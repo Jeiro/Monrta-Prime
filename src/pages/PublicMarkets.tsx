@@ -119,7 +119,7 @@ export const PublicMarkets: React.FC<PublicMarketsProps> = ({ onNavigate }) => {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[700px] text-left border-collapse">
               <thead>
-                <tr className="border-b border-line text-[10px] uppercase font-subheading tracking-wider text-muted bg-panel/40">
+                <tr className="border-b border-line text-2xs uppercase font-subheading tracking-wider text-muted bg-panel/40">
                   <th 
                     onClick={() => handleSort("symbol")}
                     className="p-4 pl-6 cursor-pointer hover:text-ink transition-colors"
@@ -218,7 +218,7 @@ export const PublicMarkets: React.FC<PublicMarketsProps> = ({ onNavigate }) => {
  
                       {/* CTA link */}
                       <td className="p-4 pr-6 text-right font-subheading">
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold font-subheading text-accent group-hover:text-white transition-colors bg-accent/15 px-2.5 py-1 rounded">
+                        <span className="inline-flex items-center gap-1 text-2xs font-bold font-subheading text-accent group-hover:text-white transition-colors bg-accent/15 px-2.5 py-1 rounded">
                           TRADE
                           <ArrowRight size={10} className="transform group-hover:translate-x-0.5 transition-transform" />
                         </span>
@@ -238,7 +238,7 @@ export const PublicMarkets: React.FC<PublicMarketsProps> = ({ onNavigate }) => {
         </div>
         <button 
           onClick={() => onNavigate("dashboard-trading")}
-          className="px-5 py-2 rounded-lg text-accent hover:text-white text-[11px] font-medium font-subheading transition-all shrink-0 cursor-pointer"
+          className="px-5 py-2 rounded-lg text-accent hover:text-white text-2xs font-medium font-subheading transition-all shrink-0 cursor-pointer"
         >
           Go to Trading Terminal
         </button>

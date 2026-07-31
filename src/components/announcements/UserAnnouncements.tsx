@@ -36,7 +36,7 @@ export const UserAnnouncements: React.FC = () => {
           <Megaphone size={17} className="text-accent" />
           <h2 className="text-sm font-bold text-ink font-heading">Announcements</h2>
         </div>
-        <span className="text-[10px] text-muted font-bold uppercase tracking-wider">
+        <span className="text-2xs text-muted font-bold uppercase tracking-wider">
           {userAnnouncements.filter(item => !readIds.includes(item.id)).length} unread
         </span>
       </div>
@@ -58,7 +58,7 @@ export const UserAnnouncements: React.FC = () => {
                     {unread && <span className="w-2 h-2 rounded-full bg-accent" title="Unread" />}
                   </div>
                   <p className="mt-2 text-xs leading-relaxed text-muted break-words">{announcement.content}</p>
-                  <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] text-muted">
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-2xs text-muted">
                     <span className={`px-2 py-0.5 rounded-full border font-bold ${style.badge}`}>{priority}</span>
                     <span>{announcement.publishDate || announcement.date}</span>
                   </div>

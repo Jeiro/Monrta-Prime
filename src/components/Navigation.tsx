@@ -80,7 +80,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
 
   return (
     <>
-      <nav role="navigation" aria-label="Main navigation" className="fixed top-0 left-0 right-0 w-full h-16 sm:h-20 bg-[#07090E]/95 backdrop-blur-md sm:bg-[#07090E]/85 sm:backdrop-blur-xl border-b border-line/80 z-50 shadow-[0_10px_40px_rgba(0,0,0,0.35)]">
+      <nav role="navigation" aria-label="Main navigation" className="fixed top-0 left-0 right-0 w-full h-16 sm:h-20 bg-ground/95 backdrop-blur-md sm:bg-ground/85 sm:backdrop-blur-xl border-b border-line/80 z-50 shadow-[0_10px_40px_rgba(0,0,0,0.35)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 lg:py-4 flex items-center justify-between">
 
           {/* Logo Brand Title (Upper Hemisphere Orange-Gold, Bottom Metallic White) */}
@@ -94,7 +94,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
               <span className="font-display tracking-[0.01em] text-lg sm:text-xl text-ink block leading-none lowercase">
                 moneta <span className="text-accent">prime</span>
               </span>
-              <span className="text-[6.5px] sm:text-[7.5px] font-mono tracking-[0.25em] text-muted block mt-1">
+              <span className="text-2xs sm:text-2xs font-mono tracking-[0.25em] text-muted block mt-1">
                 TRADE. COMPOUND. PRESERVE.
               </span>
             </div>
@@ -141,7 +141,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                       window.scrollTo({ top: 0, behavior: 'instant' });
                       onNavigate("register");
                     }}
-                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent to-[#3D7DFF] text-ground font-bold shadow-md shadow-accent/10 hover:opacity-95 transition-all cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent to-accent-deep text-ground font-bold shadow-md shadow-accent/10 hover:opacity-95 transition-all cursor-pointer"
                   >
                     Register
                   </button>
@@ -208,17 +208,17 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                   {isAdmin && (
                     <button
                       onClick={() => onNavigate("dashboard-admin")}
-                      className="py-1.5 px-3 rounded text-[10px] bg-gradient-to-r from-accent to-[#3D7DFF] text-ground font-black uppercase tracking-widest cursor-pointer shadow hover:opacity-95"
+                      className="py-1.5 px-3 rounded text-2xs bg-gradient-to-r from-accent to-accent-deep text-ground font-black uppercase tracking-widest cursor-pointer shadow hover:opacity-95"
                     >
                       Admin
                     </button>
                   )}
 
                   <div className="flex flex-col text-right">
-                    <span className="text-[10px] font-mono text-ink font-bold leading-none">
+                    <span className="text-2xs font-mono text-ink font-bold leading-none">
                       UID: {getUID(user.email)}
                     </span>
-                    <span className="text-[9px] text-muted font-mono mt-0.5 truncate max-w-[120px]" title={user.username || user.name || user.email || ""}>
+                    <span className="text-2xs text-muted font-mono mt-0.5 truncate max-w-[120px]" title={user.username || user.name || user.email || ""}>
                       {user.username || user.name || user.email}
                     </span>
                   </div>
@@ -254,7 +254,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.22, ease: "easeOut" }}
-            className="lg:hidden fixed inset-0 bg-[#07090E]/98 backdrop-blur-md z-[100] overflow-y-auto overscroll-contain px-5 py-5 flex flex-col pb-24 shadow-2xl border-l border-line/30"
+            className="lg:hidden fixed inset-0 bg-ground/98 backdrop-blur-md z-[100] overflow-y-auto overscroll-contain px-5 py-5 flex flex-col pb-24 shadow-2xl border-l border-line/30"
           >
 
             <div className="flex flex-col space-y-6 min-h-full">
@@ -270,7 +270,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                     <span className="font-display tracking-[0.01em] text-xl text-ink block leading-none lowercase">
                       moneta <span className="text-accent">prime</span>
                     </span>
-                    <span className="text-[7.5px] font-mono tracking-[0.25em] text-muted block mt-1">
+                    <span className="text-2xs font-mono tracking-[0.25em] text-muted block mt-1">
                       TRADE. COMPOUND. PRESERVE.
                     </span>
                   </div>
@@ -335,7 +335,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                           onNavigate("register");
                           setMobileMenuOpen(false);
                         }}
-                        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-accent to-[#3D7DFF] text-ground font-bold text-center text-xs font-subheading hover:opacity-95 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-accent/20"
+                        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent-deep text-ground font-bold text-center text-xs font-subheading hover:opacity-95 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-accent/20"
                       >
                         <UserPlus size={14} /> Register
                       </button>
@@ -345,7 +345,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                   // Authenticated Menu Items: Dashboard, Trade, Copy Trading, Assets, Deposit / Withdraw, Earn
                   <>
                     <div className="space-y-1 pr-2 pb-6">
-                      <div className="mb-2 text-[10px] uppercase tracking-[0.3em] text-muted/80">Primary</div>
+                      <div className="mb-2 text-2xs uppercase tracking-[0.3em] text-muted/80">Primary</div>
                       {primaryLinks.map((link) => (
                         <button
                           key={link.id}
@@ -362,7 +362,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                         </button>
                       ))}
 
-                      <div className="mt-4 mb-2 text-[10px] uppercase tracking-[0.3em] text-muted/80">More</div>
+                      <div className="mt-4 mb-2 text-2xs uppercase tracking-[0.3em] text-muted/80">More</div>
                       {secondaryLinks.map((link) => (
                         <button
                           key={link.id}
@@ -386,10 +386,10 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                       <div className="flex flex-col gap-4 px-2">
                         <div className="flex items-center justify-between p-3 rounded-xl bg-surface/30 border border-line/40">
                           <div className="flex flex-col text-left">
-                            <span className="text-[11px] font-bold text-ink font-mono tracking-wide">
+                            <span className="text-2xs font-bold text-ink font-mono tracking-wide">
                               UID: {getUID(user.email)}
                             </span>
-                            <span className="text-[10px] text-muted font-sans truncate max-w-[180px] mt-0.5" title={user.username || user.name || user.email || ""}>
+                            <span className="text-2xs text-muted font-sans truncate max-w-[180px] mt-0.5" title={user.username || user.name || user.email || ""}>
                               {user.username || user.name || user.email}
                             </span>
                           </div>
@@ -397,7 +397,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                           {isAdmin && (
                             <button
                               onClick={() => { onNavigate("dashboard-admin"); setMobileMenuOpen(false); }}
-                              className="py-1 px-2.5 rounded text-[9px] bg-gradient-to-r from-accent to-[#3D7DFF] text-ground font-black uppercase tracking-widest cursor-pointer shadow shrink-0"
+                              className="py-1 px-2.5 rounded text-2xs bg-gradient-to-r from-accent to-accent-deep text-ground font-black uppercase tracking-widest cursor-pointer shadow shrink-0"
                             >
                               Admin
                             </button>

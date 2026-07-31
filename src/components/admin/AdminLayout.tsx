@@ -48,7 +48,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
           {item.label}
         </span>
         {!!item.alert && (
-          <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${isActive ? "bg-ground text-accent" : "bg-red-500/15 text-red-400 border border-red-500/30 animate-pulse"}`}>
+          <span className={`text-2xs font-black px-1.5 py-0.5 rounded-full ${isActive ? "bg-ground text-accent" : "bg-red-500/15 text-red-400 border border-red-500/30 animate-pulse"}`}>
             {item.alert}
           </span>
         )}
@@ -83,14 +83,14 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
             <aside className="w-[85%] max-w-sm bg-surface border-r border-line h-full flex flex-col p-5 shadow-2xl relative overflow-y-auto">
               <div className="flex justify-between items-center mb-6 border-b border-line pb-4">
                 <div className="flex items-center gap-3">
-                  <span className="p-2 rounded-xl bg-gradient-to-tr from-[#3D7DFF] to-accent text-ground">
+                  <span className="p-2 rounded-xl bg-gradient-to-tr from-accent-deep to-accent text-ground">
                     <Compass size={18} />
                   </span>
                   <div>
                     <h3 className="text-xs font-bold text-ink uppercase font-heading">
                       <span className="lowercase text-ink font-bold">moneta <span className="text-accent">prime</span></span> Node
                     </h3>
-                    <span className="text-[8px] bg-red-500/10 border border-red-500/30 text-red-500 py-0.5 px-2 font-bold rounded-full block w-fit mt-0.5">
+                    <span className="text-2xs bg-red-500/10 border border-red-500/30 text-red-500 py-0.5 px-2 font-bold rounded-full block w-fit mt-0.5">
                       MASTER ADMIN
                     </span>
                   </div>
@@ -122,12 +122,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
         <aside className="hidden lg:flex lg:col-span-3 bg-surface border border-line rounded-2xl p-5 flex-col justify-between self-start sticky top-8">
           <div className="space-y-6">
             <div className="border-b border-line pb-4 flex items-center gap-3">
-              <span className="p-2.5 rounded-xl bg-gradient-to-tr from-[#3D7DFF] to-accent text-ground shrink-0">
+              <span className="p-2.5 rounded-xl bg-gradient-to-tr from-accent-deep to-accent text-ground shrink-0">
                 <Compass size={20} />
               </span>
               <div>
                 <h3 className="text-sm font-bold text-ink uppercase font-heading"><span className="lowercase text-ink font-bold">moneta <span className="text-accent">prime</span></span> Node</h3>
-                <span className="text-[10px] bg-red-500/10 border border-red-500/30 text-red-500 py-0.5 px-2.5 font-bold rounded-full block w-fit mt-1">
+                <span className="text-2xs bg-red-500/10 border border-red-500/30 text-red-500 py-0.5 px-2.5 font-bold rounded-full block w-fit mt-1">
                   MASTER ADMIN
                 </span>
               </div>
@@ -139,7 +139,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
           </div>
 
           <div className="pt-6 border-t border-line/50 mt-6 text-center">
-            <button onClick={handleLockAdminTerminal} className="text-[10px] uppercase font-bold text-center text-negative hover:underline tracking-wider cursor-pointer">
+            <button onClick={handleLockAdminTerminal} className="text-2xs uppercase font-bold text-center text-negative hover:underline tracking-wider cursor-pointer">
               Lock Admin Terminal
             </button>
           </div>
@@ -148,10 +148,10 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
         <section className="col-span-1 lg:col-span-9 space-y-6 w-full relative">
           <div className="hidden lg:flex items-center justify-between bg-surface border border-line rounded-2xl px-5 py-4">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-muted font-bold">Secure Admin Terminal</p>
+              <p className="text-2xs uppercase tracking-[0.3em] text-muted font-bold">Secure Admin Terminal</p>
               <h1 className="text-lg font-bold text-ink font-heading mt-1">Control Center</h1>
             </div>
-            <span className="text-[10px] bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+            <span className="text-2xs bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-1 rounded-full font-bold uppercase tracking-wider">
               Admin Only
             </span>
           </div>

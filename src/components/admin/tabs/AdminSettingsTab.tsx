@@ -5,7 +5,7 @@ import { useApp } from "../../../context/AppContext";
 import type { AppSettings } from "../../../types";
 
 const inputClass = "w-full px-4 py-3 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent disabled:opacity-60";
-const labelClass = "text-[10px] font-bold text-muted uppercase tracking-wider";
+const labelClass = "text-2xs font-bold text-muted uppercase tracking-wider";
 
 type FieldConfig = {
   key: keyof AppSettings;

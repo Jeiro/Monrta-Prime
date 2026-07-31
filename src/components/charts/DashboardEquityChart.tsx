@@ -83,7 +83,7 @@ export const DashboardEquityChart: React.FC<DashboardEquityChartProps> = ({ curr
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-[#121318] border border-line/50 p-3 rounded-lg shadow-xl">
+        <div className="bg-surface border border-line/50 p-3 rounded-lg shadow-xl">
           <p className="text-muted text-xs mb-1 font-sans">{label}</p>
           <p className="text-accent font-data font-bold">
             ${payload[0].value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

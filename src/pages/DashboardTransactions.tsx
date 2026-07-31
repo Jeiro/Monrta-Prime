@@ -33,30 +33,30 @@ export const DashboardTransactions: React.FC = () => {
       case "completed":
       case "approved":
         return (
-          <span className="flex items-center gap-1 text-[10px] font-bold text-positive">
+          <span className="flex items-center gap-1 text-2xs font-bold text-positive">
             <CheckCircle2 size={12} /> Completed
           </span>
         );
       case "pending":
         return (
-          <span className="flex items-center gap-1 text-[10px] font-bold text-yellow-400">
+          <span className="flex items-center gap-1 text-2xs font-bold text-yellow-400">
             <Clock size={12} /> Pending
           </span>
         );
       case "failed":
         return (
-          <span className="flex items-center gap-1 text-[10px] font-bold text-negative">
+          <span className="flex items-center gap-1 text-2xs font-bold text-negative">
             <XCircle size={12} /> Failed
           </span>
         );
       case "rejected":
         return (
-          <span className="flex items-center gap-1 text-[10px] font-bold text-negative">
+          <span className="flex items-center gap-1 text-2xs font-bold text-negative">
             <AlertTriangle size={12} /> Rejected
           </span>
         );
       default:
-        return <span className="text-[10px] text-muted">{status}</span>;
+        return <span className="text-2xs text-muted">{status}</span>;
     }
   };
 
@@ -74,7 +74,7 @@ export const DashboardTransactions: React.FC = () => {
             <select 
               value={filterType}
               onChange={e => setFilterType(e.target.value as any)}
-              className="appearance-none bg-surface border border-line text-[11px] py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
+              className="appearance-none bg-surface border border-line text-2xs py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
             >
               <option value="">All Types</option>
               <option value="deposit">Deposits</option>
@@ -89,7 +89,7 @@ export const DashboardTransactions: React.FC = () => {
             <select 
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value as any)}
-              className="appearance-none bg-surface border border-line text-[11px] py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
+              className="appearance-none bg-surface border border-line text-2xs py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
             >
               <option value="">All Status</option>
               <option value="completed">Completed</option>
@@ -104,7 +104,7 @@ export const DashboardTransactions: React.FC = () => {
             <select 
               value={filterTime}
               onChange={e => setFilterTime(e.target.value as any)}
-              className="appearance-none bg-surface border border-line text-[11px] py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
+              className="appearance-none bg-surface border border-line text-2xs py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
             >
               <option value="">All Time</option>
               <option value="7">Last 7 Days</option>
@@ -117,7 +117,7 @@ export const DashboardTransactions: React.FC = () => {
           {(filterType || filterStatus || filterTime) && (
             <button
               onClick={() => { setFilterType(""); setFilterStatus(""); setFilterTime(""); }}
-              className="text-[10px] text-accent hover:text-ink px-3 py-1.5 rounded-full border border-accent/30 bg-accent/5 font-bold cursor-pointer transition-colors"
+              className="text-2xs text-accent hover:text-ink px-3 py-1.5 rounded-full border border-accent/30 bg-accent/5 font-bold cursor-pointer transition-colors"
             >
               Clear Filters
             </button>
@@ -149,8 +149,8 @@ export const DashboardTransactions: React.FC = () => {
                     </div>
                     <div className="flex flex-col gap-0.5 min-w-0">
                       <span className="text-sm font-medium text-ink capitalize">{tx.type}</span>
-                      <span className="text-[10px] text-muted font-mono truncate">{tx.timestamp || tx.date} - {tx.currency || tx.asset}</span>
-                      <span className="text-[10px] text-muted font-mono truncate">ID: {tx.id}</span>
+                      <span className="text-2xs text-muted font-mono truncate">{tx.timestamp || tx.date} - {tx.currency || tx.asset}</span>
+                      <span className="text-2xs text-muted font-mono truncate">ID: {tx.id}</span>
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-0.5 shrink-0">

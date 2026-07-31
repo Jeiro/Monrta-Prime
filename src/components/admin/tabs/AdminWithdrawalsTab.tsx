@@ -169,7 +169,7 @@ export const AdminWithdrawalsTab: React.FC = () => {
       <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
         <div>
           <h1 className="text-xl font-bold text-ink flex items-center gap-2">
-            <ArrowUpRight size={20} className="text-[#DFAD12]" /> Withdrawal Management
+            <ArrowUpRight size={20} className="text-accent" /> Withdrawal Management
           </h1>
           <p className="text-xs text-muted mt-1">Review payout destinations, approve verified withdrawals, or reject unsafe requests.</p>
         </div>
@@ -193,7 +193,7 @@ export const AdminWithdrawalsTab: React.FC = () => {
             <h2 className="text-sm font-bold text-ink flex items-center gap-2">
               <ClipboardList size={16} className="text-accent" /> Withdrawal Queue
             </h2>
-            <p className="text-[11px] text-muted mt-1">Pending withdrawals stay at the top for faster treasury review.</p>
+            <p className="text-2xs text-muted mt-1">Pending withdrawals stay at the top for faster treasury review.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
             <div className="relative sm:w-72">
@@ -210,7 +210,7 @@ export const AdminWithdrawalsTab: React.FC = () => {
                 <button
                   key={status}
                   onClick={() => setFilterStatus(status)}
-                  className={`px-3 py-2 text-[10px] font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-accent text-ground border-accent" : "bg-ground text-muted border-line hover:border-accent"}`}
+                  className={`px-3 py-2 text-2xs font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-accent text-ground border-accent" : "bg-ground text-muted border-line hover:border-accent"}`}
                 >
                   {status === "all" ? "All" : statusLabels[status]}
                 </button>
@@ -232,7 +232,7 @@ export const AdminWithdrawalsTab: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[1260px] text-left">
                 <thead className="bg-ground/60 border-b border-line">
-                  <tr className="text-[10px] uppercase tracking-wider text-muted">
+                  <tr className="text-2xs uppercase tracking-wider text-muted">
                     <th className="px-5 py-3 font-bold">Withdrawal ID</th>
                     <th className="px-4 py-3 font-bold">User</th>
                     <th className="px-4 py-3 font-bold">Email</th>
@@ -261,12 +261,12 @@ export const AdminWithdrawalsTab: React.FC = () => {
                       <td className="px-4 py-4 text-xs text-accent font-bold">{withdrawal.network}</td>
                       <td className="px-4 py-4">
                         <span title={withdrawal.destinationWallet} className="block max-w-[220px] truncate text-xs text-ink">{withdrawal.destinationWallet}</span>
-                        {withdrawal.destinationTag && <span className="mt-1 block text-[10px] text-muted">Tag: {withdrawal.destinationTag}</span>}
+                        {withdrawal.destinationTag && <span className="mt-1 block text-2xs text-muted">Tag: {withdrawal.destinationTag}</span>}
                       </td>
                       <td className="px-4 py-4 text-xs font-bold text-ink">{formatMoney(withdrawal.amount)}</td>
                       <td className="px-4 py-4 text-xs text-muted">{withdrawal.date}</td>
                       <td className="px-4 py-4">
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-[10px] font-bold ${statusStyles[withdrawal.displayStatus]}`}>
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${statusStyles[withdrawal.displayStatus]}`}>
                           {statusLabels[withdrawal.displayStatus]}
                         </span>
                       </td>
@@ -280,21 +280,21 @@ export const AdminWithdrawalsTab: React.FC = () => {
                             className="w-[220px] px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none"
                           />
                         ) : (
-                          <p className="max-w-[220px] text-[11px] text-muted">{withdrawal.notes || "No admin notes"}</p>
+                          <p className="max-w-[220px] text-2xs text-muted">{withdrawal.notes || "No admin notes"}</p>
                         )}
                       </td>
                       <td className="px-5 py-4">
                         {withdrawal.displayStatus === "pending" ? (
                           <div className="flex justify-end gap-2">
-                            <button onClick={() => handleApprove(withdrawal)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-[10px] uppercase rounded-lg hover:bg-emerald-600 cursor-pointer">
+                            <button onClick={() => handleApprove(withdrawal)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-emerald-600 cursor-pointer">
                               <Check size={12} /> Approve
                             </button>
-                            <button onClick={() => handleReject(withdrawal)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-[10px] uppercase rounded-lg hover:bg-red-600 cursor-pointer">
+                            <button onClick={() => handleReject(withdrawal)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-red-600 cursor-pointer">
                               <X size={12} /> Reject
                             </button>
                           </div>
                         ) : (
-                          <p className="text-right text-[10px] font-bold uppercase text-muted">Reviewed</p>
+                          <p className="text-right text-2xs font-bold uppercase text-muted">Reviewed</p>
                         )}
                       </td>
                     </tr>
@@ -324,7 +324,7 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
 
   return (
     <div className={`px-3 py-2 border rounded-lg min-w-[78px] ${toneClass}`}>
-      <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
+      <p className="text-2xs uppercase text-muted tracking-wider">{label}</p>
       <p className="text-sm font-bold">{value}</p>
     </div>
   );

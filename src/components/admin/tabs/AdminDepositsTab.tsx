@@ -195,7 +195,7 @@ export const AdminDepositsTab: React.FC = () => {
             <h2 className="text-sm font-bold text-ink flex items-center gap-2">
               <ClipboardList size={16} className="text-accent" /> Deposit Queue
             </h2>
-            <p className="text-[11px] text-muted mt-1">Pending deposits stay at the top for faster treasury review.</p>
+            <p className="text-2xs text-muted mt-1">Pending deposits stay at the top for faster treasury review.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
             <div className="relative sm:w-72">
@@ -212,7 +212,7 @@ export const AdminDepositsTab: React.FC = () => {
                 <button
                   key={status}
                   onClick={() => setFilterStatus(status)}
-                  className={`px-3 py-2 text-[10px] font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-accent text-ground border-accent" : "bg-ground text-muted border-line hover:border-accent"}`}
+                  className={`px-3 py-2 text-2xs font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-accent text-ground border-accent" : "bg-ground text-muted border-line hover:border-accent"}`}
                 >
                   {status === "all" ? "All" : statusLabels[status]}
                 </button>
@@ -224,7 +224,7 @@ export const AdminDepositsTab: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1280px] text-left">
             <thead className="bg-ground/60 border-b border-line">
-              <tr className="text-[10px] uppercase tracking-wider text-muted">
+              <tr className="text-2xs uppercase tracking-wider text-muted">
                 <th className="px-5 py-3 font-bold">Deposit ID</th>
                 <th className="px-4 py-3 font-bold">User</th>
                 <th className="px-4 py-3 font-bold">Email</th>
@@ -261,14 +261,14 @@ export const AdminDepositsTab: React.FC = () => {
                       {deposit.txHash ? shortValue(deposit.txHash, 14, 7) : "No hash"}
                     </span>
                     {deposit.proofFile && (
-                      <span className="mt-1 inline-flex items-center gap-1 text-[10px] text-muted">
+                      <span className="mt-1 inline-flex items-center gap-1 text-2xs text-muted">
                         <FileText size={10} /> Proof attached
                       </span>
                     )}
                   </td>
                   <td className="px-4 py-4 text-xs text-muted">{deposit.date}</td>
                   <td className="px-4 py-4">
-                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-[10px] font-bold ${statusStyles[deposit.displayStatus]}`}>
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${statusStyles[deposit.displayStatus]}`}>
                       {statusLabels[deposit.displayStatus]}
                     </span>
                   </td>
@@ -282,21 +282,21 @@ export const AdminDepositsTab: React.FC = () => {
                         className="w-[220px] px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none"
                       />
                     ) : (
-                      <p className="max-w-[220px] text-[11px] text-muted">{deposit.notes || "No admin notes"}</p>
+                      <p className="max-w-[220px] text-2xs text-muted">{deposit.notes || "No admin notes"}</p>
                     )}
                   </td>
                   <td className="px-5 py-4">
                     {deposit.displayStatus === "pending" ? (
                       <div className="flex justify-end gap-2">
-                        <button onClick={() => handleApprove(deposit)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-[10px] uppercase rounded-lg hover:bg-emerald-600 cursor-pointer">
+                        <button onClick={() => handleApprove(deposit)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-emerald-600 cursor-pointer">
                           <Check size={12} /> Approve
                         </button>
-                        <button onClick={() => handleReject(deposit)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-[10px] uppercase rounded-lg hover:bg-red-600 cursor-pointer">
+                        <button onClick={() => handleReject(deposit)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-red-600 cursor-pointer">
                           <X size={12} /> Reject
                         </button>
                       </div>
                     ) : (
-                      <p className="text-right text-[10px] font-bold uppercase text-muted">Reviewed</p>
+                      <p className="text-right text-2xs font-bold uppercase text-muted">Reviewed</p>
                     )}
                   </td>
                 </tr>
@@ -324,7 +324,7 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
 
   return (
     <div className={`px-3 py-2 border rounded-lg min-w-[78px] ${toneClass}`}>
-      <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
+      <p className="text-2xs uppercase text-muted tracking-wider">{label}</p>
       <p className="text-sm font-bold">{value}</p>
     </div>
   );

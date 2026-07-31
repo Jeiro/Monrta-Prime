@@ -5,7 +5,7 @@ import { useApp } from '../../context/AppContext';
 
 // Section 5: Get Started
 export const GetStarted = () => (
-    <section className="py-16 md:py-24 px-4 max-w-6xl mx-auto" id="get-started">
+    <section className="py-16 px-4 max-w-6xl mx-auto" id="get-started">
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-white tracking-tight leading-tight max-w-3xl mx-auto font-display text-center mb-16">
             Get Started In Minutes
         </h2>
@@ -17,7 +17,7 @@ export const GetStarted = () => (
             ].map((step, i) => (
                 <div 
                     key={i} 
-                    className="flex flex-col items-center justify-center p-8 sm:p-10 rounded-2xl bg-[#0F1216]/60 border border-[#2B3139]/40 hover:border-[#6AA5FF]/30 hover:bg-[#12161B]/80 transition-all duration-300 shadow-xl group text-center relative overflow-hidden"
+                    className="flex flex-col items-center justify-center p-8 sm:p-10 rounded-2xl bg-[#0F1216]/60 border border-line/40 hover:border-accent/30 hover:bg-[#12161B]/80 transition-all duration-300 shadow-xl group text-center relative overflow-hidden"
                 >
                     <div className="text-5xl sm:text-6xl font-extrabold text-white/5 font-display tracking-tighter mb-4 group-hover:text-accent/15 transition-colors duration-300">
                         {step.step}

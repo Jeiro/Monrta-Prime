@@ -211,7 +211,7 @@ export function GlobalModals({
                         <Loader2 size={16} className="animate-spin text-emerald-400" />
                       </div>
                       <div className="space-y-1">
-                        <h4 className="text-[13px] font-bold text-ink leading-tight">
+                        <h4 className="text-sm font-bold text-ink leading-tight">
                           {modalFeedback.title}
                         </h4>
                         <p className="text-xs text-emerald-400/85 leading-relaxed font-sans">
@@ -235,7 +235,7 @@ export function GlobalModals({
               <form onSubmit={handleQuickDeposit} className="space-y-5">
                 {/* Step 1: Coin Selection */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-slate-400 font-sans uppercase font-bold tracking-wider block">Coin</label>
+                  <label className="text-2xs text-slate-400 font-sans uppercase font-bold tracking-wider block">Coin</label>
                   <div className="grid grid-cols-3 gap-2 text-xs font-bold font-sans">
                     {depositCoins.map(coin => (
                       <button
@@ -245,7 +245,7 @@ export function GlobalModals({
                         className={`py-2 rounded-xl border text-center cursor-pointer transition-all ${
                           depCoin === coin 
                             ? "border-accent bg-accent/10 text-accent" 
-                            : "border-line/50 bg-[#121318] text-slate-400"
+                            : "border-line/50 bg-surface text-slate-400"
                         }`}
                       >
                         {coin}
@@ -260,8 +260,8 @@ export function GlobalModals({
                 {/* Step 2: Blockchain Network Selection */}
                 {depositNetworks.length > 0 && (
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-slate-400 font-sans uppercase font-bold tracking-wider block">Blockchain Network</label>
-                  <div className="flex flex-wrap gap-2 text-[11px] font-bold font-sans">
+                  <label className="text-2xs text-slate-400 font-sans uppercase font-bold tracking-wider block">Blockchain Network</label>
+                  <div className="flex flex-wrap gap-2 text-2xs font-bold font-sans">
                     {depositNetworks.map((wallet) => (
                       <button
                         key={wallet.id}
@@ -270,7 +270,7 @@ export function GlobalModals({
                         className={`px-3 py-1.5 rounded-xl border text-center transition-all cursor-pointer ${
                           selectedDepositWallet?.id === wallet.id
                             ? "border-accent bg-accent/10 text-accent font-extrabold" 
-                            : "border-line/50 bg-[#121318] text-slate-400"
+                            : "border-line/50 bg-surface text-slate-400"
                         }`}
                       >
                         {wallet.network}
@@ -294,11 +294,11 @@ export function GlobalModals({
                     )}
 
                     <div className="flex-1 min-w-0 space-y-1.5 text-left">
-                      <span className="text-[9px] text-slate-400 font-sans uppercase block font-bold tracking-wider">
+                      <span className="text-2xs text-slate-400 font-sans uppercase block font-bold tracking-wider">
                         YOUR {selectedDepositLabel || "CRYPTO"} DEPOSIT ADDRESS
                       </span>
-                      <div className="bg-[#121318] border border-line/50 rounded-xl p-2 flex items-center justify-between gap-1.5">
-                        <span className="font-mono text-[10px] break-all select-all text-ink pr-1">
+                      <div className="bg-surface border border-line/50 rounded-xl p-2 flex items-center justify-between gap-1.5">
+                        <span className="font-mono text-2xs break-all select-all text-ink pr-1">
                           {selectedDepositWallet?.walletAddress || "No enabled wallet address available"}
                         </span>
                         {selectedDepositWallet?.walletAddress && (
@@ -309,7 +309,7 @@ export function GlobalModals({
                             title="Copy Address"
                           >
                             {copied ? (
-                              <span className="text-[9px] text-positive font-bold flex items-center gap-1">
+                              <span className="text-2xs text-positive font-bold flex items-center gap-1">
                                 <Check size={10} /> COPIED
                               </span>
                             ) : (
@@ -321,14 +321,14 @@ export function GlobalModals({
                     </div>
                   </div>
 
-                  <div className="text-[10px] text-slate-400 italic space-y-0.5 text-left font-sans">
+                  <div className="text-2xs text-slate-400 italic space-y-0.5 text-left font-sans">
                     <span>{selectedDepositWallet?.depositInstructions || "Deposit wallets are currently unavailable."}</span>
                   </div>
                 </div>
 
                 {/* Deposit Amount input */}
                 <div className="space-y-1 text-left">
-                  <label className="text-[10px] text-slate-400 font-sans uppercase block font-bold tracking-wider">
+                  <label className="text-2xs text-slate-400 font-sans uppercase block font-bold tracking-wider">
                     AMOUNT OF DEPOSIT (USD VALUE)
                   </label>
                   <div className="relative">
@@ -339,16 +339,16 @@ export function GlobalModals({
                       value={depAmt}
                       onChange={(e) => setDepAmt(e.target.value)}
                       placeholder={`Min. Deposit: ${(selectedDepositWallet?.minimumDeposit || 0).toLocaleString()} USD`}
-                      className="w-full bg-[#121318] border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 px-3 text-[11px] text-ink font-mono font-semibold transition-all focus:outline-none placeholder:text-[10px] placeholder-slate-500"
+                      className="w-full bg-surface border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 px-3 text-2xs text-ink font-mono font-semibold transition-all focus:outline-none placeholder:text-2xs placeholder-slate-500"
                     />
-                    <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-mono font-bold">
+                    <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-2xs text-slate-400 font-mono font-bold">
                       USD
                     </span>
                   </div>
                 </div>
 
                 <div className="pt-1 select-none">
-                  <p className="text-[10px] text-slate-400 flex items-start gap-1.5 leading-relaxed text-left">
+                  <p className="text-2xs text-slate-400 flex items-start gap-1.5 leading-relaxed text-left">
                     <Info size={11} className="text-amber-500 shrink-0 mt-0.5" />
                     <span>Minimum deposit: {(selectedDepositWallet?.minimumDeposit || 0).toLocaleString()} USD. Deposits below this amount cannot be recovered.</span>
                   </p>
@@ -401,7 +401,7 @@ export function GlobalModals({
                       <Loader2 size={16} className="animate-spin text-emerald-400" />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="text-[13px] font-bold text-ink leading-tight">
+                      <h4 className="text-sm font-bold text-ink leading-tight">
                         {modalFeedback.title}
                       </h4>
                       <p className="text-xs text-emerald-450/85 leading-relaxed font-sans">
@@ -425,7 +425,7 @@ export function GlobalModals({
             <form onSubmit={handleQuickWithdraw} className="space-y-5">
               {/* Step 1: Coin Selection */}
               <div className="space-y-1.5">
-                <label className="text-[10px] text-slate-400 font-sans uppercase font-bold tracking-wider block">Coin</label>
+                <label className="text-2xs text-slate-400 font-sans uppercase font-bold tracking-wider block">Coin</label>
                 <div className="grid grid-cols-3 gap-2 text-xs font-bold font-sans">
                   {["USDT", "BTC", "ETH"].map(coin => (
                     <button
@@ -435,7 +435,7 @@ export function GlobalModals({
                       className={`py-2 rounded-xl border text-center cursor-pointer transition-all ${
                         wdrCoin === coin 
                           ? "border-accent bg-accent/10 text-accent" 
-                          : "border-line/50 bg-[#121318] text-slate-400"
+                          : "border-line/50 bg-surface text-slate-400"
                       }`}
                     >
                       {coin}
@@ -446,8 +446,8 @@ export function GlobalModals({
 
               {/* Step 2: Blockchain Network Selection */}
               <div className="space-y-1.5">
-                <label className="text-[10px] text-slate-400 font-sans uppercase font-bold tracking-wider block">Blockchain Network</label>
-                <div className="flex flex-wrap gap-2 text-[11px] font-bold font-sans">
+                <label className="text-2xs text-slate-400 font-sans uppercase font-bold tracking-wider block">Blockchain Network</label>
+                <div className="flex flex-wrap gap-2 text-2xs font-bold font-sans">
                   {getNetworksForWdrCoin(wdrCoin).map((net) => (
                     <button
                       key={net.id}
@@ -456,7 +456,7 @@ export function GlobalModals({
                       className={`px-3 py-1.5 rounded-xl border text-center transition-all cursor-pointer ${
                         wdrNetwork === net.id 
                           ? "border-accent bg-accent/10 text-accent font-extrabold" 
-                          : "border-line/50 bg-[#121318] text-slate-400"
+                          : "border-line/50 bg-surface text-slate-400"
                       }`}
                     >
                       {net.id}
@@ -467,21 +467,21 @@ export function GlobalModals({
 
               {/* Step 3: Wallet Address & Amount Inputs */}
               <div className="space-y-1.5">
-                <label className="text-[10px] text-slate-400 font-sans uppercase font-bold tracking-wider block">Wallet Address</label>
+                <label className="text-2xs text-slate-400 font-sans uppercase font-bold tracking-wider block">Wallet Address</label>
                 <input
                   type="text"
                   required
                   value={wdrAddr}
                   onChange={(e) => setWdrAddr(e.target.value)}
                   placeholder="Fill in the withdrawal address"
-                  className="w-full bg-[#121318] border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 px-3 text-[11px] text-ink font-mono font-semibold transition-all focus:outline-none placeholder:text-[10px] placeholder-slate-500"
+                  className="w-full bg-surface border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 px-3 text-2xs text-ink font-mono font-semibold transition-all focus:outline-none placeholder:text-2xs placeholder-slate-500"
                 />
               </div>
 
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="text-[10px] text-slate-400 font-sans uppercase font-bold tracking-wider">Amount</label>
-                  <span className="text-[10px] text-slate-400 font-sans font-semibold">
+                  <label className="text-2xs text-slate-400 font-sans uppercase font-bold tracking-wider">Amount</label>
+                  <span className="text-2xs text-slate-400 font-sans font-semibold">
                     Available Balance: {user.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })} {wdrCoin}
                   </span>
                 </div>
@@ -494,17 +494,17 @@ export function GlobalModals({
                     value={wdrAmt}
                     onChange={(e) => setWdrAmt(e.target.value)}
                     placeholder="Fill in the withdrawal amount"
-                    className="w-full bg-[#121318] border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 px-3 pr-20 text-[11px] text-ink font-mono font-semibold transition-all focus:outline-none placeholder:text-[10px] placeholder-slate-500"
+                    className="w-full bg-surface border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 px-3 pr-20 text-2xs text-ink font-mono font-semibold transition-all focus:outline-none placeholder:text-2xs placeholder-slate-500"
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => setWdrAmt(user.balance.toString())}
-                      className="text-[10px] text-accent hover:opacity-80 font-sans font-extrabold cursor-pointer uppercase"
+                      className="text-2xs text-accent hover:opacity-80 font-sans font-extrabold cursor-pointer uppercase"
                     >
                       All
                     </button>
-                    <span className="text-[10px] text-slate-400 font-mono font-bold border-l border-slate-700 pl-2">
+                    <span className="text-2xs text-slate-400 font-mono font-bold border-l border-slate-700 pl-2">
                       {wdrCoin}
                     </span>
                   </div>
@@ -512,7 +512,7 @@ export function GlobalModals({
               </div>
 
               {/* Step 4: Fee Breakdown & Button Update */}
-              <div className="flex justify-between items-center text-[11px] font-sans text-slate-400 pt-1">
+              <div className="flex justify-between items-center text-2xs font-sans text-slate-400 pt-1">
                 <span>Gas fee:</span>
                 <span className="text-ink font-mono font-bold">
                   {wdrCoin === "USDT" ? "1.00 USDT" : wdrCoin === "BTC" ? "0.0002 BTC" : "0.003 ETH"}
@@ -555,7 +555,7 @@ export function GlobalModals({
               <button
                 type="button"
                 onClick={() => setInsufficientBalanceOpen(false)}
-                className="py-2.5 rounded-xl border border-line/50 hover:border-ink bg-transparent text-ink font-bold font-subheading text-[11px] uppercase transition-all cursor-pointer"
+                className="py-2.5 rounded-xl border border-line/50 hover:border-ink bg-transparent text-ink font-bold font-subheading text-2xs uppercase transition-all cursor-pointer"
               >
                 Close
               </button>
@@ -565,7 +565,7 @@ export function GlobalModals({
                   setInsufficientBalanceOpen(false);
                   setDepositModalOpen(true);
                 }}
-                className="py-2.5 rounded-xl bg-accent hover:opacity-95 text-ground font-extrabold font-subheading text-[11px] uppercase transition-all shadow-md shadow-accent/15 cursor-pointer leading-relaxed"
+                className="py-2.5 rounded-xl bg-accent hover:opacity-95 text-ground font-extrabold font-subheading text-2xs uppercase transition-all shadow-md shadow-accent/15 cursor-pointer leading-relaxed"
               >
                 Fund Wallet
               </button>

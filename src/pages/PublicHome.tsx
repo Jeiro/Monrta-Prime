@@ -179,7 +179,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
     <div className="min-h-screen bg-transparent text-white font-sans selection:bg-accent/20 overflow-x-hidden pt-0">
       
       {/* 1. HERO BANNER: METRICS & EXQUISITE CELESTIAL ORBITING SYSTEM */}
-      <section className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-[#0B0E11] via-[#050608] to-black border-b border-[#2B3139]/30 px-4 overflow-hidden pt-24 sm:pt-32 pb-6">
+      <section className="relative flex flex-col justify-center items-center bg-gradient-to-b from-ground via-panel to-black border-b border-line/30 px-4 overflow-hidden pt-14 sm:pt-16 pb-14">
         
         {/* Subtle grid background effects */}
         <div className="absolute inset-0 bg-[radial-gradient(rgba(106,165,255,0.12)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
@@ -217,10 +217,10 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
           <div className="relative w-full max-w-lg h-[240px] min-[380px]:h-[280px] min-[440px]:h-[340px] sm:h-[500px] mt-2 sm:mt-12 flex items-center justify-center select-none overflow-visible scale-[0.62] min-[380px]:scale-[0.72] min-[440px]:scale-[0.85] sm:scale-100 transition-transform origin-center">
             
             {/* Ambient gold starfields glow */}
-            <div className="absolute w-56 h-56 bg-[#6AA5FF]/10 rounded-full blur-[60px]" />
+            <div className="absolute w-56 h-56 bg-accent/10 rounded-full blur-[60px]" />
             
             {/* Central Moneta Prime Logo Brand Core */}
-            <div className="absolute w-[180px] h-[180px] rounded-full bg-transparent border-2 border-[#6AA5FF]/20 flex flex-col items-center justify-center z-30 shadow-[0_0_50px_rgba(106,165,255,0.15)]">
+            <div className="absolute w-[180px] h-[180px] rounded-full bg-transparent border-2 border-accent/20 flex flex-col items-center justify-center z-30 shadow-[0_0_50px_rgba(106,165,255,0.15)]">
               <Brandmark className="w-[52px] h-[52px] transition-transform duration-500 hover:rotate-6 drop-shadow-[0_4px_16px_rgba(106,165,255,0.4)]" />
               <span className="text-base text-white font-bold tracking-[0.05em] mt-2 font-display lowercase">
                 moneta <span className="text-accent">prime</span>
@@ -231,10 +231,10 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
             <motion.div 
               animate={{ rotate: 360 }} 
               transition={{ repeat: Infinity, duration: 16, ease: "linear" }} 
-              className="absolute w-[190px] h-[190px] rounded-full border border-[#2B3139]/60 border-dashed z-10"
+              className="absolute w-[190px] h-[190px] rounded-full border border-line/60 border-dashed z-10"
             >
               {[
-                { label: "₿", symbol: "BTC", bg: "bg-[#6AA5FF]", color: "text-white", angle: 0 },
+                { label: "₿", symbol: "BTC", bg: "bg-accent", color: "text-white", angle: 0 },
                 { label: "Ξ", symbol: "ETH", bg: "bg-[#4E62CC]", color: "text-white", angle: 120 },
                 { label: "₮", symbol: "USDT", bg: "bg-[#26A17B]", color: "text-white", angle: 240 }
               ].map((token, index) => (
@@ -263,7 +263,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
             <motion.div 
               animate={{ rotate: -360 }} 
               transition={{ repeat: Infinity, duration: 25, ease: "linear" }} 
-              className="absolute w-[300px] h-[300px] rounded-full border border-[#2B3139]/40 border-dotted z-10"
+              className="absolute w-[300px] h-[300px] rounded-full border border-line/40 border-dotted z-10"
             >
               {[
                 { label: "T", bg: "bg-[#E82127]", color: "text-white", angle: 0 },
@@ -296,15 +296,15 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
             <motion.div 
               animate={{ rotate: 360 }} 
               transition={{ repeat: Infinity, duration: 38, ease: "linear" }} 
-              className="absolute w-[420px] h-[420px] rounded-full border border-[#2B3139]/20 z-10"
+              className="absolute w-[420px] h-[420px] rounded-full border border-line/20 z-10"
             >
               {[
-                { label: "AVAX", bg: "bg-[#E84142]", color: "text-white text-[8px]", angle: 0 },
+                { label: "AVAX", bg: "bg-[#E84142]", color: "text-white text-2xs", angle: 0 },
                 { label: "Đ", bg: "bg-[#C2A633]", color: "text-white text-xs", angle: 45 },
-                { label: "LINK", bg: "bg-[#375BD2]", color: "text-white text-[8px]", angle: 90 },
-                { label: "DOT", bg: "bg-[#E6007A]", color: "text-white text-[8px]", angle: 135 },
-                { label: "TRX", bg: "bg-[#EC0623]", color: "text-white text-[8px]", angle: 180 },
-                { label: "LTC", bg: "bg-[#345D9D]", color: "text-white text-[8px]", angle: 225 },
+                { label: "LINK", bg: "bg-[#375BD2]", color: "text-white text-2xs", angle: 90 },
+                { label: "DOT", bg: "bg-[#E6007A]", color: "text-white text-2xs", angle: 135 },
+                { label: "TRX", bg: "bg-[#EC0623]", color: "text-white text-2xs", angle: 180 },
+                { label: "LTC", bg: "bg-[#345D9D]", color: "text-white text-2xs", angle: 225 },
                 { label: "🚀", bg: "bg-gradient-to-tr from-[#1D4ED8] to-[#1E3A8A]", color: "text-white text-xs", angle: 270 },
                 { label: "MS", bg: "bg-[#00A4EF]", color: "text-white text-xs", angle: 315 }
               ].map((token, index) => (
@@ -330,7 +330,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
 
             {/* Glowing Trademark Brand Motto underneath orbit - Borderless and containerless, staying horizontal */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap">
-              <span className="text-[10px] font-mono tracking-[0.25em] font-semibold text-accent uppercase">
+              <span className="text-2xs font-mono tracking-[0.25em] font-semibold text-accent uppercase">
                 Trade • Compound • Preserve
               </span>
             </div>

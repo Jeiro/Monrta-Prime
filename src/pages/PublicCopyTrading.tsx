@@ -102,7 +102,7 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
         <div className="absolute top-0 right-0 w-[400px] h-[200px] bg-accent/5 rounded-full blur-[80px]" />
         
         <div className="w-full max-w-full space-y-4 relative z-10">
-          <div className="inline-flex items-center gap-1.5 bg-accent/15 border border-accent/30 text-accent px-3 py-1 rounded-full text-[10px] font-subheading tracking-widest uppercase">
+          <div className="inline-flex items-center gap-1.5 bg-accent/15 border border-accent/30 text-accent px-3 py-1 rounded-full text-2xs font-subheading tracking-widest uppercase">
             ⚡ REAL-TIME TRADING ENGINE
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-heading text-ink tracking-tight">
@@ -154,7 +154,7 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                         <h3 className="text-base font-bold font-subheading text-ink flex items-center gap-2">
                           {trader.name}
                           {(trader.winRate >= 90 || trader.roi >= 150) && (
-                            <span className="text-[9px] bg-positive/10 text-positive font-subheading px-2 py-0.5 rounded-full flex items-center gap-0.5 select-none">
+                            <span className="text-2xs bg-positive/10 text-positive font-subheading px-2 py-0.5 rounded-full flex items-center gap-0.5 select-none">
                               <Award size={10} /> ELITE
                             </span>
                           )}
@@ -167,7 +167,7 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                     </div>
 
                     <div className="text-right">
-                      <span className="text-[10px] text-muted uppercase font-subheading block select-none">Total AUM</span>
+                      <span className="text-2xs text-muted uppercase font-subheading block select-none">Total AUM</span>
                       <strong className="text-sm font-mono text-accent font-bold">{trader.assetsUnderManagement}</strong>
                     </div>
                   </div>
@@ -175,21 +175,21 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                   {/* Core ROI stats grid */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-2 my-6 text-center">
                     <div>
-                      <span className="block text-[9px] text-muted uppercase font-subheading select-none">Target ROI</span>
+                      <span className="block text-2xs text-muted uppercase font-subheading select-none">Target ROI</span>
                       <span className="text-sm font-bold font-mono text-positive">{typeof trader.roi === 'number' ? trader.roi.toLocaleString() : trader.roi}%</span>
                     </div>
                     <div>
-                      <span className="block text-[9px] text-muted uppercase font-subheading select-none">Duration</span>
+                      <span className="block text-2xs text-muted uppercase font-subheading select-none">Duration</span>
                       <span className="text-sm font-bold font-mono text-accent">{trader.profitDays ?? 30} Days</span>
                     </div>
                     <div>
-                      <span className="block text-[9px] text-muted uppercase font-subheading select-none">Win Rate</span>
+                      <span className="block text-2xs text-muted uppercase font-subheading select-none">Win Rate</span>
                       <span className="text-sm font-bold font-mono text-ink">{trader.winRate}%</span>
                     </div>
                     <div>
-                      <span className="block text-[9px] text-muted uppercase font-subheading select-none mb-1">Risk</span>
+                      <span className="block text-2xs text-muted uppercase font-subheading select-none mb-1">Risk</span>
                       <div className="flex justify-center">
-                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold font-mono border select-none ${
+                        <span className={`px-2 py-0.5 rounded-full text-2xs font-bold font-mono border select-none ${
                           trader.riskScore <= 2 
                             ? "bg-green-500/10 border-green-500/20 text-green-400" 
                             : trader.riskScore === 3 
@@ -204,9 +204,9 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
 
                   {/* ROI Chart Trend Plot */}
                   <div className="space-y-2 mb-6">
-                    <div className="flex justify-between text-[11px] text-muted">
+                    <div className="flex justify-between text-2xs text-muted">
                       <span className="font-subheading select-none">7D ROI Trend</span>
-                      <span className="text-positive text-[10px] font-subheading font-bold flex items-center select-none">
+                      <span className="text-positive text-2xs font-subheading font-bold flex items-center select-none">
                         <ArrowUpRight size={12} /> Steady gains
                       </span>
                     </div>
@@ -311,12 +311,12 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                     min={allocatingTrader.minimumCopyAmount ?? 10}
                     step="any"
                     required
-                    className="w-full bg-[#121318] border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 pl-8 pr-4 text-xs text-ink font-mono font-extrabold outline-none"
+                    className="w-full bg-surface border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 pl-8 pr-4 text-xs text-ink font-mono font-extrabold outline-none"
                   />
                 </div>
               </div>
 
-              <div className="p-3 text-[11px] leading-relaxed text-zinc-400 bg-surface/50 border border-line/30 rounded-xl flex items-start gap-2.5">
+              <div className="p-3 text-2xs leading-relaxed text-zinc-400 bg-surface/50 border border-line/30 rounded-xl flex items-start gap-2.5">
                 <Info size={14} className="text-accent shrink-0 mt-0.5" />
                 <span>
                   Copy range: ${(allocatingTrader.minimumCopyAmount ?? 10).toLocaleString()} - {allocatingTrader.maximumCopyAmount ? `$${allocatingTrader.maximumCopyAmount.toLocaleString()}` : "No max"}. ROI is locked at confirmation and paid from the stored total return at maturity.
@@ -327,14 +327,14 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                 <button
                   type="button"
                   onClick={() => { setAllocatingTrader(null); setAllocateAmt(""); }}
-                  className="py-2.5 rounded-xl border border-line/50 hover:border-ink bg-transparent text-ink font-bold font-subheading text-[11px] uppercase transition-all cursor-pointer"
+                  className="py-2.5 rounded-xl border border-line/50 hover:border-ink bg-transparent text-ink font-bold font-subheading text-2xs uppercase transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={allocateLoading}
-                  className="py-2.5 rounded-xl bg-accent text-ground hover:opacity-95 font-extrabold font-subheading text-[11px] uppercase transition-all shadow-md shadow-accent/15 cursor-pointer flex justify-center items-center gap-2 leading-relaxed disabled:opacity-50"
+                  className="py-2.5 rounded-xl bg-accent text-ground hover:opacity-95 font-extrabold font-subheading text-2xs uppercase transition-all shadow-md shadow-accent/15 cursor-pointer flex justify-center items-center gap-2 leading-relaxed disabled:opacity-50"
                 >
                   {allocateLoading ? (
                     <>

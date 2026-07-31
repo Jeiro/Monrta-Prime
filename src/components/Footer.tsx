@@ -22,7 +22,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const { appSettings } = useApp();
 
   return (
-    <footer className="py-20 px-4 bg-[#05070B] border-t border-[#2B3139]/30">
+    <footer className="py-16 px-4 bg-ground border-t border-line/30">
       <motion.div
         initial={{ opacity: 0, scaleX: 0 }}
         whileInView={{ opacity: 1, scaleX: 1 }}

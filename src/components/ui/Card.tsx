@@ -57,7 +57,7 @@ export function CardTitle({ className = "", ...props }: React.HTMLAttributes<HTM
 export function CardLabel({ className = "", ...props }: React.HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
-      className={`text-[11px] font-semibold uppercase tracking-[0.09em] text-faint ${className}`}
+      className={`text-2xs font-semibold uppercase tracking-[0.09em] text-faint ${className}`}
       {...props}
     />
   );

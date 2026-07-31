@@ -56,7 +56,7 @@ export const AdminWalletFeedbackTab: React.FC = () => {
             <p className="text-xs text-muted mt-1">Review user requests for new Web3 wallet integrations.</p>
           </div>
           {newCount > 0 && (
-            <span className="flex items-center gap-2 text-[10px] font-bold text-accent bg-accent/10 border border-accent/30 px-3 py-1.5 rounded-full">
+            <span className="flex items-center gap-2 text-2xs font-bold text-accent bg-accent/10 border border-accent/30 px-3 py-1.5 rounded-full">
               <Clock size={12} /> {newCount} New Submissions
             </span>
           )}
@@ -98,7 +98,7 @@ export const AdminWalletFeedbackTab: React.FC = () => {
                 <div className="p-4 sm:p-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                      <span className={`px-2 py-0.5 rounded text-2xs font-bold uppercase tracking-wider ${
                         fb.status === "new" 
                           ? "bg-accent/10 text-accent border border-accent/30"
                           : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
@@ -109,7 +109,7 @@ export const AdminWalletFeedbackTab: React.FC = () => {
                         {new Date(fb.createdAt).toLocaleDateString()}
                       </span>
                       {fb.wouldUse && (
-                        <span className="text-[10px] font-bold text-emerald-400 flex items-center gap-1">
+                        <span className="text-2xs font-bold text-emerald-400 flex items-center gap-1">
                           <CheckCircle size={10} /> Committed User
                         </span>
                       )}

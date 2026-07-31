@@ -53,12 +53,12 @@ export const AdminSupportTab: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-xl font-bold text-ink flex items-center gap-2">
-              <MessageSquare size={20} className="text-[#DFAD12]" /> Ticket Helpdesk
+              <MessageSquare size={20} className="text-accent" /> Ticket Helpdesk
             </h1>
             <p className="text-xs text-muted mt-1">Manage and respond to user support tickets.</p>
           </div>
           {openCount > 0 && (
-            <span className="flex items-center gap-2 text-[10px] font-bold text-red-400 bg-red-500/10 border border-red-500/30 px-3 py-1.5 rounded-full animate-pulse">
+            <span className="flex items-center gap-2 text-2xs font-bold text-red-400 bg-red-500/10 border border-red-500/30 px-3 py-1.5 rounded-full animate-pulse">
               <AlertTriangle size={12} /> {openCount} Open Tickets
             </span>
           )}
@@ -88,19 +88,19 @@ export const AdminSupportTab: React.FC = () => {
               <button onClick={() => setExpandedTicket(isExpanded ? null : ticket.id)}
                 className="w-full flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-line/20 transition-colors cursor-pointer text-left gap-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#DFAD12] to-accent-deep flex items-center justify-center text-white text-[10px] font-black">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-accent-deep flex items-center justify-center text-white text-2xs font-black">
                     {ticket.userName?.charAt(0)}
                   </div>
                   <div>
                     <p className="text-sm font-bold text-ink">{ticket.subject}</p>
-                    <p className="text-[10px] text-muted">{ticket.userName} • {ticket.userEmail} • {ticket.date}</p>
+                    <p className="text-2xs text-muted">{ticket.userName} • {ticket.userEmail} • {ticket.date}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${priorityColors[ticket.priority]}`}>
+                  <span className={`text-2xs font-bold px-2 py-0.5 rounded-full border ${priorityColors[ticket.priority]}`}>
                     {ticket.priority.toUpperCase()}
                   </span>
-                  <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusColors[ticket.status]}`}>
+                  <span className={`text-2xs font-bold px-2 py-0.5 rounded-full border ${statusColors[ticket.status]}`}>
                     {ticket.status.toUpperCase()}
                   </span>
                 </div>
@@ -114,7 +114,7 @@ export const AdminSupportTab: React.FC = () => {
                       <div key={idx} className={`flex ${msg.sender === "support" ? "justify-end" : "justify-start"}`}>
                         <div className={`max-w-[80%] px-4 py-2 rounded-2xl text-xs ${msg.sender === "support" ? "bg-accent/20 text-accent rounded-br-none" : "bg-surface border border-line text-ink rounded-bl-none"}`}>
                           <p>{msg.text}</p>
-                          <p className="text-[9px] text-muted mt-1">{msg.time}</p>
+                          <p className="text-2xs text-muted mt-1">{msg.time}</p>
                         </div>
                       </div>
                     ))}
@@ -136,12 +136,12 @@ export const AdminSupportTab: React.FC = () => {
                   <div className="flex flex-wrap gap-2 pt-2 border-t border-line/50">
                     {(["low", "medium", "high"] as const).map(p => (
                       <button key={p} onClick={() => adminSetTicketPriority(ticket.id, p)}
-                        className={`px-3 py-1 text-[10px] font-bold rounded-lg border cursor-pointer transition-colors ${ticket.priority === p ? priorityColors[p] : "text-muted border-line hover:border-accent"}`}>
+                        className={`px-3 py-1 text-2xs font-bold rounded-lg border cursor-pointer transition-colors ${ticket.priority === p ? priorityColors[p] : "text-muted border-line hover:border-accent"}`}>
                         {p.toUpperCase()}
                       </button>
                     ))}
                     <button onClick={() => { adminCloseTicket(ticket.id); setFeedback("Ticket closed."); setTimeout(() => setFeedback(null), 3000); }}
-                      className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold rounded-lg hover:bg-emerald-500/20 cursor-pointer">
+                      className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-2xs font-bold rounded-lg hover:bg-emerald-500/20 cursor-pointer">
                       Mark Resolved
                     </button>
                   </div>

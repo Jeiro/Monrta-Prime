@@ -161,7 +161,7 @@ export const DashboardKYC: React.FC = () => {
 
 const Info: React.FC<{ label: string; value: string }> = ({ label, value }) => (
   <div className="bg-ground border border-line rounded-xl p-3">
-    <p className="text-[10px] uppercase tracking-wider text-muted font-bold">{label}</p>
+    <p className="text-2xs uppercase tracking-wider text-muted font-bold">{label}</p>
     <p className="mt-1 text-ink font-bold break-words">{value}</p>
   </div>
 );

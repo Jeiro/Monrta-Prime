@@ -39,7 +39,7 @@ export const DashboardAirdrops: React.FC = () => {
           <Gift className="text-accent" size={24} />
           Airdrop Center
         </h2>
-        <span className="text-[10px] font-bold text-accent bg-accent/10 border border-accent/30 px-3 py-1 rounded-full flex items-center gap-1.5 w-fit">
+        <span className="text-2xs font-bold text-accent bg-accent/10 border border-accent/30 px-3 py-1 rounded-full flex items-center gap-1.5 w-fit">
           <Sparkles size={10} /> {activeCampaigns.length} Active
         </span>
       </div>
@@ -52,9 +52,9 @@ export const DashboardAirdrops: React.FC = () => {
               <div key={claim.id} className="border border-line rounded-lg p-3 flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-xs font-bold text-ink truncate">{claim.campaignTitle || airdrops.find(item => item.id === claim.airdropId)?.title || claim.token}</p>
-                  <p className="text-[10px] text-muted">{claim.rewardAmount} {claim.token} - {claim.date}</p>
+                  <p className="text-2xs text-muted">{claim.rewardAmount} {claim.token} - {claim.date}</p>
                 </div>
-                <span className={`shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded-full border text-[10px] font-bold ${claimBadgeClass(claim.status)}`}>
+                <span className={`shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded-full border text-2xs font-bold ${claimBadgeClass(claim.status)}`}>
                   <ClaimIcon status={claim.status} /> {claim.status}
                 </span>
               </div>
@@ -84,7 +84,7 @@ export const DashboardAirdrops: React.FC = () => {
                   <div className="w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center font-bold text-accent text-sm">
                     {airdrop.token[0]}
                   </div>
-                  <span className="text-[10px] bg-positive/10 text-positive font-bold px-2 py-0.5 rounded border border-positive/20">Live</span>
+                  <span className="text-2xs bg-positive/10 text-positive font-bold px-2 py-0.5 rounded border border-positive/20">Live</span>
                 </div>
 
                 <div>
@@ -97,7 +97,7 @@ export const DashboardAirdrops: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex justify-between text-[11px] text-muted">
+                  <div className="flex justify-between text-2xs text-muted">
                     <span>Claims</span>
                     <span>{limit ? `${claimCount}/${limit}` : `${claimCount} submitted`}</span>
                   </div>
@@ -106,7 +106,7 @@ export const DashboardAirdrops: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-[10px] text-muted">
+                <div className="grid grid-cols-2 gap-2 text-2xs text-muted">
                   <span>Starts: <span className="text-ink">{airdrop.startDate || "Open"}</span></span>
                   <span>Ends: <span className="text-ink">{airdrop.endDate || "Open"}</span></span>
                 </div>

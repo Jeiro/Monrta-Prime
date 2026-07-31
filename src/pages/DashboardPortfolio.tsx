@@ -98,7 +98,7 @@ export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNaviga
       {/* Aggregate metrics box */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans">
         <div className="bg-surface border border-line rounded-2xl p-4 space-y-2">
-          <div className="flex justify-between items-center text-[10px] text-muted font-subheading">
+          <div className="flex justify-between items-center text-2xs text-muted font-subheading">
             <span>Total Equity</span>
             <Wallet size={14} className="text-muted/70 shrink-0" />
           </div>
@@ -106,7 +106,7 @@ export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNaviga
         </div>
 
         <div className="bg-surface border border-line rounded-xl p-6 space-y-2">
-          <div className="flex justify-between items-center text-[10px] text-muted font-subheading">
+          <div className="flex justify-between items-center text-2xs text-muted font-subheading">
             <span>Asset Value</span>
             <Layers size={14} className="text-muted/70 shrink-0" />
           </div>
@@ -114,7 +114,7 @@ export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNaviga
         </div>
 
         <div className="bg-surface border border-line rounded-xl p-6 space-y-2">
-          <div className="flex justify-between items-center text-[10px] text-muted font-subheading">
+          <div className="flex justify-between items-center text-2xs text-muted font-subheading">
             <span>Total PnL</span>
             <TrendingUp size={14} className="text-muted/70 shrink-0" />
           </div>
@@ -144,7 +144,7 @@ export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNaviga
                 <div className="relative w-40 h-40 rounded-full bg-panel border border-line flex items-center justify-center shadow-xl">
                   {/* Inside metrics */}
                   <div className="text-center font-sans">
-                    <span className="text-[10px] text-muted uppercase tracking-normal font-subheading">Active Assets</span>
+                    <span className="text-2xs text-muted uppercase tracking-normal font-subheading">Active Assets</span>
                     <strong className="block text-lg font-black font-data text-ink">{preProcessedPortfolio.length} Pairs</strong>
                   </div>
 
@@ -175,7 +175,7 @@ export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNaviga
             )}
           </div>
 
-          <div className="pt-4 border-t border-line/40 text-[10px] text-muted text-center font-sans">
+          <div className="pt-4 border-t border-line/40 text-2xs text-muted text-center font-sans">
             Prices update in real time.
           </div>
         </div>
@@ -206,7 +206,7 @@ export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNaviga
                 >
                   <div className="space-y-1">
                     <strong className="font-data text-sm text-ink">{holding.symbol}</strong>
-                    <span className="text-[10px] text-muted block">
+                    <span className="text-2xs text-muted block">
                       Quantity: <strong className="font-data">{holding.amount}</strong> | Weight: <span className="font-data">{holding.weight}%</span>
                     </span>
                   </div>
@@ -215,7 +215,7 @@ export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNaviga
                     <span className="text-ink text-sm font-bold block">
                       ${holding.marketValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </span>
-                    <span className={`text-[10px] font-bold ${holding.profitLoss >= 0 ? "text-positive" : "text-negative"}`}>
+                    <span className={`text-2xs font-bold ${holding.profitLoss >= 0 ? "text-positive" : "text-negative"}`}>
                       {holding.profitLoss >= 0 ? "Profit: +" : "Loss: "}${holding.profitLoss.toLocaleString()} ({holding.profitLossPct}%)
                     </span>
                   </div>
@@ -256,13 +256,13 @@ export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNaviga
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <strong className="text-ink font-subheading block">{trade.traderName}</strong>
-                    <span className="text-[10px] text-muted font-data">{isClaimable ? "Matured" : `${trade.remainingDays}d remaining`}</span>
+                    <span className="text-2xs text-muted font-data">{isClaimable ? "Matured" : `${trade.remainingDays}d remaining`}</span>
                   </div>
-                  <span className={`px-2 py-1 rounded font-bold font-subheading text-[10px] border ${isClaimable ? "bg-positive/10 text-positive border-positive/30" : "bg-accent/10 text-accent border-accent/30"}`}>
+                  <span className={`px-2 py-1 rounded font-bold font-subheading text-2xs border ${isClaimable ? "bg-positive/10 text-positive border-positive/30" : "bg-accent/10 text-accent border-accent/30"}`}>
                     {isClaimable ? "Matured" : trade.status}
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-[11px] font-data">
+                <div className="grid grid-cols-2 gap-2 text-2xs font-data">
                   <span className="text-muted">Invested <strong className="block text-ink">${trade.amountInvested.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
                   <span className="text-muted">ROI <strong className="block text-positive">{trade.roiPercent}%</strong></span>
                   <span className="text-muted">Expected profit <strong className="block text-positive">${trade.expectedProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
@@ -271,13 +271,13 @@ export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNaviga
                 <div className="w-full bg-line h-1.5 rounded-full overflow-hidden">
                   <div className="bg-accent h-full" style={{ width: `${trade.progress}%` }} />
                 </div>
-                <p className="text-[10px] text-muted font-data">Ends: {new Date(trade.endTimestamp).toLocaleString()}</p>
+                <p className="text-2xs text-muted font-data">Ends: {new Date(trade.endTimestamp).toLocaleString()}</p>
                 {isClaimable && (
                   <button
                     type="button"
                     onClick={() => handleClaimCopyPayout(trade.id)}
                     disabled={isClaiming}
-                    className="w-full bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading py-1.5 rounded text-center uppercase text-[10px] transition-colors"
+                    className="w-full bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading py-1.5 rounded text-center uppercase text-2xs transition-colors"
                   >
                     {isClaiming ? "Claiming…" : `Claim Payout $${trade.totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
                   </button>
@@ -295,7 +295,7 @@ export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNaviga
           ) : (
             <div className="space-y-2">
               {completedCopyTrades.map(trade => (
-                <div key={trade.id} className="grid grid-cols-2 md:grid-cols-6 gap-2 p-3 rounded-lg border border-line/60 bg-ground/30 text-[11px] font-data">
+                <div key={trade.id} className="grid grid-cols-2 md:grid-cols-6 gap-2 p-3 rounded-lg border border-line/60 bg-ground/30 text-2xs font-data">
                   <span className="text-ink font-bold md:col-span-2">{trade.traderName}</span>
                   <span className="text-muted">Invested ${trade.amountInvested.toLocaleString()}</span>
                   <span className="text-positive">Profit ${trade.expectedProfit.toLocaleString()}</span>

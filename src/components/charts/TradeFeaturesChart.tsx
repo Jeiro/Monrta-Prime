@@ -32,7 +32,7 @@ const generateMockData = (basePrice: number) => {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-[#121318]/90 backdrop-blur-md border border-[#2B3139] p-3 rounded-xl shadow-2xl">
+      <div className="bg-surface/90 backdrop-blur-md border border-line p-3 rounded-xl shadow-2xl">
         <p className="text-muted text-xs mb-1 font-mono">{label}</p>
         <p className="text-accent font-bold font-mono">
           Price: ${payload[0].value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -150,7 +150,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
   const yDomain = [minPrice * 0.99, maxPrice * 1.01];
 
   return (
-    <div ref={sectionRef} className="w-full bg-[#0B0E11] border-y border-[#2B3139]/50 py-16 lg:py-24 relative z-20">
+    <div ref={sectionRef} className="w-full bg-ground border-y border-line/50 py-16 relative z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
@@ -171,7 +171,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
           <div className="flex items-center gap-4">
             <button
               onClick={() => onNavigate && onNavigate("dashboard-trading")}
-              className="px-6 py-3 bg-accent hover:bg-[#8ABAFF] text-black font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(106,165,255,0.15)] flex items-center gap-2 text-sm"
+              className="px-6 py-3 bg-accent hover:bg-accent-hover text-black font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(106,165,255,0.15)] flex items-center gap-2 text-sm"
             >
               Start Trading <TrendingUp size={16} />
             </button>
@@ -179,15 +179,15 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
         </div>
 
         {/* The Interactive Terminal UI */}
-        <div className="bg-[#12161A] border border-[#2B3139] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/5">
+        <div className="bg-panel border border-line rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/5">
           {/* Terminal Toolbar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 p-4 border-b border-[#2B3139]/80 bg-[#0F1216]">
+          <div className="flex flex-wrap items-center justify-between gap-4 p-4 border-b border-line/80 bg-[#0F1216]">
             
             {/* Coin Selector */}
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-3 px-4 py-2 bg-[#1A1F26] hover:bg-[#252A33] border border-[#2B3139] rounded-lg transition-colors"
+                className="flex items-center gap-3 px-4 py-2 bg-raised hover:bg-[#252A33] border border-line rounded-lg transition-colors"
               >
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${selectedCoin.iconBg}`}>
                   {selectedCoin.icon}
@@ -199,12 +199,12 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
               </button>
 
               {dropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-[#1A1F26] border border-[#2B3139] rounded-xl shadow-xl z-50 overflow-hidden">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-raised border border-line rounded-xl shadow-xl z-50 overflow-hidden">
                   {SUPPORTED_COINS.map(coin => (
                     <button
                       key={coin.symbol}
                       onClick={() => { setSelectedCoin(coin); setDropdownOpen(false); }}
-                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#252A33] transition-colors border-b border-[#2B3139]/50 last:border-0"
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#252A33] transition-colors border-b border-line/50 last:border-0"
                     >
                       <div className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold ${coin.iconBg}`}>
                         {coin.icon}
@@ -230,25 +230,25 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
                 >
                   {realtimePrice.toLocaleString(undefined, { minimumFractionDigits: selectedCoin.basePrice < 10 ? 4 : 2 })}
                 </motion.span>
-                <span className="text-[10px] text-slate-500 font-mono tracking-widest uppercase">Current Price</span>
+                <span className="text-2xs text-slate-500 font-mono tracking-widest uppercase">Current Price</span>
               </div>
               <div className="flex flex-col">
                 <span className={`text-sm font-bold font-mono ${priceChangePercent >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                   {priceChangePercent >= 0 ? "+" : ""}{priceChangeAbs} ({priceChangePercent}%)
                 </span>
-                <span className="text-[10px] text-slate-500 font-mono tracking-widest uppercase">24h Change</span>
+                <span className="text-2xs text-slate-500 font-mono tracking-widest uppercase">24h Change</span>
               </div>
             </div>
 
             {/* Toolbar Actions */}
             <div className="flex items-center gap-2">
-              <div className="flex bg-[#1A1F26] rounded-lg p-1 border border-[#2B3139]">
+              <div className="flex bg-raised rounded-lg p-1 border border-line">
                 {(["1m", "30m", "1h", "D"] as const).map(tf => (
                   <button
                     key={tf}
                     onClick={() => setTimeframe(tf)}
                     className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
-                      timeframe === tf ? "bg-[#2B3139] text-white" : "text-slate-400 hover:text-white"
+                      timeframe === tf ? "bg-line text-white" : "text-slate-400 hover:text-white"
                     }`}
                   >
                     {tf}
@@ -258,7 +258,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
               
               <button 
                 onClick={() => setChartType(prev => prev === "area" ? "line" : "area")}
-                className="p-2 bg-[#1A1F26] hover:bg-[#252A33] border border-[#2B3139] rounded-lg text-slate-400 hover:text-white transition-colors"
+                className="p-2 bg-raised hover:bg-[#252A33] border border-line rounded-lg text-slate-400 hover:text-white transition-colors"
                 title="Toggle Chart Type"
               >
                 <Activity size={16} />
@@ -266,7 +266,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
               
               <button 
                 onClick={() => setShowVolume(!showVolume)}
-                className={`p-2 border rounded-lg transition-colors ${showVolume ? "bg-accent/10 border-accent/30 text-accent" : "bg-[#1A1F26] border-[#2B3139] text-slate-400 hover:text-white"}`}
+                className={`p-2 border rounded-lg transition-colors ${showVolume ? "bg-accent/10 border-accent/30 text-accent" : "bg-raised border-line text-slate-400 hover:text-white"}`}
                 title="Toggle Volume"
               >
                 <BarChart3 size={16} />

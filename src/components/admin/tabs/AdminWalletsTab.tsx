@@ -140,7 +140,7 @@ export const AdminWalletsTab: React.FC = () => {
             {isEditing ? "Edit Deposit Wallet" : "Add Deposit Wallet"}
           </h2>
           {isEditing && (
-            <button type="button" onClick={resetForm} className="text-[10px] text-muted hover:text-ink cursor-pointer">
+            <button type="button" onClick={resetForm} className="text-2xs text-muted hover:text-ink cursor-pointer">
               New Wallet
             </button>
           )}
@@ -186,11 +186,11 @@ export const AdminWalletsTab: React.FC = () => {
                 <div className="space-y-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <h3 className="text-sm font-bold text-ink">{getDepositWalletLabel(wallet)}</h3>
-                    <span className={`text-[9px] px-2 py-0.5 rounded-full border ${wallet.enabled ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" : "border-negative/30 bg-negative/10 text-negative"}`}>
+                    <span className={`text-2xs px-2 py-0.5 rounded-full border ${wallet.enabled ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" : "border-negative/30 bg-negative/10 text-negative"}`}>
                       {wallet.enabled ? "Enabled" : "Disabled"}
                     </span>
                   </div>
-                  <p className="text-[10px] text-muted">Min ${wallet.minimumDeposit.toLocaleString()} | Order {wallet.displayOrder}</p>
+                  <p className="text-2xs text-muted">Min ${wallet.minimumDeposit.toLocaleString()} | Order {wallet.displayOrder}</p>
                   <p className="text-xs text-ink font-mono break-all">{wallet.walletAddress}</p>
                 </div>
 
@@ -201,7 +201,7 @@ export const AdminWalletsTab: React.FC = () => {
                   <button type="button" onClick={() => setForm(walletToForm(wallet))} className="p-2 rounded-lg bg-ground border border-line text-muted hover:text-accent hover:border-accent cursor-pointer" title="Edit wallet">
                     <Edit3 size={14} />
                   </button>
-                  <button type="button" onClick={() => handleToggle(wallet)} className="px-3 py-2 rounded-lg bg-ground border border-line text-[10px] text-muted hover:text-ink cursor-pointer">
+                  <button type="button" onClick={() => handleToggle(wallet)} className="px-3 py-2 rounded-lg bg-ground border border-line text-2xs text-muted hover:text-ink cursor-pointer">
                     {wallet.enabled ? "Disable" : "Enable"}
                   </button>
                   <button type="button" onClick={() => handleDelete(wallet)} className="p-2 rounded-lg bg-ground border border-line text-muted hover:text-negative hover:border-negative/50 cursor-pointer" title="Delete wallet">

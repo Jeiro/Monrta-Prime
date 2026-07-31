@@ -6,7 +6,7 @@ import { Brandmark } from "../ui/Brandmark";
 
 // Section 4: About Us
 export const AboutUs = () => (
-    <section className="pt-12 pb-16 px-4 bg-[#0B0E11]/30 text-center flex flex-col items-center justify-center" id="about-us">
+    <section className="py-16 px-4 bg-ground/30 text-center flex flex-col items-center justify-center" id="about-us">
         {/* Brand Logo Icon on Top */}
         <div className="mb-6 relative group inline-block">
             <Brandmark className="w-16 h-16 transform group-hover:rotate-12 transition-transform duration-500 filter drop-shadow-[0_4px_12px_rgba(106,165,255,0.3)]" />

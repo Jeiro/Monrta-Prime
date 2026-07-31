@@ -147,10 +147,10 @@ export const AdminAirdropsTab: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className={metricClass}><p className="text-[10px] uppercase text-muted font-bold">Total Claims</p><p className="text-2xl font-bold text-ink mt-1">{metrics.total}</p></div>
-        <div className={metricClass}><p className="text-[10px] uppercase text-muted font-bold">Pending</p><p className="text-2xl font-bold text-yellow-300 mt-1">{metrics.pending}</p></div>
-        <div className={metricClass}><p className="text-[10px] uppercase text-muted font-bold">Approved</p><p className="text-2xl font-bold text-emerald-400 mt-1">{metrics.approved}</p></div>
-        <div className={metricClass}><p className="text-[10px] uppercase text-muted font-bold">Rejected</p><p className="text-2xl font-bold text-red-400 mt-1">{metrics.rejected}</p></div>
+        <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Total Claims</p><p className="text-2xl font-bold text-ink mt-1">{metrics.total}</p></div>
+        <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Pending</p><p className="text-2xl font-bold text-yellow-300 mt-1">{metrics.pending}</p></div>
+        <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Approved</p><p className="text-2xl font-bold text-emerald-400 mt-1">{metrics.approved}</p></div>
+        <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Rejected</p><p className="text-2xl font-bold text-red-400 mt-1">{metrics.rejected}</p></div>
       </div>
 
       {feedback && (
@@ -196,24 +196,24 @@ export const AdminAirdropsTab: React.FC = () => {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h3 className="text-sm font-bold text-ink">{airdrop.title}</h3>
-                  <p className="text-[11px] text-muted mt-1">{airdrop.description || airdrop.eligibility || "Campaign configured for airdrop claims."}</p>
+                  <p className="text-2xs text-muted mt-1">{airdrop.description || airdrop.eligibility || "Campaign configured for airdrop claims."}</p>
                 </div>
-                <span className={`shrink-0 text-[9px] font-bold px-2 py-0.5 rounded-full border ${active ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-line/40 border-line text-muted"}`}>{active ? "ACTIVE" : "INACTIVE"}</span>
+                <span className={`shrink-0 text-2xs font-bold px-2 py-0.5 rounded-full border ${active ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-line/40 border-line text-muted"}`}>{active ? "ACTIVE" : "INACTIVE"}</span>
               </div>
-              <div className="grid grid-cols-2 gap-2 text-[10px]">
+              <div className="grid grid-cols-2 gap-2 text-2xs">
                 <div><span className="text-muted">Token:</span> <span className="text-accent font-bold ml-1">{airdrop.token}</span></div>
                 <div><span className="text-muted">Reward:</span> <span className="text-ink font-bold ml-1">{airdrop.rewardAmount}</span></div>
                 <div><span className="text-muted">Claims:</span> <span className="text-ink font-bold ml-1">{claimCount}{airdrop.claimLimit ? `/${airdrop.claimLimit}` : ""}</span></div>
                 <div><span className="text-muted">Dates:</span> <span className="text-ink font-bold ml-1">{airdrop.startDate || "Now"} - {airdrop.endDate || "Open"}</span></div>
               </div>
               <div className="flex gap-2 pt-2 border-t border-line/50">
-                <button title={active ? "Disable" : "Enable"} onClick={() => toggleCampaign(airdrop)} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-line/40 border border-line text-ink text-[10px] font-bold rounded-lg hover:border-accent/40 cursor-pointer">
+                <button title={active ? "Disable" : "Enable"} onClick={() => toggleCampaign(airdrop)} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-line/40 border border-line text-ink text-2xs font-bold rounded-lg hover:border-accent/40 cursor-pointer">
                   {active ? <PauseCircle size={12} /> : <PlayCircle size={12} />}
                 </button>
-                <button onClick={() => startEdit(airdrop)} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-accent/10 border border-accent/30 text-accent text-[10px] font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
+                <button onClick={() => startEdit(airdrop)} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-accent/10 border border-accent/30 text-accent text-2xs font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
                   <Edit3 size={10} /> Edit
                 </button>
-                <button title="Delete" onClick={() => { if (window.confirm(`Delete "${airdrop.title}"?`)) adminDeleteAirdrop(airdrop.id); }} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] font-bold rounded-lg hover:bg-red-500/20 cursor-pointer">
+                <button title="Delete" onClick={() => { if (window.confirm(`Delete "${airdrop.title}"?`)) adminDeleteAirdrop(airdrop.id); }} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-500/10 border border-red-500/30 text-red-400 text-2xs font-bold rounded-lg hover:bg-red-500/20 cursor-pointer">
                   <Trash2 size={10} />
                 </button>
               </div>
@@ -225,11 +225,11 @@ export const AdminAirdropsTab: React.FC = () => {
       <div className="bg-surface border border-line rounded-2xl overflow-hidden">
         <div className="p-5 border-b border-line flex items-center justify-between gap-3">
           <h3 className="text-sm font-bold text-ink flex items-center gap-2"><Clock3 size={16} className="text-accent" /> Claim Review</h3>
-          <span className="text-[10px] text-muted">{sortedClaims.length} records</span>
+          <span className="text-2xs text-muted">{sortedClaims.length} records</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left min-w-[760px]">
-            <thead className="bg-ground/60 text-[10px] uppercase text-muted">
+            <thead className="bg-ground/60 text-2xs uppercase text-muted">
               <tr>
                 <th className="px-5 py-3">User</th>
                 <th className="px-4 py-3">Campaign</th>
@@ -242,19 +242,19 @@ export const AdminAirdropsTab: React.FC = () => {
             <tbody className="divide-y divide-line/60">
               {sortedClaims.map(claim => (
                 <tr key={claim.id} className="hover:bg-ground/30 transition-colors">
-                  <td className="px-5 py-4"><p className="text-xs font-bold text-ink">{claim.userName || claim.userEmail.split("@")[0]}</p><p className="text-[10px] text-muted">{claim.userEmail}</p></td>
+                  <td className="px-5 py-4"><p className="text-xs font-bold text-ink">{claim.userName || claim.userEmail.split("@")[0]}</p><p className="text-2xs text-muted">{claim.userEmail}</p></td>
                   <td className="px-4 py-4 text-xs text-ink">{claim.campaignTitle || airdrops.find(item => item.id === claim.airdropId)?.title || claim.airdropId}</td>
                   <td className="px-4 py-4 text-xs font-bold text-accent">{claim.rewardAmount} {claim.token}</td>
                   <td className="px-4 py-4 text-xs text-muted">{claim.date}</td>
-                  <td className="px-4 py-4"><span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-bold ${statusClass(claim.status)}`}>{claim.status === "Approved" ? <CheckCircle size={11} /> : claim.status === "Rejected" ? <XCircle size={11} /> : <Clock3 size={11} />} {claim.status}</span></td>
+                  <td className="px-4 py-4"><span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-2xs font-bold ${statusClass(claim.status)}`}>{claim.status === "Approved" ? <CheckCircle size={11} /> : claim.status === "Rejected" ? <XCircle size={11} /> : <Clock3 size={11} />} {claim.status}</span></td>
                   <td className="px-5 py-4">
                     {claim.status === "Pending" ? (
                       <div className="flex justify-end gap-2">
-                        <button disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "approve")} className="flex items-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-[10px] uppercase rounded-lg hover:bg-emerald-600 disabled:opacity-60 cursor-pointer"><Check size={12} /> Approve</button>
-                        <button disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "reject")} className="flex items-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-[10px] uppercase rounded-lg hover:bg-red-600 disabled:opacity-60 cursor-pointer"><X size={12} /> Reject</button>
+                        <button disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "approve")} className="flex items-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-emerald-600 disabled:opacity-60 cursor-pointer"><Check size={12} /> Approve</button>
+                        <button disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "reject")} className="flex items-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-red-600 disabled:opacity-60 cursor-pointer"><X size={12} /> Reject</button>
                       </div>
                     ) : (
-                      <p className="text-right text-[10px] text-muted">{claim.payoutTransactionId ? `Paid: ${claim.payoutTransactionId}` : claim.reviewedAt || "Reviewed"}</p>
+                      <p className="text-right text-2xs text-muted">{claim.payoutTransactionId ? `Paid: ${claim.payoutTransactionId}` : claim.reviewedAt || "Reviewed"}</p>
                     )}
                   </td>
                 </tr>

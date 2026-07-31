@@ -22,7 +22,7 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
     });
 
   return (
-    <section className="pt-12 pb-10 px-4 bg-[#0B0E11]/30 border-t border-[#2B3139]/10 relative overflow-hidden" id="investment-plans">
+    <section className="py-16 px-4 bg-ground/30 border-t border-line/10 relative overflow-hidden" id="investment-plans">
       {/* Background radial glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/[0.03] blur-[150px] rounded-full pointer-events-none" />
 
@@ -35,7 +35,7 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 80, damping: 15 }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-accent/15 bg-accent/5 text-[10px] md:text-xs text-accent font-bold tracking-[0.2em] font-display uppercase mb-1"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-accent/15 bg-accent/5 text-2xs md:text-xs text-accent font-bold tracking-[0.2em] font-display uppercase mb-1"
           >
             <Layers className="w-3.5 h-3.5 text-accent fill-accent/10" />
             INVESTMENT PLANS
@@ -96,7 +96,7 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
                       <p className="text-neutral-400 font-display text-xs leading-relaxed">
                         Expected return: <span className="font-semibold text-white">{plan.roiPercent}%</span>
                       </p>
-                      <p className="text-neutral-500 font-display text-[11px] leading-relaxed">
+                      <p className="text-neutral-500 font-display text-2xs leading-relaxed">
                         Min: ${plan.minDeposit.toLocaleString()} | Max: {plan.maxDeposit >= 10000000 ? "Unlimited" : `${plan.maxDeposit.toLocaleString()}`}
                       </p>
                     </div>

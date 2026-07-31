@@ -69,7 +69,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
           <div className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface text-accent">
             <Bell size={20} />
             {unreadNotificationsCount > 0 && (
-              <span className="absolute -right-1 -top-1 min-w-5 rounded-full bg-accent px-1.5 py-0.5 text-center text-[10px] font-black text-ground">
+              <span className="absolute -right-1 -top-1 min-w-5 rounded-full bg-accent px-1.5 py-0.5 text-center text-2xs font-black text-ground">
                 {unreadNotificationsCount > 99 ? "99+" : unreadNotificationsCount}
               </span>
             )}
@@ -94,7 +94,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
 
       {notifications.length === 0 ? (
         <div className="flex min-h-[340px] flex-col items-center justify-center rounded-xl border border-dashed border-line bg-surface/40 px-6 text-center">
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-line bg-[#10131a] text-muted">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-line bg-panel text-muted">
             <Bell size={24} />
           </div>
           <h2 className="text-lg font-bold text-ink">No notifications yet</h2>
@@ -120,7 +120,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
                       <div className="flex flex-wrap items-center gap-2">
                         {!notification.read && <span className={`h-2 w-2 rounded-full ${style.dot}`} />}
                         <h2 className="text-sm font-bold text-ink">{notification.title}</h2>
-                        <span className="text-[11px] uppercase tracking-wide text-muted">{notification.type}</span>
+                        <span className="text-2xs uppercase tracking-wide text-muted">{notification.type}</span>
                       </div>
                       <p className="mt-1.5 text-sm leading-6 text-slate-300">{notification.message}</p>
                       <p className="mt-2 text-xs text-muted">{formatRelativeTimestamp(notification.timestamp)}</p>
@@ -132,7 +132,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
                       <button
                         type="button"
                         onClick={() => handleAction(notification)}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-[#10131a] px-3 py-2 text-xs font-bold text-ink transition-colors hover:border-accent/50 hover:text-accent"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-panel px-3 py-2 text-xs font-bold text-ink transition-colors hover:border-accent/50 hover:text-accent"
                       >
                         {notification.action.label}
                         <ArrowRight size={13} />
@@ -142,7 +142,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
                       <button
                         type="button"
                         onClick={() => markNotificationRead(notification.id)}
-                        className="rounded-lg border border-line bg-[#10131a] p-2 text-muted transition-colors hover:text-emerald-400"
+                        className="rounded-lg border border-line bg-panel p-2 text-muted transition-colors hover:text-emerald-400"
                         title="Mark as read"
                       >
                         <CheckCircle2 size={15} />
@@ -151,7 +151,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
                     <button
                       type="button"
                       onClick={() => deleteNotification(notification.id)}
-                      className="rounded-lg border border-line bg-[#10131a] p-2 text-muted transition-colors hover:text-rose-400"
+                      className="rounded-lg border border-line bg-panel p-2 text-muted transition-colors hover:text-rose-400"
                       title="Delete notification"
                     >
                       <Trash2 size={15} />

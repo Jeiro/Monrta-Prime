@@ -111,7 +111,7 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
               className="bg-surface border border-line rounded-2xl p-6 relative overflow-hidden transition-all flex flex-col justify-between hover:scale-[1.01] hover:border-accent/40 shadow-xl"
             >
               {plan.badge && (
-                <div className="absolute top-0 right-0 bg-accent text-ground text-[9px] uppercase font-subheading tracking-wider font-bold px-3 py-1 rounded-bl-lg">
+                <div className="absolute top-0 right-0 bg-accent text-ground text-2xs uppercase font-subheading tracking-wider font-bold px-3 py-1 rounded-bl-lg">
                   {plan.badge}
                 </div>
               )}
@@ -153,7 +153,7 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-muted">Returns:</span>
-                    <strong className="text-positive font-extrabold font-data text-[13px]">
+                    <strong className="text-positive font-extrabold font-data text-sm">
                       +{plan.roiPercent}% ROI
                     </strong>
                   </div>
@@ -187,7 +187,7 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
           {/* Left Calculator Panel Inputs */}
           <div className="lg:col-span-7 space-y-6 font-sans">
             <div>
-              <span className="text-accent text-[10px] font-subheading tracking-widest uppercase">
+              <span className="text-accent text-2xs font-subheading tracking-widest uppercase">
                 INVESTMENT SIMULATOR
               </span>
               <h2 className="text-xl sm:text-2xl font-bold font-heading text-ink mt-1">
@@ -200,7 +200,7 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
 
             {/* Select Tier selectors */}
             <div className="space-y-2">
-              <label className="text-[10px] text-muted uppercase font-subheading tracking-wider">
+              <label className="text-2xs text-muted uppercase font-subheading tracking-wider">
                 Select Desired Plan Tier
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
@@ -224,7 +224,7 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
 
             {/* Input Capital Amount */}
             <div className="space-y-3">
-              <div className="flex justify-between items-center text-[10px] text-muted font-subheading tracking-wider">
+              <div className="flex justify-between items-center text-2xs text-muted font-subheading tracking-wider">
                 <span>Investment Amount</span>
                 <span>
                   Limits: ${activeCalcPlanObj.minDeposit.toLocaleString()} - {activeCalcPlanObj.maxDeposit === 1000000 ? "Unlimited" : `$${activeCalcPlanObj.maxDeposit.toLocaleString()}`}
@@ -286,14 +286,14 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
 
               {/* Final totals */}
               <div className="pt-2">
-                <span className="text-[10px] text-muted block font-subheading">Total Net Profit</span>
+                <span className="text-2xs text-muted block font-subheading">Total Net Profit</span>
                 <span className="text-2xl font-black font-data text-positive">
                   +${result.profit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
               <div>
-                <span className="text-[10px] text-muted block font-subheading">Total Payout</span>
+                <span className="text-2xs text-muted block font-subheading">Total Payout</span>
                 <span className="text-xl font-bold font-data text-ink">
                   ${result.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </span>
@@ -302,7 +302,7 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
 
             <button
               onClick={() => user.isLoggedIn ? onNavigate("dashboard-plans") : onNavigate("auth")}
-              className="w-full mt-4 py-3 rounded-lg bg-gradient-to-r from-accent to-[#3D7DFF] text-ground font-bold font-subheading text-xs tracking-wider uppercase shadow-md shadow-accent/15 cursor-pointer text-center"
+              className="w-full mt-4 py-3 rounded-lg bg-gradient-to-r from-accent to-accent-deep text-ground font-bold font-subheading text-xs tracking-wider uppercase shadow-md shadow-accent/15 cursor-pointer text-center"
             >
               Invest Now
             </button>

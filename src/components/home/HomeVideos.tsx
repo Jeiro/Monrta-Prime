@@ -24,7 +24,7 @@ const SECTIONS = [
 
 export const HomeVideos = () => {
   return (
-    <section className="py-20 md:py-32 bg-[#0B0E11] relative overflow-hidden">
+    <section className="py-16 bg-ground relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 flex flex-col gap-24 md:gap-32">
 
         {SECTIONS.map((section, idx) => (
@@ -47,7 +47,7 @@ export const HomeVideos = () => {
             </div>
 
             {/* Video Container */}
-            <div className="w-full rounded-3xl overflow-hidden border border-[#2B3139]/60 shadow-2xl bg-black relative">
+            <div className="w-full rounded-3xl overflow-hidden border border-line/60 shadow-2xl bg-black relative">
               <video
                 src={section.video}
                 className="w-full h-auto object-cover"

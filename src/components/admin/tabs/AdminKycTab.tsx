@@ -101,7 +101,7 @@ export const AdminKycTab: React.FC = () => {
             </h1>
             <p className="text-xs text-muted mt-1">Review identity documents, proof of address, notes, and verification outcomes.</p>
           </div>
-          <span className="flex items-center gap-2 text-[10px] font-bold text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 px-3 py-1.5 rounded-full">
+          <span className="flex items-center gap-2 text-2xs font-bold text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 px-3 py-1.5 rounded-full">
             {pendingCount} Pending Reviews
           </span>
         </div>
@@ -123,7 +123,7 @@ export const AdminKycTab: React.FC = () => {
           <div className="flex gap-2 flex-wrap">
             {(["all", "pending", "approved", "rejected", "unverified"] as const).map(status => (
               <button key={status} onClick={() => setFilterStatus(status)}
-                className={`px-3 py-2 text-[10px] font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-accent text-ground border-accent" : "bg-ground text-muted border-line hover:border-accent"}`}>
+                className={`px-3 py-2 text-2xs font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-accent text-ground border-accent" : "bg-ground text-muted border-line hover:border-accent"}`}>
                 {status}
               </button>
             ))}
@@ -133,7 +133,7 @@ export const AdminKycTab: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1180px] text-left">
             <thead className="bg-ground/60 border-b border-line">
-              <tr className="text-[10px] uppercase tracking-wider text-muted">
+              <tr className="text-2xs uppercase tracking-wider text-muted">
                 <th className="px-5 py-3 font-bold">User</th>
                 <th className="px-4 py-3 font-bold">Submission Date</th>
                 <th className="px-4 py-3 font-bold">Document Type</th>
@@ -153,17 +153,17 @@ export const AdminKycTab: React.FC = () => {
                     <tr className="hover:bg-ground/40 transition-colors align-top">
                       <td className="px-5 py-4">
                         <p className="text-xs font-bold text-ink">{user.name}</p>
-                        <p className="text-[10px] text-muted">{user.email}</p>
+                        <p className="text-2xs text-muted">{user.email}</p>
                       </td>
                       <td className="px-4 py-4 text-xs text-muted">{formatDate(kyc?.submissionDate)}</td>
                       <td className="px-4 py-4 text-xs font-bold text-ink">{kyc?.documentType || kyc?.idType || "Not submitted"}</td>
                       <td className="px-4 py-4">
-                        <button disabled={!kyc} onClick={() => setExpandedUser(isExpanded ? null : user.email)} className="inline-flex items-center gap-1.5 px-3 py-2 bg-ground border border-line rounded-lg text-[10px] font-bold text-ink disabled:opacity-50 cursor-pointer hover:border-accent">
+                        <button disabled={!kyc} onClick={() => setExpandedUser(isExpanded ? null : user.email)} className="inline-flex items-center gap-1.5 px-3 py-2 bg-ground border border-line rounded-lg text-2xs font-bold text-ink disabled:opacity-50 cursor-pointer hover:border-accent">
                           <Eye size={12} /> View ({getDocumentCount(kyc)})
                         </button>
                       </td>
                       <td className="px-4 py-4">
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-[10px] font-bold ${statusColors[user.kycStatus]}`}>
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${statusColors[user.kycStatus]}`}>
                           {user.kycStatus.toUpperCase()}
                         </span>
                       </td>
@@ -178,15 +178,15 @@ export const AdminKycTab: React.FC = () => {
                       <td className="px-5 py-4">
                         {kyc?.status === "pending" ? (
                           <div className="flex justify-end gap-2">
-                            <button onClick={() => approve(user)} disabled={isReviewing} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-[10px] uppercase rounded-lg hover:bg-emerald-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                            <button onClick={() => approve(user)} disabled={isReviewing} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-emerald-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                               <Check size={12} /> Approve
                             </button>
-                            <button onClick={() => reject(user)} disabled={isReviewing} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-[10px] uppercase rounded-lg hover:bg-red-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                            <button onClick={() => reject(user)} disabled={isReviewing} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-red-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                               <X size={12} /> Reject
                             </button>
                           </div>
                         ) : (
-                          <p className="text-right text-[10px] font-bold uppercase text-muted">No action</p>
+                          <p className="text-right text-2xs font-bold uppercase text-muted">No action</p>
                         )}
                       </td>
                     </tr>
@@ -212,7 +212,7 @@ export const AdminKycTab: React.FC = () => {
 
 const DocumentPanel: React.FC<{ kyc: KycSubmission }> = ({ kyc }) => (
   <div className="space-y-4">
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-[11px]">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-2xs">
       <Info label="Document Number" value={kyc.idNumber || "Not captured"} />
       <Info label="Date of Birth" value={kyc.dob || "Not captured"} />
       <Info label="Country" value={kyc.country || "Not captured"} />
@@ -228,14 +228,14 @@ const DocumentPanel: React.FC<{ kyc: KycSubmission }> = ({ kyc }) => (
 
 const Info: React.FC<{ label: string; value: string }> = ({ label, value }) => (
   <div className="bg-surface border border-line rounded-lg p-3">
-    <p className="text-[9px] uppercase tracking-wider text-muted font-bold">{label}</p>
+    <p className="text-2xs uppercase tracking-wider text-muted font-bold">{label}</p>
     <p className="mt-1 text-ink font-bold break-words">{value}</p>
   </div>
 );
 
 const DocumentLink: React.FC<{ title: string; url?: string; optional?: boolean }> = ({ title, url, optional }) => (
   <div className="bg-surface border border-line rounded-xl p-3 min-h-[120px]">
-    <p className="text-[10px] text-muted uppercase font-bold mb-2 flex items-center gap-1"><FileText size={11} /> {title}</p>
+    <p className="text-2xs text-muted uppercase font-bold mb-2 flex items-center gap-1"><FileText size={11} /> {title}</p>
     {url ? (
       <a href={url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs font-bold text-accent hover:text-ink">
         Open uploaded document <ExternalLink size={12} />

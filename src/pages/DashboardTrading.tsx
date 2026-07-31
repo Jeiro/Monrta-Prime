@@ -86,7 +86,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
       <div className="flex flex-wrap items-center justify-between gap-4 py-3.5 px-5 sm:px-6 rounded-xl border border-line bg-surface text-xs font-sans">
         <div className="flex flex-wrap items-center gap-4 sm:gap-6">
           <div>
-            <span className="text-[10px] text-muted select-none font-subheading">Active Trading Pair</span>
+            <span className="text-2xs text-muted select-none font-subheading">Active Trading Pair</span>
             <div className="mt-1">
               <button
                 type="button"
@@ -107,7 +107,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
           <div className="border-l border-line/50 h-8 hidden sm:block" />
 
           <div>
-            <span className="text-[10px] text-muted select-none font-subheading flex items-center gap-1">
+            <span className="text-2xs text-muted select-none font-subheading flex items-center gap-1">
               <Activity size={10} className="text-muted shrink-0" />
               Mark Price
             </span>
@@ -119,7 +119,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
           <div className="border-l border-line/50 h-8 hidden sm:block" />
 
           <div>
-            <span className="text-[10px] text-muted block select-none font-subheading">24h Change</span>
+            <span className="text-2xs text-muted block select-none font-subheading">24h Change</span>
             <span className={`font-data font-bold flex items-center gap-1 mt-1.5 ${activeAsset.change >= 0 ? "text-positive" : "text-negative"}`}>
               {activeAsset.change >= 0 ? <TrendingUp size={12} className="text-positive shrink-0" /> : <TrendingDown size={12} className="text-negative shrink-0" />}
               {activeAsset.change >= 0 ? "+" : ""}{activeAsset.change}%
@@ -131,7 +131,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
         <div className="flex items-center gap-6 font-data font-semibold">
           <div className="text-right">
             <div className="flex items-center gap-2 justify-end text-muted">
-              <span className="text-[10px] select-none font-subheading">Available Balance</span>
+              <span className="text-2xs select-none font-subheading">Available Balance</span>
               <button
                 type="button"
                 onClick={() => setShowBalance(!showBalance)}
@@ -172,12 +172,12 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
                 >
                   <div className="font-data">
                     <span className="block font-bold text-ink">{item.symbol}</span>
-                    <span className="text-[9px] text-muted font-sans line-clamp-1">{item.name}</span>
+                    <span className="text-2xs text-muted font-sans line-clamp-1">{item.name}</span>
                   </div>
 
                   <div className="text-right font-data font-medium">
                     <span className="block text-ink">${item.price.toLocaleString(undefined, { minimumFractionDigits: item.price > 10 ? 2 : 4 })}</span>
-                    <span className={`text-[10px] font-bold ${item.change >= 0 ? "text-positive" : "text-negative"}`}>
+                    <span className={`text-2xs font-bold ${item.change >= 0 ? "text-positive" : "text-negative"}`}>
                       {item.change >= 0 ? "+" : ""}{item.change}%
                     </span>
                   </div>
@@ -186,7 +186,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
             </div>
           </div>
 
-          <div className="pt-4 border-t border-line/40 text-[10px] text-muted text-center font-sans">
+          <div className="pt-4 border-t border-line/40 text-2xs text-muted text-center font-sans">
             Real-time market data feed.
           </div>
         </div>
@@ -223,7 +223,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
             </div>
 
             {/* Limit vs Market trigger options */}
-            <div className="flex justify-between items-center text-[10px] text-muted border-b border-line/40 pb-2">
+            <div className="flex justify-between items-center text-2xs text-muted border-b border-line/40 pb-2">
               <span className="font-subheading">Order Execution Type</span>
               <div className="flex gap-2">
                 <button
@@ -245,7 +245,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
 
             {/* Display message logs */}
             {log && (
-              <div className={`p-2 text-[10px] rounded-lg border font-medium font-sans ${
+              <div className={`p-2 text-2xs rounded-lg border font-medium font-sans ${
                 log.startsWith("Error") ? "bg-negative/10 border-negative/30 text-negative" : "bg-positive/10 border-positive/30 text-positive"
               }`}>
                 {log}
@@ -255,7 +255,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
             {/* Render input trigger rates for LIMIT orders */}
             {orderType === "limit" && (
               <div className="space-y-1">
-                <label className="text-[10px] font-subheading text-muted uppercase">
+                <label className="text-2xs font-subheading text-muted uppercase">
                   Order Price
                 </label>
                 <input
@@ -270,7 +270,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
 
             {/* Capital Allocation Size */}
             <div className="space-y-1.5 font-sans">
-              <div className="flex justify-between text-[10px] uppercase font-subheading text-muted">
+              <div className="flex justify-between text-2xs uppercase font-subheading text-muted">
                 <span>Order Qty</span>
                 <span>Limits: min $10</span>
               </div>
@@ -287,7 +287,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
 
             {/* Leverage Sliders */}
             <div className="space-y-1.5 font-sans">
-              <div className="flex justify-between text-[10px] font-subheading text-muted uppercase select-none">
+              <div className="flex justify-between text-2xs font-subheading text-muted uppercase select-none">
                 <span>Leverage</span>
               </div>
               <input
@@ -298,7 +298,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
                 onChange={(e) => setLeverage(parseInt(e.target.value))}
                 className="w-full h-1 bg-line rounded appearance-none cursor-pointer accent-accent"
               />
-              <div className="flex justify-between text-[8px] font-data text-muted">
+              <div className="flex justify-between text-2xs font-data text-muted">
                 <span>1x (Cash)</span>
                 <span>25x</span>
                 <span>50x Max</span>
@@ -306,7 +306,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
             </div>
 
             {/* Margin calculation stats summary */}
-            <div className="pt-2 border-t border-line/40 space-y-1.5 text-[10px] text-muted font-sans">
+            <div className="pt-2 border-t border-line/40 space-y-1.5 text-2xs text-muted font-sans">
               <div className="flex justify-between">
                 <span>Order Qty ({activeAsset.symbol.split("/")[0]}):</span>
                 <span className="font-data text-ink">
@@ -336,7 +336,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
           </form>
 
           {/* Quick solicitation helper */}
-          <div className="text-[9px] text-muted leading-snug border-t border-line/30 pt-3 flex gap-2 font-sans">
+          <div className="text-2xs text-muted leading-snug border-t border-line/30 pt-3 flex gap-2 font-sans">
             <ShieldAlert size={18} className="text-amber-500 shrink-0 mt-0.5" />
             <span>Risk Warning: High leverage carries liquidation risks. Manage your exposure accordingly.</span>
           </div>
@@ -356,7 +356,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
           <div className="overflow-x-auto text-xs text-left font-sans">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="border-b border-line font-subheading uppercase tracking-wider text-[10px] text-muted bg-panel/40">
+                <tr className="border-b border-line font-subheading uppercase tracking-wider text-2xs text-muted bg-panel/40">
                   <th className="p-3 pl-4">Asset Ticker</th>
                   <th className="p-3">Current Size</th>
                   <th className="p-3">Average purchase basis</th>

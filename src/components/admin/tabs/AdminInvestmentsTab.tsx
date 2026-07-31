@@ -219,9 +219,9 @@ export const AdminInvestmentsTab: React.FC = () => {
                   {plan.accentColor && <span className="w-2.5 h-2.5 rounded-full border border-white/20" style={{ backgroundColor: plan.accentColor }} />}
                   <h3 className="text-sm font-bold text-ink">{plan.name}</h3>
                 </div>
-                <p className="text-[10px] text-muted mt-1">Order {plan.displayOrder}{plan.badge ? ` | ${plan.badge}` : ""}</p>
+                <p className="text-2xs text-muted mt-1">Order {plan.displayOrder}{plan.badge ? ` | ${plan.badge}` : ""}</p>
               </div>
-              <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${plan.enabled ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" : "text-yellow-400 bg-yellow-500/10 border-yellow-500/30"}`}>
+              <span className={`text-2xs font-bold px-2 py-0.5 rounded-full border ${plan.enabled ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" : "text-yellow-400 bg-yellow-500/10 border-yellow-500/30"}`}>
                 {plan.enabled ? "ENABLED" : "DISABLED"}
               </span>
             </div>
@@ -231,11 +231,11 @@ export const AdminInvestmentsTab: React.FC = () => {
               <div><span className="text-muted">Duration:</span> <span className="text-ink font-bold font-data ml-1">{plan.durationDays}d</span></div>
               <div><span className="text-muted">ROI:</span> <span className="text-accent font-bold font-data ml-1">{plan.roiPercent}%</span></div>
             </div>
-            <p className="text-[10px] text-muted leading-relaxed line-clamp-2">{plan.description}</p>
+            <p className="text-2xs text-muted leading-relaxed line-clamp-2">{plan.description}</p>
             <div className="flex flex-wrap gap-2 pt-2 border-t border-line/50">
-              <button onClick={() => movePlan(plan, "up")} disabled={isSaving || index === 0} className="px-2 py-1.5 bg-line/40 border border-line text-ink text-[10px] font-bold rounded-lg disabled:opacity-30 cursor-pointer"><ArrowUp size={12} /></button>
-              <button onClick={() => movePlan(plan, "down")} disabled={isSaving || index === orderedPlans.length - 1} className="px-2 py-1.5 bg-line/40 border border-line text-ink text-[10px] font-bold rounded-lg disabled:opacity-30 cursor-pointer"><ArrowDown size={12} /></button>
-              <button onClick={() => startEdit(plan)} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-accent/10 border border-accent/30 text-accent text-[10px] font-bold rounded-lg hover:bg-accent/20 cursor-pointer"><Edit3 size={10} /> Edit</button>
+              <button onClick={() => movePlan(plan, "up")} disabled={isSaving || index === 0} className="px-2 py-1.5 bg-line/40 border border-line text-ink text-2xs font-bold rounded-lg disabled:opacity-30 cursor-pointer"><ArrowUp size={12} /></button>
+              <button onClick={() => movePlan(plan, "down")} disabled={isSaving || index === orderedPlans.length - 1} className="px-2 py-1.5 bg-line/40 border border-line text-ink text-2xs font-bold rounded-lg disabled:opacity-30 cursor-pointer"><ArrowDown size={12} /></button>
+              <button onClick={() => startEdit(plan)} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-accent/10 border border-accent/30 text-accent text-2xs font-bold rounded-lg hover:bg-accent/20 cursor-pointer"><Edit3 size={10} /> Edit</button>
               <button onClick={async () => {
                   try {
                     if (isSaving) return;
@@ -247,7 +247,7 @@ export const AdminInvestmentsTab: React.FC = () => {
                   } finally {
                     setIsSaving(false);
                   }
-                }} className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] font-bold rounded-lg cursor-pointer border ${plan.enabled ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/20" : "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"}`}>
+                }} className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-2xs font-bold rounded-lg cursor-pointer border ${plan.enabled ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/20" : "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"}`}>
                 {plan.enabled ? <><Pause size={10} /> Disable</> : <><Play size={10} /> Enable</>}
               </button>
               <button onClick={async () => {
@@ -261,7 +261,7 @@ export const AdminInvestmentsTab: React.FC = () => {
                   } finally {
                     setIsSaving(false);
                   }
-                }} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] font-bold rounded-lg hover:bg-red-500/20 cursor-pointer"><Trash2 size={10} /></button>
+                }} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-500/10 border border-red-500/30 text-red-400 text-2xs font-bold rounded-lg hover:bg-red-500/20 cursor-pointer"><Trash2 size={10} /></button>
             </div>
           </div>
         ))}

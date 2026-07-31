@@ -276,7 +276,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
             >
               {showBalance ? <Eye size={12} /> : <EyeOff size={12} />}
             </button>
-            <span className="text-[10px] uppercase select-none">Available Balance</span>
+            <span className="text-2xs uppercase select-none">Available Balance</span>
           </div>
           <strong className="text-accent block text-sm font-data mt-0.5">
             {showBalance ? `$${user.balance.toLocaleString()}` : "••••••"}
@@ -336,7 +336,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
 
               {/* Currency selectors */}
               <div className="space-y-4">
-                <div className="flex items-center gap-1.5 text-[10px] uppercase font-subheading tracking-wider text-muted">
+                <div className="flex items-center gap-1.5 text-2xs uppercase font-subheading tracking-wider text-muted">
                   <Download size={13} className="text-accent shrink-0" />
                   <span>Select Crypto</span>
                 </div>
@@ -348,7 +348,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                       onClick={() => {
                         setDepositCurrency(label);
                       }}
-                      className={`p-2 py-2.5 rounded-lg border text-center text-[10px] font-bold font-data cursor-pointer transition-all ${
+                      className={`p-2 py-2.5 rounded-lg border text-center text-2xs font-bold font-data cursor-pointer transition-all ${
                         selectedDepositLabel === label 
                           ? "border-accent bg-accent/10 text-accent" 
                           : "border-line bg-ground/50 text-muted"
@@ -382,7 +382,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
 
                 {/* Secure Key panel */}
                 <div className="p-3.5 rounded-xl border border-line bg-ground space-y-2 font-sans">
-                  <span className="text-[9px] uppercase tracking-normal text-muted font-subheading block">Your {selectedDepositLabel} Deposit Address</span>
+                  <span className="text-2xs uppercase tracking-normal text-muted font-subheading block">Your {selectedDepositLabel} Deposit Address</span>
                   <div className="flex items-center justify-between gap-3 text-xs">
                     <span className="text-ink font-semibold select-all break-all pr-2 font-data">
                       {selectedDepositWallet?.walletAddress || "No enabled wallet address available"}
@@ -400,7 +400,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                 {/* Optional XRP Destination Tag Box */}
                 {selectedDepositWallet?.coinName.toUpperCase() === "XRP" && (
                   <div className="p-3.5 rounded-xl border border-line bg-ground space-y-2 font-sans animate-fadeIn">
-                    <span className="text-[9px] uppercase tracking-normal text-muted font-subheading block">Your XRP Deposit Destination Tag / Memo (Required)</span>
+                    <span className="text-2xs uppercase tracking-normal text-muted font-subheading block">Your XRP Deposit Destination Tag / Memo (Required)</span>
                     <div className="flex items-center justify-between gap-3 text-xs">
                       <span className="text-ink font-mono font-bold select-all bg-panel px-2 py-0.5 rounded border border-line">
                         108253
@@ -411,7 +411,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                           navigator.clipboard.writeText("108253");
                           addNotification("Copied XRP Destination Tag: 108253");
                         }}
-                        className="p-1.5 px-3 rounded bg-surface border border-line hover:border-accent hover:text-accent transition-all shrink-0 cursor-pointer flex items-center justify-center text-[10px] text-ink font-semibold"
+                        className="p-1.5 px-3 rounded bg-surface border border-line hover:border-accent hover:text-accent transition-all shrink-0 cursor-pointer flex items-center justify-center text-2xs text-ink font-semibold"
                       >
                         Copy Tag
                       </button>
@@ -419,7 +419,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                   </div>
                 )}
 
-                <div className="text-[10px] text-muted italic space-y-0.5 font-sans">
+                <div className="text-2xs text-muted italic space-y-0.5 font-sans">
                   <span>• Ensure you send only {depositCurrency} to this address.</span>
                   <span className="block">• Assets are safely held 1:1.</span>
                 </div>
@@ -427,7 +427,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
 
               {/* Deposit Amount input (repositioned immediately below address card) */}
               <div className="space-y-1.5 font-sans">
-                <label className="text-[10px] uppercase font-subheading tracking-wider text-muted block">Deposit Amount</label>
+                <label className="text-2xs uppercase font-subheading tracking-wider text-muted block">Deposit Amount</label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted font-bold font-data">$</span>
                   <input
@@ -436,26 +436,26 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                     value={depositAmountTxt}
                     onChange={(e) => setDepositAmountTxt(e.target.value)}
                     placeholder={`Min. Deposit: ${selectedMinimumDeposit.toLocaleString()} USD`}
-                    className="w-full bg-ground border border-line focus:border-accent rounded-xl pl-8 pr-4 py-2.5 text-xs text-ink font-bold font-data placeholder:text-[11px] placeholder:font-medium"
+                    className="w-full bg-ground border border-line focus:border-accent rounded-xl pl-8 pr-4 py-2.5 text-xs text-ink font-bold font-data placeholder:text-2xs placeholder:font-medium"
                   />
                 </div>
               </div>
 
               {/* Transaction Hash (TxID) input (pushed as part of the absolute bottom fields) */}
               <div className="space-y-1.5 font-sans">
-                <label className="text-[10px] uppercase font-subheading tracking-wider text-muted block">Transaction Hash (Optional)</label>
+                <label className="text-2xs uppercase font-subheading tracking-wider text-muted block">Transaction Hash (Optional)</label>
                 <input
                   type="text"
                   value={depositTxHash}
                   onChange={(e) => setDepositTxHash(e.target.value)}
                   placeholder="Blockchain validation hash / transaction index"
-                  className="w-full bg-ground border border-line focus:border-accent rounded-xl px-4 py-2.5 text-xs text-ink font-mono placeholder:text-[10.5px] placeholder:font-normal"
+                  className="w-full bg-ground border border-line focus:border-accent rounded-xl px-4 py-2.5 text-xs text-ink font-mono placeholder:text-2xs placeholder:font-normal"
                 />
               </div>
 
               {/* Transaction Screenshot (Optional) with native image gallery selection */}
               <div className="space-y-2 font-sans">
-                <label className="text-[10px] uppercase font-subheading tracking-wider text-muted block">Transaction Screenshot (Optional)</label>
+                <label className="text-2xs uppercase font-subheading tracking-wider text-muted block">Transaction Screenshot (Optional)</label>
                 <input
                   type="file"
                   ref={fileInputRef}
@@ -475,10 +475,10 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                       : "border-line bg-ground hover:border-accent"
                   }`}
                 >
-                  <p className="text-[11px] font-sans font-medium">
+                  <p className="text-2xs font-sans font-medium">
                     {depositProofName ? "✓ Receipt Proof Attached" : "📸 Upload transfer receipt or block explorer snapshot"}
                   </p>
-                  <span className="text-[9px] text-zinc-500 font-mono block mt-1">
+                  <span className="text-2xs text-zinc-500 font-mono block mt-1">
                     {depositProofName || "Supports JPG, PNG (Max size: 5MB)"}
                   </span>
                 </div>
@@ -487,7 +487,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
               <div>
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-accent to-[#3D7DFF] text-ground font-bold font-subheading text-xs uppercase shadow transition-all transform hover:-translate-y-0.5 cursor-pointer text-center"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent-deep text-ground font-bold font-subheading text-xs uppercase shadow transition-all transform hover:-translate-y-0.5 cursor-pointer text-center"
                 >
                   Confirm Deposit
                 </button>
@@ -518,14 +518,14 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
 
             {/* Denomination Coin selection */}
             <div className="space-y-1.5">
-              <label className="text-[10px] uppercase font-subheading tracking-wider text-muted">Select Withdrawal Method</label>
+              <label className="text-2xs uppercase font-subheading tracking-wider text-muted">Select Withdrawal Method</label>
               <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 font-data">
                 {["USDT", "BTC", "ETH", "XRP", "SOL", "Bank", "PayPal"].map((coin) => (
                   <button
                     key={coin}
                     type="button"
                     onClick={() => setWdrCurrency(coin)}
-                    className={`p-2 py-2.5 rounded-lg border text-center text-[10px] font-bold cursor-pointer transition-all ${
+                    className={`p-2 py-2.5 rounded-lg border text-center text-2xs font-bold cursor-pointer transition-all ${
                       wdrCurrency === coin 
                         ? "border-accent bg-accent/10 text-accent" 
                         : "border-line bg-ground/50 text-muted"
@@ -539,7 +539,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
 
             {wdrCurrency === "USDT" && (
               <div className="space-y-1.5 animate-fadeIn">
-                <label className="text-[10px] uppercase font-subheading tracking-wider text-muted">Select USDT Network</label>
+                <label className="text-2xs uppercase font-subheading tracking-wider text-muted">Select USDT Network</label>
                 <div className="grid grid-cols-3 gap-3 font-data">
                   {["TRC20", "ERC20", "BEP20"].map((net) => (
                     <button
@@ -561,7 +561,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
 
             {/* Wallet Cash limit checking */}
             <div className="space-y-1.5 font-sans">
-              <div className="flex justify-between text-[10px] uppercase text-muted font-subheading">
+              <div className="flex justify-between text-2xs uppercase text-muted font-subheading">
                 <span>Amount (USD)</span>
                 <span className="font-data">Available Balance: ${user.balance.toLocaleString()}</span>
               </div>
@@ -581,7 +581,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
             {/* Conditional input fields based on payout method */}
             {wdrCurrency === "PayPal" && (
               <div className="space-y-1.5 animate-fadeIn font-sans">
-                <label className="text-[10px] uppercase font-subheading tracking-wider text-muted">PayPal Email Address</label>
+                <label className="text-2xs uppercase font-subheading tracking-wider text-muted">PayPal Email Address</label>
                 <input
                   type="email"
                   required
@@ -595,10 +595,10 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
 
             {wdrCurrency === "Bank" && (
               <div className="space-y-3.5 animate-fadeIn font-sans">
-                <h4 className="text-[11px] font-bold font-subheading uppercase text-accent tracking-wider">Local Bank Settlement Fields</h4>
+                <h4 className="text-2xs font-bold font-subheading uppercase text-accent tracking-wider">Local Bank Settlement Fields</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase font-subheading tracking-wider text-muted">Bank Name</label>
+                    <label className="text-2xs uppercase font-subheading tracking-wider text-muted">Bank Name</label>
                     <input
                       type="text"
                       required
@@ -609,7 +609,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase font-subheading tracking-wider text-muted">Account Name</label>
+                    <label className="text-2xs uppercase font-subheading tracking-wider text-muted">Account Name</label>
                     <input
                       type="text"
                       required
@@ -620,7 +620,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase font-subheading tracking-wider text-muted">Account Number</label>
+                    <label className="text-2xs uppercase font-subheading tracking-wider text-muted">Account Number</label>
                     <input
                       type="text"
                       required
@@ -631,7 +631,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase font-subheading tracking-wider text-muted">Routing / Transit Code</label>
+                    <label className="text-2xs uppercase font-subheading tracking-wider text-muted">Routing / Transit Code</label>
                     <input
                       type="text"
                       required
@@ -648,7 +648,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
             {wdrCurrency !== "Bank" && wdrCurrency !== "PayPal" && (
               <div className="space-y-3.5 animate-fadeIn font-sans">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] uppercase font-subheading tracking-wider text-muted">Withdrawal Address</label>
+                  <label className="text-2xs uppercase font-subheading tracking-wider text-muted">Withdrawal Address</label>
                   <input
                     type="text"
                     required
@@ -661,7 +661,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
 
                 {wdrCurrency === "XRP" && (
                   <div className="space-y-1.5 animate-fadeIn">
-                    <label className="text-[10px] uppercase font-subheading tracking-wider text-muted">XRP Destination Tag / Memo</label>
+                    <label className="text-2xs uppercase font-subheading tracking-wider text-muted">XRP Destination Tag / Memo</label>
                     <input
                       type="text"
                       required
@@ -703,7 +703,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
               <div className="overflow-x-auto text-sans">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="border-b border-line text-[9px] uppercase font-subheading tracking-wider text-muted bg-ground/40">
+                    <tr className="border-b border-line text-2xs uppercase font-subheading tracking-wider text-muted bg-ground/40">
                       <th className="p-3 pl-4">TxID</th>
                       <th className="p-3">Date</th>
                       <th className="p-3">Category</th>
@@ -718,7 +718,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                         <td className="p-3 pl-4 font-bold text-ink select-all">{t.id}</td>
                         <td className="p-3 text-muted font-sans">{t.date}</td>
                         <td className="p-3 uppercase font-semibold font-sans">
-                          <span className={`px-2 py-0.5 rounded text-[10px] ${
+                          <span className={`px-2 py-0.5 rounded text-2xs ${
                             t.type === "deposit" ? "bg-positive/10 text-positive" : "bg-negative/10 text-negative"
                           }`}>
                             {t.type}
@@ -727,7 +727,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                         <td className="p-3 font-semibold text-ink font-data">{t.asset}</td>
                         <td className="p-3 text-ink font-bold">${t.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                         <td className="p-3 pr-4 text-right">
-                          <span className={`text-[11px] font-bold flex items-center justify-end gap-1 font-subheading ${
+                          <span className={`text-2xs font-bold flex items-center justify-end gap-1 font-subheading ${
                             t.status === "completed" || t.status === "approved" ? "text-positive" :
                             t.status === "pending" ? "text-yellow-400" :
                             "text-negative"

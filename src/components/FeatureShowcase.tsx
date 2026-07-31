@@ -114,7 +114,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
               
               {/* Left Column: Copy Content matching Image 4 */}
               <div className="lg:col-span-7 space-y-6 text-left">
-                <span className="text-[11px] font-bold font-subheading tracking-[0.25em] text-accent uppercase block">
+                <span className="text-2xs font-bold font-subheading tracking-[0.25em] text-accent uppercase block">
                   MAIN FEATURES
                 </span>
                 
@@ -156,7 +156,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                       }}
                     >
                       {idx === 6 && (
-                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-accent/15 border border-accent/40 text-[9px] text-accent font-mono font-bold px-1.5 py-0.5 rounded shadow">
+                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-accent/15 border border-accent/40 text-2xs text-accent font-mono font-bold px-1.5 py-0.5 rounded shadow">
                           Max
                         </div>
                       )}
@@ -179,7 +179,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
           {/* Left: Beautiful spacious live chart panel */}
           <div className="lg:col-span-7 flex justify-center relative order-2 lg:order-1 w-full">
             <ScrollReveal>
-              <div className="relative w-full rounded-2xl border border-zinc-800/80 bg-[#0B0E11] p-5 sm:p-6 shadow-2xl flex flex-col group min-h-[460px]">
+              <div className="relative w-full rounded-2xl border border-zinc-800/80 bg-ground p-5 sm:p-6 shadow-2xl flex flex-col group min-h-[460px]">
                 
                 {/* Subtle Amber Accent Glow */}
                 <div className="absolute -inset-1 bg-gradient-to-tr from-accent/5 via-transparent to-transparent rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition-opacity" />
@@ -189,7 +189,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] animate-ping" />
-                      <span className="text-[10px] uppercase tracking-wider text-accent font-extrabold font-mono">
+                      <span className="text-2xs uppercase tracking-wider text-accent font-extrabold font-mono">
                         BTCUSDT CRYPTO PAIR
                       </span>
                     </div>
@@ -198,10 +198,10 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                     </h4>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-[#0ecb81] font-bold font-mono bg-[#0ecb81]/10 border border-[#0ecb81]/25 px-2.5 py-1 rounded">
+                    <span className="text-2xs text-[#0ecb81] font-bold font-mono bg-[#0ecb81]/10 border border-[#0ecb81]/25 px-2.5 py-1 rounded">
                       +1.87%
                     </span>
-                    <span className="text-[10px] font-mono text-zinc-500 bg-zinc-900 border border-zinc-800/80 px-2 py-1 rounded select-none uppercase">
+                    <span className="text-2xs font-mono text-zinc-500 bg-zinc-900 border border-zinc-800/80 px-2 py-1 rounded select-none uppercase">
                       Real-time Feed
                     </span>
                   </div>
@@ -234,7 +234,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                 <motion.div
                   animate={{ y: [0, -6, 0] }}
                   transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                  className="absolute -right-3 -top-3 w-8 h-8 rounded-full border border-accent/20 bg-[#0B0E11] text-[10px] font-bold text-accent font-mono flex items-center justify-center z-10 shadow"
+                  className="absolute -right-3 -top-3 w-8 h-8 rounded-full border border-accent/20 bg-ground text-2xs font-bold text-accent font-mono flex items-center justify-center z-10 shadow"
                 >
                   a
                 </motion.div>
@@ -246,7 +246,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
           {/* Right: Stocks Trading Copy Panel matching Image 5 */}
           <div className="lg:col-span-5 space-y-6 text-left order-1 lg:order-2">
             <ScrollReveal>
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 border border-accent/25 rounded-md text-[10px] uppercase font-bold text-accent tracking-widest">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 border border-accent/25 rounded-md text-2xs uppercase font-bold text-accent tracking-widest">
                 <TrendingUp size={12} /> Equities & Indices
               </div>
               
@@ -281,7 +281,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
           {/* Left: Crypto Futures Copy Panel matching Image 6 */}
           <div className="lg:col-span-6 space-y-6 text-left">
             <ScrollReveal>
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 border border-accent/25 rounded-md text-[10px] uppercase font-bold text-accent tracking-widest">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 border border-accent/25 rounded-md text-2xs uppercase font-bold text-accent tracking-widest">
                 <Zap size={12} /> Crypto Derivatives
               </div>
               
@@ -320,11 +320,11 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                   className="relative z-15 p-12 bg-zinc-950/40 rounded-full border border-zinc-800/40 shadow-2xl backdrop-blur-md flex items-center justify-center w-52 h-52 hover:scale-[1.05] transition-transform duration-500"
                 >
                   <div className="text-center">
-                    <span className="block text-[11px] font-mono tracking-widest uppercase text-zinc-500">Makers Fee</span>
+                    <span className="block text-2xs font-mono tracking-widest uppercase text-zinc-500">Makers Fee</span>
                     <span className="block text-6xl font-black font-display tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-300 to-zinc-600">
                       0%
                     </span>
-                    <span className="block text-[8px] font-bold text-accent bg-accent/15 border border-accent/30 rounded-full py-0.5 px-2 mt-1 uppercase w-fit mx-auto">
+                    <span className="block text-2xs font-bold text-accent bg-accent/15 border border-accent/30 rounded-full py-0.5 px-2 mt-1 uppercase w-fit mx-auto">
                       Sovereign Deal
                     </span>
                   </div>
@@ -341,7 +341,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                   style={{ top: "15%", left: "15%" }}
                 >
                   {/* BTC Coin representation */}
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#6AA5FF]/15 to-[#6AA5FF]/80 border border-[#6AA5FF] flex items-center justify-center shadow-lg shadow-[#6AA5FF]/10 backdrop-blur-sm">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-accent/15 to-accent/80 border border-accent flex items-center justify-center shadow-lg shadow-accent/10 backdrop-blur-sm">
                     <span className="text-lg font-bold text-white">₿</span>
                   </div>
                 </motion.div>

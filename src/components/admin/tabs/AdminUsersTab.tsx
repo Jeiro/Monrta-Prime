@@ -233,7 +233,7 @@ export const AdminUsersTab: React.FC = () => {
             <h2 className="text-sm font-bold text-ink flex items-center gap-2">
               <ClipboardList size={16} className="text-accent" /> Accounts
             </h2>
-            <p className="text-[11px] text-muted mt-1">Use Manage to open a full account operations panel.</p>
+            <p className="text-2xs text-muted mt-1">Use Manage to open a full account operations panel.</p>
           </div>
           <div className="relative w-full lg:w-80">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
@@ -259,7 +259,7 @@ export const AdminUsersTab: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[1080px] text-left">
                 <thead className="bg-ground/60 border-b border-line">
-                  <tr className="text-[10px] uppercase tracking-wider text-muted">
+                  <tr className="text-2xs uppercase tracking-wider text-muted">
                     <th className="px-5 py-3 font-bold">Avatar</th>
                     <th className="px-4 py-3 font-bold">Name</th>
                     <th className="px-4 py-3 font-bold">Email</th>
@@ -276,30 +276,30 @@ export const AdminUsersTab: React.FC = () => {
                     return (
                       <tr key={user.email} className="hover:bg-ground/40 transition-colors">
                         <td className="px-5 py-4">
-                          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-accent to-[#3D7DFF] flex items-center justify-center text-ground text-xs font-black">
+                          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-accent to-accent-deep flex items-center justify-center text-ground text-xs font-black">
                             {getInitials(user.name || "")}
                           </div>
                         </td>
                         <td className="px-4 py-4">
                           <p className="text-sm font-bold text-ink">{user.name}</p>
-                          <p className="text-[10px] text-muted">{user.accountType || user.username || "Standard account"}</p>
+                          <p className="text-2xs text-muted">{user.accountType || user.username || "Standard account"}</p>
                         </td>
                         <td className="px-4 py-4 text-xs text-muted">{user.email}</td>
                         <td className="px-4 py-4 text-xs font-bold text-ink font-data">{formatMoney(user.balance)}</td>
                         <td className="px-4 py-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-[10px] font-bold ${kycStyles[kycStatus]}`}>
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${kycStyles[kycStatus]}`}>
                             {kycStatus.toUpperCase()}
                           </span>
                         </td>
                         <td className="px-4 py-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-[10px] font-bold ${statusStyles[user.status as AccountStatus]}`}>
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${statusStyles[user.status as AccountStatus]}`}>
                             {user.status.toUpperCase()}
                           </span>
                         </td>
                         <td className="px-4 py-4 text-xs text-muted">{formatDate(user.registrationDate || undefined)}</td>
                         <td className="px-5 py-4">
                           <div className="flex justify-end">
-                            <button onClick={() => openDrawer(user)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-accent text-ground font-bold text-[10px] uppercase rounded-lg hover:bg-[#DFAD12] transition-colors cursor-pointer">
+                            <button onClick={() => openDrawer(user)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-accent text-ground font-bold text-2xs uppercase rounded-lg hover:bg-accent transition-colors cursor-pointer">
                               <Edit3 size={12} /> Manage
                             </button>
                           </div>
@@ -397,12 +397,12 @@ const UserDrawer: React.FC<{
       <motion.aside initial={{ x: 480 }} animate={{ x: 0 }} transition={{ type: "spring", damping: 28, stiffness: 260 }} onClick={event => event.stopPropagation()} className="h-full w-full max-w-2xl bg-ground border-l border-line shadow-2xl overflow-y-auto">
         <div className="sticky top-0 z-10 bg-ground/95 backdrop-blur border-b border-line px-5 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-[#3D7DFF] flex items-center justify-center text-ground text-sm font-black shrink-0">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-deep flex items-center justify-center text-ground text-sm font-black shrink-0">
               {getInitials(user.name || "")}
             </div>
             <div className="min-w-0">
               <h3 className="text-base font-bold text-ink truncate">{user.name}</h3>
-              <p className="text-[11px] text-muted truncate">{user.email}</p>
+              <p className="text-2xs text-muted truncate">{user.email}</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 rounded-lg bg-surface border border-line text-muted hover:text-ink hover:border-accent cursor-pointer" title="Close panel">
@@ -436,7 +436,7 @@ const UserDrawer: React.FC<{
                 className="w-full px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent"
                 placeholder="Set wallet balance"
               />
-              <button onClick={onSaveBalance} disabled={balanceBusy} className="flex items-center justify-center gap-1.5 px-4 py-2 bg-accent text-ground font-bold text-[10px] uppercase rounded-lg hover:bg-[#DFAD12] disabled:opacity-60 cursor-pointer">
+              <button onClick={onSaveBalance} disabled={balanceBusy} className="flex items-center justify-center gap-1.5 px-4 py-2 bg-accent text-ground font-bold text-2xs uppercase rounded-lg hover:bg-accent disabled:opacity-60 cursor-pointer">
                 {balanceBusy ? <Loader2 size={12} className="animate-spin" /> : <DollarSign size={12} />} Save Balance
               </button>
             </div>
@@ -444,8 +444,8 @@ const UserDrawer: React.FC<{
 
           <Section title="KYC Information" icon={<Shield size={15} className="text-accent" />}>
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-[10px] font-bold ${kycStyles[kycStatus]}`}>{kycStatus.toUpperCase()}</span>
-              {kyc?.rejectionReason && <span className="text-[11px] text-red-400">Previous rejection: {kyc.rejectionReason}</span>}
+              <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${kycStyles[kycStatus]}`}>{kycStatus.toUpperCase()}</span>
+              {kyc?.rejectionReason && <span className="text-2xs text-red-400">Previous rejection: {kyc.rejectionReason}</span>}
             </div>
             {kyc ? (
               <div className="grid grid-cols-2 gap-3">
@@ -505,7 +505,7 @@ const UserDrawer: React.FC<{
             <Section title="Recent Deposits" icon={<ArrowDownLeft size={15} className="text-emerald-400" />}>
               <TransactionList rows={deposits} empty="No recent deposits." />
             </Section>
-            <Section title="Recent Withdrawals" icon={<ArrowUpRight size={15} className="text-[#DFAD12]" />}>
+            <Section title="Recent Withdrawals" icon={<ArrowUpRight size={15} className="text-accent" />}>
               <TransactionList rows={withdrawals} empty="No recent withdrawals." />
             </Section>
           </div>
@@ -522,13 +522,13 @@ const UserDrawer: React.FC<{
 
           <Section title="Account Actions" icon={<AlertTriangle size={15} className="text-yellow-400" />}>
             <div className="flex flex-wrap gap-2">
-              <button onClick={onActivate} className="flex items-center gap-1.5 px-3 py-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold rounded-lg hover:bg-emerald-500/20 cursor-pointer">
+              <button onClick={onActivate} className="flex items-center gap-1.5 px-3 py-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-2xs font-bold rounded-lg hover:bg-emerald-500/20 cursor-pointer">
                 <UserCheck size={12} /> Activate
               </button>
-              <button onClick={onSuspend} className="flex items-center gap-1.5 px-3 py-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-[10px] font-bold rounded-lg hover:bg-yellow-500/20 cursor-pointer">
+              <button onClick={onSuspend} className="flex items-center gap-1.5 px-3 py-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-2xs font-bold rounded-lg hover:bg-yellow-500/20 cursor-pointer">
                 <Ban size={12} /> Suspend
               </button>
-              <button onClick={onResetPassword} className="flex items-center gap-1.5 px-3 py-2 bg-accent/10 border border-accent/30 text-accent text-[10px] font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
+              <button onClick={onResetPassword} className="flex items-center gap-1.5 px-3 py-2 bg-accent/10 border border-accent/30 text-accent text-2xs font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
                 <Key size={12} /> Reset Password
               </button>
             </div>
@@ -550,7 +550,7 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
 
   return (
     <div className={`px-3 py-2 border rounded-lg min-w-[92px] ${toneClass}`}>
-      <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
+      <p className="text-2xs uppercase text-muted tracking-wider">{label}</p>
       <p className="text-sm font-bold">{value}</p>
     </div>
   );
@@ -581,14 +581,14 @@ const Section: React.FC<{ title: string; icon: React.ReactNode; children: React.
 
 const InfoItem: React.FC<{ label: string; value: string }> = ({ label, value }) => (
   <div className="min-w-0">
-    <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
+    <p className="text-2xs uppercase text-muted tracking-wider">{label}</p>
     <p className="mt-1 text-xs font-bold text-ink break-words">{value}</p>
   </div>
 );
 
 const Metric: React.FC<{ label: string; value: string }> = ({ label, value }) => (
   <div className="bg-ground border border-line rounded-lg p-3">
-    <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
+    <p className="text-2xs uppercase text-muted tracking-wider">{label}</p>
     <p className="mt-1 text-sm font-bold text-ink font-data">{value}</p>
   </div>
 );
@@ -602,11 +602,11 @@ const RecordList: React.FC<{ rows: Array<{ id: string; title: string; meta: stri
         <div key={row.id} className="flex items-start justify-between gap-3 bg-ground border border-line rounded-lg p-3">
           <div className="min-w-0">
             <p className="text-xs font-bold text-ink truncate">{row.title}</p>
-            <p className="text-[10px] text-muted mt-1">{row.meta}</p>
+            <p className="text-2xs text-muted mt-1">{row.meta}</p>
           </div>
           <div className="text-right shrink-0">
             <p className="text-xs font-bold text-ink font-data">{row.value}</p>
-            <p className="text-[10px] text-accent uppercase font-bold mt-1">{row.status}</p>
+            <p className="text-2xs text-accent uppercase font-bold mt-1">{row.status}</p>
           </div>
         </div>
       ))}
@@ -624,14 +624,14 @@ const TransactionList: React.FC<{ rows: Transaction[]; empty: string }> = ({ row
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <p className="text-xs font-bold text-ink" title={row.id}>{shortValue(row.id)}</p>
-              <p className="text-[10px] text-muted mt-1">{row.asset} / {formatDate(row.date)}</p>
+              <p className="text-2xs text-muted mt-1">{row.asset} / {formatDate(row.date)}</p>
             </div>
             <div className="text-right shrink-0">
               <p className="text-xs font-bold text-ink font-data">{formatMoney(row.amount)}</p>
-              <p className="text-[10px] text-accent uppercase font-bold mt-1">{row.status}</p>
+              <p className="text-2xs text-accent uppercase font-bold mt-1">{row.status}</p>
             </div>
           </div>
-          {row.notes && <p className="mt-2 text-[10px] text-muted">{row.notes}</p>}
+          {row.notes && <p className="mt-2 text-2xs text-muted">{row.notes}</p>}
         </div>
       ))}
     </div>

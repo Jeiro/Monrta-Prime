@@ -57,7 +57,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
       {/* Dynamic atmospheric radial gradient glows (blue and gold) */}
       <div className="absolute top-0 left-[-10%] w-[60%] h-[750px] rounded-full bg-gradient-to-br from-accent/[0.08] via-indigo-950/[0.04] to-transparent blur-[130px]" />
       <div className="absolute top-[15%] right-[-10%] w-[50%] h-[800px] rounded-full bg-gradient-to-bl from-accent/[0.05] via-yellow-600/[0.02] to-transparent blur-[120px]" />
-      <div className="absolute top-[40%] left-[15%] w-[65%] h-[900px] rounded-full bg-gradient-to-r from-[#3D7DFF]/[0.03] via-blue-900/[0.04] to-transparent blur-[140px]" />
+      <div className="absolute top-[40%] left-[15%] w-[65%] h-[900px] rounded-full bg-gradient-to-r from-accent-deep/[0.03] via-blue-900/[0.04] to-transparent blur-[140px]" />
       <div className="absolute bottom-0 right-[5%] w-[55%] h-[1000px] rounded-full bg-gradient-to-t from-accent/[0.09] via-accent/[0.03] to-transparent blur-[150px]" />
 
       {/* Cyber Grid Background */}
@@ -170,14 +170,14 @@ export const ScrollAnimatedBackground: React.FC = () => {
         {/* Floating green candlestick cluster 1 */}
         <div className="absolute top-[280px] left-[6%] xl:left-[10%] opacity-[0.25] flex gap-1.5 items-end transform hover:scale-105 transition-transform duration-500">
           <div className="flex flex-col items-center">
-            <div className="w-0.5 h-3 bg-[#10B981]" />
-            <div className="w-3.5 h-10 bg-[#10B981] rounded-sm shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
-            <div className="w-0.5 h-3 bg-[#10B981]" />
+            <div className="w-0.5 h-3 bg-positive" />
+            <div className="w-3.5 h-10 bg-positive rounded-sm shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
+            <div className="w-0.5 h-3 bg-positive" />
           </div>
           <div className="flex flex-col items-center">
-            <div className="w-0.5 h-2 bg-[#10B981]" />
-            <div className="w-3.5 h-14 bg-[#10B981] rounded-sm shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
-            <div className="w-0.5 h-4 bg-[#10B981]" />
+            <div className="w-0.5 h-2 bg-positive" />
+            <div className="w-3.5 h-14 bg-positive rounded-sm shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
+            <div className="w-0.5 h-4 bg-positive" />
           </div>
           <div className="flex flex-col items-center">
             <div className="w-0.5 h-5 bg-red-400" />
@@ -185,9 +185,9 @@ export const ScrollAnimatedBackground: React.FC = () => {
             <div className="w-0.5 h-2 bg-red-400" />
           </div>
           <div className="flex flex-col items-center">
-            <div className="w-0.5 h-2 bg-[#10B981]" />
-            <div className="w-3.5 h-12 bg-[#10B981] rounded-sm shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
-            <div className="w-0.5 h-2 bg-[#10B981]" />
+            <div className="w-0.5 h-2 bg-positive" />
+            <div className="w-3.5 h-12 bg-positive rounded-sm shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
+            <div className="w-0.5 h-2 bg-positive" />
           </div>
         </div>
 
@@ -199,9 +199,9 @@ export const ScrollAnimatedBackground: React.FC = () => {
             <div className="w-0.5 h-2 bg-red-400" />
           </div>
           <div className="flex flex-col items-center">
-            <div className="w-0.5 h-5 bg-[#10B981]" />
-            <div className="w-3 h-8 bg-[#10B981] rounded-sm shadow-[0_0_6px_rgba(16,185,129,0.2)]" />
-            <div className="w-0.5 h-3 bg-[#10B981]" />
+            <div className="w-0.5 h-5 bg-positive" />
+            <div className="w-3 h-8 bg-positive rounded-sm shadow-[0_0_6px_rgba(16,185,129,0.2)]" />
+            <div className="w-0.5 h-3 bg-positive" />
           </div>
           <div className="flex flex-col items-center">
             <div className="w-0.5 h-3 bg-red-400" />
@@ -211,7 +211,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
         </div>
 
         {/* Mini Gold breakout cluster 3 at bottom-ish levels */}
-        <div className="absolute top-[1750px] left-[5%] opacity-[0.15] flex gap-1 text-[10px] font-mono items-center">
+        <div className="absolute top-[1750px] left-[5%] opacity-[0.15] flex gap-1 text-2xs font-mono items-center">
           <div className="flex flex-col items-center">
             <div className="w-0.5 h-2 bg-accent-hover" />
             <div className="w-2.5 h-7 bg-accent-hover/90 rounded-sm shadow-[0_0_6px_rgba(106,165,255,0.3)]" />
@@ -232,7 +232,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
       {/* ========================================================================= */}
       <motion.div 
         style={{ y: yMedium }}
-        className="absolute inset-y-0 right-[4%] w-[80px] h-full opacity-[0.06] flex justify-between pointer-events-none text-[8px] font-mono tracking-wider overflow-hidden pt-40"
+        className="absolute inset-y-0 right-[4%] w-[80px] h-full opacity-[0.06] flex justify-between pointer-events-none text-2xs font-mono tracking-wider overflow-hidden pt-40"
       >
         {dataColumns.slice(0, 2).map((col, cIdx) => (
           <div key={cIdx} className="flex flex-col gap-6 select-none animate-[float_45s_linear_infinite]" style={{ animationDelay: `${cIdx * 5}s` }}>
@@ -241,7 +241,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
                 key={iIdx} 
                 className={`transform leading-none whitespace-nowrap ${
                   item.includes("▲") 
-                    ? "text-[#10B981]" 
+                    ? "text-positive" 
                     : item.includes("▼") 
                       ? "text-red-400" 
                       : "text-zinc-500"
@@ -256,7 +256,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
                 key={`r-${iIdx}`} 
                 className={`transform leading-none whitespace-nowrap ${
                   item.includes("▲") 
-                    ? "text-[#10B981]" 
+                    ? "text-positive" 
                     : item.includes("▼") 
                       ? "text-red-400" 
                       : "text-zinc-500"
@@ -271,7 +271,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
 
       <motion.div 
         style={{ y: yFast }}
-        className="absolute inset-y-0 left-[2%] w-[80px] h-full opacity-[0.05] flex justify-between pointer-events-none text-[8px] font-mono tracking-wider overflow-hidden pt-80"
+        className="absolute inset-y-0 left-[2%] w-[80px] h-full opacity-[0.05] flex justify-between pointer-events-none text-2xs font-mono tracking-wider overflow-hidden pt-80"
       >
         {dataColumns.slice(2, 4).map((col, cIdx) => (
           <div key={cIdx} className="flex flex-col gap-6 select-none animate-[float_60s_linear_infinite]" style={{ animationDelay: `${cIdx * 8}s`, animationDirection: "reverse" }}>
@@ -280,7 +280,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
                 key={iIdx} 
                 className={`transform leading-none whitespace-nowrap ${
                   item.includes("▲") 
-                    ? "text-[#10B981]" 
+                    ? "text-positive" 
                     : item.includes("▼") 
                       ? "text-red-400" 
                       : "text-zinc-500"

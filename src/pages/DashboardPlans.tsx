@@ -127,38 +127,38 @@ export const DashboardPlans: React.FC = () => {
               } ${isPaused ? "opacity-50 cursor-not-allowed border-red-500/10" : ""}`}
             >
               {isSelected && (
-                <div className="absolute top-0 right-0 bg-accent text-ground font-black uppercase text-[8px] py-1 px-3 rounded-bl-xl tracking-widest font-subheading">
+                <div className="absolute top-0 right-0 bg-accent text-ground font-black uppercase text-2xs py-1 px-3 rounded-bl-xl tracking-widest font-subheading">
                   Selected
                 </div>
               )}
               
               <div className="space-y-4">
                 <div>
-                  <div className="inline-flex items-center justify-center bg-[#3D7DFF]/10 border border-[#3D7DFF]/20 p-1 rounded-md mb-2">
-                    <Activity size={13} className="text-[#3D7DFF] animate-pulse" />
+                  <div className="inline-flex items-center justify-center bg-accent-deep/10 border border-accent-deep/20 p-1 rounded-md mb-2">
+                    <Activity size={13} className="text-accent-deep animate-pulse" />
                   </div>
                   <h3 className="text-base font-extrabold text-ink tracking-tight font-sans mt-0.5 flex items-center gap-2">
                     {getPlanIcon(p.id)}
                     <span>{p.name}</span>
                   </h3>
-                  <p className="text-[10px] text-zinc-400 mt-1.5 leading-normal font-sans line-clamp-2">{p.description}</p>
+                  <p className="text-2xs text-zinc-400 mt-1.5 leading-normal font-sans line-clamp-2">{p.description}</p>
                 </div>
 
                 <div className="space-y-1.5 border-t border-line/50 pt-3">
-                  <div className="flex justify-between text-[11px] font-sans">
+                  <div className="flex justify-between text-2xs font-sans">
                     <span className="text-muted">Duration:</span>
                     <strong className="text-ink font-bold font-data flex items-center gap-1">
                       <Timer size={10} className="text-accent" />
                       {p.durationDays} Days
                     </strong>
                   </div>
-                  <div className="flex justify-between text-[11px] font-sans">
+                  <div className="flex justify-between text-2xs font-sans">
                     <span className="text-muted">Deposit:</span>
                     <strong className="text-ink font-bold font-data">
                       ${p.minDeposit.toLocaleString()} - {p.maxDeposit >= 10000000 ? "Unlimited" : `$${p.maxDeposit.toLocaleString()}`}
                     </strong>
                   </div>
-                  <div className="flex justify-between text-[11px] font-sans">
+                  <div className="flex justify-between text-2xs font-sans">
                     <span className="text-muted">Returns:</span>
                     <strong className="text-positive font-black font-data">
                       +{p.roiPercent}% ROI
@@ -179,7 +179,7 @@ export const DashboardPlans: React.FC = () => {
                       document.getElementById("investAmountInput")?.focus();
                     }
                   }}
-                  className={`w-full py-2 rounded-xl text-center text-[10px] font-black uppercase tracking-wider font-subheading transition-all ${
+                  className={`w-full py-2 rounded-xl text-center text-2xs font-black uppercase tracking-wider font-subheading transition-all ${
                     isPaused
                       ? "bg-red-500/10 text-red-400 border border-red-500/20"
                       : isSelected
@@ -205,7 +205,7 @@ export const DashboardPlans: React.FC = () => {
               <Coins size={16} className="text-accent animate-spin" style={{ animationDuration: "12s" }} />
               <span>Invest to Earn: <span className="text-accent font-sans font-extrabold">{activePlanObj.name}</span></span>
             </span>
-            <span className="flex items-center gap-1.5 bg-[#121318]/50 border border-line/40 py-1 px-2.5 rounded-lg text-[11px] font-sans font-medium text-slate-400">
+            <span className="flex items-center gap-1.5 bg-surface/50 border border-line/40 py-1 px-2.5 rounded-lg text-2xs font-sans font-medium text-slate-400">
               {getPlanIcon(activePlanObj.id)}
               <span className="text-ink font-semibold">{activePlanObj.name}</span>
             </span>
@@ -225,15 +225,15 @@ export const DashboardPlans: React.FC = () => {
             {/* Selected Plan statistics parameters */}
             <div className="grid grid-cols-3 gap-4 border border-line/70 p-4 bg-panel/35 rounded-xl text-xs font-sans">
               <div className="space-y-1">
-                <span className="text-muted text-[9px] uppercase tracking-wider block font-sans font-bold">Term</span>
+                <span className="text-muted text-2xs uppercase tracking-wider block font-sans font-bold">Term</span>
                 <strong className="text-ink text-sm font-sans font-extrabold block">{activePlanObj.durationDays} Days</strong>
               </div>
               <div className="space-y-1">
-                <span className="text-muted text-[9px] uppercase tracking-wider block font-sans font-bold">Min Deposit</span>
+                <span className="text-muted text-2xs uppercase tracking-wider block font-sans font-bold">Min Deposit</span>
                 <strong className="text-ink text-sm font-sans font-extrabold block">${activePlanObj.minDeposit.toLocaleString()}</strong>
               </div>
               <div className="space-y-1">
-                <span className="text-muted text-[9px] uppercase tracking-wider block font-sans font-bold">Max Deposit</span>
+                <span className="text-muted text-2xs uppercase tracking-wider block font-sans font-bold">Max Deposit</span>
                 <strong className="text-ink text-sm font-sans font-extrabold block">
                   {activePlanObj.maxDeposit === 10000000 ? "No Limit" : `$${activePlanObj.maxDeposit.toLocaleString()}`}
                 </strong>
@@ -242,7 +242,7 @@ export const DashboardPlans: React.FC = () => {
 
             {/* Input Capital mount size */}
             <div className="space-y-2 font-sans">
-              <div className="flex justify-between text-[10px] uppercase text-slate-400 font-bold font-sans">
+              <div className="flex justify-between text-2xs uppercase text-slate-400 font-bold font-sans">
                 <span>Amount ($)</span>
                 <span className="text-slate-400 font-sans font-semibold">Available: ${user.balance.toLocaleString()}</span>
               </div>
@@ -256,7 +256,7 @@ export const DashboardPlans: React.FC = () => {
                   value={investAmountText}
                   onChange={(e) => setInvestAmountText(e.target.value)}
                   placeholder="Amount to invest"
-                  className="w-full bg-[#121318] border border-line/80 focus:border-accent rounded-xl pl-8 pr-4 py-3 text-xs text-ink font-sans font-semibold focus:outline-none"
+                  className="w-full bg-surface border border-line/80 focus:border-accent rounded-xl pl-8 pr-4 py-3 text-xs text-ink font-sans font-semibold focus:outline-none"
                 />
               </div>
             </div>
@@ -341,7 +341,7 @@ export const DashboardPlans: React.FC = () => {
                         />
                       </div>
 
-                      <div className="flex justify-between text-[9px] text-muted font-data">
+                      <div className="flex justify-between text-2xs text-muted font-data">
                         <span>Funded: ${inv.amount.toLocaleString()}</span>
                         <span className="font-subheading">{isPaid ? "Completed" : isClaimable ? "Matured" : `${remainingDays}d left`}</span>
                       </div>
@@ -350,13 +350,13 @@ export const DashboardPlans: React.FC = () => {
                           type="button"
                           onClick={() => handleClaimPayout(inv.id)}
                           disabled={isClaiming}
-                          className="w-full bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading py-1.5 rounded text-center uppercase text-[10px] mt-1 transition-colors"
+                          className="w-full bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading py-1.5 rounded text-center uppercase text-2xs mt-1 transition-colors"
                         >
                           {isClaiming ? "Claiming…" : `Claim Payout $${totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
                         </button>
                       )}
                       {isPaid && (
-                        <div className="w-full bg-positive/10 border border-positive/30 text-positive font-bold font-subheading py-1.5 rounded text-center uppercase text-[10px] mt-1">
+                        <div className="w-full bg-positive/10 border border-positive/30 text-positive font-bold font-subheading py-1.5 rounded text-center uppercase text-2xs mt-1">
                           Paid ${totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </div>
                       )}

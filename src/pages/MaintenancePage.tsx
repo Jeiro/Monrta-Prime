@@ -7,7 +7,7 @@ export const MaintenancePage: React.FC = () => {
   return (
     <div className="relative min-h-screen bg-[#03060d] text-white flex items-center justify-center px-6 py-12">
       <div className="relative max-w-3xl w-full rounded-3xl border border-white/10 bg-slate-950/80 p-10 shadow-[0_30px_90px_rgba(15,23,42,0.35)] backdrop-blur-xl">
-        <div className="inline-flex items-center justify-center rounded-full bg-[#6AA5FF]/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.24em] text-accent">
+        <div className="inline-flex items-center justify-center rounded-full bg-accent/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.24em] text-accent">
           Under Maintenance
         </div>
 
@@ -22,7 +22,7 @@ export const MaintenancePage: React.FC = () => {
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           <a
             href={`mailto:${appSettings.supportEmail}`}
-            className="inline-flex items-center justify-center rounded-2xl bg-[#6AA5FF] px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-[#ffb86c]"
+            className="inline-flex items-center justify-center rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-[#ffb86c]"
           >
             Contact support
           </a>

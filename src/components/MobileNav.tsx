@@ -49,7 +49,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, onNavigate })
               <div className={`p-1.5 rounded-full ${tab.isSpecial ? "bg-accent/20 text-accent" : isActive ? "bg-white/10" : "bg-transparent"}`}>
                 <Icon size={18} />
               </div>
-              <span className="text-[11px] font-medium tracking-wide">{tab.label}</span>
+              <span className="text-2xs font-medium tracking-wide">{tab.label}</span>
             </button>
           );
         })}

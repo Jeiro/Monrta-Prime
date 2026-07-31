@@ -121,7 +121,7 @@ export const AdminTransactionsTab: React.FC = () => {
             <h2 className="text-sm font-bold text-ink flex items-center gap-2">
               <Hash size={16} className="text-accent" /> Ledger Entries
             </h2>
-            <p className="text-[11px] text-muted mt-1">Each row includes transaction ID, user identity, type, amount, status, reference, and timestamp.</p>
+            <p className="text-2xs text-muted mt-1">Each row includes transaction ID, user identity, type, amount, status, reference, and timestamp.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
             <div className="relative sm:w-72">
@@ -147,7 +147,7 @@ export const AdminTransactionsTab: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1320px] text-left">
             <thead className="bg-ground/60 border-b border-line">
-              <tr className="text-[10px] uppercase tracking-wider text-muted">
+              <tr className="text-2xs uppercase tracking-wider text-muted">
                 <th className="px-5 py-3 font-bold">Transaction ID</th>
                 <th className="px-4 py-3 font-bold">User ID</th>
                 <th className="px-4 py-3 font-bold">User Name</th>
@@ -169,7 +169,7 @@ export const AdminTransactionsTab: React.FC = () => {
                   <td className="px-4 py-4 text-xs font-bold text-ink">{formatMoney(transaction.amount, transaction.currency || "USD")}</td>
                   <td className="px-4 py-4 text-xs text-muted">{transaction.currency || transaction.asset}</td>
                   <td className="px-4 py-4">
-                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-bold capitalize ${statusClass(transaction.status)}`}>
+                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-2xs font-bold capitalize ${statusClass(transaction.status)}`}>
                       <StatusIcon status={transaction.status} /> {transaction.status}
                     </span>
                   </td>
@@ -200,7 +200,7 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
 
   return (
     <div className={`px-3 py-2 border rounded-lg min-w-[78px] ${toneClass}`}>
-      <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
+      <p className="text-2xs uppercase text-muted tracking-wider">{label}</p>
       <p className="text-sm font-bold">{value}</p>
     </div>
   );

@@ -36,7 +36,7 @@ export const AdminSecurityTab: React.FC = () => {
           { label: "Alerts", value: adminAuditLogs.filter(l => l.status === "alert").length, color: "text-red-400" }
         ].map((s, i) => (
           <div key={i} className="bg-surface border border-line rounded-xl p-4 flex items-center justify-between">
-            <span className="text-[10px] text-muted uppercase font-bold">{s.label}</span>
+            <span className="text-2xs text-muted uppercase font-bold">{s.label}</span>
             <span className={`text-xl font-bold font-data ${s.color}`}>{s.value}</span>
           </div>
         ))}
@@ -53,10 +53,10 @@ export const AdminSecurityTab: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-ink">{log.action}</p>
-                  <p className="text-[10px] text-muted mt-0.5 leading-relaxed">{log.details}</p>
+                  <p className="text-2xs text-muted mt-0.5 leading-relaxed">{log.details}</p>
                 </div>
               </div>
-              <div className="text-right text-[10px] text-muted shrink-0 space-y-0.5">
+              <div className="text-right text-2xs text-muted shrink-0 space-y-0.5">
                 <p className="font-bold text-ink">{log.timestamp}</p>
                 <p>{log.email}</p>
                 <p className="font-mono">{log.ip}</p>

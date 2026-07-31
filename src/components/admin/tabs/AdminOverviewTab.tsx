@@ -40,7 +40,7 @@ const AdminVolumeChart: React.FC<{ chartData: any[] }> = ({ chartData }) => {
     <div className="bg-surface border border-line rounded-2xl p-5 flex flex-col justify-between">
       <div>
         <h3 className="text-sm font-bold text-ink">In/Out Volume Breakdown</h3>
-        <p className="text-[10px] text-muted mt-1">Comparisons of total accepted deposits against total settled withdrawals.</p>
+        <p className="text-2xs text-muted mt-1">Comparisons of total accepted deposits against total settled withdrawals.</p>
       </div>
       <div ref={containerRef} className="h-[200px] mt-4 w-full">
         {hasSize ? (
@@ -116,17 +116,17 @@ export const AdminOverviewTab: React.FC = () => {
               {[
                 { label: "Total Network Volume", val: `$${totalDepositVolume.toLocaleString()}`, change: "+14.2%", icon: Activity, color: "text-positive" },
                 { label: "Active Investors", val: activeUserCount, change: "+5.8%", icon: Users, color: "text-accent" },
-                { label: "Pending Payouts", val: pendingPayoutCount, change: "-2", icon: ArrowUpRight, color: "text-[#DFAD12]" },
+                { label: "Pending Payouts", val: pendingPayoutCount, change: "-2", icon: ArrowUpRight, color: "text-accent" },
                 { label: "Total Asset Investments", val: `$${totalInvestmentsPlaced.toLocaleString()}`, change: "+22%", icon: Layers, color: "text-ink" }
               ].map((stat, idx) => (
                 <div key={idx} className="bg-surface border border-line rounded-2xl p-5 flex flex-col justify-between h-[120px]">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-muted font-bold uppercase tracking-wider">{stat.label}</span>
+                    <span className="text-2xs text-muted font-bold uppercase tracking-wider">{stat.label}</span>
                     <stat.icon size={16} className={stat.color} />
                   </div>
                   <div className="flex items-end justify-between">
                     <span className="text-2xl font-bold text-ink font-data">{stat.val}</span>
-                    <span className="text-[10px] font-bold text-positive">{stat.change}</span>
+                    <span className="text-2xs font-bold text-positive">{stat.change}</span>
                   </div>
                 </div>
               ))}
@@ -143,7 +143,7 @@ export const AdminOverviewTab: React.FC = () => {
                 Review Invoices
               </button>
               <button onClick={() => window.location.hash = "#support"} className="flex-1 py-2 bg-surface border border-line text-ink hover:border-accent text-xs font-bold rounded-lg cursor-pointer transition-colors flex items-center justify-center gap-2">
-                <MessageSquare size={14} className="text-[#DFAD12]" />
+                <MessageSquare size={14} className="text-accent" />
                 Support Desk
               </button>
             </div>
@@ -154,7 +154,7 @@ export const AdminOverviewTab: React.FC = () => {
               <div className="bg-surface border border-line rounded-2xl p-5">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-sm font-bold text-ink">Platform Fiscal Hedging</h3>
-                  <span className="text-[10px] uppercase font-bold text-accent border border-accent/30 bg-accent/10 px-2 py-0.5 rounded-full">Automated Mode</span>
+                  <span className="text-2xs uppercase font-bold text-accent border border-accent/30 bg-accent/10 px-2 py-0.5 rounded-full">Automated Mode</span>
                 </div>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center text-xs">
@@ -171,7 +171,7 @@ export const AdminOverviewTab: React.FC = () => {
                   </div>
                   
                   <div className="pt-4 border-t border-line/40 mt-4">
-                    <button className="w-full py-2 bg-accent text-ground font-bold uppercase tracking-wider text-[10px] rounded hover:opacity-90 cursor-pointer">
+                    <button className="w-full py-2 bg-accent text-ground font-bold uppercase tracking-wider text-2xs rounded hover:opacity-90 cursor-pointer">
                       Export Hedging Log
                     </button>
                   </div>

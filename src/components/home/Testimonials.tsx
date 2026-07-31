@@ -49,7 +49,7 @@ export const Testimonials = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section className="py-20 md:py-28 bg-[#0B0E11] border-t border-[#2B3139]/50 relative overflow-hidden">
+    <section className="py-16 bg-ground border-t border-line/50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Header */}
@@ -90,7 +90,7 @@ export const Testimonials = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1, duration: 0.5, ease: "easeOut" }}
-              className="min-w-[300px] sm:min-w-[340px] bg-[#12161A] border border-[#2B3139] rounded-2xl p-6 snap-start flex flex-col"
+              className="min-w-[300px] sm:min-w-[340px] bg-panel border border-line rounded-2xl p-6 snap-start flex flex-col"
             >
               {/* Stars + Badge */}
               <div className="flex items-center gap-3 mb-4">
@@ -99,10 +99,10 @@ export const Testimonials = () => {
                     <Star key={i} size={14} fill="currentColor" />
                   ))}
                   {[...Array(5 - t.rating)].map((_, i) => (
-                    <Star key={i} size={14} className="text-[#2B3139]" />
+                    <Star key={i} size={14} className="text-line" />
                   ))}
                 </div>
-                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <span className="text-2xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                   {t.rating} Stars
                 </span>
               </div>
@@ -116,7 +116,7 @@ export const Testimonials = () => {
               </p>
 
               {/* Divider */}
-              <div className="border-t border-[#2B3139] mb-5" />
+              <div className="border-t border-line mb-5" />
 
               {/* Author */}
               <div className="flex items-center gap-3">

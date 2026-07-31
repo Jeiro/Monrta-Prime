@@ -79,7 +79,7 @@ export const AdminContentTab: React.FC = () => {
       <div className="space-y-4">
         {fields.map(field => (
           <div key={field.key} className="bg-surface border border-line rounded-xl p-4 space-y-2">
-            <label className="text-[10px] font-bold text-muted uppercase tracking-wider">{field.label}</label>
+            <label className="text-2xs font-bold text-muted uppercase tracking-wider">{field.label}</label>
             {field.rows > 1 ? (
               <textarea
                 rows={field.rows}

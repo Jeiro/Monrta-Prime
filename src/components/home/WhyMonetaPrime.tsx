@@ -22,7 +22,7 @@ export const WhyMonetaPrime = () => {
   const brands = ["Bloomberg", "Forbes", "Reuters", "CoinDesk", "TechCrunch"];
 
   return (
-    <section className="pt-10 pb-12 px-4 bg-[#0B0E11]/20 border-t border-[#2B3139]/5 overflow-hidden" id="why-moneta-prime">
+    <section className="py-10 px-4 bg-ground/20 border-t border-line/5 overflow-hidden" id="why-moneta-prime">
       <div className="max-w-7xl mx-auto">
         
         {/* Header content with TRUSTED WORLDWIDE badge */}
@@ -32,7 +32,7 @@ export const WhyMonetaPrime = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 80, damping: 15 }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-accent/15 bg-accent/5 text-[10px] md:text-xs text-accent font-bold tracking-[0.2em] font-display uppercase mb-1"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-accent/15 bg-accent/5 text-2xs md:text-xs text-accent font-bold tracking-[0.2em] font-display uppercase mb-1"
           >
             <Shield className="w-3.5 h-3.5 text-accent fill-accent/10" />
             TRUSTED WORLDWIDE
@@ -77,7 +77,7 @@ export const WhyMonetaPrime = () => {
                   <StatIcon className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 
-                <div className="font-display font-black text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-[#6AA5FF] via-[#FF9900] to-accent-deep select-none group-hover:scale-105 transition-transform duration-300">
+                <div className="font-display font-black text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-accent via-[#FF9900] to-accent-deep select-none group-hover:scale-105 transition-transform duration-300">
                   {stat.value}
                 </div>
                 <div className="text-xs sm:text-sm font-bold text-neutral-400 tracking-widest uppercase mt-3.5 font-display">
@@ -115,12 +115,12 @@ export const WhyMonetaPrime = () => {
         </div>
 
         {/* Corporate AS SEEN IN marquee/logos strip */}
-        <div className="mt-8 border-t border-[#2B3139]/5 pt-6 text-center">
+        <div className="mt-8 border-t border-line/5 pt-6 text-center">
           <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 0.7 }}
             viewport={{ once: true }}
-            className="text-[10px] sm:text-xs font-mono tracking-[0.35em] text-neutral-500 uppercase font-semibold"
+            className="text-2xs sm:text-xs font-mono tracking-[0.35em] text-neutral-500 uppercase font-semibold"
           >
             AS SEEN IN
           </motion.span>

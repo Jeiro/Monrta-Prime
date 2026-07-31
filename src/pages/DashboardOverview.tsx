@@ -182,8 +182,8 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             <span className="hidden sm:inline text-slate-700 select-none font-normal">•</span>
 
             {/* UID Badge with Copy Action */}
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 bg-[#121318]/50 hover:bg-[#121318] border border-line/40 py-0.5 px-2 rounded-md transition-all">
-              <span className="text-[9px] uppercase tracking-wider text-slate-600 font-bold font-mono">UID</span>
+            <div className="flex items-center gap-1.5 text-2xs text-slate-500 bg-surface/50 hover:bg-surface border border-line/40 py-0.5 px-2 rounded-md transition-all">
+              <span className="text-2xs uppercase tracking-wider text-slate-600 font-bold font-mono">UID</span>
               <span className="font-mono text-slate-400 font-medium select-all">{uid}</span>
               <button 
                 onClick={() => {
@@ -199,7 +199,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             </div>
 
             {/* Security Badge */}
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 bg-[#121318]/50 border border-line/40 py-0.5 px-2 rounded-md">
+            <div className="flex items-center gap-1.5 text-2xs text-slate-500 bg-surface/50 border border-line/40 py-0.5 px-2 rounded-md">
               <Shield size={11} className="text-slate-500 shrink-0" />
               <span className="text-slate-400">Security:</span>
               <span className="text-emerald-500 font-bold tracking-wide">High</span>
@@ -207,17 +207,17 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 
             {/* Verification Badge */}
             {user.kyc?.status === "approved" ? (
-              <div className="flex items-center gap-1 text-[11px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
+              <div className="flex items-center gap-1 text-2xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
                 <CheckCircle2 size={11} className="text-emerald-400 shrink-0" />
                 <span>Identity Verified</span>
               </div>
             ) : user.kyc?.status === "pending" ? (
-              <div className="flex items-center gap-1 text-[11px] bg-amber-500/10 text-amber-400 border border-amber-500/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
+              <div className="flex items-center gap-1 text-2xs bg-amber-500/10 text-amber-400 border border-amber-500/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
                 <AlertTriangle size={11} className="text-amber-400 shrink-0" />
                 <span>Verification Pending</span>
               </div>
             ) : (
-              <div className="flex items-center gap-1 text-[11px] bg-rose-500/10 text-rose-400 border border-rose-500/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
+              <div className="flex items-center gap-1 text-2xs bg-rose-500/10 text-rose-400 border border-rose-500/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
                 <AlertTriangle size={11} className="text-rose-400 shrink-0" />
                 <span>Unverified Identity</span>
               </div>
@@ -250,7 +250,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         {/* Net Worth */}
         <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
           <div className="flex justify-between items-start text-muted">
-            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Total Equity</span>
+            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Total Equity</span>
             <span className="p-1.5 rounded-lg bg-blue-500/10 text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
               <Briefcase size={16} />
             </span>
@@ -260,11 +260,11 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               <span className="text-xl font-black font-data text-ink select-all">
                 ${aggregateNetWorth.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </span>
-              <span className="text-[11px] text-slate-500 font-data font-medium">
+              <span className="text-2xs text-slate-500 font-data font-medium">
                 ≈ {((aggregateNetWorth) / 68500).toFixed(4)} BTC
               </span>
             </div>
-            <div className="flex items-center gap-1 text-[11px]">
+            <div className="flex items-center gap-1 text-2xs">
               <span className={`flex items-center font-data font-bold ${netPnL >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                 {netPnL >= 0 ? "+" : ""}{netPnL.toLocaleString()} ({netPnLPercent}%)
               </span>
@@ -276,7 +276,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         {/* Available Cash balance */}
         <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
           <div className="flex justify-between items-start text-muted">
-            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Available Balance</span>
+            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Available Balance</span>
             <span className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
               <DollarSign size={16} />
             </span>
@@ -285,7 +285,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             <span className="text-2xl font-black font-data text-ink select-all">
               ${availableCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
-            <p className="text-[11px] text-slate-400 tracking-normal font-sans font-medium">
+            <p className="text-2xs text-slate-400 tracking-normal font-sans font-medium">
               In Orders: <span className="font-data">${(activePlanCapital + activeCopyCapital).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> USD
             </p>
           </div>
@@ -294,7 +294,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         {/* Portfolio Assets value */}
         <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
           <div className="flex justify-between items-start text-muted">
-            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Derivatives Account</span>
+            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Derivatives Account</span>
             <span className="p-1.5 rounded-lg bg-rose-500/10 text-rose-500 group-hover:bg-rose-500 group-hover:text-white transition-colors">
               <Activity size={16} />
             </span>
@@ -303,7 +303,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             <span className="text-xl font-black font-data text-ink animate-pulse">
               ${portfolioAssetsValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
-            <p className="text-[11px] text-slate-400 font-sans font-medium">
+            <p className="text-2xs text-slate-400 font-sans font-medium">
               Fluctuating with global indexes
             </p>
           </div>
@@ -314,7 +314,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           {/* Subtle gold flare for yield */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-3xl rounded-full" />
           <div className="flex justify-between items-start text-muted relative z-10">
-            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Plan Yield Capital</span>
+            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Plan Yield Capital</span>
             <span className="p-1.5 rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-white transition-colors">
               <Layers size={16} />
             </span>
@@ -323,7 +323,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             <span className="text-xl font-black font-data text-accent">
               ${(activePlanCapital + activePlanProfits).toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
-            <p className="text-[11px] text-emerald-400 font-data">
+            <p className="text-2xs text-emerald-400 font-data">
               +{activePlanProfits > 0 ? `$${activePlanProfits.toFixed(2)} accrued` : "0.00 accruals"}
             </p>
           </div>
@@ -364,7 +364,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               <p className="text-xs">No active investments found.</p>
               <button
                 onClick={() => onNavigate("dashboard-plans")}
-                className="px-4 py-1.5 bg-line hover:bg-accent hover:text-ground text-[10px] font-bold font-subheading text-ink rounded transition-colors cursor-pointer"
+                className="px-4 py-1.5 bg-line hover:bg-accent hover:text-ground text-2xs font-bold font-subheading text-ink rounded transition-colors cursor-pointer"
               >
                 Explore Investment Plans
               </button>
@@ -387,12 +387,12 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                     <div className="flex justify-between items-center text-xs">
                       <div>
                         <span className="font-bold text-ink font-subheading">{inv.name}</span>
-                        <span className="block text-[9px] text-muted font-data">
+                        <span className="block text-2xs text-muted font-data">
                           Matures: {inv.endDate}
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className="block text-[10px] text-muted uppercase font-subheading">Compounded profit</span>
+                        <span className="block text-2xs text-muted uppercase font-subheading">Compounded profit</span>
                         <strong className="font-data text-positive font-bold">
                           +${(isCompleted ? expectedProfit : inv.accumulatedProfit).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </strong>
@@ -400,13 +400,13 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                     </div>
 
                     {/* Progress & Actions */}
-                    <div className="flex items-center justify-between text-[10px] mt-2">
+                    <div className="flex items-center justify-between text-2xs mt-2">
                       <span className="text-muted">Allocated: ${inv.amount.toLocaleString()}</span>
                       <div className="flex items-center gap-2">
                         <span className="text-muted">{isPaid ? "Completed" : isClaimable ? "Matured" : `${remainingDays}d left`}</span>
                         {!isCompleted && (<button
                           onClick={() => setTopUpTarget(topUpTarget === inv.id ? null : inv.id)}
-                          className="text-[9px] text-accent border border-accent/30 bg-accent/10 px-2 py-0.5 rounded flex items-center gap-1 hover:bg-accent/20 transition-colors"
+                          className="text-2xs text-accent border border-accent/30 bg-accent/10 px-2 py-0.5 rounded flex items-center gap-1 hover:bg-accent/20 transition-colors"
                         >
                           <Plus size={10} /> Top Up
                         </button>)}
@@ -443,13 +443,13 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                         type="button"
                         onClick={() => handleClaimInvPayout(inv.id)}
                         disabled={isClaimingInv}
-                        className="w-full py-2 bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading text-[11px] rounded text-center uppercase transition-colors"
+                        className="w-full py-2 bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading text-2xs rounded text-center uppercase transition-colors"
                       >
                         {isClaimingInv ? "Claiming…" : `Claim Payout $${totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
                       </button>
                     )}
                     {isPaid && (
-                      <div className="w-full py-2 bg-positive/10 border border-positive/30 text-positive font-bold font-subheading text-[11px] rounded text-center uppercase">
+                      <div className="w-full py-2 bg-positive/10 border border-positive/30 text-positive font-bold font-subheading text-2xs rounded text-center uppercase">
                         Paid ${totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                       </div>
                     )}
@@ -490,12 +490,12 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                   >
                     <div>
                       <strong className="font-data text-ink block">{asset.symbol}</strong>
-                      <span className="text-[10px] text-muted font-sans">{asset.amount} holdings</span>
+                      <span className="text-2xs text-muted font-sans">{asset.amount} holdings</span>
                     </div>
 
                     <div className="text-right font-data">
                       <span className="text-ink block font-semibold">${totalMarket.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                      <span className={`text-[10px] font-bold ${profitLoss >= 0 ? "text-positive" : "text-negative"}`}>
+                      <span className={`text-2xs font-bold ${profitLoss >= 0 ? "text-positive" : "text-negative"}`}>
                         {profitLoss >= 0 ? "+" : ""}{profitLoss.toLocaleString()}
                       </span>
                     </div>
@@ -532,19 +532,19 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                 <div className="flex justify-between items-start gap-3">
                   <div>
                     <span className="font-bold text-ink font-subheading">{trade.traderName}</span>
-                    <span className="block text-[9px] text-muted font-data">Ends: {new Date(trade.endTimestamp).toLocaleString()}</span>
+                    <span className="block text-2xs text-muted font-data">Ends: {new Date(trade.endTimestamp).toLocaleString()}</span>
                   </div>
-                  <span className={`px-2 py-1 rounded text-[10px] font-bold font-subheading border ${isClaimable ? "bg-positive/10 border-positive/30 text-positive" : "bg-accent/10 border-accent/30 text-accent"}`}>{isClaimable ? "Matured" : trade.status}</span>
+                  <span className={`px-2 py-1 rounded text-2xs font-bold font-subheading border ${isClaimable ? "bg-positive/10 border-positive/30 text-positive" : "bg-accent/10 border-accent/30 text-accent"}`}>{isClaimable ? "Matured" : trade.status}</span>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] font-data">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-2xs font-data">
                   <span className="text-muted">Invested<strong className="block text-ink text-xs">${trade.amountInvested.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
                   <span className="text-muted">ROI<strong className="block text-positive text-xs">{trade.roiPercent}%</strong></span>
                   <span className="text-muted">Profit<strong className="block text-positive text-xs">${trade.expectedProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
                   <span className="text-muted">Total<strong className="block text-ink text-xs">${trade.totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
                 </div>
 
-                <div className="flex items-center justify-between text-[10px] text-muted">
+                <div className="flex items-center justify-between text-2xs text-muted">
                   <span>{isClaimable ? "Matured" : `${trade.remainingDays}d remaining`}</span>
                   <span>{trade.progress}%</span>
                 </div>
@@ -556,7 +556,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                     type="button"
                     onClick={() => handleClaimCopyPayout(trade.id)}
                     disabled={isClaiming}
-                    className="w-full bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading py-1.5 rounded text-center uppercase text-[10px] transition-colors"
+                    className="w-full bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading py-1.5 rounded text-center uppercase text-2xs transition-colors"
                   >
                     {isClaiming ? "Claiming…" : `Claim Payout $${trade.totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
                   </button>
@@ -574,7 +574,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           ) : (
             <div className="space-y-2">
               {completedCopyTrades.slice(0, 4).map(trade => (
-                <div key={trade.id} className="grid grid-cols-2 md:grid-cols-5 gap-2 p-3 rounded-lg border border-line/50 bg-ground/30 text-[11px] font-data">
+                <div key={trade.id} className="grid grid-cols-2 md:grid-cols-5 gap-2 p-3 rounded-lg border border-line/50 bg-ground/30 text-2xs font-data">
                   <span className="text-ink font-bold">{trade.traderName}</span>
                   <span className="text-muted">ROI {trade.roiPercent}%</span>
                   <span className="text-muted">Invested ${trade.amountInvested.toLocaleString()}</span>
@@ -608,7 +608,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse font-sans">
               <thead>
-                <tr className="border-b border-line text-[10px] uppercase font-subheading tracking-wider text-muted">
+                <tr className="border-b border-line text-2xs uppercase font-subheading tracking-wider text-muted">
                   <th className="p-3">TxID</th>
                   <th className="p-3">Date</th>
                   <th className="p-3">Type</th>
@@ -623,7 +623,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                     <td className="p-3 font-semibold text-ink">{tx.id}</td>
                     <td className="p-3 text-muted font-sans">{tx.date}</td>
                     <td className="p-3 uppercase">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-semibold font-subheading ${
+                      <span className={`px-2 py-0.5 rounded text-2xs font-semibold font-subheading ${
                         tx.type === "deposit" ? "bg-positive/10 text-positive" : 
                         tx.type === "withdrawal" ? "bg-negative/10 text-negative" : 
                         tx.type === "investment" ? "bg-accent/15 text-accent" : 
@@ -635,7 +635,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                     <td className="p-3 font-bold text-ink">{tx.asset}</td>
                     <td className="p-3 font-bold text-ink">${tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                     <td className="p-3 pr-4 text-right">
-                      <span className={`inline-flex items-center gap-1 text-[11px] font-semibold font-subheading ${
+                      <span className={`inline-flex items-center gap-1 text-2xs font-semibold font-subheading ${
                         tx.status === "completed" || tx.status === "approved" ? "text-positive" :
                         tx.status === "pending" ? "text-yellow-400" :
                         tx.status === "rejected" || tx.status === "failed" ? "text-negative" :

@@ -264,11 +264,11 @@ export const AdminBulletinsTab: React.FC = () => {
                   <div className="flex flex-wrap items-center gap-2">
                     {announcement.pinned && <Pin size={12} className="text-accent" />}
                     <h3 className="text-sm font-bold text-ink break-words">{announcement.title}</h3>
-                    <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${priorityClass[priority]}`}>{priority}</span>
-                    <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${disabled ? "bg-slate-500/10 text-slate-400 border-slate-500/30" : "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"}`}>{disabled ? "Disabled" : "Enabled"}</span>
+                    <span className={`px-2 py-0.5 rounded-full border text-2xs font-bold ${priorityClass[priority]}`}>{priority}</span>
+                    <span className={`px-2 py-0.5 rounded-full border text-2xs font-bold ${disabled ? "bg-slate-500/10 text-slate-400 border-slate-500/30" : "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"}`}>{disabled ? "Disabled" : "Enabled"}</span>
                   </div>
                   <p className="text-xs text-muted mt-2 leading-relaxed break-words">{announcement.content}</p>
-                  <div className="flex flex-wrap items-center gap-3 mt-3 text-[10px] text-muted">
+                  <div className="flex flex-wrap items-center gap-3 mt-3 text-2xs text-muted">
                     <span>Created: {announcement.date}</span>
                     {announcement.publishDate && <span className="text-accent">Publishes: {announcement.publishDate}</span>}
                     {announcement.expiryDate && <span className="text-red-300">Expires: {announcement.expiryDate}</span>}

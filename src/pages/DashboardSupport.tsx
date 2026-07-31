@@ -61,7 +61,7 @@ export const DashboardSupport: React.FC = () => {
             </h3>
 
             <div className="space-y-1">
-              <label className="text-[10px] text-muted uppercase font-mono">Subject</label>
+              <label className="text-2xs text-muted uppercase font-mono">Subject</label>
               <input
                 type="text"
                 required
@@ -73,7 +73,7 @@ export const DashboardSupport: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] text-muted uppercase font-mono">Category</label>
+              <label className="text-2xs text-muted uppercase font-mono">Category</label>
               <select
                 value={tktCategory}
                 onChange={(e) => setTktCategory(e.target.value as any)}
@@ -87,7 +87,7 @@ export const DashboardSupport: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] text-muted uppercase font-mono font-semibold">Message</label>
+              <label className="text-2xs text-muted uppercase font-mono font-semibold">Message</label>
               <textarea
                 required
                 rows={4}
@@ -112,13 +112,13 @@ export const DashboardSupport: React.FC = () => {
             {/* Ticket selector header */}
             <div className="flex bg-ground p-1.5 border border-line/70 rounded-lg justify-start gap-2 overflow-x-auto scrollbar-none">
               {user.tickets.length === 0 ? (
-                <span className="text-[10px] text-muted p-1 font-sans">No active support tickets.</span>
+                <span className="text-2xs text-muted p-1 font-sans">No active support tickets.</span>
               ) : (
                 user.tickets.map((tkt) => (
                   <button
                     key={tkt.id}
                     onClick={() => setSelectedTicketId(tkt.id)}
-                    className={`px-3 py-1.5 rounded text-[10px] font-semibold tracking-normal shrink-0 transition-all ${
+                    className={`px-3 py-1.5 rounded text-2xs font-semibold tracking-normal shrink-0 transition-all ${
                       selectedTicketId === tkt.id
                         ? "bg-surface text-accent border border-line"
                         : "text-muted hover:text-ink"
@@ -146,7 +146,7 @@ export const DashboardSupport: React.FC = () => {
                           : "bg-accent text-ground font-medium rounded-tr-none"
                       }`}>
                         <p>{m.text}</p>
-                        <span className="block text-[8px] text-right mt-1 opacity-70">
+                        <span className="block text-2xs text-right mt-1 opacity-70">
                           {m.time}
                         </span>
                       </div>

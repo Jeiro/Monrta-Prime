@@ -125,7 +125,7 @@ export const ZeroPercentLoopCard = () => {
                     zIndex: [25, 25, 5, 25, 25, 25, 25]
                   }}
                   transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                  className="absolute left-1/2 top-1/2 -ml-4.5 -mt-4.5 w-9 h-9 rounded-full bg-gradient-to-tr from-[#9945FF] via-[#14F195] to-[#9945FF] border border-white/50 flex items-center justify-center text-neutral-900 text-[9px] font-black shadow-lg transform-gpu"
+                  className="absolute left-1/2 top-1/2 -ml-4.5 -mt-4.5 w-9 h-9 rounded-full bg-gradient-to-tr from-[#9945FF] via-[#14F195] to-[#9945FF] border border-white/50 flex items-center justify-center text-neutral-900 text-2xs font-black shadow-lg transform-gpu"
                 >
                   SOL
                 </motion.div>
@@ -139,7 +139,7 @@ export const ZeroPercentLoopCard = () => {
                     zIndex: [25, 25, 25, 5, 5, 25, 25]
                   }}
                   transition={{ duration: 9.2, repeat: Infinity, ease: "linear" }}
-                  className="absolute left-1/2 top-1/2 -ml-4 -mt-4 w-8 h-8 rounded-full bg-gradient-to-br from-[#FF0013] to-[#b3000e] border border-white/40 flex items-center justify-center text-white text-[10px] font-bold shadow-lg transform-gpu"
+                  className="absolute left-1/2 top-1/2 -ml-4 -mt-4 w-8 h-8 rounded-full bg-gradient-to-br from-[#FF0013] to-[#b3000e] border border-white/40 flex items-center justify-center text-white text-2xs font-bold shadow-lg transform-gpu"
                 >
                   TRX
                 </motion.div>
@@ -149,10 +149,10 @@ export const ZeroPercentLoopCard = () => {
         )}
 
         <div className={`transition-all duration-300 ${videoPlaying ? "absolute bottom-3 left-2 right-2 p-2 text-center" : "w-full mt-2"}`}>
-          <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-accent uppercase block drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+          <span className="text-2xs font-mono font-bold tracking-[0.3em] text-accent uppercase block drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
             Derivative Fee Rate
           </span>
-          <span className="text-[9px] text-neutral-300 font-sans mt-1 max-w-[210px] mx-auto block leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+          <span className="text-2xs text-neutral-300 font-sans mt-1 max-w-[210px] mx-auto block leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
             Institutional liquidity with zero standard maker commission charges.
           </span>
         </div>

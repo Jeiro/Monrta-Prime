@@ -49,7 +49,7 @@ const TextInput: React.FC<TextInputProps> = ({
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
-        <label className="text-[11px] uppercase font-subheading tracking-wider text-muted">
+        <label className="text-2xs uppercase font-subheading tracking-wider text-muted">
           {label}{required && <span className="text-accent ml-0.5">*</span>}
         </label>
         {rightLabel}
@@ -85,7 +85,7 @@ const TextInput: React.FC<TextInputProps> = ({
         ) : null}
       </div>
       {hint && (
-        <p className={`text-[11px] leading-tight ${state === "err" ? "text-negative" : "text-positive"}`}>
+        <p className={`text-2xs leading-tight ${state === "err" ? "text-negative" : "text-positive"}`}>
           {hint}
         </p>
       )}
@@ -104,7 +104,7 @@ interface SelectInputProps {
 
 const SelectInput: React.FC<SelectInputProps> = ({ label, required, value, onChange, state = "idle", children }) => (
   <div className="space-y-1.5">
-    <label className="text-[11px] uppercase font-subheading tracking-wider text-muted block">
+    <label className="text-2xs uppercase font-subheading tracking-wider text-muted block">
       {label}{required && <span className="text-accent ml-0.5">*</span>}
     </label>
     <div className={`relative flex items-center rounded-xl bg-ground border transition-all duration-150 ${stateBorder(state)}`}>
@@ -167,7 +167,7 @@ const Divider = () => (
     <div className="absolute inset-0 flex items-center">
       <div className="w-full border-t border-line/40" />
     </div>
-    <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-[0.14em]">
+    <div className="relative flex justify-center text-2xs uppercase font-bold tracking-[0.14em]">
       <span className="bg-[#0e1116] px-3 text-muted">Or</span>
     </div>
   </div>
@@ -586,7 +586,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
 
   return (
     <div className="mx-auto my-8 w-full max-w-5xl px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="grid overflow-hidden rounded-[28px] border border-line/70 bg-gradient-to-br from-[#12161D] via-[#0D1014] to-[#090B10] shadow-[0_40px_120px_rgba(0,0,0,0.55)] md:grid-cols-[0.92fr_1.08fr]">
+      <div className="grid overflow-hidden rounded-[28px] border border-line/70 bg-gradient-to-br from-surface via-ground to-ground shadow-[0_40px_120px_rgba(0,0,0,0.55)] md:grid-cols-[0.92fr_1.08fr]">
 
         {/* ---------------- LEFT BRAND RAIL ---------------- */}
         <aside className="relative order-2 flex flex-col overflow-hidden border-t border-line/50 p-8 md:order-1 md:border-r md:border-t-0 md:p-10">
@@ -602,12 +602,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
           </div>
 
           <div className="relative z-10 mt-auto pt-10">
-            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
+            <div className="text-2xs font-bold uppercase tracking-[0.22em] text-accent">
               Institutional-grade trading
             </div>
             <h1 className="mt-3 mb-3 max-w-[13ch] font-display text-[30px] font-bold leading-[1.1] tracking-tight text-balance text-ink sm:text-[34px]">
               Trade with{" "}
-              <span className="bg-gradient-to-r from-accent to-[#3D7DFF] bg-clip-text text-transparent">precision</span>,
+              <span className="bg-gradient-to-r from-accent to-accent-deep bg-clip-text text-transparent">precision</span>,
               onboard in minutes.
             </h1>
             <p className="mb-8 max-w-[34ch] text-sm leading-relaxed text-muted">
@@ -621,7 +621,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                     <Icon size={15} />
                   </span>
                   <div>
-                    <div className="text-[13px] font-semibold leading-tight text-ink">{t1}</div>
+                    <div className="text-sm font-semibold leading-tight text-ink">{t1}</div>
                     <div className="text-xs leading-snug text-muted">{t2}</div>
                   </div>
                 </div>
@@ -629,7 +629,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
             </div>
           </div>
 
-          <div className="relative z-10 mt-8 flex items-center gap-2 text-[11px] text-muted">
+          <div className="relative z-10 mt-8 flex items-center gap-2 text-2xs text-muted">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-positive animate-ping" />
             Security node active · End-to-end encryption
           </div>
@@ -671,7 +671,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                 </span>
               )}
               <h2 className="font-display text-[25px] font-bold tracking-tight text-ink">{headerTitle}</h2>
-              <p className="mt-1.5 max-w-[46ch] text-[13px] leading-relaxed text-muted">{headerSub}</p>
+              <p className="mt-1.5 max-w-[46ch] text-sm leading-relaxed text-muted">{headerSub}</p>
             </div>
           )}
 
@@ -693,7 +693,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                 </div>
               )}
               <div className="space-y-1.5">
-                <label className="block text-[11px] uppercase font-subheading tracking-wider text-muted">
+                <label className="block text-2xs uppercase font-subheading tracking-wider text-muted">
                   Verification code
                 </label>
                 <input
@@ -750,14 +750,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                       return (
                         <React.Fragment key={n}>
                           <div className="flex items-center gap-2">
-                            <span className={`flex h-6 w-6 flex-none items-center justify-center rounded-full border text-[11px] font-bold tabular-nums transition-all ${
+                            <span className={`flex h-6 w-6 flex-none items-center justify-center rounded-full border text-2xs font-bold tabular-nums transition-all ${
                               active ? "border-accent bg-accent text-ground"
                                 : done ? "border-accent bg-accent/15 text-accent"
                                 : "border-line bg-white/[0.04] text-muted"
                             }`}>
                               {done ? <Check size={13} /> : n}
                             </span>
-                            <span className={`hidden text-[11px] font-semibold sm:block ${active ? "text-ink" : "text-muted"}`}>
+                            <span className={`hidden text-2xs font-semibold sm:block ${active ? "text-ink" : "text-muted"}`}>
                               {label}
                             </span>
                           </div>
@@ -786,7 +786,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                                   <span key={i} className={`h-1 flex-1 rounded-full transition-colors ${pwBarColor(i, pw.score)}`} />
                                 ))}
                               </div>
-                              <div className="mt-1.5 flex justify-between text-[11px] text-muted">
+                              <div className="mt-1.5 flex justify-between text-2xs text-muted">
                                 <span>Password strength</span>
                                 <span className={`font-semibold ${pwTextColor(pw.score)}`}>{pw.label}</span>
                               </div>
@@ -891,7 +891,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                           ) : (<>Create account <ArrowRight size={16} /></>)}
                         </button>
                       </div>
-                      <p className="text-center text-[11px] leading-tight text-muted">
+                      <p className="text-center text-2xs leading-tight text-muted">
                         A 6-digit code will confirm your email next.
                       </p>
                     </div>
@@ -928,7 +928,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                   ) : (
                     <>
                       <div className="space-y-1.5">
-                        <label className="block text-[11px] uppercase font-subheading tracking-wider text-muted">Reset code</label>
+                        <label className="block text-2xs uppercase font-subheading tracking-wider text-muted">Reset code</label>
                         <input
                           type="text"
                           inputMode="numeric"
@@ -970,7 +970,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                       <button
                         type="button"
                         onClick={() => { setShowForgotPassword(true); setErrorMsg(null); setSuccessMsg(null); }}
-                        className="cursor-pointer border-none bg-transparent text-[11px] font-semibold text-accent outline-none hover:underline"
+                        className="cursor-pointer border-none bg-transparent text-2xs font-semibold text-accent outline-none hover:underline"
                       >
                         Forgot password?
                       </button>
@@ -995,7 +995,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
           )}
 
           {/* Support signpost */}
-          <div className="mt-auto pt-8 text-center text-[11px] text-muted">
+          <div className="mt-auto pt-8 text-center text-2xs text-muted">
             Need assistance? <a href={`mailto:${appSettings.supportEmail}`} className="text-accent hover:underline">Contact support</a>
           </div>
 
