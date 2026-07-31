@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { Check, CheckCircle, Clock3, Edit3, Gift, PauseCircle, PlayCircle, Plus, Save, Trash2, X, XCircle } from "lucide-react";
 import type { Airdrop } from "../../../types";
 import { getCampaignClaimCount, isAirdropActive } from "../../../services";
+import { formatDateTime } from "../../../lib/format";
 
 type CampaignForm = {
   title: string;
@@ -245,7 +246,7 @@ export const AdminAirdropsTab: React.FC = () => {
                   <td className="px-5 py-4"><p className="text-xs font-bold text-ink">{claim.userName || claim.userEmail.split("@")[0]}</p><p className="text-2xs text-muted">{claim.userEmail}</p></td>
                   <td className="px-4 py-4 text-xs text-ink">{claim.campaignTitle || airdrops.find(item => item.id === claim.airdropId)?.title || claim.airdropId}</td>
                   <td className="px-4 py-4 text-xs font-bold text-accent">{claim.rewardAmount} {claim.token}</td>
-                  <td className="px-4 py-4 text-xs text-muted">{claim.date}</td>
+                  <td className="px-4 py-4 text-xs text-muted">{formatDateTime(claim.date)}</td>
                   <td className="px-4 py-4"><span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-2xs font-bold ${statusClass(claim.status)}`}>{claim.status === "Approved" ? <CheckCircle size={11} /> : claim.status === "Rejected" ? <XCircle size={11} /> : <Clock3 size={11} />} {claim.status}</span></td>
                   <td className="px-5 py-4">
                     {claim.status === "Pending" ? (

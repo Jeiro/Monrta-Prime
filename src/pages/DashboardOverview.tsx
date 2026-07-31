@@ -23,6 +23,7 @@ import { motion } from "motion/react";
 import { DashboardEquityChart } from "../components/charts/DashboardEquityChart";
 import { UserAnnouncements } from "../components/announcements/UserAnnouncements";
 import { StatCard } from "../components/ui/StatCard";
+import { formatDate, formatDateTime } from "../lib/format";
 
 interface DashboardOverviewProps {
   onNavigate: (view: string) => void;
@@ -332,7 +333,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                       <div>
                         <span className="font-bold text-ink font-subheading">{inv.name}</span>
                         <span className="block text-2xs text-muted font-data">
-                          Matures: {inv.endDate}
+                          Matures: {formatDate(inv.endDate)}
                         </span>
                       </div>
                       <div className="text-right">
@@ -565,7 +566,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                 {user.transactions.slice(0, 4).map((tx) => (
                   <tr key={tx.id} className="hover:bg-panel/40 transition-colors">
                     <td className="p-3 font-semibold text-ink">{tx.id}</td>
-                    <td className="p-3 text-muted font-sans">{tx.date}</td>
+                    <td className="p-3 text-muted font-sans">{formatDateTime(tx.date)}</td>
                     <td className="p-3 uppercase">
                       <span className={`px-2 py-0.5 rounded text-2xs font-semibold font-subheading ${
                         tx.type === "deposit" ? "bg-positive/10 text-positive" : 

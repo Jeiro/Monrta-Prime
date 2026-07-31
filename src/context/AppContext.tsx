@@ -928,7 +928,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         portfolioValue: +totalAssetVal.toFixed(2)
       };
     });
-  }, [marketCrypto, marketStocks, plans]);
+    // user.portfolio.length matters: this effect derives portfolioValue from
+    // prev.portfolio, but the holdings are seeded by a separate effect that
+    // usually resolves AFTER the first market tick. Without this dependency
+    // the value stayed at $0 — with the holdings visibly listed right beside
+    // it — until the next tick happened to fire. Depending on the length (not
+    // the array identity) means it re-derives when holdings arrive or change
+    // count, while price movement stays covered by marketCrypto/marketStocks.
+  }, [marketCrypto, marketStocks, plans, user.portfolio.length]);
 
   const notifiedMaturityIds = useRef<Set<string>>(new Set());
 

@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { AlertCircle, ArrowUpRight, Check, ClipboardList, Hash, Loader2, Search, X } from "lucide-react";
 import { useApp } from "../../../context/AppContext";
 import type { Transaction } from "../../../types";
+import { formatDateTime } from "../../../lib/format";
 
 type WithdrawalStatus = "pending" | "approved" | "rejected";
 
@@ -264,7 +265,7 @@ export const AdminWithdrawalsTab: React.FC = () => {
                         {withdrawal.destinationTag && <span className="mt-1 block text-2xs text-muted">Tag: {withdrawal.destinationTag}</span>}
                       </td>
                       <td className="px-4 py-4 text-xs font-bold text-ink">{formatMoney(withdrawal.amount)}</td>
-                      <td className="px-4 py-4 text-xs text-muted">{withdrawal.date}</td>
+                      <td className="px-4 py-4 text-xs text-muted">{formatDateTime(withdrawal.date)}</td>
                       <td className="px-4 py-4">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${statusStyles[withdrawal.displayStatus]}`}>
                           {statusLabels[withdrawal.displayStatus]}

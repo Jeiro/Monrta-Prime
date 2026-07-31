@@ -2,6 +2,7 @@ import React from "react";
 import { useApp } from "../../../context/AppContext";
 import { motion } from "motion/react";
 import { ShieldAlert, AlertTriangle, Check, Info } from "lucide-react";
+import { formatDateTime } from "../../../lib/format";
 
 export const AdminSecurityTab: React.FC = () => {
   const { adminAuditLogs } = useApp();
@@ -57,7 +58,7 @@ export const AdminSecurityTab: React.FC = () => {
                 </div>
               </div>
               <div className="text-right text-2xs text-muted shrink-0 space-y-0.5">
-                <p className="font-bold text-ink">{log.timestamp}</p>
+                <p className="font-bold text-ink">{formatDateTime(log.timestamp)}</p>
                 <p>{log.email}</p>
                 <p className="font-mono">{log.ip}</p>
               </div>

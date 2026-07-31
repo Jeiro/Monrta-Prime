@@ -20,6 +20,7 @@ import {
   Eye,
   EyeOff
 } from "lucide-react";
+import { formatDateTime } from "../lib/format";
 
 interface DashboardWalletProps {
   initialOpenTab?: "deposit" | "withdraw" | "ledger";
@@ -716,7 +717,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                     {user.transactions.map((t) => (
                       <tr key={t.id} className="hover:bg-panel/50 transition-colors">
                         <td className="p-3 pl-4 font-bold text-ink select-all">{t.id}</td>
-                        <td className="p-3 text-muted font-sans">{t.date}</td>
+                        <td className="p-3 text-muted font-sans">{formatDateTime(t.date)}</td>
                         <td className="p-3 uppercase font-semibold font-sans">
                           <span className={`px-2 py-0.5 rounded text-2xs ${
                             t.type === "deposit" ? "bg-positive/10 text-positive" : "bg-negative/10 text-negative"

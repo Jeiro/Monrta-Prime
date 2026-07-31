@@ -4,6 +4,7 @@ import { ArrowDownLeft, Check, ClipboardList, FileText, Hash, Search, X } from "
 import { useApp } from "../../../context/AppContext";
 import { getDepositWalletLabel } from "../../../services";
 import type { DepositWallet, Transaction } from "../../../types";
+import { formatDateTime } from "../../../lib/format";
 
 type DepositStatus = "pending" | "approved" | "rejected";
 
@@ -266,7 +267,7 @@ export const AdminDepositsTab: React.FC = () => {
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-4 text-xs text-muted">{deposit.date}</td>
+                  <td className="px-4 py-4 text-xs text-muted">{formatDateTime(deposit.date)}</td>
                   <td className="px-4 py-4">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${statusStyles[deposit.displayStatus]}`}>
                       {statusLabels[deposit.displayStatus]}

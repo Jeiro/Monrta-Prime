@@ -111,9 +111,13 @@ export const DashboardEquityChart: React.FC<DashboardEquityChartProps> = ({ curr
       <div ref={containerRef} className="w-full h-full">
         {hasSize ? (
           <ResponsiveContainer width={size.w} height={size.h}>
+            {/* left:-20 pulled the Y axis off the canvas, so "$60,000" rendered
+                as "0,000" with the leading digit clipped; right:0 cut the last
+                X label ("Jul 31" -> "Jul 3"). The axis reserves its own width
+                instead. */}
             <AreaChart
               data={data}
-              margin={{ top: 10, right: 0, left: -20, bottom: 0 }}
+              margin={{ top: 10, right: 28, left: 0, bottom: 0 }}
             >
               <defs>
                 <linearGradient id="colorEquity" x1="0" y1="0" x2="0" y2="1">

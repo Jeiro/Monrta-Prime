@@ -16,6 +16,7 @@ import {
   X
 } from "lucide-react";
 import type { Announcement, AnnouncementPriority } from "../../../types";
+import { formatDate } from "../../../lib/format";
 
 const priorities: AnnouncementPriority[] = ["Normal", "Important", "Critical"];
 
@@ -269,9 +270,9 @@ export const AdminBulletinsTab: React.FC = () => {
                   </div>
                   <p className="text-xs text-muted mt-2 leading-relaxed break-words">{announcement.content}</p>
                   <div className="flex flex-wrap items-center gap-3 mt-3 text-2xs text-muted">
-                    <span>Created: {announcement.date}</span>
-                    {announcement.publishDate && <span className="text-accent">Publishes: {announcement.publishDate}</span>}
-                    {announcement.expiryDate && <span className="text-negative">Expires: {announcement.expiryDate}</span>}
+                    <span>Created: {formatDate(announcement.date)}</span>
+                    {announcement.publishDate && <span className="text-accent">Publishes: {formatDate(announcement.publishDate)}</span>}
+                    {announcement.expiryDate && <span className="text-negative">Expires: {formatDate(announcement.expiryDate)}</span>}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">

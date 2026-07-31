@@ -3,6 +3,7 @@ import { AlertTriangle, Check, Megaphone, Pin } from "lucide-react";
 import { motion } from "motion/react";
 import { useApp } from "../../context/AppContext";
 import type { AnnouncementPriority } from "../../types";
+import { formatDate } from "../../lib/format";
 
 const priorityStyle: Record<AnnouncementPriority, { badge: string; border: string; icon: React.ReactNode }> = {
   Normal: {
@@ -60,7 +61,7 @@ export const UserAnnouncements: React.FC = () => {
                   <p className="mt-2 text-xs leading-relaxed text-muted break-words">{announcement.content}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-2 text-2xs text-muted">
                     <span className={`px-2 py-0.5 rounded-full border font-bold ${style.badge}`}>{priority}</span>
-                    <span>{announcement.publishDate || announcement.date}</span>
+                    <span>{formatDate(announcement.publishDate || announcement.date)}</span>
                   </div>
                 </div>
                 <button

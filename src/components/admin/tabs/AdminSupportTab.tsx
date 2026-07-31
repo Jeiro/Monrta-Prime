@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useApp } from "../../../context/AppContext";
 import { motion } from "motion/react";
 import { MessageSquare, Send, X as XIcon, Search, AlertTriangle } from "lucide-react";
+import { formatDateTime } from "../../../lib/format";
 
 export const AdminSupportTab: React.FC = () => {
   const { supportTickets, adminReplyToTicket, adminCloseTicket, adminSetTicketPriority } = useApp();
@@ -93,7 +94,7 @@ export const AdminSupportTab: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-sm font-bold text-ink">{ticket.subject}</p>
-                    <p className="text-2xs text-muted">{ticket.userName} • {ticket.userEmail} • {ticket.date}</p>
+                    <p className="text-2xs text-muted">{ticket.userName} • {ticket.userEmail} • {formatDateTime(ticket.date)}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

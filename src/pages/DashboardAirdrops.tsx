@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { CheckCircle, Clock3, Gift, Sparkles, XCircle } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { findUserCampaignClaim, getCampaignClaimCount, hasReachedClaimLimit, isAirdropActive } from "../services";
+import { formatDateTime } from "../lib/format";
 
 const claimBadgeClass = (status: string) => {
   if (status === "Approved") return "bg-positive/10 text-positive border-positive/30";
@@ -52,7 +53,7 @@ export const DashboardAirdrops: React.FC = () => {
               <div key={claim.id} className="border border-line rounded-lg p-3 flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-xs font-bold text-ink truncate">{claim.campaignTitle || airdrops.find(item => item.id === claim.airdropId)?.title || claim.token}</p>
-                  <p className="text-2xs text-muted">{claim.rewardAmount} {claim.token} - {claim.date}</p>
+                  <p className="text-2xs text-muted">{claim.rewardAmount} {claim.token} - {formatDateTime(claim.date)}</p>
                 </div>
                 <span className={`shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded-full border text-2xs font-bold ${claimBadgeClass(claim.status)}`}>
                   <ClaimIcon status={claim.status} /> {claim.status}
