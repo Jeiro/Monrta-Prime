@@ -322,10 +322,25 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
         setIsSuccess(true);
         setTimeout(() => onNavigate("dashboard"), 1000);
       } else {
-        setErrorMsg("Verification incomplete. Please check the code and try again.");
+        // Clerk accepted the request but the sign-up still isn't complete —
+        // it's waiting on something. The old copy ("check the code") was
+        // actively misleading here, because the code was fine. Report what
+        // Clerk is actually holding out for.
+        const missing = [
+          ...((result as any).missingFields ?? []),
+          ...((result as any).unverifiedFields ?? []),
+        ];
+        console.error("[signup] status:", result.status, "missing:", missing, result);
+        setErrorMsg(
+          missing.length
+            ? `Account not activated yet — still required: ${missing.join(", ")}.`
+            : `Account not activated yet (status: ${result.status}). Please contact support.`
+        );
       }
     } catch (err: any) {
-      setErrorMsg(err?.errors?.[0]?.message || "Invalid verification code.");
+      const e = err?.errors?.[0];
+      console.error("[signup] verification error:", e?.code, e?.longMessage || e?.message, err);
+      setErrorMsg(e?.longMessage || e?.message || "Invalid verification code.");
     } finally {
       setIsVerifying(false);
     }
@@ -430,7 +445,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
           setPendingVerification(true);
         }
       } catch (err: any) {
-        setErrorMsg(err?.errors?.[0]?.message || "Registration failed. Please attempt with a different email.");
+        const e = err?.errors?.[0];
+        console.error("[signup] create error:", e?.code, e?.longMessage || e?.message, err);
+        setErrorMsg(e?.longMessage || e?.message || "Registration failed. Please attempt with a different email.");
       } finally {
         setIsSubmitting(false);
       }
