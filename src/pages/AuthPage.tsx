@@ -215,6 +215,13 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
   const [pendingVerification, setPendingVerification] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
 
+  // Sign-in second factor. Clerk challenges sign-ins from an unrecognised
+  // device with an emailed code (status "needs_second_factor", strategy
+  // "email_code"). Previously this screen dead-ended on "contact support",
+  // so anyone signing in from a new browser was simply locked out.
+  const [pendingSecondFactor, setPendingSecondFactor] = useState(false);
+  const [secondFactorCode, setSecondFactorCode] = useState("");
+
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -341,6 +348,35 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
       const e = err?.errors?.[0];
       console.error("[signup] verification error:", e?.code, e?.longMessage || e?.message, err);
       setErrorMsg(e?.longMessage || e?.message || "Invalid verification code.");
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  /** Completes a sign-in that Clerk challenged with an emailed second factor. */
+  const handleVerifySecondFactor = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!signInLoaded) return;
+    setErrorMsg(null);
+    setIsVerifying(true);
+    try {
+      const result = await signIn.attemptSecondFactor({
+        strategy: "email_code",
+        code: secondFactorCode.trim(),
+      });
+      if (result.status === "complete") {
+        await setActiveFromSignIn({ session: result.createdSessionId });
+        setPendingSecondFactor(false);
+        setIsSuccess(true);
+        setTimeout(() => onNavigate("dashboard"), 800);
+      } else {
+        console.error("[login] second factor not complete:", result.status, result);
+        setErrorMsg(`Sign-in couldn't be completed (status: ${result.status}).`);
+      }
+    } catch (err: any) {
+      const er = err?.errors?.[0];
+      console.error("[login] second factor error:", er?.code, er?.longMessage || er?.message, err);
+      setErrorMsg(er?.longMessage || er?.message || "That code wasn't accepted. Please try again.");
     } finally {
       setIsVerifying(false);
     }
@@ -497,7 +533,30 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
           } else if (result.status === "needs_new_password") {
             setErrorMsg('You need to set a new password. Use “Forgot password?” to continue.');
           } else if (result.status === "needs_second_factor") {
-            setErrorMsg("Two-factor authentication is required for this account, but this screen doesn’t support it yet. Please contact support.");
+            // Clerk challenges sign-ins from an unrecognised device with a
+            // second factor. On this instance that's an emailed code, which
+            // this screen can handle — send it and switch to the code step.
+            const emailFactor = result.supportedSecondFactors?.find(
+              (f) => f.strategy === "email_code",
+            );
+            if (emailFactor) {
+              try {
+                await signIn.prepareSecondFactor({ strategy: "email_code" });
+                setSecondFactorCode("");
+                setPendingSecondFactor(true);
+                setErrorMsg(null);
+              } catch (prepErr: any) {
+                setErrorMsg(
+                  prepErr?.errors?.[0]?.longMessage ||
+                    "Couldn't send the verification code. Please try again.",
+                );
+              }
+            } else {
+              const strategies = result.supportedSecondFactors?.map((f) => f.strategy).join(", ");
+              setErrorMsg(
+                `This account needs a second factor this screen can't handle yet (${strategies || "unknown"}). Please contact support.`,
+              );
+            }
           } else {
             setErrorMsg(`Sign-in couldn’t be completed (status: ${result.status}). Please contact support.`);
           }
@@ -579,13 +638,17 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
   const phState: FieldState = phone.trim() ? "ok" : "idle";
   const pw = passwordStrength(password);
 
-  const headerTitle = pendingVerification
+  const headerTitle = pendingSecondFactor
+    ? "Confirm this device"
+    : pendingVerification
     ? "Verify your email"
     : showForgotPassword
       ? "Reset password"
       : activeTab === "register" ? "Create your account" : "Welcome back";
 
-  const headerSub = pendingVerification
+  const headerSub = pendingSecondFactor
+    ? `This is a new device, so we sent a 6-digit code to ${loginEmail} to confirm it's you.`
+    : pendingVerification
     ? `We sent a 6-digit code to ${email}. Enter it below to activate your account.`
     : showForgotPassword
       ? "We'll email you a secure code to reset your password."
@@ -701,6 +764,48 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                 {activeTab === "register" ? "Creating your account…" : "Signing you in…"}
               </p>
             </div>
+          ) : pendingSecondFactor ? (
+            /* Sign-in second factor: emailed code for an unrecognised device */
+            <form onSubmit={handleVerifySecondFactor} className="flex flex-col gap-5">
+              {errorMsg && (
+                <div className="rounded-xl border border-negative/20 bg-negative/10 p-3.5 font-sans text-xs text-negative">
+                  {errorMsg}
+                </div>
+              )}
+              <p className="font-sans text-xs text-muted">
+                We sent a 6-digit code to <span className="text-ink">{loginEmail}</span> to confirm
+                this device.
+              </p>
+              <div className="space-y-1.5">
+                <label className="block text-2xs uppercase font-subheading tracking-wider text-muted">
+                  Verification code
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  value={secondFactorCode}
+                  onChange={(e) => setSecondFactorCode(e.target.value)}
+                  placeholder="Enter 6-digit code"
+                  className="w-full rounded-xl border border-line/85 bg-ground px-4 py-3.5 text-center font-sans tracking-[0.4em] text-ink outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15 tabular-nums"
+                  required
+                />
+              </div>
+              <button type="submit" disabled={isVerifying} className="orb-button w-full py-4 disabled:opacity-50 disabled:cursor-not-allowed">
+                {isVerifying ? (
+                  <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-ground/30 border-t-ground" />Verifying…</>
+                ) : (<>Confirm &amp; sign in <ArrowRight size={16} /></>)}
+              </button>
+              <div className="pt-1 text-center">
+                <button
+                  type="button"
+                  onClick={() => { setPendingSecondFactor(false); setErrorMsg(null); }}
+                  className="cursor-pointer border-none bg-transparent text-xs font-semibold text-accent outline-none hover:underline"
+                >
+                  ← Back
+                </button>
+              </div>
+            </form>
           ) : pendingVerification ? (
             /* Email verification step */
             <form onSubmit={handleVerifyEmail} className="flex flex-col gap-5">
