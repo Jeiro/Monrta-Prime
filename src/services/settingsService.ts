@@ -11,8 +11,8 @@ export const DEFAULT_APP_SETTINGS: AppSettings = {
   companyAddress: "2780 Candlelight Drive, La Porte, TX 77571, USA",
   senderName: "Moneta Prime",
   replyToEmail: "",
-  tawkPropertyId: "6a395d28c9a6011d42f66d6c",
-  tawkWidgetId: "1jro17q8a"
+  tawkPropertyId: "6a6c68f44f48221d49ac0248",
+  tawkWidgetId: "1jurnk07k"
 };
 export const DEFAULT_SITE_CONTENT: SiteContent = {
   hero_title: "Build wealth with intelligent investing",
