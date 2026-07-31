@@ -16,14 +16,21 @@ interface DashboardEquityChartProps {
 
 export const DashboardEquityChart: React.FC<DashboardEquityChartProps> = ({ currentEquity }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [hasSize, setHasSize] = useState(false);
+  // Recharts is given explicit pixel dimensions rather than width="100%"
+  // height="100%". With percentages it measures its own parent, and during the
+  // first paint after this gate flips it reads back -1, which is the
+  // "width(-1) and height(-1) of chart should be greater than 0" warning.
+  const [size, setSize] = useState({ w: 0, h: 0 });
+  const hasSize = size.w > 0 && size.h > 0;
 
   useEffect(() => {
     const node = containerRef.current;
     if (!node) return;
 
     const updateSize = () => {
-      setHasSize(node.clientWidth > 0 && node.clientHeight > 0);
+      const w = Math.floor(node.clientWidth);
+      const h = Math.floor(node.clientHeight);
+      setSize(prev => (prev.w === w && prev.h === h ? prev : { w, h }));
     };
 
     const rafId = window.requestAnimationFrame(updateSize);
@@ -103,7 +110,7 @@ export const DashboardEquityChart: React.FC<DashboardEquityChartProps> = ({ curr
     >
       <div ref={containerRef} className="w-full h-full">
         {hasSize ? (
-          <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
+          <ResponsiveContainer width={size.w} height={size.h}>
             <AreaChart
               data={data}
               margin={{ top: 10, right: 0, left: -20, bottom: 0 }}

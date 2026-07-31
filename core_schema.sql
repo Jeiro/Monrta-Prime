@@ -191,7 +191,10 @@ create table if not exists copy_trades (
   payout_completed       boolean not null default false,
   progress               numeric not null default 0,
   completed_at           timestamptz,
-  payout_transaction_id  text
+  payout_transaction_id  text,
+  -- The hook orders by created_at, not start_timestamp
+  -- (src/hooks/data/useCopyTrades.ts).
+  created_at             timestamptz not null default now()
 );
 
 create index if not exists copy_trades_user_id_idx on copy_trades(user_id);
@@ -404,6 +407,9 @@ create policy "deposit_wallets_admin_write" on deposit_wallets
 -- ── wallet_feedback ─────────────────────────────────────────────────────────
 create table if not exists wallet_feedback (
   id           text primary key,
+  -- The hook inserts user_id and, for non-admins, filters on it
+  -- (src/hooks/data/useWalletFeedback.ts) — not just the email.
+  user_id      text references users(id) on delete cascade,
   user_email   text not null default '',
   user_name    text not null default '',
   wallet       text not null default '',
@@ -414,15 +420,19 @@ create table if not exists wallet_feedback (
   created_at   timestamptz not null default now()
 );
 
+create index if not exists wallet_feedback_user_id_idx on wallet_feedback(user_id);
+
 alter table wallet_feedback enable row level security;
 
-drop policy if exists "wallet_feedback_insert_any" on wallet_feedback;
-create policy "wallet_feedback_insert_any" on wallet_feedback
-  for insert with check (auth.jwt()->>'sub' is not null);
+drop policy if exists "wallet_feedback_insert_own" on wallet_feedback;
+create policy "wallet_feedback_insert_own" on wallet_feedback
+  for insert with check (user_id = auth.jwt()->>'sub');
 
-drop policy if exists "wallet_feedback_admin_read" on wallet_feedback;
-create policy "wallet_feedback_admin_read" on wallet_feedback
-  for select using (public.is_admin());
+-- Users read their own submissions; admins read all. An admin-only select
+-- policy would have made the user's own list silently return zero rows.
+drop policy if exists "wallet_feedback_select_own_or_admin" on wallet_feedback;
+create policy "wallet_feedback_select_own_or_admin" on wallet_feedback
+  for select using (user_id = auth.jwt()->>'sub' or public.is_admin());
 
 drop policy if exists "wallet_feedback_admin_write" on wallet_feedback;
 create policy "wallet_feedback_admin_write" on wallet_feedback
