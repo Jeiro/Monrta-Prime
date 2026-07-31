@@ -195,7 +195,12 @@ async function startServer() {
 
   app.listen(PORT, "0.0.0.0", () => {
     if (process.env.NODE_ENV !== "production") {
-      console.info(`Moneta Prime institutional platform listening at http://0.0.0.0:${PORT}`);
+      // Print localhost, not 0.0.0.0 (not a browsable address) and not
+      // 127.0.0.1. Clerk development instances and their Cloudflare Turnstile
+      // bot-protection widget key off the origin: on 127.0.0.1 the Turnstile
+      // iframe fails to post its token back ("target origin ... does not match
+      // the recipient window's origin"), which can leave a sign-up stuck.
+      console.info(`Moneta Prime institutional platform listening at http://localhost:${PORT}`);
     }
   });
 }
