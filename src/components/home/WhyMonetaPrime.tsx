@@ -32,7 +32,7 @@ export const WhyMonetaPrime = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 80, damping: 15 }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-accent/15 bg-accent/5 text-2xs md:text-xs text-accent font-bold tracking-[0.2em] font-display uppercase mb-1"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-accent/15 bg-accent/5 text-2xs md:text-xs text-accent font-bold tracking-[0.2em] font-sans uppercase mb-1"
           >
             <Shield className="w-3.5 h-3.5 text-accent fill-accent/10" />
             TRUSTED WORLDWIDE
@@ -53,7 +53,7 @@ export const WhyMonetaPrime = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 14, delay: 0.1 }}
-            className="text-neutral-400 max-w-2xl mx-auto text-base md:text-lg leading-relaxed font-display"
+            className="text-neutral-400 max-w-2xl mx-auto text-base md:text-lg leading-relaxed font-sans"
           >
             Backed by Consensys infrastructure, global regulatory compliance, and the trust of thousands of active digital asset investors.
           </motion.p>
@@ -80,7 +80,7 @@ export const WhyMonetaPrime = () => {
                 <div className="font-display font-black text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-accent via-[#FF9900] to-accent-deep select-none group-hover:scale-105 transition-transform duration-300">
                   {stat.value}
                 </div>
-                <div className="text-xs sm:text-sm font-bold text-neutral-400 tracking-widest uppercase mt-3.5 font-display">
+                <div className="text-xs sm:text-sm font-bold text-neutral-400 tracking-widest uppercase mt-3.5 font-sans">
                   {stat.label}
                 </div>
               </motion.div>
@@ -103,10 +103,10 @@ export const WhyMonetaPrime = () => {
                 <item.icon className="w-5.5 h-5.5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-extrabold text-white text-base font-display tracking-tight">
+                <h4 className="font-extrabold text-white text-base font-sans tracking-tight">
                   {item.title}
                 </h4>
-                <p className="text-neutral-400 text-xs sm:text-sm font-display">
+                <p className="text-neutral-400 text-xs sm:text-sm font-sans">
                   {item.desc}
                 </p>
               </div>

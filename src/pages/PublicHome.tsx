@@ -222,7 +222,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
             {/* Central Moneta Prime Logo Brand Core */}
             <div className="absolute w-[180px] h-[180px] rounded-full bg-transparent border-2 border-accent/20 flex flex-col items-center justify-center z-30 shadow-[0_0_50px_rgba(106,165,255,0.15)]">
               <Brandmark className="w-[52px] h-[52px] transition-transform duration-500 hover:rotate-6 drop-shadow-[0_4px_16px_rgba(106,165,255,0.4)]" />
-              <span className="text-base text-white font-bold tracking-[0.05em] mt-2 font-display lowercase">
+              <span className="text-base text-white font-bold tracking-[0.05em] mt-2 font-sans lowercase">
                 moneta <span className="text-accent">prime</span>
               </span>
             </div>

@@ -28,7 +28,7 @@ export const Confidence = () => (
                               <ItemIcon className="w-5 h-5" />
                           </div>
                           <div>
-                               <h4 className="font-bold text-white text-base mb-2 font-display">{item.title}</h4>
+                               <h4 className="font-bold text-white text-base mb-2 font-sans">{item.title}</h4>
                                <p className="text-neutral-400 text-xs leading-relaxed">{item.desc}</p>
                           </div>
                       </div>

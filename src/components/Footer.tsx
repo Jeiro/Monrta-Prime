@@ -33,7 +33,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="mb-4">
           <div className="flex items-center gap-2.5 mb-2">
             <Brandmark className="w-[28px] h-[28px] transition-transform duration-500 hover:rotate-6" />
-            <h4 className="font-bold text-white text-brand font-display text-lg tracking-tight">
+            <h4 className="font-bold text-white text-brand font-sans text-lg tracking-tight">
               <span className="lowercase">moneta <span className="text-accent">prime</span></span>
             </h4>
           </div>

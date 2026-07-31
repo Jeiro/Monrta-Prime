@@ -40,7 +40,13 @@ export const TawkChat: React.FC = () => {
     script.async = true;
     script.src = `https://embed.tawk.to/${propertyId}/${widgetId}`;
     script.charset = "UTF-8";
-    script.setAttribute("crossorigin", "*");
+    // NO crossorigin attribute. It used to be set to "*", which is not a legal
+    // value — the only ones are "anonymous" and "use-credentials", and anything
+    // else is coerced to "anonymous". That forced the embed into CORS mode, and
+    // Tawk does not send Access-Control-Allow-Origin, so the script and every
+    // chunk it pulls failed to load. That was the source of the "Loading failed
+    // for the <script>", the va.tawk.to CORS blocks, and the cascading
+    // websocket failures. A classic script tag loads in no-CORS mode and works.
     script.setAttribute("data-moneta-prime-tawk", "true");
 
     if (firstScript?.parentNode) {

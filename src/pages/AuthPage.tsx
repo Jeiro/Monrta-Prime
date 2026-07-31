@@ -597,7 +597,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                 "radial-gradient(120% 80% at 0% 0%, rgba(106,165,255,0.12), transparent 55%), radial-gradient(60% 40% at 85% 95%, rgba(61,125,255,0.10), transparent 60%)",
             }}
           />
-          <div className="relative z-10 font-display text-[22px] font-bold tracking-tight">
+          <div className="relative z-10 font-sans text-[22px] font-bold tracking-tight">
             <span className="text-ink">moneta </span><span className="text-accent">prime</span>
           </div>
 
