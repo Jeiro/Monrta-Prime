@@ -14,3 +14,6 @@ export { Brandmark, Wordmark, BRAND_TAGLINE } from "./Brandmark";
 
 export { Section, Container, SectionHeading, SectionBody } from "./Layout";
 export type { SectionProps, ContainerProps, SectionHeadingProps } from "./Layout";
+
+export { StatCard } from "./StatCard";
+export type { StatCardProps } from "./StatCard";

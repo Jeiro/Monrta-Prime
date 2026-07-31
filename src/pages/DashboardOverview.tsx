@@ -22,6 +22,7 @@ import {
 import { motion } from "motion/react";
 import { DashboardEquityChart } from "../components/charts/DashboardEquityChart";
 import { UserAnnouncements } from "../components/announcements/UserAnnouncements";
+import { StatCard } from "../components/ui/StatCard";
 
 interface DashboardOverviewProps {
   onNavigate: (view: string) => void;
@@ -244,91 +245,34 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 
       <UserAnnouncements />
  
-      {/* 2. Core balances cards row */}
-      <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 font-sans">
-        
-        {/* Net Worth */}
-        <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
-          <div className="flex justify-between items-start text-muted">
-            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-muted group-hover:text-ink transition-colors">Total Equity</span>
-            <span className="p-1.5 rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-ink transition-colors">
-              <Briefcase size={16} />
-            </span>
-          </div>
-          <div className="mt-3 space-y-1">
-            <div className="flex items-baseline gap-2">
-              <span className="text-xl font-black font-data text-ink select-all">
-                ${aggregateNetWorth.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-              </span>
-              <span className="text-2xs text-faint font-data font-medium">
-                ≈ {((aggregateNetWorth) / 68500).toFixed(4)} BTC
-              </span>
-            </div>
-            <div className="flex items-center gap-1 text-2xs">
-              <span className={`flex items-center font-data font-bold ${netPnL >= 0 ? "text-positive" : "text-negative"}`}>
-                {netPnL >= 0 ? "+" : ""}{netPnL.toLocaleString()} ({netPnLPercent}%)
-              </span>
-              <span className="text-muted font-medium font-sans">Today's P&L</span>
-            </div>
-          </div>
-        </div>
- 
-        {/* Available Cash balance */}
-        <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
-          <div className="flex justify-between items-start text-muted">
-            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-muted group-hover:text-ink transition-colors">Available Balance</span>
-            <span className="p-1.5 rounded-lg bg-positive/10 text-positive group-hover:bg-positive group-hover:text-ink transition-colors">
-              <DollarSign size={16} />
-            </span>
-          </div>
-          <div className="mt-4 space-y-1">
-            <span className="text-2xl font-black font-data text-ink select-all">
-              ${availableCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-            </span>
-            <p className="text-2xs text-muted tracking-normal font-sans font-medium">
-              In Orders: <span className="font-data">${(activePlanCapital + activeCopyCapital).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> USD
-            </p>
-          </div>
-        </div>
- 
-        {/* Portfolio Assets value */}
-        <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
-          <div className="flex justify-between items-start text-muted">
-            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-muted group-hover:text-ink transition-colors">Derivatives Account</span>
-            <span className="p-1.5 rounded-lg bg-negative/10 text-negative group-hover:bg-negative group-hover:text-ink transition-colors">
-              <Activity size={16} />
-            </span>
-          </div>
-          <div className="mt-4 space-y-1">
-            <span className="text-xl font-black font-data text-ink animate-pulse">
-              ${portfolioAssetsValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-            </span>
-            <p className="text-2xs text-muted font-sans font-medium">
-              Fluctuating with global indexes
-            </p>
-          </div>
-        </div>
- 
-        {/* Dynamic active plan totals */}
-        <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group relative overflow-hidden">
-          {/* Subtle gold flare for yield */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-3xl rounded-full" />
-          <div className="flex justify-between items-start text-muted relative z-10">
-            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-muted group-hover:text-ink transition-colors">Plan Yield Capital</span>
-            <span className="p-1.5 rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-ink transition-colors">
-              <Layers size={16} />
-            </span>
-          </div>
-          <div className="mt-4 space-y-1 relative z-10">
-            <span className="text-xl font-black font-data text-accent">
-              ${(activePlanCapital + activePlanProfits).toLocaleString(undefined, { minimumFractionDigits: 2 })}
-            </span>
-            <p className="text-2xs text-positive font-data">
-              +{activePlanProfits > 0 ? `$${activePlanProfits.toFixed(2)} accrued` : "0.00 accruals"}
-            </p>
-          </div>
-        </div>
- 
+      {/* 2. Core balances cards row. Four <StatCard>s replacing ~100 lines of
+          duplicated markup that gave each tile a different icon hue. */}
+      <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <StatCard
+          emphasis
+          label="Total equity"
+          icon={Briefcase}
+          value={`$${aggregateNetWorth.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+          delta={{ value: netPnL, percent: netPnLPercent, label: "today" }}
+        />
+        <StatCard
+          label="Available balance"
+          icon={DollarSign}
+          value={`$${availableCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+          hint={`$${(activePlanCapital + activeCopyCapital).toLocaleString(undefined, { minimumFractionDigits: 2 })} in orders`}
+        />
+        <StatCard
+          label="Derivatives account"
+          icon={Activity}
+          value={`$${portfolioAssetsValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+          hint="Fluctuating with global indexes"
+        />
+        <StatCard
+          label="Plan yield capital"
+          icon={Layers}
+          value={`$${(activePlanCapital + activePlanProfits).toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+          hint={activePlanProfits > 0 ? `$${activePlanProfits.toFixed(2)} accrued` : "No accruals yet"}
+        />
       </motion.div>
 
       {/* 2.5 Portfolio Performance Chart */}
