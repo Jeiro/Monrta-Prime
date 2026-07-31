@@ -99,7 +99,7 @@ import { useAirdropClaims } from "../hooks/data/useAirdropClaims";
 import { useNotifications } from "../hooks/data/useNotifications";
 import { useInvestmentPlans } from "../hooks/data/useInvestmentPlans";
 
-interface OrbitContextType {
+interface AppContextType {
   user: UserState;
   marketCrypto: MarketAsset[];
   marketStocks: MarketAsset[];
@@ -209,7 +209,7 @@ interface OrbitContextType {
   adminDeleteWalletFeedback: (id: string) => Promise<void>;
 }
 
-const OrbitContext = createContext<OrbitContextType | undefined>(undefined);
+const AppContext = createContext<AppContextType | undefined>(undefined);
 
 // Re-exported for AdminContentTab.tsx, which imports this from here.
 export { DEFAULT_SITE_CONTENT } from "../services/settingsService";
@@ -255,7 +255,7 @@ const localDeleteUserDoc = async (email: string) => {
 
 const DEFAULT_PLANS = DEFAULT_INVESTMENT_PLANS;
 
-export const OrbitProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const supabase = useSupabaseClient();
   const { fetchNotifications, saveNotificationToDb, markReadInDb, markManyReadInDb, deleteNotificationInDb } = useNotifications(supabase);
   const { siteContent, appSettings, updateSiteContent, updateAppSettings } = useSiteSettings(supabase);
@@ -2065,7 +2065,7 @@ export const OrbitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   return (
-    <OrbitContext.Provider value={{
+    <AppContext.Provider value={{
       user,
       marketCrypto,
       marketStocks,
@@ -2167,14 +2167,14 @@ export const OrbitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       adminDeleteTrader
     }}>
       {children}
-    </OrbitContext.Provider>
+    </AppContext.Provider>
   );
 };
 
-export const useOrbit = () => {
-  const context = useContext(OrbitContext);
+export const useApp = () => {
+  const context = useContext(AppContext);
   if (context === undefined) {
-    throw new Error("useOrbit must be used inside an OrbitProvider");
+    throw new Error("useApp must be used inside an AppProvider");
   }
   return context;
 };

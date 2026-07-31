@@ -79,9 +79,9 @@ export const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ symbol }) 
   }, [symbol]);
 
   return (
-    <div className="w-full h-full border border-orbit-border rounded-xl overflow-hidden bg-orbit-card relative">
+    <div className="w-full h-full border border-line rounded-xl overflow-hidden bg-surface relative">
       <div className="absolute top-2 left-3 z-10 hidden md:flex items-center gap-2">
-        <span className="text-[10px] uppercase font-data tracking-wider bg-orbit-bg/85 border border-orbit-border px-2 py-0.5 rounded text-orbit-accent">
+        <span className="text-[10px] uppercase font-data tracking-wider bg-ground/85 border border-line px-2 py-0.5 rounded text-accent">
           Live feed active
         </span>
       </div>

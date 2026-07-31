@@ -33,8 +33,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-[#121318]/90 backdrop-blur-md border border-[#2B3139] p-3 rounded-xl shadow-2xl">
-        <p className="text-orbit-gray-text text-xs mb-1 font-mono">{label}</p>
-        <p className="text-orbit-accent font-bold font-mono">
+        <p className="text-muted text-xs mb-1 font-mono">{label}</p>
+        <p className="text-accent font-bold font-mono">
           Price: ${payload[0].value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </p>
         {payload[1] && (
@@ -156,7 +156,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="space-y-4 md:max-w-2xl text-center md:text-left mx-auto md:mx-0">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-orbit-accent/10 border border-orbit-accent/30 text-orbit-accent mb-2">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent/10 border border-accent/30 text-accent mb-2">
               <Layers size={24} />
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-sans">
@@ -170,7 +170,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
           <div className="flex items-center gap-4">
             <button
               onClick={() => onNavigate && onNavigate("dashboard-trading")}
-              className="px-6 py-3 bg-orbit-accent hover:bg-[#FFBA3B] text-black font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(247,147,26,0.15)] flex items-center gap-2 text-sm"
+              className="px-6 py-3 bg-accent hover:bg-[#8ABAFF] text-black font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(106,165,255,0.15)] flex items-center gap-2 text-sm"
             >
               Start Trading <TrendingUp size={16} />
             </button>
@@ -265,7 +265,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
               
               <button 
                 onClick={() => setShowVolume(!showVolume)}
-                className={`p-2 border rounded-lg transition-colors ${showVolume ? "bg-orbit-accent/10 border-orbit-accent/30 text-orbit-accent" : "bg-[#1A1F26] border-[#2B3139] text-slate-400 hover:text-white"}`}
+                className={`p-2 border rounded-lg transition-colors ${showVolume ? "bg-accent/10 border-accent/30 text-accent" : "bg-[#1A1F26] border-[#2B3139] text-slate-400 hover:text-white"}`}
                 title="Toggle Volume"
               >
                 <BarChart3 size={16} />

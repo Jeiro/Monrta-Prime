@@ -98,38 +98,38 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
   };
 
   return (
-    <div className="w-full space-y-32 py-16 bg-[#000000] text-orbit-white overflow-hidden font-sans">
+    <div className="w-full space-y-32 py-16 bg-[#000000] text-ink overflow-hidden font-sans">
       
       {/* ======================================================= */}
       {/* SECTION 4: The Benchmark for Secure Multi-Asset Investing */}
       {/* ======================================================= */}
       <section className="max-w-7xl mx-auto px-4 relative">
         <ScrollReveal>
-          <div className="relative rounded-3xl p-8 sm:p-12 lg:p-16 border border-orbit-border/30 bg-[#07090C] overflow-hidden group shadow-2xl">
+          <div className="relative rounded-3xl p-8 sm:p-12 lg:p-16 border border-line/30 bg-[#07090C] overflow-hidden group shadow-2xl">
             {/* Soft glowing vector grid columns background */}
-            <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#FFB11A_1px,transparent_1px)] bg-[size:5rem_5rem]" />
-            <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-orbit-accent/5 blur-[120px]" />
+            <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#6AA5FF_1px,transparent_1px)] bg-[size:5rem_5rem]" />
+            <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-accent/5 blur-[120px]" />
             
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
               
               {/* Left Column: Copy Content matching Image 4 */}
               <div className="lg:col-span-7 space-y-6 text-left">
-                <span className="text-[11px] font-bold font-subheading tracking-[0.25em] text-orbit-accent uppercase block">
+                <span className="text-[11px] font-bold font-subheading tracking-[0.25em] text-accent uppercase block">
                   MAIN FEATURES
                 </span>
                 
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-heading text-orbit-white tracking-tight leading-[1.12]">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-heading text-ink tracking-tight leading-[1.12]">
                   The Benchmark for Secure Multi-Asset Investing
                 </h2>
                 
-                <p className="text-sm sm:text-base text-orbit-gray-text leading-relaxed max-w-xl font-sans font-light">
+                <p className="text-sm sm:text-base text-muted leading-relaxed max-w-xl font-sans font-light">
                   Join a network of over 6,000 elite investors who rely on TenVault to automate their growth. Sync your portfolio with top-tier strategists and experience institutional-grade execution in real-time.
                 </p>
                 
                 <div className="pt-4">
                   <button
                     onClick={handleStartTrading}
-                    className="px-8 py-4 rounded-xl bg-orbit-accent hover:bg-orbit-accent-hover text-orbit-bg font-extrabold font-subheading text-xs uppercase tracking-wider shadow-lg shadow-orbit-accent/10 hover:shadow-orbit-accent/20 transition-all flex items-center gap-2 group cursor-pointer"
+                    className="px-8 py-4 rounded-xl bg-accent hover:bg-accent-hover text-ground font-extrabold font-subheading text-xs uppercase tracking-wider shadow-lg shadow-accent/10 hover:shadow-accent/20 transition-all flex items-center gap-2 group cursor-pointer"
                   >
                     Start Trading
                     <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -150,13 +150,13 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                       className="w-8 rounded-t-lg relative group"
                       style={{
                         background: idx === 6 
-                          ? "linear-gradient(to top, rgba(255, 177, 26, 0.05), rgba(255, 177, 26, 0.45))" 
+                          ? "linear-gradient(to top, rgba(106,165,255, 0.05), rgba(106,165,255, 0.45))" 
                           : "linear-gradient(to top, rgba(43, 49, 57, 0.05), rgba(132, 142, 156, 0.2))",
-                        border: idx === 6 ? "1px solid rgba(255, 177, 26, 0.4)" : "1px solid rgba(43, 49, 57, 0.3)"
+                        border: idx === 6 ? "1px solid rgba(106,165,255, 0.4)" : "1px solid rgba(43, 49, 57, 0.3)"
                       }}
                     >
                       {idx === 6 && (
-                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-orbit-accent/15 border border-orbit-accent/40 text-[9px] text-orbit-accent font-mono font-bold px-1.5 py-0.5 rounded shadow">
+                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-accent/15 border border-accent/40 text-[9px] text-accent font-mono font-bold px-1.5 py-0.5 rounded shadow">
                           Max
                         </div>
                       )}
@@ -182,18 +182,18 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
               <div className="relative w-full rounded-2xl border border-zinc-800/80 bg-[#0B0E11] p-5 sm:p-6 shadow-2xl flex flex-col group min-h-[460px]">
                 
                 {/* Subtle Amber Accent Glow */}
-                <div className="absolute -inset-1 bg-gradient-to-tr from-orbit-accent/5 via-transparent to-transparent rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute -inset-1 bg-gradient-to-tr from-accent/5 via-transparent to-transparent rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition-opacity" />
 
                 {/* Main Header inside Card */}
                 <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-800/60 pb-4 mb-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] animate-ping" />
-                      <span className="text-[10px] uppercase tracking-wider text-orbit-accent font-extrabold font-mono">
+                      <span className="text-[10px] uppercase tracking-wider text-accent font-extrabold font-mono">
                         BTCUSDT CRYPTO PAIR
                       </span>
                     </div>
-                    <h4 className="text-2xl sm:text-3xl font-black text-orbit-white font-heading tracking-tight">
+                    <h4 className="text-2xl sm:text-3xl font-black text-ink font-heading tracking-tight">
                       $68,432.50
                     </h4>
                   </div>
@@ -234,7 +234,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                 <motion.div
                   animate={{ y: [0, -6, 0] }}
                   transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                  className="absolute -right-3 -top-3 w-8 h-8 rounded-full border border-orbit-accent/20 bg-[#0B0E11] text-[10px] font-bold text-orbit-accent font-mono flex items-center justify-center z-10 shadow"
+                  className="absolute -right-3 -top-3 w-8 h-8 rounded-full border border-accent/20 bg-[#0B0E11] text-[10px] font-bold text-accent font-mono flex items-center justify-center z-10 shadow"
                 >
                   a
                 </motion.div>
@@ -246,22 +246,22 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
           {/* Right: Stocks Trading Copy Panel matching Image 5 */}
           <div className="lg:col-span-5 space-y-6 text-left order-1 lg:order-2">
             <ScrollReveal>
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-orbit-accent/10 border border-orbit-accent/25 rounded-md text-[10px] uppercase font-bold text-orbit-accent tracking-widest">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 border border-accent/25 rounded-md text-[10px] uppercase font-bold text-accent tracking-widest">
                 <TrendingUp size={12} /> Equities & Indices
               </div>
               
-              <h3 className="text-3xl font-extrabold font-heading text-orbit-white tracking-tight">
+              <h3 className="text-3xl font-extrabold font-heading text-ink tracking-tight">
                 Stocks Trading
               </h3>
               
-              <p className="text-sm leading-relaxed text-orbit-gray-text font-sans font-light">
+              <p className="text-sm leading-relaxed text-muted font-sans font-light">
                 Trade over 100 global markets, including popular stocks such as AAPL, TSLA, NVDA, and many more. Access a diverse range of equities, indices, and ETFs, all from a single platform designed for both new and experienced traders. Take advantage of real-time data, advanced charting tools, and seamless execution to maximize your trading opportunities across the world's leading financial markets.
               </p>
 
               <div className="pt-4">
                 <button
                   onClick={handleStartTrading}
-                  className="px-6 py-3 rounded-lg border border-orbit-border hover:border-orbit-accent text-orbit-white hover:text-orbit-accent transition-all text-xs font-bold font-subheading uppercase tracking-wider bg-transparent cursor-pointer"
+                  className="px-6 py-3 rounded-lg border border-line hover:border-accent text-ink hover:text-accent transition-all text-xs font-bold font-subheading uppercase tracking-wider bg-transparent cursor-pointer"
                 >
                   Explore Stocks
                 </button>
@@ -281,22 +281,22 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
           {/* Left: Crypto Futures Copy Panel matching Image 6 */}
           <div className="lg:col-span-6 space-y-6 text-left">
             <ScrollReveal>
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-orbit-accent/10 border border-orbit-accent/25 rounded-md text-[10px] uppercase font-bold text-orbit-accent tracking-widest">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 border border-accent/25 rounded-md text-[10px] uppercase font-bold text-accent tracking-widest">
                 <Zap size={12} /> Crypto Derivatives
               </div>
               
-              <h3 className="text-3xl font-extrabold font-heading text-orbit-white tracking-tight">
+              <h3 className="text-3xl font-extrabold font-heading text-ink tracking-tight">
                 Crypto Futures Trading
               </h3>
               
-              <p className="text-sm leading-relaxed text-orbit-gray-text font-sans font-light">
+              <p className="text-sm leading-relaxed text-muted font-sans font-light">
                 Trade Crypto Futures contracts like BTC, ETH, SOL, PEPE and more. Gain exposure to the most popular cryptocurrencies with advanced futures trading tools, allowing you to go long or short, manage leverage, and hedge your portfolio. Our platform supports a wide range of crypto assets, providing deep liquidity, competitive fees, and real-time risk management so you can trade confidently in any market condition.
               </p>
 
               <div className="pt-4">
                 <button
                   onClick={handleStartTrading}
-                  className="px-6 py-3 rounded-lg border border-orbit-border hover:border-orbit-accent text-orbit-white hover:text-orbit-accent transition-all text-xs font-bold font-subheading uppercase tracking-wider bg-transparent cursor-pointer"
+                  className="px-6 py-3 rounded-lg border border-line hover:border-accent text-ink hover:text-accent transition-all text-xs font-bold font-subheading uppercase tracking-wider bg-transparent cursor-pointer"
                 >
                   Configure Leverage
                 </button>
@@ -307,11 +307,11 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
           {/* Right: Gorgeous Metallic Ring with Zero percent (0%) and rotating coins matching Image 6 */}
           <div className="lg:col-span-6 flex justify-center relative">
             <ScrollReveal>
-              <div className="relative w-full max-w-[340px] aspect-square rounded-3xl bg-transparent flex items-center justify-center text-orbit-white select-none">
+              <div className="relative w-full max-w-[340px] aspect-square rounded-3xl bg-transparent flex items-center justify-center text-ink select-none">
                 
                 {/* Embedded Glowing background rings */}
                 <div className="absolute inset-0 rounded-full border border-zinc-800/40 scale-95" />
-                <div className="absolute inset-0 rounded-full border border-orbit-accent/5 scale-105 blur-[1px]" />
+                <div className="absolute inset-0 rounded-full border border-accent/5 scale-105 blur-[1px]" />
                 
                 {/* Custom Vector Silver Chrome "0%" Graphic representing zero commissions */}
                 <motion.div
@@ -321,10 +321,10 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                 >
                   <div className="text-center">
                     <span className="block text-[11px] font-mono tracking-widest uppercase text-zinc-500">Makers Fee</span>
-                    <span className="block text-6xl font-black font-brand tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-300 to-zinc-600">
+                    <span className="block text-6xl font-black font-display tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-300 to-zinc-600">
                       0%
                     </span>
-                    <span className="block text-[8px] font-bold text-orbit-accent bg-orbit-accent/15 border border-orbit-accent/30 rounded-full py-0.5 px-2 mt-1 uppercase w-fit mx-auto">
+                    <span className="block text-[8px] font-bold text-accent bg-accent/15 border border-accent/30 rounded-full py-0.5 px-2 mt-1 uppercase w-fit mx-auto">
                       Sovereign Deal
                     </span>
                   </div>
@@ -341,7 +341,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                   style={{ top: "15%", left: "15%" }}
                 >
                   {/* BTC Coin representation */}
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#f7931a]/15 to-[#f7931a]/80 border border-[#f7931a] flex items-center justify-center shadow-lg shadow-[#f7931a]/10 backdrop-blur-sm">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#6AA5FF]/15 to-[#6AA5FF]/80 border border-[#6AA5FF] flex items-center justify-center shadow-lg shadow-[#6AA5FF]/10 backdrop-blur-sm">
                     <span className="text-lg font-bold text-white">₿</span>
                   </div>
                 </motion.div>

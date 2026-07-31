@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Bell, CheckCheck, CheckCircle2, Info, Trash2, AlertTriangle, XCircle, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
-import { useOrbit } from "../context/OrbitContext";
+import { useApp } from "../context/AppContext";
 import type { NotificationItem, NotificationType } from "../services";
 import { formatRelativeTimestamp } from "../services";
 
@@ -41,7 +41,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
     markNotificationRead,
     markAllNotificationsRead,
     deleteNotification
-  } = useOrbit();
+  } = useApp();
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const visibleNotifications = useMemo(
@@ -64,19 +64,19 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
       animate={{ opacity: 1, y: 0 }}
       className="space-y-4 pb-6"
     >
-      <div className="flex flex-col gap-3 border-b border-orbit-border/50 pb-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 border-b border-line/50 pb-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-orbit-border bg-orbit-card text-orbit-accent">
+          <div className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface text-accent">
             <Bell size={20} />
             {unreadNotificationsCount > 0 && (
-              <span className="absolute -right-1 -top-1 min-w-5 rounded-full bg-orbit-accent px-1.5 py-0.5 text-center text-[10px] font-black text-orbit-bg">
+              <span className="absolute -right-1 -top-1 min-w-5 rounded-full bg-accent px-1.5 py-0.5 text-center text-[10px] font-black text-ground">
                 {unreadNotificationsCount > 99 ? "99+" : unreadNotificationsCount}
               </span>
             )}
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-orbit-white">Notification Center</h1>
-            <p className="mt-1 text-xs text-orbit-gray-text">
+            <h1 className="text-2xl font-bold tracking-tight text-ink">Notification Center</h1>
+            <p className="mt-1 text-xs text-muted">
               {unreadNotificationsCount ? `${unreadNotificationsCount} unread update${unreadNotificationsCount === 1 ? "" : "s"}` : "All caught up"}
             </p>
           </div>
@@ -86,19 +86,19 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
           type="button"
           onClick={markAllNotificationsRead}
           disabled={!unreadNotificationsCount}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-orbit-border bg-orbit-card px-4 py-2 text-xs font-bold text-orbit-white transition-all hover:border-orbit-accent/50 hover:text-orbit-accent disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-surface px-4 py-2 text-xs font-bold text-ink transition-all hover:border-accent/50 hover:text-accent disabled:cursor-not-allowed disabled:opacity-50"
         >
           <CheckCheck size={15} /> Mark all read
         </button>
       </div>
 
       {notifications.length === 0 ? (
-        <div className="flex min-h-[340px] flex-col items-center justify-center rounded-xl border border-dashed border-orbit-border bg-orbit-card/40 px-6 text-center">
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-orbit-border bg-[#10131a] text-orbit-gray-text">
+        <div className="flex min-h-[340px] flex-col items-center justify-center rounded-xl border border-dashed border-line bg-surface/40 px-6 text-center">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-line bg-[#10131a] text-muted">
             <Bell size={24} />
           </div>
-          <h2 className="text-lg font-bold text-orbit-white">No notifications yet</h2>
-          <p className="mt-2 max-w-md text-sm text-orbit-gray-text">
+          <h2 className="text-lg font-bold text-ink">No notifications yet</h2>
+          <p className="mt-2 max-w-md text-sm text-muted">
             Account activity, reviews, bulletins, and trade lifecycle updates will appear here.
           </p>
         </div>
@@ -109,7 +109,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
             return (
               <article
                 key={notification.id}
-                className={`rounded-xl border p-4 transition-all ${notification.read ? "border-orbit-border bg-orbit-card/55" : "border-orbit-accent/40 bg-orbit-accent/5 shadow-[0_0_24px_rgba(247,147,26,0.08)]"}`}
+                className={`rounded-xl border p-4 transition-all ${notification.read ? "border-line bg-surface/55" : "border-accent/40 bg-accent/5 shadow-[0_0_24px_rgba(106,165,255,0.08)]"}`}
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div className="flex min-w-0 gap-3">
@@ -119,11 +119,11 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         {!notification.read && <span className={`h-2 w-2 rounded-full ${style.dot}`} />}
-                        <h2 className="text-sm font-bold text-orbit-white">{notification.title}</h2>
-                        <span className="text-[11px] uppercase tracking-wide text-orbit-gray-text">{notification.type}</span>
+                        <h2 className="text-sm font-bold text-ink">{notification.title}</h2>
+                        <span className="text-[11px] uppercase tracking-wide text-muted">{notification.type}</span>
                       </div>
                       <p className="mt-1.5 text-sm leading-6 text-slate-300">{notification.message}</p>
-                      <p className="mt-2 text-xs text-orbit-gray-text">{formatRelativeTimestamp(notification.timestamp)}</p>
+                      <p className="mt-2 text-xs text-muted">{formatRelativeTimestamp(notification.timestamp)}</p>
                     </div>
                   </div>
 
@@ -132,7 +132,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
                       <button
                         type="button"
                         onClick={() => handleAction(notification)}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-orbit-border bg-[#10131a] px-3 py-2 text-xs font-bold text-orbit-white transition-colors hover:border-orbit-accent/50 hover:text-orbit-accent"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-[#10131a] px-3 py-2 text-xs font-bold text-ink transition-colors hover:border-accent/50 hover:text-accent"
                       >
                         {notification.action.label}
                         <ArrowRight size={13} />
@@ -142,7 +142,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
                       <button
                         type="button"
                         onClick={() => markNotificationRead(notification.id)}
-                        className="rounded-lg border border-orbit-border bg-[#10131a] p-2 text-orbit-gray-text transition-colors hover:text-emerald-400"
+                        className="rounded-lg border border-line bg-[#10131a] p-2 text-muted transition-colors hover:text-emerald-400"
                         title="Mark as read"
                       >
                         <CheckCircle2 size={15} />
@@ -151,7 +151,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
                     <button
                       type="button"
                       onClick={() => deleteNotification(notification.id)}
-                      className="rounded-lg border border-orbit-border bg-[#10131a] p-2 text-orbit-gray-text transition-colors hover:text-rose-400"
+                      className="rounded-lg border border-line bg-[#10131a] p-2 text-muted transition-colors hover:text-rose-400"
                       title="Delete notification"
                     >
                       <Trash2 size={15} />
@@ -167,7 +167,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
               <button
                 type="button"
                 onClick={() => setVisibleCount(count => count + PAGE_SIZE)}
-                className="rounded-xl border border-orbit-border bg-orbit-card px-5 py-2.5 text-xs font-bold text-orbit-white transition-all hover:border-orbit-accent/50 hover:text-orbit-accent"
+                className="rounded-xl border border-line bg-surface px-5 py-2.5 text-xs font-bold text-ink transition-all hover:border-accent/50 hover:text-accent"
               >
                 Load more
               </button>

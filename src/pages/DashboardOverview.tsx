@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { useOrbit } from "../context/OrbitContext";
+import { useApp } from "../context/AppContext";
 import { 
   DollarSign, 
   ArrowUpRight, 
@@ -34,7 +34,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   onOpenDeposit, 
   onOpenWithdraw 
 }) => {
-  const { user, plans, topUpInvestment, claimPlanPayout, claimCopyTradePayout, addNotification, siteContent, setInsufficientBalanceOpen } = useOrbit();
+  const { user, plans, topUpInvestment, claimPlanPayout, claimCopyTradePayout, addNotification, siteContent, setInsufficientBalanceOpen } = useApp();
   const [copiedUid, setCopiedUid] = useState(false);
   const [claimingCopyId, setClaimingCopyId] = useState<string | null>(null);
   const [claimingInvId, setClaimingInvId] = useState<string | null>(null);
@@ -166,23 +166,23 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     >
       
       {/* 1. Header welcome */}
-      <motion.div variants={itemVariants} className="flex flex-col gap-3 border-b border-orbit-border/50 pb-4 md:flex-row md:items-center md:justify-between">
+      <motion.div variants={itemVariants} className="flex flex-col gap-3 border-b border-line/50 pb-4 md:flex-row md:items-center md:justify-between">
         <div>
           <div className="flex items-center gap-2.5">
-            <Wallet size={24} className="text-orbit-accent shrink-0" />
-            <h1 className="text-2xl font-bold font-sans tracking-tight text-orbit-white">
+            <Wallet size={24} className="text-accent shrink-0" />
+            <h1 className="text-2xl font-bold font-sans tracking-tight text-ink">
               Asset Overview
             </h1>
           </div>
           <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-sans">
             <span className="text-slate-400">
-              Welcome back, <span className="text-orbit-white font-medium">{(user.name || user.email || "").toLowerCase()}</span>
+              Welcome back, <span className="text-ink font-medium">{(user.name || user.email || "").toLowerCase()}</span>
             </span>
             
             <span className="hidden sm:inline text-slate-700 select-none font-normal">•</span>
 
             {/* UID Badge with Copy Action */}
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 bg-[#121318]/50 hover:bg-[#121318] border border-orbit-border/40 py-0.5 px-2 rounded-md transition-all">
+            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 bg-[#121318]/50 hover:bg-[#121318] border border-line/40 py-0.5 px-2 rounded-md transition-all">
               <span className="text-[9px] uppercase tracking-wider text-slate-600 font-bold font-mono">UID</span>
               <span className="font-mono text-slate-400 font-medium select-all">{uid}</span>
               <button 
@@ -191,7 +191,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                   setCopiedUid(true);
                   setTimeout(() => setCopiedUid(false), 2000);
                 }}
-                className="text-slate-500 hover:text-orbit-accent transition-colors p-0.5"
+                className="text-slate-500 hover:text-accent transition-colors p-0.5"
                 title="Copy UID"
               >
                 {copiedUid ? <Check size={11} className="text-emerald-500" /> : <Copy size={11} />}
@@ -199,7 +199,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             </div>
 
             {/* Security Badge */}
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 bg-[#121318]/50 border border-orbit-border/40 py-0.5 px-2 rounded-md">
+            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 bg-[#121318]/50 border border-line/40 py-0.5 px-2 rounded-md">
               <Shield size={11} className="text-slate-500 shrink-0" />
               <span className="text-slate-400">Security:</span>
               <span className="text-emerald-500 font-bold tracking-wide">High</span>
@@ -229,13 +229,13 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={onOpenDeposit}
-            className="flex items-center gap-1.5 px-4 py-2 bg-orbit-accent text-orbit-bg font-bold font-subheading text-xs rounded-xl hover:opacity-95 shadow shadow-orbit-accent/20 hover:-translate-y-0.5 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 bg-accent text-ground font-bold font-subheading text-xs rounded-xl hover:opacity-95 shadow shadow-accent/20 hover:-translate-y-0.5 transition-all cursor-pointer"
           >
             <PlusCircle size={14} /> Deposit
           </button>
           <button
             onClick={onOpenWithdraw}
-            className="flex items-center gap-1.5 px-4 py-2 bg-orbit-card border border-orbit-border hover:bg-orbit-card/80 text-orbit-white font-semibold font-subheading text-xs rounded-xl hover:-translate-y-0.5 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 bg-surface border border-line hover:bg-surface/80 text-ink font-semibold font-subheading text-xs rounded-xl hover:-translate-y-0.5 transition-all cursor-pointer"
           >
             <MinusCircle size={14} /> Withdraw
           </button>
@@ -248,16 +248,16 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 font-sans">
         
         {/* Net Worth */}
-        <div className="bg-gradient-to-br from-orbit-card to-orbit-card/50 border border-orbit-border rounded-xl p-5 hover:border-orbit-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-orbit-accent/5 transition-all duration-300 group">
-          <div className="flex justify-between items-start text-orbit-gray-text">
-            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-orbit-white transition-colors">Total Equity</span>
+        <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
+          <div className="flex justify-between items-start text-muted">
+            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Total Equity</span>
             <span className="p-1.5 rounded-lg bg-blue-500/10 text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
               <Briefcase size={16} />
             </span>
           </div>
           <div className="mt-3 space-y-1">
             <div className="flex items-baseline gap-2">
-              <span className="text-xl font-black font-data text-orbit-white select-all">
+              <span className="text-xl font-black font-data text-ink select-all">
                 ${aggregateNetWorth.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </span>
               <span className="text-[11px] text-slate-500 font-data font-medium">
@@ -274,15 +274,15 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         </div>
  
         {/* Available Cash balance */}
-        <div className="bg-gradient-to-br from-orbit-card to-orbit-card/50 border border-orbit-border rounded-xl p-5 hover:border-orbit-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-orbit-accent/5 transition-all duration-300 group">
-          <div className="flex justify-between items-start text-orbit-gray-text">
-            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-orbit-white transition-colors">Available Balance</span>
+        <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
+          <div className="flex justify-between items-start text-muted">
+            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Available Balance</span>
             <span className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
               <DollarSign size={16} />
             </span>
           </div>
           <div className="mt-4 space-y-1">
-            <span className="text-2xl font-black font-data text-orbit-white select-all">
+            <span className="text-2xl font-black font-data text-ink select-all">
               ${availableCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
             <p className="text-[11px] text-slate-400 tracking-normal font-sans font-medium">
@@ -292,15 +292,15 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         </div>
  
         {/* Portfolio Assets value */}
-        <div className="bg-gradient-to-br from-orbit-card to-orbit-card/50 border border-orbit-border rounded-xl p-5 hover:border-orbit-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-orbit-accent/5 transition-all duration-300 group">
-          <div className="flex justify-between items-start text-orbit-gray-text">
-            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-orbit-white transition-colors">Derivatives Account</span>
+        <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
+          <div className="flex justify-between items-start text-muted">
+            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Derivatives Account</span>
             <span className="p-1.5 rounded-lg bg-rose-500/10 text-rose-500 group-hover:bg-rose-500 group-hover:text-white transition-colors">
               <Activity size={16} />
             </span>
           </div>
           <div className="mt-4 space-y-1">
-            <span className="text-xl font-black font-data text-orbit-white animate-pulse">
+            <span className="text-xl font-black font-data text-ink animate-pulse">
               ${portfolioAssetsValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
             <p className="text-[11px] text-slate-400 font-sans font-medium">
@@ -310,17 +310,17 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         </div>
  
         {/* Dynamic active plan totals */}
-        <div className="bg-gradient-to-br from-orbit-card to-orbit-card/50 border border-orbit-border rounded-xl p-5 hover:border-orbit-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-orbit-accent/5 transition-all duration-300 group relative overflow-hidden">
+        <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group relative overflow-hidden">
           {/* Subtle gold flare for yield */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-3xl rounded-full" />
-          <div className="flex justify-between items-start text-orbit-gray-text relative z-10">
-            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-orbit-white transition-colors">Plan Yield Capital</span>
-            <span className="p-1.5 rounded-lg bg-amber-500/10 text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-colors">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-3xl rounded-full" />
+          <div className="flex justify-between items-start text-muted relative z-10">
+            <span className="text-[10px] uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Plan Yield Capital</span>
+            <span className="p-1.5 rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-white transition-colors">
               <Layers size={16} />
             </span>
           </div>
           <div className="mt-4 space-y-1 relative z-10">
-            <span className="text-xl font-black font-data text-orbit-accent">
+            <span className="text-xl font-black font-data text-accent">
               ${(activePlanCapital + activePlanProfits).toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
             <p className="text-[11px] text-emerald-400 font-data">
@@ -332,13 +332,13 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       </motion.div>
 
       {/* 2.5 Portfolio Performance Chart */}
-      <motion.div variants={itemVariants} className="bg-orbit-card border border-orbit-border rounded-2xl p-4 hover:shadow-lg hover:shadow-orbit-accent/5 transition-all duration-300">
-        <div className="flex justify-between items-center border-b border-orbit-border/60 pb-3">
+      <motion.div variants={itemVariants} className="bg-surface border border-line rounded-2xl p-4 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
+        <div className="flex justify-between items-center border-b border-line/60 pb-3">
           <div className="flex items-center gap-2">
-            <Activity className="text-orbit-accent" size={18} />
-            <h3 className="text-sm font-bold font-heading text-orbit-white">30-Day Equity Trend</h3>
+            <Activity className="text-accent" size={18} />
+            <h3 className="text-sm font-bold font-heading text-ink">30-Day Equity Trend</h3>
           </div>
-          <span className="text-xs text-orbit-gray-text font-data">Live Updates</span>
+          <span className="text-xs text-muted font-data">Live Updates</span>
         </div>
         <DashboardEquityChart currentEquity={aggregateNetWorth} />
       </motion.div>
@@ -347,24 +347,24 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-12 gap-5 font-sans">
         
         {/* Left column: Active Investment plans */}
-        <div className="lg:col-span-7 bg-orbit-card border border-orbit-border rounded-2xl p-4 space-y-4">
-          <div className="flex items-center justify-between border-b border-orbit-border/60 pb-3">
-            <h3 className="text-sm font-bold font-heading text-orbit-white">Active Investments</h3>
+        <div className="lg:col-span-7 bg-surface border border-line rounded-2xl p-4 space-y-4">
+          <div className="flex items-center justify-between border-b border-line/60 pb-3">
+            <h3 className="text-sm font-bold font-heading text-ink">Active Investments</h3>
             <button 
               onClick={() => onNavigate("dashboard-plans")}
-              className="text-xs text-orbit-accent font-subheading hover:underline cursor-pointer"
+              className="text-xs text-accent font-subheading hover:underline cursor-pointer"
             >
               View Plans
             </button>
           </div>
 
           {user.activeInvestments.length === 0 ? (
-            <div className="py-8 text-center text-orbit-gray-text space-y-3 font-sans">
-              <FileText className="mx-auto text-orbit-border" size={32} />
+            <div className="py-8 text-center text-muted space-y-3 font-sans">
+              <FileText className="mx-auto text-line" size={32} />
               <p className="text-xs">No active investments found.</p>
               <button
                 onClick={() => onNavigate("dashboard-plans")}
-                className="px-4 py-1.5 bg-orbit-border hover:bg-orbit-accent hover:text-orbit-bg text-[10px] font-bold font-subheading text-orbit-white rounded transition-colors cursor-pointer"
+                className="px-4 py-1.5 bg-line hover:bg-accent hover:text-ground text-[10px] font-bold font-subheading text-ink rounded transition-colors cursor-pointer"
               >
                 Explore Investment Plans
               </button>
@@ -382,18 +382,18 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                 return (
                   <div 
                     key={inv.id}
-                    className="p-4 border border-orbit-border bg-orbit-darkcard/50 rounded-xl space-y-3"
+                    className="p-4 border border-line bg-panel/50 rounded-xl space-y-3"
                   >
                     <div className="flex justify-between items-center text-xs">
                       <div>
-                        <span className="font-bold text-orbit-white font-subheading">{inv.name}</span>
-                        <span className="block text-[9px] text-orbit-gray-text font-data">
+                        <span className="font-bold text-ink font-subheading">{inv.name}</span>
+                        <span className="block text-[9px] text-muted font-data">
                           Matures: {inv.endDate}
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className="block text-[10px] text-orbit-gray-text uppercase font-subheading">Compounded profit</span>
-                        <strong className="font-data text-orbit-green font-bold">
+                        <span className="block text-[10px] text-muted uppercase font-subheading">Compounded profit</span>
+                        <strong className="font-data text-positive font-bold">
                           +${(isCompleted ? expectedProfit : inv.accumulatedProfit).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </strong>
                       </div>
@@ -401,12 +401,12 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 
                     {/* Progress & Actions */}
                     <div className="flex items-center justify-between text-[10px] mt-2">
-                      <span className="text-orbit-gray-text">Allocated: ${inv.amount.toLocaleString()}</span>
+                      <span className="text-muted">Allocated: ${inv.amount.toLocaleString()}</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-orbit-gray-text">{isPaid ? "Completed" : isClaimable ? "Matured" : `${remainingDays}d left`}</span>
+                        <span className="text-muted">{isPaid ? "Completed" : isClaimable ? "Matured" : `${remainingDays}d left`}</span>
                         {!isCompleted && (<button
                           onClick={() => setTopUpTarget(topUpTarget === inv.id ? null : inv.id)}
-                          className="text-[9px] text-orbit-accent border border-orbit-accent/30 bg-orbit-accent/10 px-2 py-0.5 rounded flex items-center gap-1 hover:bg-orbit-accent/20 transition-colors"
+                          className="text-[9px] text-accent border border-accent/30 bg-accent/10 px-2 py-0.5 rounded flex items-center gap-1 hover:bg-accent/20 transition-colors"
                         >
                           <Plus size={10} /> Top Up
                         </button>)}
@@ -415,26 +415,26 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 
                     {/* Top Up Inline Form */}
                     {!isCompleted && topUpTarget === inv.id && (
-                      <div className="pt-2 mt-2 border-t border-orbit-border/50 flex gap-2 animate-in slide-in-from-top-2">
+                      <div className="pt-2 mt-2 border-t border-line/50 flex gap-2 animate-in slide-in-from-top-2">
                         <input 
                           type="number"
                           placeholder="Amount to add ($)"
                           value={topUpAmount}
                           onChange={(e) => setTopUpAmount(e.target.value)}
-                          className="w-full bg-orbit-bg border border-orbit-border rounded px-3 py-1 text-xs text-orbit-white outline-none focus:border-orbit-accent"
+                          className="w-full bg-ground border border-line rounded px-3 py-1 text-xs text-ink outline-none focus:border-accent"
                         />
                         <button 
                           onClick={() => handleTopUp(inv.id)}
-                          className="bg-orbit-accent text-orbit-bg px-3 py-1 rounded text-xs font-bold hover:opacity-90"
+                          className="bg-accent text-ground px-3 py-1 rounded text-xs font-bold hover:opacity-90"
                         >
                           Confirm
                         </button>
                       </div>
                     )}
                     
-                    <div className="w-full bg-orbit-bg rounded-full h-1.5 mt-2">
+                    <div className="w-full bg-ground rounded-full h-1.5 mt-2">
                       <div 
-                        className="bg-orbit-accent h-1.5 rounded-full" 
+                        className="bg-accent h-1.5 rounded-full" 
                         style={{ width: `${inv.progress}%` }}
                       />
                     </div>
@@ -443,13 +443,13 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                         type="button"
                         onClick={() => handleClaimInvPayout(inv.id)}
                         disabled={isClaimingInv}
-                        className="w-full py-2 bg-orbit-green/15 border border-orbit-green/40 text-orbit-green hover:bg-orbit-green/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading text-[11px] rounded text-center uppercase transition-colors"
+                        className="w-full py-2 bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading text-[11px] rounded text-center uppercase transition-colors"
                       >
                         {isClaimingInv ? "Claiming…" : `Claim Payout $${totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
                       </button>
                     )}
                     {isPaid && (
-                      <div className="w-full py-2 bg-orbit-green/10 border border-orbit-green/30 text-orbit-green font-bold font-subheading text-[11px] rounded text-center uppercase">
+                      <div className="w-full py-2 bg-positive/10 border border-positive/30 text-positive font-bold font-subheading text-[11px] rounded text-center uppercase">
                         Paid ${totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                       </div>
                     )}
@@ -461,19 +461,19 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         </div>
 
         {/* Right column: Quick overview portfolio holdings */}
-        <div className="lg:col-span-5 bg-orbit-card border border-orbit-border rounded-xl p-6 space-y-6">
-          <div className="flex items-center justify-between border-b border-orbit-border/60 pb-4">
-            <h3 className="text-sm font-bold font-heading text-orbit-white">Open Positions</h3>
+        <div className="lg:col-span-5 bg-surface border border-line rounded-xl p-6 space-y-6">
+          <div className="flex items-center justify-between border-b border-line/60 pb-4">
+            <h3 className="text-sm font-bold font-heading text-ink">Open Positions</h3>
             <button 
               onClick={() => onNavigate("dashboard-portfolio")}
-              className="text-xs font-subheading text-orbit-accent hover:underline cursor-pointer"
+              className="text-xs font-subheading text-accent hover:underline cursor-pointer"
             >
               View Details
             </button>
           </div>
 
           {user.portfolio.length === 0 ? (
-            <div className="py-12 text-center text-orbit-gray-text font-sans">
+            <div className="py-12 text-center text-muted font-sans">
               <p className="text-xs">No open positions. Go to Trade to get started.</p>
             </div>
           ) : (
@@ -486,16 +486,16 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                 return (
                   <div 
                     key={asset.symbol}
-                    className="flex justify-between items-center p-3 border border-orbit-border/40 bg-orbit-bg/40 rounded-lg text-xs"
+                    className="flex justify-between items-center p-3 border border-line/40 bg-ground/40 rounded-lg text-xs"
                   >
                     <div>
-                      <strong className="font-data text-orbit-white block">{asset.symbol}</strong>
-                      <span className="text-[10px] text-orbit-gray-text font-sans">{asset.amount} holdings</span>
+                      <strong className="font-data text-ink block">{asset.symbol}</strong>
+                      <span className="text-[10px] text-muted font-sans">{asset.amount} holdings</span>
                     </div>
 
                     <div className="text-right font-data">
-                      <span className="text-orbit-white block font-semibold">${totalMarket.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                      <span className={`text-[10px] font-bold ${profitLoss >= 0 ? "text-orbit-green" : "text-orbit-red"}`}>
+                      <span className="text-ink block font-semibold">${totalMarket.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                      <span className={`text-[10px] font-bold ${profitLoss >= 0 ? "text-positive" : "text-negative"}`}>
                         {profitLoss >= 0 ? "+" : ""}{profitLoss.toLocaleString()}
                       </span>
                     </div>
@@ -509,54 +509,54 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       </motion.div>
 
       {/* 3.5 Copy trading engine */}
-      <motion.section variants={itemVariants} className="bg-orbit-card border border-orbit-border rounded-xl p-5 space-y-5 font-sans hover:shadow-lg hover:shadow-orbit-accent/5 transition-all duration-300">
-        <div className="flex items-center justify-between border-b border-orbit-border/60 pb-3">
-          <h3 className="text-sm font-bold font-heading text-orbit-white">Active Copy Trades</h3>
+      <motion.section variants={itemVariants} className="bg-surface border border-line rounded-xl p-5 space-y-5 font-sans hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
+        <div className="flex items-center justify-between border-b border-line/60 pb-3">
+          <h3 className="text-sm font-bold font-heading text-ink">Active Copy Trades</h3>
           <button 
             onClick={() => onNavigate("copy-trading")}
-            className="text-xs text-orbit-accent font-subheading hover:underline cursor-pointer"
+            className="text-xs text-accent font-subheading hover:underline cursor-pointer"
           >
             View Traders
           </button>
         </div>
 
         {runningCopyTrades.length === 0 ? (
-          <p className="text-xs text-center text-orbit-gray-text py-6 font-sans">No running copy trades.</p>
+          <p className="text-xs text-center text-muted py-6 font-sans">No running copy trades.</p>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {runningCopyTrades.map(trade => {
               const isClaimable = trade.status === "Completed" && !trade.payoutCompleted;
               const isClaiming = claimingCopyId === trade.id;
               return (
-              <div key={trade.id} className="p-4 border border-orbit-border bg-orbit-darkcard/50 rounded-xl space-y-3 text-xs">
+              <div key={trade.id} className="p-4 border border-line bg-panel/50 rounded-xl space-y-3 text-xs">
                 <div className="flex justify-between items-start gap-3">
                   <div>
-                    <span className="font-bold text-orbit-white font-subheading">{trade.traderName}</span>
-                    <span className="block text-[9px] text-orbit-gray-text font-data">Ends: {new Date(trade.endTimestamp).toLocaleString()}</span>
+                    <span className="font-bold text-ink font-subheading">{trade.traderName}</span>
+                    <span className="block text-[9px] text-muted font-data">Ends: {new Date(trade.endTimestamp).toLocaleString()}</span>
                   </div>
-                  <span className={`px-2 py-1 rounded text-[10px] font-bold font-subheading border ${isClaimable ? "bg-orbit-green/10 border-orbit-green/30 text-orbit-green" : "bg-orbit-accent/10 border-orbit-accent/30 text-orbit-accent"}`}>{isClaimable ? "Matured" : trade.status}</span>
+                  <span className={`px-2 py-1 rounded text-[10px] font-bold font-subheading border ${isClaimable ? "bg-positive/10 border-positive/30 text-positive" : "bg-accent/10 border-accent/30 text-accent"}`}>{isClaimable ? "Matured" : trade.status}</span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] font-data">
-                  <span className="text-orbit-gray-text">Invested<strong className="block text-orbit-white text-xs">${trade.amountInvested.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
-                  <span className="text-orbit-gray-text">ROI<strong className="block text-orbit-green text-xs">{trade.roiPercent}%</strong></span>
-                  <span className="text-orbit-gray-text">Profit<strong className="block text-orbit-green text-xs">${trade.expectedProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
-                  <span className="text-orbit-gray-text">Total<strong className="block text-orbit-white text-xs">${trade.totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
+                  <span className="text-muted">Invested<strong className="block text-ink text-xs">${trade.amountInvested.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
+                  <span className="text-muted">ROI<strong className="block text-positive text-xs">{trade.roiPercent}%</strong></span>
+                  <span className="text-muted">Profit<strong className="block text-positive text-xs">${trade.expectedProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
+                  <span className="text-muted">Total<strong className="block text-ink text-xs">${trade.totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
                 </div>
 
-                <div className="flex items-center justify-between text-[10px] text-orbit-gray-text">
+                <div className="flex items-center justify-between text-[10px] text-muted">
                   <span>{isClaimable ? "Matured" : `${trade.remainingDays}d remaining`}</span>
                   <span>{trade.progress}%</span>
                 </div>
-                <div className="w-full bg-orbit-bg rounded-full h-1.5">
-                  <div className="bg-orbit-accent h-1.5 rounded-full" style={{ width: `${trade.progress}%` }} />
+                <div className="w-full bg-ground rounded-full h-1.5">
+                  <div className="bg-accent h-1.5 rounded-full" style={{ width: `${trade.progress}%` }} />
                 </div>
                 {isClaimable && (
                   <button
                     type="button"
                     onClick={() => handleClaimCopyPayout(trade.id)}
                     disabled={isClaiming}
-                    className="w-full bg-orbit-green/15 border border-orbit-green/40 text-orbit-green hover:bg-orbit-green/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading py-1.5 rounded text-center uppercase text-[10px] transition-colors"
+                    className="w-full bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading py-1.5 rounded text-center uppercase text-[10px] transition-colors"
                   >
                     {isClaiming ? "Claiming…" : `Claim Payout $${trade.totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
                   </button>
@@ -567,19 +567,19 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           </div>
         )}
 
-        <div className="border-t border-orbit-border/60 pt-4 space-y-3">
-          <h4 className="text-xs font-bold font-heading text-orbit-white">History</h4>
+        <div className="border-t border-line/60 pt-4 space-y-3">
+          <h4 className="text-xs font-bold font-heading text-ink">History</h4>
           {completedCopyTrades.length === 0 ? (
-            <p className="text-xs text-orbit-gray-text">No completed copy trades yet.</p>
+            <p className="text-xs text-muted">No completed copy trades yet.</p>
           ) : (
             <div className="space-y-2">
               {completedCopyTrades.slice(0, 4).map(trade => (
-                <div key={trade.id} className="grid grid-cols-2 md:grid-cols-5 gap-2 p-3 rounded-lg border border-orbit-border/50 bg-orbit-bg/30 text-[11px] font-data">
-                  <span className="text-orbit-white font-bold">{trade.traderName}</span>
-                  <span className="text-orbit-gray-text">ROI {trade.roiPercent}%</span>
-                  <span className="text-orbit-gray-text">Invested ${trade.amountInvested.toLocaleString()}</span>
-                  <span className="text-orbit-green">Returned ${trade.totalReturn.toLocaleString()}</span>
-                  <span className="text-orbit-green font-subheading">{trade.payoutCompleted ? "Paid" : trade.status}</span>
+                <div key={trade.id} className="grid grid-cols-2 md:grid-cols-5 gap-2 p-3 rounded-lg border border-line/50 bg-ground/30 text-[11px] font-data">
+                  <span className="text-ink font-bold">{trade.traderName}</span>
+                  <span className="text-muted">ROI {trade.roiPercent}%</span>
+                  <span className="text-muted">Invested ${trade.amountInvested.toLocaleString()}</span>
+                  <span className="text-positive">Returned ${trade.totalReturn.toLocaleString()}</span>
+                  <span className="text-positive font-subheading">{trade.payoutCompleted ? "Paid" : trade.status}</span>
                 </div>
               ))}
             </div>
@@ -588,27 +588,27 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       </motion.section>
 
       {/* 4. Bottom Paginated Ledger Transactions */}
-      <motion.section variants={itemVariants} className="bg-orbit-card border border-orbit-border rounded-xl p-6 space-y-6 font-sans hover:shadow-lg hover:shadow-orbit-accent/5 transition-all duration-300">
-        <div className="flex items-center justify-between border-b border-orbit-border/60 pb-4">
+      <motion.section variants={itemVariants} className="bg-surface border border-line rounded-xl p-6 space-y-6 font-sans hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
+        <div className="flex items-center justify-between border-b border-line/60 pb-4">
           <div className="flex items-center gap-2">
-            <History className="text-orbit-accent animate-pulse" size={16} />
-            <h3 className="text-sm font-bold font-heading text-orbit-white">Recent Transactions</h3>
+            <History className="text-accent animate-pulse" size={16} />
+            <h3 className="text-sm font-bold font-heading text-ink">Recent Transactions</h3>
           </div>
           <button 
             onClick={() => onNavigate("dashboard-transactions")}
-            className="text-xs text-neutral-400 hover:text-amber-500 transition-colors"
+            className="text-xs text-neutral-400 hover:text-accent transition-colors"
           >
             View All
           </button>
         </div>
 
         {user.transactions.length === 0 ? (
-          <p className="text-xs text-center text-orbit-gray-text py-6 font-sans">No past transactions found.</p>
+          <p className="text-xs text-center text-muted py-6 font-sans">No past transactions found.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse font-sans">
               <thead>
-                <tr className="border-b border-orbit-border text-[10px] uppercase font-subheading tracking-wider text-orbit-gray-text">
+                <tr className="border-b border-line text-[10px] uppercase font-subheading tracking-wider text-muted">
                   <th className="p-3">TxID</th>
                   <th className="p-3">Date</th>
                   <th className="p-3">Type</th>
@@ -617,29 +617,29 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                   <th className="p-3 pr-4 text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-orbit-border/30 font-data">
+              <tbody className="divide-y divide-line/30 font-data">
                 {user.transactions.slice(0, 4).map((tx) => (
-                  <tr key={tx.id} className="hover:bg-orbit-darkcard/40 transition-colors">
-                    <td className="p-3 font-semibold text-orbit-white">{tx.id}</td>
-                    <td className="p-3 text-orbit-gray-text font-sans">{tx.date}</td>
+                  <tr key={tx.id} className="hover:bg-panel/40 transition-colors">
+                    <td className="p-3 font-semibold text-ink">{tx.id}</td>
+                    <td className="p-3 text-muted font-sans">{tx.date}</td>
                     <td className="p-3 uppercase">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-semibold font-subheading ${
-                        tx.type === "deposit" ? "bg-orbit-green/10 text-orbit-green" : 
-                        tx.type === "withdrawal" ? "bg-orbit-red/10 text-orbit-red" : 
-                        tx.type === "investment" ? "bg-orbit-accent/15 text-orbit-accent" : 
-                        "bg-white/10 text-orbit-white"
+                        tx.type === "deposit" ? "bg-positive/10 text-positive" : 
+                        tx.type === "withdrawal" ? "bg-negative/10 text-negative" : 
+                        tx.type === "investment" ? "bg-accent/15 text-accent" : 
+                        "bg-white/10 text-ink"
                       }`}>
                         {tx.type}
                       </span>
                     </td>
-                    <td className="p-3 font-bold text-orbit-white">{tx.asset}</td>
-                    <td className="p-3 font-bold text-orbit-white">${tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                    <td className="p-3 font-bold text-ink">{tx.asset}</td>
+                    <td className="p-3 font-bold text-ink">${tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                     <td className="p-3 pr-4 text-right">
                       <span className={`inline-flex items-center gap-1 text-[11px] font-semibold font-subheading ${
-                        tx.status === "completed" || tx.status === "approved" ? "text-orbit-green" :
+                        tx.status === "completed" || tx.status === "approved" ? "text-positive" :
                         tx.status === "pending" ? "text-yellow-400" :
-                        tx.status === "rejected" || tx.status === "failed" ? "text-orbit-red" :
-                        "text-orbit-gray-text"
+                        tx.status === "rejected" || tx.status === "failed" ? "text-negative" :
+                        "text-muted"
                       }`}>
                         {tx.status === "pending" ? <AlertTriangle size={12} /> : tx.status === "rejected" || tx.status === "failed" ? <AlertTriangle size={12} /> : <CheckCircle2 size={12} />}
                         {tx.status.toUpperCase()}

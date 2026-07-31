@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { useOrbit } from "../../../context/OrbitContext";
+import { useApp } from "../../../context/AppContext";
 import { motion } from "motion/react";
 import { UserCheck, Check, X, Search, Eye, FileText, ExternalLink } from "lucide-react";
 import type { KycSubmission, KycStatus } from "../../../types";
@@ -24,7 +24,7 @@ const formatDate = (value?: string) => {
 const getDocumentCount = (kyc?: KycSubmission) => [kyc?.frontImage, kyc?.backImage, kyc?.proofOfAddressImage].filter(Boolean).length;
 
 export const AdminKycTab: React.FC = () => {
-  const { usersDirectory, allKycSubmissions, adminKycReview } = useOrbit();
+  const { usersDirectory, allKycSubmissions, adminKycReview } = useApp();
   const [searchQuery, setSearchQuery] = useState("");
   const [adminNotes, setAdminNotes] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -93,13 +93,13 @@ export const AdminKycTab: React.FC = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl p-6">
+      <div className="bg-surface border border-line rounded-2xl p-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl font-bold text-orbit-white flex items-center gap-2">
-              <UserCheck size={20} className="text-orbit-accent" /> ID Verifications
+            <h1 className="text-xl font-bold text-ink flex items-center gap-2">
+              <UserCheck size={20} className="text-accent" /> ID Verifications
             </h1>
-            <p className="text-xs text-orbit-gray-text mt-1">Review identity documents, proof of address, notes, and verification outcomes.</p>
+            <p className="text-xs text-muted mt-1">Review identity documents, proof of address, notes, and verification outcomes.</p>
           </div>
           <span className="flex items-center gap-2 text-[10px] font-bold text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 px-3 py-1.5 rounded-full">
             {pendingCount} Pending Reviews
@@ -113,17 +113,17 @@ export const AdminKycTab: React.FC = () => {
         </motion.div>
       )}
 
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-orbit-border flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <div className="bg-surface border border-line rounded-2xl overflow-hidden">
+        <div className="px-5 py-4 border-b border-line flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div className="relative lg:w-80">
-            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-orbit-gray-text" />
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
             <input type="text" placeholder="Search verifications" value={searchQuery} onChange={event => setSearchQuery(event.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-orbit-bg border border-orbit-border rounded-xl text-sm text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent" />
+              className="w-full pl-11 pr-4 py-3 bg-ground border border-line rounded-xl text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
           </div>
           <div className="flex gap-2 flex-wrap">
             {(["all", "pending", "approved", "rejected", "unverified"] as const).map(status => (
               <button key={status} onClick={() => setFilterStatus(status)}
-                className={`px-3 py-2 text-[10px] font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-orbit-accent text-orbit-bg border-orbit-accent" : "bg-orbit-bg text-orbit-gray-text border-orbit-border hover:border-orbit-accent"}`}>
+                className={`px-3 py-2 text-[10px] font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-accent text-ground border-accent" : "bg-ground text-muted border-line hover:border-accent"}`}>
                 {status}
               </button>
             ))}
@@ -132,8 +132,8 @@ export const AdminKycTab: React.FC = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1180px] text-left">
-            <thead className="bg-orbit-bg/60 border-b border-orbit-border">
-              <tr className="text-[10px] uppercase tracking-wider text-orbit-gray-text">
+            <thead className="bg-ground/60 border-b border-line">
+              <tr className="text-[10px] uppercase tracking-wider text-muted">
                 <th className="px-5 py-3 font-bold">User</th>
                 <th className="px-4 py-3 font-bold">Submission Date</th>
                 <th className="px-4 py-3 font-bold">Document Type</th>
@@ -143,22 +143,22 @@ export const AdminKycTab: React.FC = () => {
                 <th className="px-5 py-3 font-bold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-orbit-border/70">
+            <tbody className="divide-y divide-line/70">
               {filtered.map(user => {
                 const kyc = user.kyc;
                 const isExpanded = expandedUser === user.email;
                 const isReviewing = reviewingEmail === user.email;
                 return (
                   <React.Fragment key={user.email}>
-                    <tr className="hover:bg-orbit-bg/40 transition-colors align-top">
+                    <tr className="hover:bg-ground/40 transition-colors align-top">
                       <td className="px-5 py-4">
-                        <p className="text-xs font-bold text-orbit-white">{user.name}</p>
-                        <p className="text-[10px] text-orbit-gray-text">{user.email}</p>
+                        <p className="text-xs font-bold text-ink">{user.name}</p>
+                        <p className="text-[10px] text-muted">{user.email}</p>
                       </td>
-                      <td className="px-4 py-4 text-xs text-orbit-gray-text">{formatDate(kyc?.submissionDate)}</td>
-                      <td className="px-4 py-4 text-xs font-bold text-orbit-white">{kyc?.documentType || kyc?.idType || "Not submitted"}</td>
+                      <td className="px-4 py-4 text-xs text-muted">{formatDate(kyc?.submissionDate)}</td>
+                      <td className="px-4 py-4 text-xs font-bold text-ink">{kyc?.documentType || kyc?.idType || "Not submitted"}</td>
                       <td className="px-4 py-4">
-                        <button disabled={!kyc} onClick={() => setExpandedUser(isExpanded ? null : user.email)} className="inline-flex items-center gap-1.5 px-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-[10px] font-bold text-orbit-white disabled:opacity-50 cursor-pointer hover:border-orbit-accent">
+                        <button disabled={!kyc} onClick={() => setExpandedUser(isExpanded ? null : user.email)} className="inline-flex items-center gap-1.5 px-3 py-2 bg-ground border border-line rounded-lg text-[10px] font-bold text-ink disabled:opacity-50 cursor-pointer hover:border-accent">
                           <Eye size={12} /> View ({getDocumentCount(kyc)})
                         </button>
                       </td>
@@ -172,7 +172,7 @@ export const AdminKycTab: React.FC = () => {
                           value={adminNotes[user.email] ?? kyc?.adminNotes ?? kyc?.rejectionReason ?? ""}
                           onChange={event => setAdminNotes(prev => ({ ...prev, [user.email]: event.target.value }))}
                           placeholder="Approval note or rejection reason"
-                          className="w-[250px] px-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-xs text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent"
+                          className="w-[250px] px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent"
                         />
                       </td>
                       <td className="px-5 py-4">
@@ -186,12 +186,12 @@ export const AdminKycTab: React.FC = () => {
                             </button>
                           </div>
                         ) : (
-                          <p className="text-right text-[10px] font-bold uppercase text-orbit-gray-text">No action</p>
+                          <p className="text-right text-[10px] font-bold uppercase text-muted">No action</p>
                         )}
                       </td>
                     </tr>
                     {isExpanded && kyc && (
-                      <tr className="bg-orbit-bg/50">
+                      <tr className="bg-ground/50">
                         <td colSpan={7} className="px-5 py-5">
                           <DocumentPanel kyc={kyc} />
                         </td>
@@ -204,7 +204,7 @@ export const AdminKycTab: React.FC = () => {
           </table>
         </div>
 
-        {filtered.length === 0 && <div className="py-14 text-center text-sm text-orbit-gray-text">No verification records match this view.</div>}
+        {filtered.length === 0 && <div className="py-14 text-center text-sm text-muted">No verification records match this view.</div>}
       </div>
     </motion.div>
   );
@@ -227,21 +227,21 @@ const DocumentPanel: React.FC<{ kyc: KycSubmission }> = ({ kyc }) => (
 );
 
 const Info: React.FC<{ label: string; value: string }> = ({ label, value }) => (
-  <div className="bg-orbit-card border border-orbit-border rounded-lg p-3">
-    <p className="text-[9px] uppercase tracking-wider text-orbit-gray-text font-bold">{label}</p>
-    <p className="mt-1 text-orbit-white font-bold break-words">{value}</p>
+  <div className="bg-surface border border-line rounded-lg p-3">
+    <p className="text-[9px] uppercase tracking-wider text-muted font-bold">{label}</p>
+    <p className="mt-1 text-ink font-bold break-words">{value}</p>
   </div>
 );
 
 const DocumentLink: React.FC<{ title: string; url?: string; optional?: boolean }> = ({ title, url, optional }) => (
-  <div className="bg-orbit-card border border-orbit-border rounded-xl p-3 min-h-[120px]">
-    <p className="text-[10px] text-orbit-gray-text uppercase font-bold mb-2 flex items-center gap-1"><FileText size={11} /> {title}</p>
+  <div className="bg-surface border border-line rounded-xl p-3 min-h-[120px]">
+    <p className="text-[10px] text-muted uppercase font-bold mb-2 flex items-center gap-1"><FileText size={11} /> {title}</p>
     {url ? (
-      <a href={url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs font-bold text-orbit-accent hover:text-orbit-white">
+      <a href={url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs font-bold text-accent hover:text-ink">
         Open uploaded document <ExternalLink size={12} />
       </a>
     ) : (
-      <p className="text-xs text-orbit-gray-text">{optional ? "Not provided" : "Missing document"}</p>
+      <p className="text-xs text-muted">{optional ? "Not provided" : "Missing document"}</p>
     )}
   </div>
 );

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useOrbit } from "../context/OrbitContext";
+import { useApp } from "../context/AppContext";
 
 declare global {
   interface Window {
@@ -13,7 +13,7 @@ const removeTawkScript = () => {
 };
 
 export const TawkChat: React.FC = () => {
-  const { appSettings } = useOrbit();
+  const { appSettings } = useApp();
   const propertyId = appSettings.tawkPropertyId.trim();
   const widgetId = appSettings.tawkWidgetId.trim();
 

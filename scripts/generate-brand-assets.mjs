@@ -8,72 +8,73 @@ import { dirname, resolve } from "node:path";
 
 const publicDir = resolve(dirname(fileURLToPath(import.meta.url)), "../public");
 
-// The app's orbit logo mark (from Footer.tsx / AboutUs.tsx), viewBox 0 0 100 100.
-const orbitMark = (goldId, silverId) => `
-  <path d="M 18,50 A 30,30 0 0,1 78,28 L 71,35 A 20,20 0 0,0 26,50 Z" fill="url(#${goldId})" />
-  <path d="M 18,50 C 23,48 45,38 78,28 C 65,37 40,45 18,50" fill="url(#${goldId})" />
-  <path d="M 23,55 A 30,30 0 0,0 82,50 A 30,30 0 0,0 78,28 L 71,35 A 20,20 0 0,1 74,50 A 20,20 0 0,1 28,54 Z" fill="url(#${silverId})" />
-  <circle cx="85" cy="22" r="5.5" fill="#F7931A" />
+// The Moneta Prime mark — kept in sync with src/components/ui/Brandmark.tsx.
+// A cut hexagonal prism with an ascending position line knocked out of it.
+// viewBox 0 0 100 100.
+const primeMark = (accentId) => `
+  <path d="M50 4 L91 27 L91 73 L50 96 L9 73 L9 27 Z" fill="url(#${accentId})" />
+  <polyline points="26,64 42,52 56,60 74,34" fill="none" stroke="#0B0C0F"
+            stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="74" cy="34" r="8" fill="#0B0C0F" />
+  <circle cx="74" cy="34" r="3.6" fill="#E9EBEF" />
 `;
 
-const goldStops = (id) => `
+const accentStops = (id) => `
   <linearGradient id="${id}" x1="0%" y1="100%" x2="100%" y2="0%">
-    <stop offset="0%" stop-color="#E05B00" />
-    <stop offset="45%" stop-color="#F7931A" />
-    <stop offset="100%" stop-color="#FFBA3B" />
-  </linearGradient>`;
-const silverStops = (id) => `
-  <linearGradient id="${id}" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#FFFFFF" />
-    <stop offset="50%" stop-color="#E6E8EF" />
-    <stop offset="100%" stop-color="#A3AABF" />
+    <stop offset="0%" stop-color="#2E6BE0" />
+    <stop offset="55%" stop-color="#6AA5FF" />
+    <stop offset="100%" stop-color="#8ABAFF" />
   </linearGradient>`;
 
-const FONT = "Segoe UI, Arial, Helvetica, sans-serif";
+// Rendered by librsvg via sharp, so these resolve against the fonts
+// installed on whichever machine runs this — not against webfonts.
+// DISPLAY mirrors the app's --font-display (a high-contrast serif);
+// FONT mirrors --font-sans for supporting text.
+const DISPLAY = "Instrument Serif, Noto Serif, Liberation Serif, Georgia, serif";
+const FONT = "IBM Plex Sans, Noto Sans, Liberation Sans, Arial, sans-serif";
 
 // ---- OG image (1200 x 630) ----
 const ogSvg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    ${goldStops("ogGold")}
-    ${silverStops("ogSilver")}
+    ${accentStops("ogAccent")}
     <linearGradient id="ogBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0E1319" />
-      <stop offset="100%" stop-color="#070A0E" />
+      <stop offset="0%" stop-color="#131519" />
+      <stop offset="100%" stop-color="#08090C" />
     </linearGradient>
     <radialGradient id="ogGlow" cx="18%" cy="12%" r="60%">
-      <stop offset="0%" stop-color="#FFB11A" stop-opacity="0.16" />
-      <stop offset="100%" stop-color="#FFB11A" stop-opacity="0" />
+      <stop offset="0%" stop-color="#6AA5FF" stop-opacity="0.14" />
+      <stop offset="100%" stop-color="#6AA5FF" stop-opacity="0" />
     </radialGradient>
     <radialGradient id="ogGlow2" cx="88%" cy="92%" r="55%">
-      <stop offset="0%" stop-color="#FF7F00" stop-opacity="0.10" />
-      <stop offset="100%" stop-color="#FF7F00" stop-opacity="0" />
+      <stop offset="0%" stop-color="#3D7DFF" stop-opacity="0.09" />
+      <stop offset="100%" stop-color="#3D7DFF" stop-opacity="0" />
     </radialGradient>
   </defs>
 
   <rect width="1200" height="630" fill="url(#ogBg)" />
   <rect width="1200" height="630" fill="url(#ogGlow)" />
   <rect width="1200" height="630" fill="url(#ogGlow2)" />
-  <rect x="8" y="8" width="1184" height="614" rx="28" fill="none" stroke="#2B3139" stroke-opacity="0.6" stroke-width="2" />
-  <rect x="0" y="0" width="1200" height="6" fill="url(#ogGold)" />
+  <rect x="8" y="8" width="1184" height="614" rx="28" fill="none" stroke="#262A32" stroke-opacity="0.6" stroke-width="2" />
+  <rect x="0" y="0" width="1200" height="6" fill="url(#ogAccent)" />
 
   <!-- Brand mark -->
   <g transform="translate(500,86) scale(2.0)">
-    ${orbitMark("ogGold", "ogSilver")}
+    ${primeMark("ogAccent")}
   </g>
 
   <!-- Wordmark -->
-  <text x="600" y="380" text-anchor="middle" font-family="${FONT}" font-size="86" font-weight="800" letter-spacing="-1">
-    <tspan fill="#FFFFFF">Moneta Prime</tspan><tspan fill="#FFB11A" dx="26">Trades</tspan>
+  <text x="600" y="382" text-anchor="middle" font-family="${DISPLAY}" font-size="104" font-weight="400" letter-spacing="-1">
+    <tspan fill="#E9EBEF">moneta</tspan><tspan fill="#6AA5FF" dx="26">prime</tspan>
   </text>
 
   <!-- Tagline -->
-  <text x="600" y="446" text-anchor="middle" font-family="${FONT}" font-size="31" font-weight="500" fill="#B7BDC6">
+  <text x="600" y="462" text-anchor="middle" font-family="${FONT}" font-size="31" font-weight="500" fill="#949BA9">
     Crypto Trading  ·  Copy Trading  ·  Investment Plans
   </text>
 
   <!-- Domain -->
-  <text x="600" y="552" text-anchor="middle" font-family="${FONT}" font-size="30" font-weight="700" letter-spacing="1" fill="#FFB11A">
+  <text x="600" y="560" text-anchor="middle" font-family="${FONT}" font-size="30" font-weight="600" letter-spacing="1" fill="#6AA5FF">
     PLACEHOLDER-DOMAIN.example
   </text>
 </svg>`;
@@ -82,17 +83,16 @@ const ogSvg = `<?xml version="1.0" encoding="UTF-8"?>
 const faviconSvg = (size) => `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="${size}" height="${size}" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    ${goldStops("fgGold")}
-    ${silverStops("fgSilver")}
+    ${accentStops("fgAccent")}
     <linearGradient id="fgTile" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#12161D" />
-      <stop offset="100%" stop-color="#090B10" />
+      <stop offset="0%" stop-color="#16191F" />
+      <stop offset="100%" stop-color="#0A0B0E" />
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="112" fill="url(#fgTile)" />
-  <rect x="4" y="4" width="504" height="504" rx="108" fill="none" stroke="#2B3139" stroke-width="6" />
-  <g transform="translate(76,86) scale(3.6)">
-    ${orbitMark("fgGold", "fgSilver")}
+  <rect x="4" y="4" width="504" height="504" rx="108" fill="none" stroke="#262A32" stroke-width="6" />
+  <g transform="translate(76,76) scale(3.6)">
+    ${primeMark("fgAccent")}
   </g>
 </svg>`;
 
@@ -127,14 +127,17 @@ async function buildIco(sizes) {
 }
 
 const run = async () => {
-  // OG image: composite the supplied brand logo (public/brand-logo.png)
-  // centered on a 1200x630 canvas, padded with the logo's own near-black
-  // corner color (#03030d) for a seamless fill. Falls back to the generated
-  // text card if the source logo isn't present.
+  // OG image: generated from the mark above by default.
+  //
+  // This used to composite public/brand-logo.png unconditionally. That file
+  // is still the pre-rebrand Orbitrio artwork, so compositing it would put
+  // the old identity back into the social card. Once a Moneta Prime
+  // brand-logo.png is supplied, re-enable the composite with:
+  //   USE_BRAND_LOGO=1 node scripts/generate-brand-assets.mjs
   const brandLogo = resolve(publicDir, "brand-logo.png");
-  if (existsSync(brandLogo)) {
+  if (process.env.USE_BRAND_LOGO === "1" && existsSync(brandLogo)) {
     await sharp(brandLogo)
-      .resize(1200, 630, { fit: "contain", background: { r: 3, g: 3, b: 13, alpha: 1 } })
+      .resize(1200, 630, { fit: "contain", background: { r: 8, g: 9, b: 12, alpha: 1 } })
       .png()
       .toFile(resolve(publicDir, "og-image.png"));
     console.log("✓ public/og-image.png (1200x630, from brand-logo.png)");

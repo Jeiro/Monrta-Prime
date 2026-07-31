@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useOrbit } from "../../../context/OrbitContext";
+import { useApp } from "../../../context/AppContext";
 import { motion } from "motion/react";
 import { MessageSquare, Send, X as XIcon, Search, AlertTriangle } from "lucide-react";
 
 export const AdminSupportTab: React.FC = () => {
-  const { supportTickets, adminReplyToTicket, adminCloseTicket, adminSetTicketPriority } = useOrbit();
+  const { supportTickets, adminReplyToTicket, adminCloseTicket, adminSetTicketPriority } = useApp();
   const [searchQuery, setSearchQuery] = useState("");
   const [replyTexts, setReplyTexts] = useState<Record<string, string>>({});
   const [expandedTicket, setExpandedTicket] = useState<string | null>(null);
@@ -49,13 +49,13 @@ export const AdminSupportTab: React.FC = () => {
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
       {/* Header */}
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl p-6">
+      <div className="bg-surface border border-line rounded-2xl p-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl font-bold text-orbit-white flex items-center gap-2">
+            <h1 className="text-xl font-bold text-ink flex items-center gap-2">
               <MessageSquare size={20} className="text-[#DFAD12]" /> Ticket Helpdesk
             </h1>
-            <p className="text-xs text-orbit-gray-text mt-1">Manage and respond to user support tickets.</p>
+            <p className="text-xs text-muted mt-1">Manage and respond to user support tickets.</p>
           </div>
           {openCount > 0 && (
             <span className="flex items-center gap-2 text-[10px] font-bold text-red-400 bg-red-500/10 border border-red-500/30 px-3 py-1.5 rounded-full animate-pulse">
@@ -74,9 +74,9 @@ export const AdminSupportTab: React.FC = () => {
 
       {/* Search */}
       <div className="relative">
-        <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-orbit-gray-text" />
+        <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
         <input type="text" placeholder="Search tickets..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-          className="w-full pl-11 pr-4 py-3 bg-orbit-card border border-orbit-border rounded-xl text-sm text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent" />
+          className="w-full pl-11 pr-4 py-3 bg-surface border border-line rounded-xl text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
       </div>
 
       {/* Tickets */}
@@ -84,16 +84,16 @@ export const AdminSupportTab: React.FC = () => {
         {filtered.map(ticket => {
           const isExpanded = expandedTicket === ticket.id;
           return (
-            <div key={ticket.id} className={`bg-orbit-card border rounded-2xl overflow-hidden ${ticket.status === "open" ? "border-red-500/30" : "border-orbit-border"}`}>
+            <div key={ticket.id} className={`bg-surface border rounded-2xl overflow-hidden ${ticket.status === "open" ? "border-red-500/30" : "border-line"}`}>
               <button onClick={() => setExpandedTicket(isExpanded ? null : ticket.id)}
-                className="w-full flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-orbit-border/20 transition-colors cursor-pointer text-left gap-2">
+                className="w-full flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-line/20 transition-colors cursor-pointer text-left gap-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#DFAD12] to-orange-500 flex items-center justify-center text-white text-[10px] font-black">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#DFAD12] to-accent-deep flex items-center justify-center text-white text-[10px] font-black">
                     {ticket.userName?.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-orbit-white">{ticket.subject}</p>
-                    <p className="text-[10px] text-orbit-gray-text">{ticket.userName} • {ticket.userEmail} • {ticket.date}</p>
+                    <p className="text-sm font-bold text-ink">{ticket.subject}</p>
+                    <p className="text-[10px] text-muted">{ticket.userName} • {ticket.userEmail} • {ticket.date}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -107,14 +107,14 @@ export const AdminSupportTab: React.FC = () => {
               </button>
 
               {isExpanded && (
-                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} className="border-t border-orbit-border p-4 space-y-4 bg-orbit-bg/50">
+                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} className="border-t border-line p-4 space-y-4 bg-ground/50">
                   {/* Messages */}
                   <div className="space-y-2 max-h-[300px] overflow-y-auto">
                     {ticket.messages.map((msg: any, idx: number) => (
                       <div key={idx} className={`flex ${msg.sender === "support" ? "justify-end" : "justify-start"}`}>
-                        <div className={`max-w-[80%] px-4 py-2 rounded-2xl text-xs ${msg.sender === "support" ? "bg-orbit-accent/20 text-orbit-accent rounded-br-none" : "bg-orbit-card border border-orbit-border text-orbit-white rounded-bl-none"}`}>
+                        <div className={`max-w-[80%] px-4 py-2 rounded-2xl text-xs ${msg.sender === "support" ? "bg-accent/20 text-accent rounded-br-none" : "bg-surface border border-line text-ink rounded-bl-none"}`}>
                           <p>{msg.text}</p>
-                          <p className="text-[9px] text-orbit-gray-text mt-1">{msg.time}</p>
+                          <p className="text-[9px] text-muted mt-1">{msg.time}</p>
                         </div>
                       </div>
                     ))}
@@ -125,18 +125,18 @@ export const AdminSupportTab: React.FC = () => {
                     <div className="flex-1 flex gap-2">
                       <input placeholder="Type a reply..." value={replyTexts[ticket.id] || ""} onChange={e => setReplyTexts(prev => ({ ...prev, [ticket.id]: e.target.value }))}
                         onKeyDown={e => { if (e.key === "Enter") handleReply(ticket.id); }}
-                        className="flex-1 px-4 py-2 bg-orbit-card border border-orbit-border rounded-xl text-xs text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent" />
+                        className="flex-1 px-4 py-2 bg-surface border border-line rounded-xl text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
                       <button onClick={() => handleReply(ticket.id)}
-                        className="px-4 py-2 bg-orbit-accent text-orbit-bg font-bold text-xs rounded-xl hover:opacity-90 cursor-pointer">
+                        className="px-4 py-2 bg-accent text-ground font-bold text-xs rounded-xl hover:opacity-90 cursor-pointer">
                         <Send size={14} />
                       </button>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-2 pt-2 border-t border-orbit-border/50">
+                  <div className="flex flex-wrap gap-2 pt-2 border-t border-line/50">
                     {(["low", "medium", "high"] as const).map(p => (
                       <button key={p} onClick={() => adminSetTicketPriority(ticket.id, p)}
-                        className={`px-3 py-1 text-[10px] font-bold rounded-lg border cursor-pointer transition-colors ${ticket.priority === p ? priorityColors[p] : "text-orbit-gray-text border-orbit-border hover:border-orbit-accent"}`}>
+                        className={`px-3 py-1 text-[10px] font-bold rounded-lg border cursor-pointer transition-colors ${ticket.priority === p ? priorityColors[p] : "text-muted border-line hover:border-accent"}`}>
                         {p.toUpperCase()}
                       </button>
                     ))}
@@ -152,7 +152,7 @@ export const AdminSupportTab: React.FC = () => {
         })}
 
         {filtered.length === 0 && (
-          <div className="text-center py-12 text-orbit-gray-text text-sm">No support tickets found.</div>
+          <div className="text-center py-12 text-muted text-sm">No support tickets found.</div>
         )}
       </div>
     </motion.div>

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowDownLeft, Check, ClipboardList, FileText, Hash, Search, X } from "lucide-react";
-import { useOrbit } from "../../../context/OrbitContext";
+import { useApp } from "../../../context/AppContext";
 import { getDepositWalletLabel } from "../../../services";
 import type { DepositWallet, Transaction } from "../../../types";
 
@@ -101,7 +101,7 @@ const buildDepositRows = (
     });
 
 export const AdminDepositsTab: React.FC = () => {
-  const { adminTransactions, adminWallets, depositWallets, adminApproveDeposit, adminRejectDeposit } = useOrbit();
+  const { adminTransactions, adminWallets, depositWallets, adminApproveDeposit, adminRejectDeposit } = useApp();
   const [adminNotes, setAdminNotes] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<"all" | DepositStatus>("all");
@@ -168,12 +168,12 @@ export const AdminDepositsTab: React.FC = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
+      <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
         <div>
-          <h1 className="text-xl font-bold text-orbit-white flex items-center gap-2">
+          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
             <ArrowDownLeft size={20} className="text-emerald-400" /> Crypto Deposit Management
           </h1>
-          <p className="text-xs text-orbit-gray-text mt-1">Review incoming crypto deposits, wallet destinations, hashes, and admin decisions.</p>
+          <p className="text-xs text-muted mt-1">Review incoming crypto deposits, wallet destinations, hashes, and admin decisions.</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
           <StatBadge label="Total" value={stats.total} />
@@ -189,22 +189,22 @@ export const AdminDepositsTab: React.FC = () => {
         </motion.div>
       )}
 
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-orbit-border flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <div className="bg-surface border border-line rounded-2xl overflow-hidden">
+        <div className="px-5 py-4 border-b border-line flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div>
-            <h2 className="text-sm font-bold text-orbit-white flex items-center gap-2">
-              <ClipboardList size={16} className="text-orbit-accent" /> Deposit Queue
+            <h2 className="text-sm font-bold text-ink flex items-center gap-2">
+              <ClipboardList size={16} className="text-accent" /> Deposit Queue
             </h2>
-            <p className="text-[11px] text-orbit-gray-text mt-1">Pending deposits stay at the top for faster treasury review.</p>
+            <p className="text-[11px] text-muted mt-1">Pending deposits stay at the top for faster treasury review.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
             <div className="relative sm:w-72">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-orbit-gray-text" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
               <input
                 value={searchQuery}
                 onChange={event => setSearchQuery(event.target.value)}
                 placeholder="Search deposits"
-                className="w-full pl-9 pr-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-xs text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent"
+                className="w-full pl-9 pr-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent"
               />
             </div>
             <div className="flex flex-wrap gap-2">
@@ -212,7 +212,7 @@ export const AdminDepositsTab: React.FC = () => {
                 <button
                   key={status}
                   onClick={() => setFilterStatus(status)}
-                  className={`px-3 py-2 text-[10px] font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-orbit-accent text-orbit-bg border-orbit-accent" : "bg-orbit-bg text-orbit-gray-text border-orbit-border hover:border-orbit-accent"}`}
+                  className={`px-3 py-2 text-[10px] font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-accent text-ground border-accent" : "bg-ground text-muted border-line hover:border-accent"}`}
                 >
                   {status === "all" ? "All" : statusLabels[status]}
                 </button>
@@ -223,8 +223,8 @@ export const AdminDepositsTab: React.FC = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1280px] text-left">
-            <thead className="bg-orbit-bg/60 border-b border-orbit-border">
-              <tr className="text-[10px] uppercase tracking-wider text-orbit-gray-text">
+            <thead className="bg-ground/60 border-b border-line">
+              <tr className="text-[10px] uppercase tracking-wider text-muted">
                 <th className="px-5 py-3 font-bold">Deposit ID</th>
                 <th className="px-4 py-3 font-bold">User</th>
                 <th className="px-4 py-3 font-bold">Email</th>
@@ -239,34 +239,34 @@ export const AdminDepositsTab: React.FC = () => {
                 <th className="px-5 py-3 font-bold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-orbit-border/70">
+            <tbody className="divide-y divide-line/70">
               {filteredDeposits.map(deposit => (
-                <tr key={deposit.id} className="hover:bg-orbit-bg/40 transition-colors align-top">
+                <tr key={deposit.id} className="hover:bg-ground/40 transition-colors align-top">
                   <td className="px-5 py-4">
-                    <div className="flex items-center gap-2 text-xs font-bold text-orbit-white">
-                      <Hash size={12} className="text-orbit-gray-text" />
+                    <div className="flex items-center gap-2 text-xs font-bold text-ink">
+                      <Hash size={12} className="text-muted" />
                       <span title={deposit.id}>{shortValue(deposit.id, 12, 5)}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-xs font-bold text-orbit-white">{deposit.userName}</td>
-                  <td className="px-4 py-4 text-xs text-orbit-gray-text">{deposit.userEmail}</td>
-                  <td className="px-4 py-4 text-xs font-bold text-orbit-white">{deposit.coin}</td>
-                  <td className="px-4 py-4 text-xs text-orbit-accent font-bold">{deposit.network}</td>
+                  <td className="px-4 py-4 text-xs font-bold text-ink">{deposit.userName}</td>
+                  <td className="px-4 py-4 text-xs text-muted">{deposit.userEmail}</td>
+                  <td className="px-4 py-4 text-xs font-bold text-ink">{deposit.coin}</td>
+                  <td className="px-4 py-4 text-xs text-accent font-bold">{deposit.network}</td>
                   <td className="px-4 py-4">
-                    <span title={deposit.wallet} className="block max-w-[180px] truncate text-xs text-orbit-white">{deposit.wallet}</span>
+                    <span title={deposit.wallet} className="block max-w-[180px] truncate text-xs text-ink">{deposit.wallet}</span>
                   </td>
-                  <td className="px-4 py-4 text-xs font-bold text-orbit-white">{formatMoney(deposit.amount)}</td>
+                  <td className="px-4 py-4 text-xs font-bold text-ink">{formatMoney(deposit.amount)}</td>
                   <td className="px-4 py-4">
-                    <span title={deposit.txHash || "No hash submitted"} className="block max-w-[170px] truncate text-xs text-orbit-accent font-bold">
+                    <span title={deposit.txHash || "No hash submitted"} className="block max-w-[170px] truncate text-xs text-accent font-bold">
                       {deposit.txHash ? shortValue(deposit.txHash, 14, 7) : "No hash"}
                     </span>
                     {deposit.proofFile && (
-                      <span className="mt-1 inline-flex items-center gap-1 text-[10px] text-orbit-gray-text">
+                      <span className="mt-1 inline-flex items-center gap-1 text-[10px] text-muted">
                         <FileText size={10} /> Proof attached
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-4 text-xs text-orbit-gray-text">{deposit.date}</td>
+                  <td className="px-4 py-4 text-xs text-muted">{deposit.date}</td>
                   <td className="px-4 py-4">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-[10px] font-bold ${statusStyles[deposit.displayStatus]}`}>
                       {statusLabels[deposit.displayStatus]}
@@ -279,10 +279,10 @@ export const AdminDepositsTab: React.FC = () => {
                         placeholder="Optional admin notes"
                         value={adminNotes[deposit.id] || ""}
                         onChange={event => setNote(deposit.id, event.target.value)}
-                        className="w-[220px] px-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-xs text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent resize-none"
+                        className="w-[220px] px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none"
                       />
                     ) : (
-                      <p className="max-w-[220px] text-[11px] text-orbit-gray-text">{deposit.notes || "No admin notes"}</p>
+                      <p className="max-w-[220px] text-[11px] text-muted">{deposit.notes || "No admin notes"}</p>
                     )}
                   </td>
                   <td className="px-5 py-4">
@@ -296,7 +296,7 @@ export const AdminDepositsTab: React.FC = () => {
                         </button>
                       </div>
                     ) : (
-                      <p className="text-right text-[10px] font-bold uppercase text-orbit-gray-text">Reviewed</p>
+                      <p className="text-right text-[10px] font-bold uppercase text-muted">Reviewed</p>
                     )}
                   </td>
                 </tr>
@@ -306,7 +306,7 @@ export const AdminDepositsTab: React.FC = () => {
         </div>
 
         {filteredDeposits.length === 0 && (
-          <div className="py-14 text-center text-sm text-orbit-gray-text">No deposit records match this view.</div>
+          <div className="py-14 text-center text-sm text-muted">No deposit records match this view.</div>
         )}
       </div>
     </motion.div>
@@ -320,11 +320,11 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
       ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
       : tone === "red"
         ? "bg-red-500/10 border-red-500/20 text-red-400"
-        : "bg-orbit-bg border-orbit-border text-orbit-white";
+        : "bg-ground border-line text-ink";
 
   return (
     <div className={`px-3 py-2 border rounded-lg min-w-[78px] ${toneClass}`}>
-      <p className="text-[9px] uppercase text-orbit-gray-text tracking-wider">{label}</p>
+      <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
       <p className="text-sm font-bold">{value}</p>
     </div>
   );

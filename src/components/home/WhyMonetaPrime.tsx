@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Zap, Shield, ShieldCheck, BarChart3, Lock, Globe, Layers, Target, Users, TrendingUp, ThumbsUp, Headset, Database, Puzzle, Fingerprint, Mail } from 'lucide-react';
-import { useOrbit } from '../../context/OrbitContext';
+import { useApp } from '../../context/AppContext';
 
 // Section 2: Why Choose (Platform Trust Section redesigned based on User Request with gold orange theme and container-less sleekness)
 export const WhyMonetaPrime = () => {
@@ -15,7 +15,7 @@ export const WhyMonetaPrime = () => {
   const trustItems = [
     { icon: Lock, title: "SSL Secured", desc: "256-bit Encryption", colorClass: "text-indigo-400 bg-indigo-500/5 border-indigo-500/10 fill-indigo-500/10" },
     { icon: Shield, title: "Regulated", desc: "Licensed Platform", colorClass: "text-emerald-400 bg-emerald-500/5 border-emerald-500/10 fill-emerald-500/10" },
-    { icon: Zap, title: "Fast Withdrawals", desc: "Within 24 Hours", colorClass: "text-[#FFB11A] bg-amber-500/5 border-amber-500/10 fill-amber-500/10" },
+    { icon: Zap, title: "Fast Withdrawals", desc: "Within 24 Hours", colorClass: "text-accent bg-accent/5 border-accent/10 fill-accent/10" },
     { icon: Globe, title: "Data Privacy", desc: "GDPR Compliant", colorClass: "text-sky-400 bg-sky-500/5 border-sky-500/10 fill-sky-500/10" }
   ];
 
@@ -32,9 +32,9 @@ export const WhyMonetaPrime = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 80, damping: 15 }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-amber-500/15 bg-amber-500/5 text-[10px] md:text-xs text-amber-500 font-bold tracking-[0.2em] font-bybit uppercase mb-1"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-accent/15 bg-accent/5 text-[10px] md:text-xs text-accent font-bold tracking-[0.2em] font-display uppercase mb-1"
           >
-            <Shield className="w-3.5 h-3.5 text-amber-500 fill-amber-500/10" />
+            <Shield className="w-3.5 h-3.5 text-accent fill-accent/10" />
             TRUSTED WORLDWIDE
           </motion.div>
           
@@ -43,7 +43,7 @@ export const WhyMonetaPrime = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 14 }}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-white tracking-tight leading-tight max-w-4xl mx-auto font-bybit"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-white tracking-tight leading-tight max-w-4xl mx-auto font-display"
           >
             A Platform Traders Rely On
           </motion.h2>
@@ -53,7 +53,7 @@ export const WhyMonetaPrime = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 14, delay: 0.1 }}
-            className="text-neutral-400 max-w-2xl mx-auto text-base md:text-lg leading-relaxed font-bybit"
+            className="text-neutral-400 max-w-2xl mx-auto text-base md:text-lg leading-relaxed font-display"
           >
             Backed by Consensys infrastructure, global regulatory compliance, and the trust of thousands of active digital asset investors.
           </motion.p>
@@ -77,10 +77,10 @@ export const WhyMonetaPrime = () => {
                   <StatIcon className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 
-                <div className="font-bybit font-black text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-[#FFB11A] via-[#FF9900] to-amber-600 select-none group-hover:scale-105 transition-transform duration-300">
+                <div className="font-display font-black text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-[#6AA5FF] via-[#FF9900] to-accent-deep select-none group-hover:scale-105 transition-transform duration-300">
                   {stat.value}
                 </div>
-                <div className="text-xs sm:text-sm font-bold text-neutral-400 tracking-widest uppercase mt-3.5 font-bybit">
+                <div className="text-xs sm:text-sm font-bold text-neutral-400 tracking-widest uppercase mt-3.5 font-display">
                   {stat.label}
                 </div>
               </motion.div>
@@ -103,10 +103,10 @@ export const WhyMonetaPrime = () => {
                 <item.icon className="w-5.5 h-5.5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-extrabold text-white text-base font-bybit tracking-tight">
+                <h4 className="font-extrabold text-white text-base font-display tracking-tight">
                   {item.title}
                 </h4>
-                <p className="text-neutral-400 text-xs sm:text-sm font-bybit">
+                <p className="text-neutral-400 text-xs sm:text-sm font-display">
                   {item.desc}
                 </p>
               </div>

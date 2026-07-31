@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useOrbit } from "../context/OrbitContext";
+import { useApp } from "../context/AppContext";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { 
   Users, Layers, ArrowDownLeft, ArrowUpRight, Volume2, ShieldAlert,
@@ -28,7 +28,7 @@ const AdminSettingsTab = lazy(() => import("../components/admin/tabs/AdminSettin
 const AdminWalletFeedbackTab = lazy(() => import("../components/admin/tabs/AdminWalletFeedbackTab").then(m => ({ default: m.AdminWalletFeedbackTab })));
 
 export const DashboardAdmin: React.FC = () => {
-  const { walletFeedback, adminTransactions, supportTickets } = useOrbit();
+  const { walletFeedback, adminTransactions, supportTickets } = useApp();
 
   // Role-based admin authentication — backed by Clerk + Supabase.
   const { isLoggedIn: userIsLoggedIn, isAdmin: userIsAdmin } = useCurrentUser();
@@ -47,12 +47,12 @@ export const DashboardAdmin: React.FC = () => {
 
   if (!isAdminAuthenticated) {
     return (
-      <div className="min-h-screen bg-orbit-bg flex items-center justify-center font-sans">
+      <div className="min-h-screen bg-ground flex items-center justify-center font-sans">
         <div className="text-center space-y-4">
           <ShieldAlert size={48} className="text-red-500 mx-auto" />
-          <h1 className="text-2xl font-bold text-orbit-white font-heading">Access Denied</h1>
-          <p className="text-orbit-gray-text">You do not have administrative privileges.</p>
-          <button onClick={() => window.location.assign("/")} className="text-orbit-accent hover:underline font-bold text-sm">
+          <h1 className="text-2xl font-bold text-ink font-heading">Access Denied</h1>
+          <p className="text-muted">You do not have administrative privileges.</p>
+          <button onClick={() => window.location.assign("/")} className="text-accent hover:underline font-bold text-sm">
             Return to Homepage
           </button>
         </div>
@@ -84,7 +84,7 @@ export const DashboardAdmin: React.FC = () => {
   const renderActiveTab = () => (
     <Suspense fallback={
       <div className="flex h-64 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-orbit-accent"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-accent"></div>
       </div>
     }>
       {renderActiveTabContent()}

@@ -29,7 +29,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
     return (
       <div className="absolute inset-0 w-full pointer-events-none select-none z-0 overflow-hidden">
         <div className="absolute inset-0 bg-[#04060b]" />
-        <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-orbit-accent/[0.07] blur-[70px]" />
+        <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-accent/[0.07] blur-[70px]" />
         <div className="absolute top-1/3 -right-24 h-72 w-72 rounded-full bg-blue-500/[0.05] blur-[65px]" />
         <div
           className="absolute inset-0 opacity-[0.025]"
@@ -55,10 +55,10 @@ export const ScrollAnimatedBackground: React.FC = () => {
       <div className="absolute inset-0 bg-[#04060b]" />
       
       {/* Dynamic atmospheric radial gradient glows (blue and gold) */}
-      <div className="absolute top-0 left-[-10%] w-[60%] h-[750px] rounded-full bg-gradient-to-br from-orbit-accent/[0.08] via-indigo-950/[0.04] to-transparent blur-[130px]" />
-      <div className="absolute top-[15%] right-[-10%] w-[50%] h-[800px] rounded-full bg-gradient-to-bl from-amber-500/[0.05] via-yellow-600/[0.02] to-transparent blur-[120px]" />
-      <div className="absolute top-[40%] left-[15%] w-[65%] h-[900px] rounded-full bg-gradient-to-r from-[#FF7F00]/[0.03] via-blue-900/[0.04] to-transparent blur-[140px]" />
-      <div className="absolute bottom-0 right-[5%] w-[55%] h-[1000px] rounded-full bg-gradient-to-t from-orbit-accent/[0.09] via-amber-500/[0.03] to-transparent blur-[150px]" />
+      <div className="absolute top-0 left-[-10%] w-[60%] h-[750px] rounded-full bg-gradient-to-br from-accent/[0.08] via-indigo-950/[0.04] to-transparent blur-[130px]" />
+      <div className="absolute top-[15%] right-[-10%] w-[50%] h-[800px] rounded-full bg-gradient-to-bl from-accent/[0.05] via-yellow-600/[0.02] to-transparent blur-[120px]" />
+      <div className="absolute top-[40%] left-[15%] w-[65%] h-[900px] rounded-full bg-gradient-to-r from-[#3D7DFF]/[0.03] via-blue-900/[0.04] to-transparent blur-[140px]" />
+      <div className="absolute bottom-0 right-[5%] w-[55%] h-[1000px] rounded-full bg-gradient-to-t from-accent/[0.09] via-accent/[0.03] to-transparent blur-[150px]" />
 
       {/* Cyber Grid Background */}
       <div 
@@ -73,7 +73,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
       {[...Array(8)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1.5 h-1.5 bg-amber-500/20 rounded-full"
+          className="absolute w-1.5 h-1.5 bg-accent/20 rounded-full"
           initial={{ top: Math.random() * 100 + "%", left: Math.random() * 100 + "%" }}
           animate={{ y: [0, -100], opacity: [0, 1, 0] }}
           transition={{ duration: 10 + Math.random() * 5, repeat: Infinity, ease: "linear" }}
@@ -89,7 +89,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
       >
         {/* Outermost ring: Gold dotted */}
         <div 
-          className="absolute w-full h-full rounded-full border border-dashed border-amber-500/30 animate-spin"
+          className="absolute w-full h-full rounded-full border border-dashed border-accent/30 animate-spin"
           style={{ animationDuration: "140s" }}
         />
         {/* Middle ring: Glowing blue with nodes */}
@@ -98,17 +98,17 @@ export const ScrollAnimatedBackground: React.FC = () => {
           style={{ animationDuration: "90s", animationDirection: "reverse" }}
         >
           {/* Node pointers on the orbital path */}
-          <div className="absolute -top-1.5 left-1/2 w-3 h-3 rounded-full bg-orbit-accent shadow-[0_0_12px_#3b82f6] border border-[#04060b]" />
-          <div className="absolute -bottom-1.5 left-1/2 w-3 h-3 rounded-full bg-amber-500 shadow-[0_0_12px_#f59e0b] border border-[#04060b]" />
+          <div className="absolute -top-1.5 left-1/2 w-3 h-3 rounded-full bg-accent shadow-[0_0_12px_#3b82f6] border border-[#04060b]" />
+          <div className="absolute -bottom-1.5 left-1/2 w-3 h-3 rounded-full bg-accent shadow-[0_0_12px_#6AA5FF] border border-[#04060b]" />
         </div>
         {/* Inner ring: Double orbit gold accent */}
         <div 
-          className="absolute w-[60%] h-[60%] rounded-full border-2 border-double border-amber-500/15 animate-spin"
+          className="absolute w-[60%] h-[60%] rounded-full border-2 border-double border-accent/15 animate-spin"
           style={{ animationDuration: "60s" }}
         />
         {/* Core ring: Subtle accent */}
         <div className="absolute w-[40%] h-[40%] rounded-full border border-blue-500/10 animate-pulse opacity-60" style={{ animationDuration: "5s" }} />
-        <div className="absolute w-[40%] h-[40%] rounded-full border border-orbit-accent/10" />
+        <div className="absolute w-[40%] h-[40%] rounded-full border border-accent/10" />
       </motion.div>
 
       {/* Secondary Orbit Node at the Earn Section */}
@@ -117,9 +117,9 @@ export const ScrollAnimatedBackground: React.FC = () => {
         className="absolute top-[1600px] right-[-100px] w-[500px] h-[500px] opacity-[0.15] pointer-events-none"
       >
         <div className="w-full h-full rounded-full border border-blue-400/25 animate-spin" style={{ animationDuration: "80s" }}>
-          <div className="absolute top-1/2 -translate-y-1/2 -left-1 w-2.5 h-2.5 rounded-full bg-orbit-accent shadow-[0_0_8px_rgb(59,130,246)]" />
+          <div className="absolute top-1/2 -translate-y-1/2 -left-1 w-2.5 h-2.5 rounded-full bg-accent shadow-[0_0_8px_rgb(59,130,246)]" />
         </div>
-        <div className="absolute top-8 left-8 w-[calc(100%-64px)] h-[calc(100%-64px)] rounded-full border border-dashed border-amber-500/20 animate-spin" style={{ animationDuration: "40s", animationDirection: "reverse" }} />
+        <div className="absolute top-8 left-8 w-[calc(100%-64px)] h-[calc(100%-64px)] rounded-full border border-dashed border-accent/20 animate-spin" style={{ animationDuration: "40s", animationDirection: "reverse" }} />
       </motion.div>
 
 
@@ -144,19 +144,19 @@ export const ScrollAnimatedBackground: React.FC = () => {
           <path d="M780,260 L850,260 L880,310 L810,330 L760,300 Z" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="3 4" />
           
           {/* 4. BLUE AND GOLD GLOWING TRANSACTION ROUTING PATHS */}
-          <g className="text-amber-400">
+          <g className="text-accent-hover">
             {/* New York to London */}
             <path d="M 230,100 Q 350,60 520,70" fill="none" stroke="#FFD700" strokeWidth="1.5" strokeDasharray="500" strokeDashoffset="500" className="animate-[dash_12s_linear_infinite]" />
             <circle cx="230" cy="100" r="3" fill="#3b82f6" className="animate-pulse" />
             
             {/* London to Singapore */}
             <path d="M 520,70 Q 640,180 770,220" fill="none" stroke="#3b82f6" strokeWidth="1.5" strokeDasharray="500" strokeDashoffset="500" className="animate-[dash_15s_linear_infinite]" style={{ animationDelay: "3s" }} />
-            <circle cx="520" cy="70" r="3.5" fill="#f59e0b" className="animate-pulse" />
+            <circle cx="520" cy="70" r="3.5" fill="#6AA5FF" className="animate-pulse" />
             <circle cx="770" cy="220" r="3" fill="#3b82f6" className="animate-pulse" />
 
             {/* Singapore to Tokyo */}
             <path d="M 770,220 Q 820,150 860,100" fill="none" stroke="#FFD700" strokeWidth="1" strokeDasharray="500" strokeDashoffset="500" className="animate-[dash_10s_linear_infinite]" style={{ animationDelay: "6s" }} />
-            <circle cx="860" cy="100" r="3" fill="#f59e0b" />
+            <circle cx="860" cy="100" r="3" fill="#6AA5FF" />
           </g>
         </svg>
       </motion.div>
@@ -213,16 +213,16 @@ export const ScrollAnimatedBackground: React.FC = () => {
         {/* Mini Gold breakout cluster 3 at bottom-ish levels */}
         <div className="absolute top-[1750px] left-[5%] opacity-[0.15] flex gap-1 text-[10px] font-mono items-center">
           <div className="flex flex-col items-center">
-            <div className="w-0.5 h-2 bg-amber-400" />
-            <div className="w-2.5 h-7 bg-amber-400/90 rounded-sm shadow-[0_0_6px_rgba(245,158,11,0.3)]" />
-            <div className="w-0.5 h-2 bg-amber-400" />
+            <div className="w-0.5 h-2 bg-accent-hover" />
+            <div className="w-2.5 h-7 bg-accent-hover/90 rounded-sm shadow-[0_0_6px_rgba(106,165,255,0.3)]" />
+            <div className="w-0.5 h-2 bg-accent-hover" />
           </div>
           <div className="flex flex-col items-center">
-            <div className="w-0.5 h-1 bg-amber-400" />
-            <div className="w-2.5 h-10 bg-amber-400/90 rounded-sm shadow-[0_0_8px_rgba(245,158,11,0.4)]" />
-            <div className="w-0.5 h-3 bg-amber-400" />
+            <div className="w-0.5 h-1 bg-accent-hover" />
+            <div className="w-2.5 h-10 bg-accent-hover/90 rounded-sm shadow-[0_0_8px_rgba(106,165,255,0.4)]" />
+            <div className="w-0.5 h-3 bg-accent-hover" />
           </div>
-          <span className="text-amber-400/80 font-bold ml-1 animate-pulse">BREAKOUT</span>
+          <span className="text-accent-hover/80 font-bold ml-1 animate-pulse">BREAKOUT</span>
         </div>
       </motion.div>
 
@@ -303,8 +303,8 @@ export const ScrollAnimatedBackground: React.FC = () => {
         <div className="absolute top-[180px] right-[4%] w-[220px] h-[340px] rounded-[32px] bg-gradient-to-b from-white/[0.015] to-transparent border border-white/[0.03]" />
         
         {/* Decorative thin gold vector line with bullet node */}
-        <div className="absolute top-[520px] left-[3%] w-[150px] h-0.5 bg-gradient-to-r from-transparent via-amber-500/30 to-transparent">
-          <div className="absolute left-1/2 -top-1 w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgb(245,158,11)]" />
+        <div className="absolute top-[520px] left-[3%] w-[150px] h-0.5 bg-gradient-to-r from-transparent via-accent/30 to-transparent">
+          <div className="absolute left-1/2 -top-1 w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_rgb(106,165,255)]" />
         </div>
 
         {/* Decorative thin blue vector line with bullet node on the right */}

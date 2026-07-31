@@ -46,7 +46,7 @@ export const DEFAULT_INVESTMENT_PLANS: InvestmentPlan[] = [
     enabled: true,
     displayOrder: 30,
     badge: "Popular",
-    accentColor: "#FFB11A"
+    accentColor: "#6AA5FF"
   },
   {
     id: "plan-platinum",

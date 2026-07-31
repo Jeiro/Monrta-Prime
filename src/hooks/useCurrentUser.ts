@@ -15,8 +15,8 @@ export interface CurrentUserProfile {
  * Single source of truth for "who is signed in and are they an admin" —
  * backed entirely by Clerk (identity) + Supabase (role), no Firebase.
  * Use this for access-gating (routing guards). It does NOT replace
- * OrbitContext's `user` object for dashboard data (balance, portfolio,
- * etc.) — that migration is happening feature-by-feature in OrbitContext
+ * AppContext's `user` object for dashboard data (balance, portfolio,
+ * etc.) — that migration is happening feature-by-feature in AppContext
  * itself; `profile`/`refetchProfile` here are used for the pieces that
  * have already moved (e.g. live balance checks during a deposit/withdrawal).
  */

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useOrbit } from "../../../context/OrbitContext";
+import { useApp } from "../../../context/AppContext";
 import { InvestmentPlan } from "../../../types";
 import { motion } from "motion/react";
 import { 
@@ -37,10 +37,10 @@ const AdminVolumeChart: React.FC<{ chartData: any[] }> = ({ chartData }) => {
   }, []);
 
   return (
-    <div className="bg-orbit-card border border-orbit-border rounded-2xl p-5 flex flex-col justify-between">
+    <div className="bg-surface border border-line rounded-2xl p-5 flex flex-col justify-between">
       <div>
-        <h3 className="text-sm font-bold text-orbit-white">In/Out Volume Breakdown</h3>
-        <p className="text-[10px] text-orbit-gray-text mt-1">Comparisons of total accepted deposits against total settled withdrawals.</p>
+        <h3 className="text-sm font-bold text-ink">In/Out Volume Breakdown</h3>
+        <p className="text-[10px] text-muted mt-1">Comparisons of total accepted deposits against total settled withdrawals.</p>
       </div>
       <div ref={containerRef} className="h-[200px] mt-4 w-full">
         {hasSize ? (
@@ -54,7 +54,7 @@ const AdminVolumeChart: React.FC<{ chartData: any[] }> = ({ chartData }) => {
                 itemStyle={{ color: "#fff" }}
                 formatter={(val: any) => `$${Number(val).toLocaleString()}`}
               />
-              <Bar dataKey="volume" fill="#FF7F00" radius={[0, 4, 4, 0]} barSize={20} />
+              <Bar dataKey="volume" fill="#3D7DFF" radius={[0, 4, 4, 0]} barSize={20} />
             </BarChart>
           </ResponsiveContainer>
         ) : null}
@@ -65,7 +65,7 @@ const AdminVolumeChart: React.FC<{ chartData: any[] }> = ({ chartData }) => {
 
 
 export const AdminOverviewTab: React.FC = () => {
-  const orbit = useOrbit();
+  const orbit = useApp();
 
   const currentUser = orbit.user;
   const usersList = orbit.usersDirectory || [];
@@ -114,35 +114,35 @@ export const AdminOverviewTab: React.FC = () => {
             {/* Top Stat Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { label: "Total Network Volume", val: `$${totalDepositVolume.toLocaleString()}`, change: "+14.2%", icon: Activity, color: "text-orbit-green" },
-                { label: "Active Investors", val: activeUserCount, change: "+5.8%", icon: Users, color: "text-orbit-accent" },
+                { label: "Total Network Volume", val: `$${totalDepositVolume.toLocaleString()}`, change: "+14.2%", icon: Activity, color: "text-positive" },
+                { label: "Active Investors", val: activeUserCount, change: "+5.8%", icon: Users, color: "text-accent" },
                 { label: "Pending Payouts", val: pendingPayoutCount, change: "-2", icon: ArrowUpRight, color: "text-[#DFAD12]" },
-                { label: "Total Asset Investments", val: `$${totalInvestmentsPlaced.toLocaleString()}`, change: "+22%", icon: Layers, color: "text-orbit-white" }
+                { label: "Total Asset Investments", val: `$${totalInvestmentsPlaced.toLocaleString()}`, change: "+22%", icon: Layers, color: "text-ink" }
               ].map((stat, idx) => (
-                <div key={idx} className="bg-orbit-card border border-orbit-border rounded-2xl p-5 flex flex-col justify-between h-[120px]">
+                <div key={idx} className="bg-surface border border-line rounded-2xl p-5 flex flex-col justify-between h-[120px]">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-orbit-gray-text font-bold uppercase tracking-wider">{stat.label}</span>
+                    <span className="text-[10px] text-muted font-bold uppercase tracking-wider">{stat.label}</span>
                     <stat.icon size={16} className={stat.color} />
                   </div>
                   <div className="flex items-end justify-between">
-                    <span className="text-2xl font-bold text-orbit-white font-data">{stat.val}</span>
-                    <span className="text-[10px] font-bold text-orbit-green">{stat.change}</span>
+                    <span className="text-2xl font-bold text-ink font-data">{stat.val}</span>
+                    <span className="text-[10px] font-bold text-positive">{stat.change}</span>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* Quick Actions Panel */}
-            <div className="bg-orbit-bg border border-orbit-border/50 rounded-xl p-4 flex flex-col sm:flex-row gap-3">
-              <button onClick={() => window.location.hash = "#users"} className="flex-1 py-2 bg-orbit-card border border-orbit-border text-orbit-white hover:border-orbit-accent text-xs font-bold rounded-lg cursor-pointer transition-colors flex items-center justify-center gap-2">
-                <Users size={14} className="text-orbit-accent" />
+            <div className="bg-ground border border-line/50 rounded-xl p-4 flex flex-col sm:flex-row gap-3">
+              <button onClick={() => window.location.hash = "#users"} className="flex-1 py-2 bg-surface border border-line text-ink hover:border-accent text-xs font-bold rounded-lg cursor-pointer transition-colors flex items-center justify-center gap-2">
+                <Users size={14} className="text-accent" />
                 Manage Users
               </button>
-              <button onClick={() => window.location.hash = "#deposits"} className="flex-1 py-2 bg-orbit-card border border-orbit-border text-orbit-white hover:border-orbit-accent text-xs font-bold rounded-lg cursor-pointer transition-colors flex items-center justify-center gap-2">
-                <ArrowDownLeft size={14} className="text-orbit-green" />
+              <button onClick={() => window.location.hash = "#deposits"} className="flex-1 py-2 bg-surface border border-line text-ink hover:border-accent text-xs font-bold rounded-lg cursor-pointer transition-colors flex items-center justify-center gap-2">
+                <ArrowDownLeft size={14} className="text-positive" />
                 Review Invoices
               </button>
-              <button onClick={() => window.location.hash = "#support"} className="flex-1 py-2 bg-orbit-card border border-orbit-border text-orbit-white hover:border-orbit-accent text-xs font-bold rounded-lg cursor-pointer transition-colors flex items-center justify-center gap-2">
+              <button onClick={() => window.location.hash = "#support"} className="flex-1 py-2 bg-surface border border-line text-ink hover:border-accent text-xs font-bold rounded-lg cursor-pointer transition-colors flex items-center justify-center gap-2">
                 <MessageSquare size={14} className="text-[#DFAD12]" />
                 Support Desk
               </button>
@@ -151,27 +151,27 @@ export const AdminOverviewTab: React.FC = () => {
             {/* Platform Financial Analysis */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
-              <div className="bg-orbit-card border border-orbit-border rounded-2xl p-5">
+              <div className="bg-surface border border-line rounded-2xl p-5">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-sm font-bold text-orbit-white">Platform Fiscal Hedging</h3>
-                  <span className="text-[10px] uppercase font-bold text-orbit-accent border border-orbit-accent/30 bg-orbit-accent/10 px-2 py-0.5 rounded-full">Automated Mode</span>
+                  <h3 className="text-sm font-bold text-ink">Platform Fiscal Hedging</h3>
+                  <span className="text-[10px] uppercase font-bold text-accent border border-accent/30 bg-accent/10 px-2 py-0.5 rounded-full">Automated Mode</span>
                 </div>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-zinc-500 font-medium uppercase tracking-wider">Hedged Revenue Base</span>
-                    <span className="font-bold text-orbit-green font-data text-sm">+${platformHedgedRevenue.toLocaleString()}</span>
+                    <span className="font-bold text-positive font-data text-sm">+${platformHedgedRevenue.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-zinc-500 font-medium uppercase tracking-wider">Projected Next Month</span>
-                    <span className="font-bold text-orbit-white font-data text-sm">+${(platformHedgedRevenue * 1.15).toLocaleString()}</span>
+                    <span className="font-bold text-ink font-data text-sm">+${(platformHedgedRevenue * 1.15).toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-zinc-500 font-medium uppercase tracking-wider">System Yield Rate</span>
-                    <span className="font-bold text-orbit-accent font-data text-sm">4.2%</span>
+                    <span className="font-bold text-accent font-data text-sm">4.2%</span>
                   </div>
                   
-                  <div className="pt-4 border-t border-orbit-border/40 mt-4">
-                    <button className="w-full py-2 bg-orbit-accent text-orbit-bg font-bold uppercase tracking-wider text-[10px] rounded hover:opacity-90 cursor-pointer">
+                  <div className="pt-4 border-t border-line/40 mt-4">
+                    <button className="w-full py-2 bg-accent text-ground font-bold uppercase tracking-wider text-[10px] rounded hover:opacity-90 cursor-pointer">
                       Export Hedging Log
                     </button>
                   </div>

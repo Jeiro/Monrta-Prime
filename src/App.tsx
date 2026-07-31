@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState, Suspense, lazy } from "react";
 import { Routes, Route, Navigate, useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { OrbitProvider } from "./context/OrbitContext";
+import { AppProvider } from "./context/AppContext";
 import { Navigation } from "./components/Navigation";
 import { MobileNav } from "./components/MobileNav";
 import { Footer } from "./components/Footer";
@@ -109,7 +109,7 @@ class DecorativeErrorBoundary extends React.Component<{ children: React.ReactNod
 
 const RouteSpinner = () => (
   <div className="flex h-[70vh] items-center justify-center">
-    <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-orbit-accent"></div>
+    <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-accent"></div>
   </div>
 );
 
@@ -214,7 +214,7 @@ function AppShell() {
 
   if (maintenanceMode) {
     return (
-      <div className="relative flex min-h-screen flex-col bg-orbit-bg text-[#F5F6F8] font-sans">
+      <div className="relative flex min-h-screen flex-col bg-ground text-[#F5F6F8] font-sans">
         <DecorativeErrorBoundary>
         <ScrollAnimatedBackground />
       </DecorativeErrorBoundary>
@@ -233,8 +233,8 @@ function AppShell() {
   // flashed through the user dashboard) before the redirect effects fired.
   if (!isReady) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-orbit-bg">
-        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-orbit-accent"></div>
+      <div className="flex min-h-screen items-center justify-center bg-ground">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-accent"></div>
       </div>
     );
   }
@@ -265,7 +265,7 @@ function AppShell() {
   );
 
   return (
-    <div className={`relative flex min-h-screen flex-col bg-orbit-bg text-[#F5F6F8] font-sans ${showUserNavigation ? "pt-16 sm:pt-20" : ""}`}>
+    <div className={`relative flex min-h-screen flex-col bg-ground text-[#F5F6F8] font-sans ${showUserNavigation ? "pt-16 sm:pt-20" : ""}`}>
       <DecorativeErrorBoundary>
         <ScrollAnimatedBackground />
       </DecorativeErrorBoundary>
@@ -363,8 +363,8 @@ export default function App() {
   }
 
   return (
-    <OrbitProvider>
+    <AppProvider>
       <AppShell />
-    </OrbitProvider>
+    </AppProvider>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSeo } from "../lib/useSeo";
-import { useOrbit } from "../context/OrbitContext";
+import { useApp } from "../context/AppContext";
 import { 
   ArrowUpRight, 
   TrendingUp, 
@@ -85,7 +85,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
     description: "Trade crypto with precision on Moneta Prime. Real-time markets, tiered investment plans, and copy trading in one workspace built for serious traders.",
     path: "/",
   });
-  const { marketCrypto, marketStocks, user } = useOrbit();
+  const { marketCrypto, marketStocks, user } = useApp();
   const [activeSpotlightTab, setActiveSpotlightTab] = useState<"crypto" | "stocks">("crypto");
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const [marketSearch, setMarketSearch] = useState("");
@@ -175,21 +175,21 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
   };
 
   return (
-    <div className="min-h-screen bg-transparent text-white font-sans selection:bg-amber-500/20 overflow-x-hidden pt-0">
+    <div className="min-h-screen bg-transparent text-white font-sans selection:bg-accent/20 overflow-x-hidden pt-0">
       
       {/* 1. HERO BANNER: METRICS & EXQUISITE CELESTIAL ORBITING SYSTEM */}
       <section className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-[#0B0E11] via-[#050608] to-black border-b border-[#2B3139]/30 px-4 overflow-hidden pt-24 sm:pt-32 pb-6">
         
         {/* Subtle grid background effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(rgba(247,147,26,0.12)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(rgba(106,165,255,0.12)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[140px] pointer-events-none" />
         
         <div className="max-w-4xl mx-auto w-full relative z-20 text-center flex flex-col items-center mt-2">
           
           {/* Main Display Typography */}
           <div className="space-y-4 max-w-3xl">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-extrabold text-white tracking-tight leading-tight max-w-4xl mx-auto font-sans">
-              Trade Smarter With <span className="lowercase text-white font-extrabold">orbit<span className="text-[#F7931A]">rio</span></span>
+              Trade Smarter With <span className="lowercase text-white font-extrabold">moneta <span className="text-accent">prime</span></span>
             </h1>
             <p className="text-neutral-400 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
               Access global markets through a secure, data-driven trading platform. Built for traders and investors who demand precision, speed, and reliability.
@@ -216,16 +216,16 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
           <div className="relative w-full max-w-lg h-[240px] min-[380px]:h-[280px] min-[440px]:h-[340px] sm:h-[500px] mt-2 sm:mt-12 flex items-center justify-center select-none overflow-visible scale-[0.62] min-[380px]:scale-[0.72] min-[440px]:scale-[0.85] sm:scale-100 transition-transform origin-center">
             
             {/* Ambient gold starfields glow */}
-            <div className="absolute w-56 h-56 bg-[#F7931A]/10 rounded-full blur-[60px]" />
+            <div className="absolute w-56 h-56 bg-[#6AA5FF]/10 rounded-full blur-[60px]" />
             
             {/* Central Moneta Prime Logo Brand Core */}
-            <div className="absolute w-[180px] h-[180px] rounded-full bg-transparent border-2 border-[#F7931A]/20 flex flex-col items-center justify-center z-30 shadow-[0_0_50px_rgba(247,147,26,0.15)]">
-              <svg className="w-[52px] h-[52px] transform hover:rotate-12 transition-transform duration-500 filter drop-shadow-[0_4px_16px_rgba(247,147,26,0.4)]" viewBox="0 0 100 100">
+            <div className="absolute w-[180px] h-[180px] rounded-full bg-transparent border-2 border-[#6AA5FF]/20 flex flex-col items-center justify-center z-30 shadow-[0_0_50px_rgba(106,165,255,0.15)]">
+              <svg className="w-[52px] h-[52px] transform hover:rotate-12 transition-transform duration-500 filter drop-shadow-[0_4px_16px_rgba(106,165,255,0.4)]" viewBox="0 0 100 100">
                 <defs>
                   <linearGradient id="orbCoreGold" x1="0%" y1="100%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#E05B00" />
-                    <stop offset="45%" stopColor="#F7931A" />
-                    <stop offset="100%" stopColor="#FFBA3B" />
+                    <stop offset="0%" stopColor="#2E6BE0" />
+                    <stop offset="45%" stopColor="#6AA5FF" />
+                    <stop offset="100%" stopColor="#8ABAFF" />
                   </linearGradient>
                   <linearGradient id="orbCoreSilver" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#FFFFFF" />
@@ -236,10 +236,10 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
                 <path d="M 18,50 A 30,30 0 0,1 78,28 L 71,35 A 20,20 0 0,0 26,50 Z" fill="url(#orbCoreGold)" />
                 <path d="M 18,50 C 23,48 45,38 78,28 C 65,37 40,45 18,50" fill="url(#orbCoreGold)" />
                 <path d="M 23,55 A 30,30 0 0,0 82,50 A 30,30 0 0,0 78,28 L 71,35 A 20,20 0 0,1 74,50 A 20,20 0 0,1 28,54 Z" fill="url(#orbCoreSilver)" />
-                <circle cx="85" cy="22" r="5.5" fill="#F7931A" />
+                <circle cx="85" cy="22" r="5.5" fill="#6AA5FF" />
               </svg>
-              <span className="text-base text-white font-bold tracking-[0.05em] mt-2 font-brand lowercase">
-                orbit<span className="text-[#F7931A]">rio</span>
+              <span className="text-base text-white font-bold tracking-[0.05em] mt-2 font-display lowercase">
+                moneta <span className="text-accent">prime</span>
               </span>
             </div>
 
@@ -250,7 +250,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
               className="absolute w-[190px] h-[190px] rounded-full border border-[#2B3139]/60 border-dashed z-10"
             >
               {[
-                { label: "₿", symbol: "BTC", bg: "bg-[#F7931A]", color: "text-white", angle: 0 },
+                { label: "₿", symbol: "BTC", bg: "bg-[#6AA5FF]", color: "text-white", angle: 0 },
                 { label: "Ξ", symbol: "ETH", bg: "bg-[#4E62CC]", color: "text-white", angle: 120 },
                 { label: "₮", symbol: "USDT", bg: "bg-[#26A17B]", color: "text-white", angle: 240 }
               ].map((token, index) => (
@@ -346,7 +346,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
 
             {/* Glowing Trademark Brand Motto underneath orbit - Borderless and containerless, staying horizontal */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap">
-              <span className="text-[10px] font-mono tracking-[0.25em] font-semibold text-[#F7931A] uppercase">
+              <span className="text-[10px] font-mono tracking-[0.25em] font-semibold text-accent uppercase">
                 Trade • Elevate • Orbit
               </span>
             </div>

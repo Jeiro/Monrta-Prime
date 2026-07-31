@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useOrbit } from "../context/OrbitContext";
+import { useApp } from "../context/AppContext";
 import { getDepositWalletLabel } from "../services";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { X, Check, Copy, ArrowUpRight, Loader2, Info, AlertTriangle } from "lucide-react";
@@ -17,7 +17,7 @@ export function GlobalModals({
   withdrawModalOpen, setWithdrawModalOpen,
   onNavigate
 }: GlobalModalsProps) {
-  const { user, deposit, withdraw, enabledDepositWallets, insufficientBalanceOpen, setInsufficientBalanceOpen } = useOrbit();
+  const { user, deposit, withdraw, enabledDepositWallets, insufficientBalanceOpen, setInsufficientBalanceOpen } = useApp();
 
   // Form states inside Quick Modals
   const [depAmt, setDepAmt] = useState("");
@@ -185,17 +185,17 @@ export function GlobalModals({
       {depositModalOpen && (() => {
         return (
           <div className="fixed inset-0 bg-[#000000]/80 backdrop-blur-sm p-4 z-50 flex items-center justify-center">
-            <div className="bg-orbit-card border border-orbit-border rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-5 max-h-[85dvh] overflow-y-auto my-auto scrollbar-none">
+            <div className="bg-surface border border-line rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-5 max-h-[85dvh] overflow-y-auto my-auto scrollbar-none">
               <button 
                 onClick={() => { setDepositModalOpen(false); setModalFeedback(null); }}
-                className="absolute top-4 right-4 text-orbit-gray-text hover:text-orbit-white cursor-pointer"
+                className="absolute top-4 right-4 text-muted hover:text-ink cursor-pointer"
               >
                 <X size={18} />
               </button>
 
               <div>
-                <h3 className="text-base font-bold text-orbit-white flex items-center gap-2">
-                  <ArrowUpRight size={18} className="text-orbit-accent shrink-0 transform rotate-180" />
+                <h3 className="text-base font-bold text-ink flex items-center gap-2">
+                  <ArrowUpRight size={18} className="text-accent shrink-0 transform rotate-180" />
                   Fast Deposit
                 </h3>
                 <p className="text-xs text-slate-400 mt-1 leading-relaxed font-sans">
@@ -211,7 +211,7 @@ export function GlobalModals({
                         <Loader2 size={16} className="animate-spin text-emerald-400" />
                       </div>
                       <div className="space-y-1">
-                        <h4 className="text-[13px] font-bold text-orbit-white leading-tight">
+                        <h4 className="text-[13px] font-bold text-ink leading-tight">
                           {modalFeedback.title}
                         </h4>
                         <p className="text-xs text-emerald-400/85 leading-relaxed font-sans">
@@ -224,8 +224,8 @@ export function GlobalModals({
                 return (
                   <div className={`p-3 text-xs rounded-lg text-center ${
                     modalFeedback.startsWith("Error") 
-                      ? "bg-orbit-red/10 border-orbit-red/30 text-orbit-red" 
-                      : "bg-orbit-green/10 border-orbit-green/30 text-orbit-green font-semibold"
+                      ? "bg-negative/10 border-negative/30 text-negative" 
+                      : "bg-positive/10 border-positive/30 text-positive font-semibold"
                   }`}>
                     {modalFeedback}
                   </div>
@@ -244,8 +244,8 @@ export function GlobalModals({
                         onClick={() => setDepCoin(coin)}
                         className={`py-2 rounded-xl border text-center cursor-pointer transition-all ${
                           depCoin === coin 
-                            ? "border-orbit-accent bg-orbit-accent/10 text-orbit-accent" 
-                            : "border-orbit-border/50 bg-[#121318] text-slate-400"
+                            ? "border-accent bg-accent/10 text-accent" 
+                            : "border-line/50 bg-[#121318] text-slate-400"
                         }`}
                       >
                         {coin}
@@ -269,8 +269,8 @@ export function GlobalModals({
                         onClick={() => setDepNetwork(wallet.network)}
                         className={`px-3 py-1.5 rounded-xl border text-center transition-all cursor-pointer ${
                           selectedDepositWallet?.id === wallet.id
-                            ? "border-orbit-accent bg-orbit-accent/10 text-orbit-accent font-extrabold" 
-                            : "border-orbit-border/50 bg-[#121318] text-slate-400"
+                            ? "border-accent bg-accent/10 text-accent font-extrabold" 
+                            : "border-line/50 bg-[#121318] text-slate-400"
                         }`}
                       >
                         {wallet.network}
@@ -297,19 +297,19 @@ export function GlobalModals({
                       <span className="text-[9px] text-slate-400 font-sans uppercase block font-bold tracking-wider">
                         YOUR {selectedDepositLabel || "CRYPTO"} DEPOSIT ADDRESS
                       </span>
-                      <div className="bg-[#121318] border border-orbit-border/50 rounded-xl p-2 flex items-center justify-between gap-1.5">
-                        <span className="font-mono text-[10px] break-all select-all text-orbit-white pr-1">
+                      <div className="bg-[#121318] border border-line/50 rounded-xl p-2 flex items-center justify-between gap-1.5">
+                        <span className="font-mono text-[10px] break-all select-all text-ink pr-1">
                           {selectedDepositWallet?.walletAddress || "No enabled wallet address available"}
                         </span>
                         {selectedDepositWallet?.walletAddress && (
                           <button
                             type="button"
                             onClick={() => handleCopyAddress(selectedDepositWallet.walletAddress)}
-                            className="p-1 px-1.5 rounded-lg bg-orbit-border/50 hover:bg-orbit-accent/10 text-orbit-gray-text hover:text-orbit-accent transition-all cursor-pointer select-none shrink-0"
+                            className="p-1 px-1.5 rounded-lg bg-line/50 hover:bg-accent/10 text-muted hover:text-accent transition-all cursor-pointer select-none shrink-0"
                             title="Copy Address"
                           >
                             {copied ? (
-                              <span className="text-[9px] text-orbit-green font-bold flex items-center gap-1">
+                              <span className="text-[9px] text-positive font-bold flex items-center gap-1">
                                 <Check size={10} /> COPIED
                               </span>
                             ) : (
@@ -339,7 +339,7 @@ export function GlobalModals({
                       value={depAmt}
                       onChange={(e) => setDepAmt(e.target.value)}
                       placeholder={`Min. Deposit: ${(selectedDepositWallet?.minimumDeposit || 0).toLocaleString()} USD`}
-                      className="w-full bg-[#121318] border border-orbit-border/80 focus:border-orbit-accent focus:ring-1 focus:ring-orbit-accent rounded-xl py-2.5 px-3 text-[11px] text-orbit-white font-mono font-semibold transition-all focus:outline-none placeholder:text-[10px] placeholder-slate-500"
+                      className="w-full bg-[#121318] border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 px-3 text-[11px] text-ink font-mono font-semibold transition-all focus:outline-none placeholder:text-[10px] placeholder-slate-500"
                     />
                     <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-mono font-bold">
                       USD
@@ -358,7 +358,7 @@ export function GlobalModals({
                   <button
                     type="submit"
                     disabled={!selectedDepositWallet}
-                    className="w-full py-3.5 bg-orbit-accent hover:opacity-95 disabled:opacity-50 text-orbit-bg font-extrabold font-heading text-xs uppercase rounded-xl transition-all shadow-md shadow-orbit-accent/10 cursor-pointer tracking-wider text-center"
+                    className="w-full py-3.5 bg-accent hover:opacity-95 disabled:opacity-50 text-ground font-extrabold font-heading text-xs uppercase rounded-xl transition-all shadow-md shadow-accent/10 cursor-pointer tracking-wider text-center"
                   >
                     CONFIRM DEPOSIT
                   </button>
@@ -375,17 +375,17 @@ export function GlobalModals({
       {/* QUICK WITHDRAWAL MODAL OUTLAY */}
       {withdrawModalOpen && (
         <div className="fixed inset-0 bg-[#000000]/80 backdrop-blur-sm p-4 z-50 flex items-center justify-center">
-          <div className="bg-orbit-card border border-orbit-border rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-5 max-h-[85dvh] overflow-y-auto my-auto">
+          <div className="bg-surface border border-line rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-5 max-h-[85dvh] overflow-y-auto my-auto">
             <button 
               onClick={() => { setWithdrawModalOpen(false); setModalFeedback(null); }}
-              className="absolute top-4 right-4 text-orbit-gray-text hover:text-orbit-white cursor-pointer"
+              className="absolute top-4 right-4 text-muted hover:text-ink cursor-pointer"
             >
               <X size={18} />
             </button>
 
             <div>
-              <h3 className="text-base font-bold text-orbit-white flex items-center gap-2">
-                <ArrowUpRight size={18} className="text-orbit-accent shrink-0" />
+              <h3 className="text-base font-bold text-ink flex items-center gap-2">
+                <ArrowUpRight size={18} className="text-accent shrink-0" />
                 Withdraw
               </h3>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
@@ -401,7 +401,7 @@ export function GlobalModals({
                       <Loader2 size={16} className="animate-spin text-emerald-400" />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="text-[13px] font-bold text-orbit-white leading-tight">
+                      <h4 className="text-[13px] font-bold text-ink leading-tight">
                         {modalFeedback.title}
                       </h4>
                       <p className="text-xs text-emerald-450/85 leading-relaxed font-sans">
@@ -414,8 +414,8 @@ export function GlobalModals({
               return (
                 <div className={`p-3 text-xs rounded-lg text-center ${
                   modalFeedback.startsWith("Error") 
-                    ? "bg-orbit-red/10 border-orbit-red/30 text-orbit-red" 
-                    : "bg-orbit-green/10 border-orbit-green/30 text-orbit-green font-semibold"
+                    ? "bg-negative/10 border-negative/30 text-negative" 
+                    : "bg-positive/10 border-positive/30 text-positive font-semibold"
                 }`}>
                   {modalFeedback}
                 </div>
@@ -434,8 +434,8 @@ export function GlobalModals({
                       onClick={() => setWdrCoin(coin)}
                       className={`py-2 rounded-xl border text-center cursor-pointer transition-all ${
                         wdrCoin === coin 
-                          ? "border-orbit-accent bg-orbit-accent/10 text-orbit-accent" 
-                          : "border-orbit-border/50 bg-[#121318] text-slate-400"
+                          ? "border-accent bg-accent/10 text-accent" 
+                          : "border-line/50 bg-[#121318] text-slate-400"
                       }`}
                     >
                       {coin}
@@ -455,8 +455,8 @@ export function GlobalModals({
                       onClick={() => setWdrNetwork(net.id)}
                       className={`px-3 py-1.5 rounded-xl border text-center transition-all cursor-pointer ${
                         wdrNetwork === net.id 
-                          ? "border-orbit-accent bg-orbit-accent/10 text-orbit-accent font-extrabold" 
-                          : "border-orbit-border/50 bg-[#121318] text-slate-400"
+                          ? "border-accent bg-accent/10 text-accent font-extrabold" 
+                          : "border-line/50 bg-[#121318] text-slate-400"
                       }`}
                     >
                       {net.id}
@@ -474,7 +474,7 @@ export function GlobalModals({
                   value={wdrAddr}
                   onChange={(e) => setWdrAddr(e.target.value)}
                   placeholder="Fill in the withdrawal address"
-                  className="w-full bg-[#121318] border border-orbit-border/80 focus:border-orbit-accent focus:ring-1 focus:ring-orbit-accent rounded-xl py-2.5 px-3 text-[11px] text-orbit-white font-mono font-semibold transition-all focus:outline-none placeholder:text-[10px] placeholder-slate-500"
+                  className="w-full bg-[#121318] border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 px-3 text-[11px] text-ink font-mono font-semibold transition-all focus:outline-none placeholder:text-[10px] placeholder-slate-500"
                 />
               </div>
 
@@ -494,13 +494,13 @@ export function GlobalModals({
                     value={wdrAmt}
                     onChange={(e) => setWdrAmt(e.target.value)}
                     placeholder="Fill in the withdrawal amount"
-                    className="w-full bg-[#121318] border border-orbit-border/80 focus:border-orbit-accent focus:ring-1 focus:ring-orbit-accent rounded-xl py-2.5 px-3 pr-20 text-[11px] text-orbit-white font-mono font-semibold transition-all focus:outline-none placeholder:text-[10px] placeholder-slate-500"
+                    className="w-full bg-[#121318] border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 px-3 pr-20 text-[11px] text-ink font-mono font-semibold transition-all focus:outline-none placeholder:text-[10px] placeholder-slate-500"
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => setWdrAmt(user.balance.toString())}
-                      className="text-[10px] text-orbit-accent hover:opacity-80 font-sans font-extrabold cursor-pointer uppercase"
+                      className="text-[10px] text-accent hover:opacity-80 font-sans font-extrabold cursor-pointer uppercase"
                     >
                       All
                     </button>
@@ -514,14 +514,14 @@ export function GlobalModals({
               {/* Step 4: Fee Breakdown & Button Update */}
               <div className="flex justify-between items-center text-[11px] font-sans text-slate-400 pt-1">
                 <span>Gas fee:</span>
-                <span className="text-orbit-white font-mono font-bold">
+                <span className="text-ink font-mono font-bold">
                   {wdrCoin === "USDT" ? "1.00 USDT" : wdrCoin === "BTC" ? "0.0002 BTC" : "0.003 ETH"}
                 </span>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 bg-orbit-accent hover:opacity-95 text-orbit-bg font-extrabold font-heading text-xs uppercase rounded-xl transition-all shadow-md shadow-orbit-accent/10 cursor-pointer tracking-wider"
+                className="w-full py-3 bg-accent hover:opacity-95 text-ground font-extrabold font-heading text-xs uppercase rounded-xl transition-all shadow-md shadow-accent/10 cursor-pointer tracking-wider"
               >
                 Withdraw
               </button>
@@ -533,21 +533,21 @@ export function GlobalModals({
       {/* Insufficient Balance Modal Overlay */}
       {insufficientBalanceOpen && (
         <div className="fixed inset-0 bg-black/85 backdrop-blur-sm z-[200] flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-orbit-card border border-orbit-border rounded-2xl w-full max-w-sm p-6 relative shadow-2xl space-y-5">
+          <div className="bg-surface border border-line rounded-2xl w-full max-w-sm p-6 relative shadow-2xl space-y-5">
             <button 
               onClick={() => setInsufficientBalanceOpen(false)}
-              className="absolute top-4 right-4 text-orbit-gray-text hover:text-orbit-white cursor-pointer bg-transparent border-none outline-none"
+              className="absolute top-4 right-4 text-muted hover:text-ink cursor-pointer bg-transparent border-none outline-none"
             >
               <X size={18} />
             </button>
             <div className="text-center space-y-3">
-              <div className="mx-auto w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-orbit-accent">
+              <div className="mx-auto w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-accent">
                 <AlertTriangle size={24} className="animate-bounce" />
               </div>
-              <h3 className="text-base font-bold text-orbit-white uppercase tracking-wider font-heading">
+              <h3 className="text-base font-bold text-ink uppercase tracking-wider font-heading">
                 Insufficient Balance
               </h3>
-              <p className="text-xs text-orbit-gray-text leading-relaxed font-sans">
+              <p className="text-xs text-muted leading-relaxed font-sans">
                 Your wallet balance is insufficient to complete this action. Please fund your wallet to continue.
               </p>
             </div>
@@ -555,7 +555,7 @@ export function GlobalModals({
               <button
                 type="button"
                 onClick={() => setInsufficientBalanceOpen(false)}
-                className="py-2.5 rounded-xl border border-orbit-border/50 hover:border-orbit-white bg-transparent text-orbit-white font-bold font-subheading text-[11px] uppercase transition-all cursor-pointer"
+                className="py-2.5 rounded-xl border border-line/50 hover:border-ink bg-transparent text-ink font-bold font-subheading text-[11px] uppercase transition-all cursor-pointer"
               >
                 Close
               </button>
@@ -565,7 +565,7 @@ export function GlobalModals({
                   setInsufficientBalanceOpen(false);
                   setDepositModalOpen(true);
                 }}
-                className="py-2.5 rounded-xl bg-orbit-accent hover:opacity-95 text-orbit-bg font-extrabold font-subheading text-[11px] uppercase transition-all shadow-md shadow-orbit-accent/15 cursor-pointer leading-relaxed"
+                className="py-2.5 rounded-xl bg-accent hover:opacity-95 text-ground font-extrabold font-subheading text-[11px] uppercase transition-all shadow-md shadow-accent/15 cursor-pointer leading-relaxed"
               >
                 Fund Wallet
               </button>

@@ -83,9 +83,9 @@ export const DashboardEquityChart: React.FC<DashboardEquityChartProps> = ({ curr
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-[#121318] border border-orbit-border/50 p-3 rounded-lg shadow-xl">
-          <p className="text-orbit-gray-text text-xs mb-1 font-sans">{label}</p>
-          <p className="text-orbit-accent font-data font-bold">
+        <div className="bg-[#121318] border border-line/50 p-3 rounded-lg shadow-xl">
+          <p className="text-muted text-xs mb-1 font-sans">{label}</p>
+          <p className="text-accent font-data font-bold">
             ${payload[0].value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>
@@ -110,8 +110,8 @@ export const DashboardEquityChart: React.FC<DashboardEquityChartProps> = ({ curr
             >
               <defs>
                 <linearGradient id="colorEquity" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#F7931A" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#F7931A" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#6AA5FF" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#6AA5FF" stopOpacity={0}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1A1C24" />
@@ -132,7 +132,7 @@ export const DashboardEquityChart: React.FC<DashboardEquityChartProps> = ({ curr
               <Area 
                 type="monotone" 
                 dataKey="Equity" 
-                stroke="#F7931A" 
+                stroke="#6AA5FF" 
                 strokeWidth={3}
                 fillOpacity={1} 
                 fill="url(#colorEquity)" 

@@ -1,22 +1,22 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Zap, Shield, ShieldCheck, BarChart3, Lock, Globe, Layers, Target, Users, TrendingUp, ThumbsUp, Headset, Database, Puzzle, Fingerprint, Mail, Sparkles } from 'lucide-react';
-import { useOrbit } from '../../context/OrbitContext';
+import { useApp } from '../../context/AppContext';
 
 // Investment Plans Section (matching reference image precisely with floating transparent cards, gold-orange theme, and scroll entrance effects)
 export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: string) => void }) => {
-  const { plans, user } = useOrbit();
+  const { plans, user } = useApp();
   const plansList = plans
     .filter((plan) => plan.enabled && plan.status === "active")
     .sort((a, b) => a.displayOrder - b.displayOrder || a.minDeposit - b.minDeposit)
     .map((plan, index) => {
       const icons = [Sparkles, Shield, Layers, Zap, Target];
-      const color = plan.accentColor || "#FFB11A";
+      const color = plan.accentColor || "#6AA5FF";
       return {
         ...plan,
         icon: icons[index % icons.length],
         colorClass: "",
-        glowClass: "via-amber-400/30",
+        glowClass: "via-accent-hover/30",
         color
       };
     });
@@ -24,7 +24,7 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
   return (
     <section className="pt-12 pb-10 px-4 bg-[#0B0E11]/30 border-t border-[#2B3139]/10 relative overflow-hidden" id="investment-plans">
       {/* Background radial glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/[0.03] blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/[0.03] blur-[150px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         
@@ -35,9 +35,9 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 80, damping: 15 }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-amber-500/15 bg-amber-500/5 text-[10px] md:text-xs text-amber-500 font-bold tracking-[0.2em] font-bybit uppercase mb-1"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-accent/15 bg-accent/5 text-[10px] md:text-xs text-accent font-bold tracking-[0.2em] font-display uppercase mb-1"
           >
-            <Layers className="w-3.5 h-3.5 text-amber-500 fill-amber-500/10" />
+            <Layers className="w-3.5 h-3.5 text-accent fill-accent/10" />
             INVESTMENT PLANS
           </motion.div>
           
@@ -46,7 +46,7 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 14 }}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-white tracking-tight leading-tight max-w-4xl mx-auto font-bybit"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-white tracking-tight leading-tight max-w-4xl mx-auto font-display"
           >
             Choose your plan and target
           </motion.h2>
@@ -56,7 +56,7 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 14, delay: 0.1 }}
-            className="text-neutral-400 max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed font-bybit"
+            className="text-neutral-400 max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed font-display"
           >
             Select a plan that fits your budget and timeline. Track progress from your dashboard.
           </motion.p>
@@ -85,18 +85,18 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
                   </div>
                   
                   <div className="space-y-4">
-                    <h3 className="text-base font-bold text-white tracking-wider font-bybit uppercase">
+                    <h3 className="text-base font-bold text-white tracking-wider font-display uppercase">
                       {plan.name}
                     </h3>
                     
                     <div className="space-y-2">
-                      <p className="text-neutral-400 font-bybit text-xs leading-relaxed line-clamp-2">
+                      <p className="text-neutral-400 font-display text-xs leading-relaxed line-clamp-2">
                         {plan.description}
                       </p>
-                      <p className="text-neutral-400 font-bybit text-xs leading-relaxed">
+                      <p className="text-neutral-400 font-display text-xs leading-relaxed">
                         Expected return: <span className="font-semibold text-white">{plan.roiPercent}%</span>
                       </p>
-                      <p className="text-neutral-500 font-bybit text-[11px] leading-relaxed">
+                      <p className="text-neutral-500 font-display text-[11px] leading-relaxed">
                         Min: ${plan.minDeposit.toLocaleString()} | Max: {plan.maxDeposit >= 10000000 ? "Unlimited" : `${plan.maxDeposit.toLocaleString()}`}
                       </p>
                     </div>
@@ -104,7 +104,7 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
                 </div>
 
                 <div className="mt-8 border-t border-neutral-900/40 pt-4 relative z-10">
-                  <p className="text-neutral-400 font-bybit text-xs">
+                  <p className="text-neutral-400 font-display text-xs">
                     Duration: <span className="font-semibold text-white">{plan.durationDays} Days</span>
                   </p>
                   <button
@@ -115,7 +115,7 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
                         onNavigate('auth');
                       }
                     }}
-                    className="mt-4 w-full bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs py-2 rounded-lg transition-colors"
+                    className="mt-4 w-full bg-accent hover:bg-accent-hover text-black font-bold text-xs py-2 rounded-lg transition-colors"
                   >
                     Invest Now
                   </button>

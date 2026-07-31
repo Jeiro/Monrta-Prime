@@ -1,14 +1,14 @@
 import React from "react";
 import { AlertTriangle, Check, Megaphone, Pin } from "lucide-react";
 import { motion } from "motion/react";
-import { useOrbit } from "../../context/OrbitContext";
+import { useApp } from "../../context/AppContext";
 import type { AnnouncementPriority } from "../../types";
 
 const priorityStyle: Record<AnnouncementPriority, { badge: string; border: string; icon: React.ReactNode }> = {
   Normal: {
     badge: "bg-slate-500/10 text-slate-300 border-slate-500/30",
-    border: "border-orbit-border",
-    icon: <Megaphone size={15} className="text-orbit-accent" />
+    border: "border-line",
+    icon: <Megaphone size={15} className="text-accent" />
   },
   Important: {
     badge: "bg-amber-500/10 text-amber-300 border-amber-500/30",
@@ -23,7 +23,7 @@ const priorityStyle: Record<AnnouncementPriority, { badge: string; border: strin
 };
 
 export const UserAnnouncements: React.FC = () => {
-  const { user, userAnnouncements, markAnnouncementRead } = useOrbit();
+  const { user, userAnnouncements, markAnnouncementRead } = useApp();
 
   if (userAnnouncements.length === 0) return null;
 
@@ -33,10 +33,10 @@ export const UserAnnouncements: React.FC = () => {
     <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <Megaphone size={17} className="text-orbit-accent" />
-          <h2 className="text-sm font-bold text-orbit-white font-heading">Announcements</h2>
+          <Megaphone size={17} className="text-accent" />
+          <h2 className="text-sm font-bold text-ink font-heading">Announcements</h2>
         </div>
-        <span className="text-[10px] text-orbit-gray-text font-bold uppercase tracking-wider">
+        <span className="text-[10px] text-muted font-bold uppercase tracking-wider">
           {userAnnouncements.filter(item => !readIds.includes(item.id)).length} unread
         </span>
       </div>
@@ -48,17 +48,17 @@ export const UserAnnouncements: React.FC = () => {
           const unread = !readIds.includes(announcement.id);
 
           return (
-            <article key={announcement.id} className={`rounded-xl border ${style.border} ${unread ? "bg-orbit-accent/10 shadow shadow-orbit-accent/5" : "bg-orbit-card/80"} p-4 transition-colors`}>
+            <article key={announcement.id} className={`rounded-xl border ${style.border} ${unread ? "bg-accent/10 shadow shadow-accent/5" : "bg-surface/80"} p-4 transition-colors`}>
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    {announcement.pinned && <Pin size={12} className="text-orbit-accent" />}
+                    {announcement.pinned && <Pin size={12} className="text-accent" />}
                     {style.icon}
-                    <h3 className="text-sm font-bold text-orbit-white break-words">{announcement.title}</h3>
-                    {unread && <span className="w-2 h-2 rounded-full bg-orbit-accent" title="Unread" />}
+                    <h3 className="text-sm font-bold text-ink break-words">{announcement.title}</h3>
+                    {unread && <span className="w-2 h-2 rounded-full bg-accent" title="Unread" />}
                   </div>
-                  <p className="mt-2 text-xs leading-relaxed text-orbit-gray-text break-words">{announcement.content}</p>
-                  <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] text-orbit-gray-text">
+                  <p className="mt-2 text-xs leading-relaxed text-muted break-words">{announcement.content}</p>
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] text-muted">
                     <span className={`px-2 py-0.5 rounded-full border font-bold ${style.badge}`}>{priority}</span>
                     <span>{announcement.publishDate || announcement.date}</span>
                   </div>
@@ -66,7 +66,7 @@ export const UserAnnouncements: React.FC = () => {
                 <button
                   onClick={() => markAnnouncementRead(announcement.id)}
                   disabled={!unread}
-                  className={`shrink-0 p-2 rounded-lg border transition-colors ${unread ? "bg-orbit-bg border-orbit-border text-orbit-accent hover:bg-orbit-accent hover:text-orbit-bg" : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 cursor-default"}`}
+                  className={`shrink-0 p-2 rounded-lg border transition-colors ${unread ? "bg-ground border-line text-accent hover:bg-accent hover:text-ground" : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 cursor-default"}`}
                   title={unread ? "Mark as read" : "Read"}
                 >
                   <Check size={14} />

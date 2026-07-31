@@ -62,7 +62,7 @@ export const ZeroPercentLoopCard = () => {
                   </linearGradient>
                   
                   <linearGradient id="accentGlow" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#FFB11A" />
+                    <stop offset="0%" stopColor="#6AA5FF" />
                     <stop offset="100%" stopColor="#FF6600" />
                   </linearGradient>
 
@@ -81,8 +81,8 @@ export const ZeroPercentLoopCard = () => {
                 <path d="M50,15 A25,30 0 1,0 50,75 A25,30 0 1,0 50,15 Z M50,28 A12,17 0 1,1 50,62 A12,17 0 1,1 50,28 Z" fill="url(#metalFace)" stroke="#FFFFFF" strokeWidth="0.5" />
                 
                 <g transform="translate(48, 48) scale(0.38)" fill="none" stroke="url(#accentGlow)" strokeWidth="6">
-                  <circle cx="20" cy="20" r="8" fill="#FFB11A" fillOpacity="0.2" strokeWidth="4" />
-                  <circle cx="50" cy="50" r="8" fill="#FFB11A" fillOpacity="0.2" strokeWidth="4" />
+                  <circle cx="20" cy="20" r="8" fill="#6AA5FF" fillOpacity="0.2" strokeWidth="4" />
+                  <circle cx="50" cy="50" r="8" fill="#6AA5FF" fillOpacity="0.2" strokeWidth="4" />
                   <line x1="50" y1="20" x2="20" y2="50" strokeLinecap="round" strokeWidth="5" />
                 </g>
               </svg>
@@ -149,7 +149,7 @@ export const ZeroPercentLoopCard = () => {
         )}
 
         <div className={`transition-all duration-300 ${videoPlaying ? "absolute bottom-3 left-2 right-2 p-2 text-center" : "w-full mt-2"}`}>
-          <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-[#FFB11A] uppercase block drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+          <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-accent uppercase block drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
             Derivative Fee Rate
           </span>
           <span className="text-[9px] text-neutral-300 font-sans mt-1 max-w-[210px] mx-auto block leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">

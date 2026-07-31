@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { Award, Check, Edit3, ImagePlus, Plus, Save, Star, ToggleLeft, ToggleRight, Trash2, Upload, X } from "lucide-react";
-import { useOrbit } from "../../../context/OrbitContext";
+import { useApp } from "../../../context/AppContext";
 import type { TraderProfile } from "../../../types";
 
 type TraderFormState = {
@@ -57,7 +57,7 @@ const moneyRange = (minimum?: number, maximum?: number) => {
 };
 
 export const AdminTradersTab: React.FC = () => {
-  const { traders, adminUpdateTrader, adminCreateTrader, adminDeleteTrader } = useOrbit();
+  const { traders, adminUpdateTrader, adminCreateTrader, adminDeleteTrader } = useApp();
 
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -233,12 +233,12 @@ export const AdminTradersTab: React.FC = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
+      <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
         <div>
-          <h1 className="text-xl font-bold text-orbit-white flex items-center gap-2">
-            <Award size={20} className="text-orbit-accent" /> Trader Management
+          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
+            <Award size={20} className="text-accent" /> Trader Management
           </h1>
-          <p className="text-xs text-orbit-gray-text mt-1">Manage copy trading profiles, visibility, allocation limits, and platform ranking.</p>
+          <p className="text-xs text-muted mt-1">Manage copy trading profiles, visibility, allocation limits, and platform ranking.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <div className="grid grid-cols-3 gap-2 text-center">
@@ -246,7 +246,7 @@ export const AdminTradersTab: React.FC = () => {
             <StatBadge label="Active" value={tableStats.active} tone="green" />
             <StatBadge label="Featured" value={tableStats.featured} tone="accent" />
           </div>
-          <button onClick={startCreate} className="flex items-center gap-2 px-4 py-2 bg-orbit-accent text-orbit-bg font-bold text-xs uppercase rounded-lg hover:opacity-90 cursor-pointer">
+          <button onClick={startCreate} className="flex items-center gap-2 px-4 py-2 bg-accent text-ground font-bold text-xs uppercase rounded-lg hover:opacity-90 cursor-pointer">
             <Plus size={14} /> Add Trader
           </button>
         </div>
@@ -259,13 +259,13 @@ export const AdminTradersTab: React.FC = () => {
       )}
 
       {(isCreating || editingId) && (
-        <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="bg-orbit-card border border-orbit-accent/30 rounded-2xl p-6 space-y-5">
+        <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="bg-surface border border-accent/30 rounded-2xl p-6 space-y-5">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h3 className="text-sm font-bold text-orbit-white">{isCreating ? "Add New Trader" : "Edit Trader Profile"}</h3>
-              <p className="text-[11px] text-orbit-gray-text mt-1">Update the fields shown to admins and copied into the trader record.</p>
+              <h3 className="text-sm font-bold text-ink">{isCreating ? "Add New Trader" : "Edit Trader Profile"}</h3>
+              <p className="text-[11px] text-muted mt-1">Update the fields shown to admins and copied into the trader record.</p>
             </div>
-            <button onClick={resetForm} className="p-1.5 rounded-lg bg-orbit-border/50 text-orbit-gray-text hover:text-orbit-white cursor-pointer" aria-label="Close trader form">
+            <button onClick={resetForm} className="p-1.5 rounded-lg bg-line/50 text-muted hover:text-ink cursor-pointer" aria-label="Close trader form">
               <X size={14} />
             </button>
           </div>
@@ -276,16 +276,16 @@ export const AdminTradersTab: React.FC = () => {
             <TextInput placeholder="Trading Style" value={form.tradingStyle} onChange={value => setField("tradingStyle", value)} />
             <TextInput placeholder="Markets (Crypto, Forex, Stocks)" value={form.markets} onChange={value => setField("markets", value)} />
 
-            <div className="flex items-center gap-3 px-3 py-1.5 bg-orbit-bg border border-orbit-border rounded-lg">
+            <div className="flex items-center gap-3 px-3 py-1.5 bg-ground border border-line rounded-lg">
               <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarFileChange} className="hidden" id="trader-avatar-upload" />
               {form.avatar ? (
-                <img src={form.avatar} alt="Avatar preview" className="w-8 h-8 rounded-full object-cover border-2 border-orbit-accent/40 flex-shrink-0" />
+                <img src={form.avatar} alt="Avatar preview" className="w-8 h-8 rounded-full object-cover border-2 border-accent/40 flex-shrink-0" />
               ) : (
-                <div className="w-8 h-8 rounded-full bg-orbit-border/50 flex items-center justify-center flex-shrink-0">
-                  <ImagePlus size={14} className="text-orbit-gray-text" />
+                <div className="w-8 h-8 rounded-full bg-line/50 flex items-center justify-center flex-shrink-0">
+                  <ImagePlus size={14} className="text-muted" />
                 </div>
               )}
-              <button type="button" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 text-xs text-orbit-accent font-semibold hover:text-orbit-white transition-colors cursor-pointer truncate">
+              <button type="button" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 text-xs text-accent font-semibold hover:text-ink transition-colors cursor-pointer truncate">
                 <Upload size={12} />
                 {form.avatar ? "Change Photo" : "Upload Photo"}
               </button>
@@ -308,31 +308,31 @@ export const AdminTradersTab: React.FC = () => {
             </div>
           </div>
 
-          <textarea placeholder="Biography" rows={4} value={form.biography} onChange={event => setField("biography", event.target.value)} className="w-full px-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-sm text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent resize-none" />
+          <textarea placeholder="Biography" rows={4} value={form.biography} onChange={event => setField("biography", event.target.value)} className="w-full px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none" />
 
           <div className="flex flex-wrap gap-3">
-            <button onClick={isCreating ? handleCreate : handleUpdate} className="flex items-center gap-2 px-6 py-2 bg-orbit-accent text-orbit-bg font-bold text-xs uppercase rounded-lg hover:opacity-90 cursor-pointer">
+            <button onClick={isCreating ? handleCreate : handleUpdate} className="flex items-center gap-2 px-6 py-2 bg-accent text-ground font-bold text-xs uppercase rounded-lg hover:opacity-90 cursor-pointer">
               <Save size={14} /> {isCreating ? "Create Trader" : "Save Changes"}
             </button>
-            <button onClick={resetForm} className="flex items-center gap-2 px-5 py-2 bg-orbit-border/60 text-orbit-white font-bold text-xs uppercase rounded-lg hover:bg-orbit-border cursor-pointer">
+            <button onClick={resetForm} className="flex items-center gap-2 px-5 py-2 bg-line/60 text-ink font-bold text-xs uppercase rounded-lg hover:bg-line cursor-pointer">
               <X size={14} /> Cancel
             </button>
           </div>
         </motion.div>
       )}
 
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-orbit-border flex items-center justify-between gap-3">
+      <div className="bg-surface border border-line rounded-2xl overflow-hidden">
+        <div className="px-5 py-4 border-b border-line flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-sm font-bold text-orbit-white">Trader Directory</h2>
-            <p className="text-[11px] text-orbit-gray-text mt-1">Inline visibility controls with editable profile details.</p>
+            <h2 className="text-sm font-bold text-ink">Trader Directory</h2>
+            <p className="text-[11px] text-muted mt-1">Inline visibility controls with editable profile details.</p>
           </div>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1120px] text-left">
-            <thead className="bg-orbit-bg/60 border-b border-orbit-border">
-              <tr className="text-[10px] uppercase tracking-wider text-orbit-gray-text">
+            <thead className="bg-ground/60 border-b border-line">
+              <tr className="text-[10px] uppercase tracking-wider text-muted">
                 <th className="px-5 py-3 font-bold">Trader</th>
                 <th className="px-4 py-3 font-bold">Status</th>
                 <th className="px-4 py-3 font-bold">Featured</th>
@@ -345,15 +345,15 @@ export const AdminTradersTab: React.FC = () => {
                 <th className="px-5 py-3 font-bold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-orbit-border/70">
+            <tbody className="divide-y divide-line/70">
               {sortedTraders.map(trader => (
-                <tr key={trader.id} className="hover:bg-orbit-bg/40 transition-colors">
+                <tr key={trader.id} className="hover:bg-ground/40 transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <img src={trader.avatar} alt={trader.name} className="w-10 h-10 rounded-full object-cover border-2 border-orbit-accent/30" />
+                      <img src={trader.avatar} alt={trader.name} className="w-10 h-10 rounded-full object-cover border-2 border-accent/30" />
                       <div className="min-w-0">
-                        <p className="text-sm font-bold text-orbit-white truncate">{trader.name}</p>
-                        <p className="text-[10px] text-orbit-gray-text">{trader.assetsUnderManagement || "$0"} AUM</p>
+                        <p className="text-sm font-bold text-ink truncate">{trader.name}</p>
+                        <p className="text-[10px] text-muted">{trader.assetsUnderManagement || "$0"} AUM</p>
                       </div>
                     </div>
                   </td>
@@ -363,25 +363,25 @@ export const AdminTradersTab: React.FC = () => {
                   <td className="px-4 py-4">
                     <TableToggle enabled={trader.featured ?? false} onClick={() => toggleTraderField(trader, "featured")} onText="Featured" offText="Standard" />
                   </td>
-                  <td className="px-4 py-4 text-xs text-orbit-white">{trader.country || "Not set"}</td>
+                  <td className="px-4 py-4 text-xs text-ink">{trader.country || "Not set"}</td>
                   <td className="px-4 py-4">
-                    <p className="text-xs font-bold text-orbit-white">{trader.tradingStyle || "Not set"}</p>
-                    <p className="text-[10px] text-orbit-gray-text mt-0.5">{trader.markets || "Markets not set"}</p>
+                    <p className="text-xs font-bold text-ink">{trader.tradingStyle || "Not set"}</p>
+                    <p className="text-[10px] text-muted mt-0.5">{trader.markets || "Markets not set"}</p>
                   </td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-3 text-[11px]">
                       <span className="font-bold text-emerald-400">{trader.roi ?? 0}% ROI</span>
-                      <span className="text-orbit-white">{trader.winRate ?? 0}% win</span>
-                      <span className="text-orbit-accent">R{trader.riskScore ?? 2}</span>
+                      <span className="text-ink">{trader.winRate ?? 0}% win</span>
+                      <span className="text-accent">R{trader.riskScore ?? 2}</span>
                     </div>
-                    <p className="text-[10px] text-orbit-gray-text mt-1">{trader.profitDays ?? 0} profit days</p>
+                    <p className="text-[10px] text-muted mt-1">{trader.profitDays ?? 0} profit days</p>
                   </td>
-                  <td className="px-4 py-4 text-xs text-orbit-white font-bold">{trader.followers ?? 0}<span className="text-orbit-gray-text font-normal"> / {trader.maxFollowers ?? 500}</span></td>
-                  <td className="px-4 py-4 text-xs text-orbit-white">{moneyRange(trader.minimumCopyAmount, trader.maximumCopyAmount)}</td>
-                  <td className="px-4 py-4 text-xs text-orbit-accent font-bold">{trader.displayOrder ?? "-"}</td>
+                  <td className="px-4 py-4 text-xs text-ink font-bold">{trader.followers ?? 0}<span className="text-muted font-normal"> / {trader.maxFollowers ?? 500}</span></td>
+                  <td className="px-4 py-4 text-xs text-ink">{moneyRange(trader.minimumCopyAmount, trader.maximumCopyAmount)}</td>
+                  <td className="px-4 py-4 text-xs text-accent font-bold">{trader.displayOrder ?? "-"}</td>
                   <td className="px-5 py-4">
                     <div className="flex justify-end gap-2">
-                      <button onClick={() => startEdit(trader)} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-orbit-accent/10 border border-orbit-accent/30 text-orbit-accent text-[10px] font-bold rounded-lg hover:bg-orbit-accent/20 cursor-pointer">
+                      <button onClick={() => startEdit(trader)} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-accent/10 border border-accent/30 text-accent text-[10px] font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
                         <Edit3 size={10} /> Edit
                       </button>
                       <button onClick={() => { if (window.confirm(`Delete \"${trader.name}\"?`)) void adminDeleteTrader(trader.id); }} className="flex items-center justify-center px-3 py-1.5 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/20 cursor-pointer" aria-label={`Delete ${trader.name}`}>
@@ -399,7 +399,7 @@ export const AdminTradersTab: React.FC = () => {
   );
 };
 
-const inputClass = "px-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-sm text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent";
+const inputClass = "px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent";
 
 const TextInput: React.FC<{ placeholder: string; value: string; onChange: (value: string) => void }> = ({ placeholder, value, onChange }) => (
   <input placeholder={placeholder} value={value} onChange={event => onChange(event.target.value)} className={inputClass} />
@@ -413,26 +413,26 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "gr
   const toneClass = tone === "green"
     ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
     : tone === "accent"
-      ? "bg-orbit-accent/10 border-orbit-accent/20 text-orbit-accent"
-      : "bg-orbit-bg border-orbit-border text-orbit-white";
+      ? "bg-accent/10 border-accent/20 text-accent"
+      : "bg-ground border-line text-ink";
 
   return (
     <div className={`px-3 py-2 border rounded-lg ${toneClass}`}>
-      <p className="text-[9px] uppercase text-orbit-gray-text tracking-wider">{label}</p>
+      <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
       <p className="text-sm font-bold">{value}</p>
     </div>
   );
 };
 
 const ToggleButton: React.FC<{ label: string; enabled: boolean; onClick: () => void }> = ({ label, enabled, onClick }) => (
-  <button type="button" onClick={onClick} className={`flex items-center justify-center gap-1.5 px-3 py-2 border rounded-lg text-[11px] font-bold cursor-pointer ${enabled ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-orbit-bg border-orbit-border text-orbit-gray-text"}`}>
+  <button type="button" onClick={onClick} className={`flex items-center justify-center gap-1.5 px-3 py-2 border rounded-lg text-[11px] font-bold cursor-pointer ${enabled ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-ground border-line text-muted"}`}>
     {enabled ? <ToggleRight size={14} /> : <ToggleLeft size={14} />}
     {label}
   </button>
 );
 
 const TableToggle: React.FC<{ enabled: boolean; onClick: () => void; onText: string; offText: string }> = ({ enabled, onClick, onText, offText }) => (
-  <button type="button" onClick={onClick} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[10px] font-bold cursor-pointer ${enabled ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-orbit-bg border-orbit-border text-orbit-gray-text"}`}>
+  <button type="button" onClick={onClick} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[10px] font-bold cursor-pointer ${enabled ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-ground border-line text-muted"}`}>
     {enabled ? <ToggleRight size={13} /> : <ToggleLeft size={13} />}
     {enabled ? onText : offText}
     {enabled && onText === "Featured" ? <Star size={11} /> : null}

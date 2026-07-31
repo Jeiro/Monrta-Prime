@@ -19,7 +19,7 @@ export const renderKeycap = (type: string) => {
         <div key="cat" className="bg-[#12161F] border border-neutral-800 rounded-xl p-3 flex flex-col justify-center items-center shadow-[inset_0_2px_2px_rgba(255,255,255,0.1),0_4px_0_#06080d,0_8px_15px_rgba(0,0,0,0.85)] h-12 w-16 relative overflow-hidden">
           <span className="text-white font-black text-[9px] font-sans relative z-10 leading-none mb-0.5">CAT</span>
           <svg className="w-3.5 h-1.5 relative z-10" viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 0L20 10H0L10 0Z" fill="#FFB11A"/>
+            <path d="M10 0L20 10H0L10 0Z" fill="#6AA5FF"/>
           </svg>
         </div>
       );
@@ -160,12 +160,12 @@ export const renderKeycap = (type: string) => {
           </svg>
         </div>
       );
-    case 'ORBIT':
+    case 'MONETA':
       return (
-        <div key="orbit" className="bg-[#12161F] border-2 border-[#FFB11A]/95 rounded-xl p-2.5 flex flex-col justify-center items-center shadow-[0_4px_0_#b27b12,0_15px_22px_rgba(255,177,26,0.55)] h-12 w-16 scale-105 relative z-10 transition-transform">
-          <span className="text-[#FFB11A] font-extrabold text-sm leading-none font-sans">O</span>
-          <span className="text-[5.5px] text-white/95 font-mono tracking-widest uppercase mt-0.5 leading-none">ORBIT</span>
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-[#FFB11A]/15 to-transparent mix-blend-overlay pointer-events-none"></div>
+        <div key="moneta" className="bg-[#12161F] border-2 border-[#6AA5FF]/95 rounded-xl p-2.5 flex flex-col justify-center items-center shadow-[0_4px_0_#2E6BE0,0_15px_22px_rgba(106,165,255,0.55)] h-12 w-16 scale-105 relative z-10 transition-transform">
+          <span className="text-accent font-extrabold text-sm leading-none font-sans">M</span>
+          <span className="text-[5.5px] text-white/95 font-mono tracking-widest uppercase mt-0.5 leading-none">MONETA</span>
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-[#6AA5FF]/15 to-transparent mix-blend-overlay pointer-events-none"></div>
         </div>
       );
     default:

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useOrbit } from "../../../context/OrbitContext";
+import { useApp } from "../../../context/AppContext";
 import { motion } from "motion/react";
 import { PenTool, Save, Check, RotateCcw } from "lucide-react";
-import { DEFAULT_SITE_CONTENT } from "../../../context/OrbitContext";
+import { DEFAULT_SITE_CONTENT } from "../../../context/AppContext";
 
 export const AdminContentTab: React.FC = () => {
-  const { siteContent, updateSiteContent } = useOrbit();
+  const { siteContent, updateSiteContent } = useApp();
   const [form, setForm] = useState({ ...siteContent });
   const [feedback, setFeedback] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -49,20 +49,20 @@ export const AdminContentTab: React.FC = () => {
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
       {/* Header */}
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-orbit-white flex items-center gap-2">
-            <PenTool size={20} className="text-orbit-accent" /> Content Editor
+          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
+            <PenTool size={20} className="text-accent" /> Content Editor
           </h1>
-          <p className="text-xs text-orbit-gray-text mt-1">Edit all text content displayed on the public-facing website. Changes sync in real-time to Firestore.</p>
+          <p className="text-xs text-muted mt-1">Edit all text content displayed on the public-facing website. Changes sync in real-time to Firestore.</p>
         </div>
         <div className="flex gap-2">
           <button onClick={handleReset}
-            className="flex items-center gap-1.5 px-3 py-2 bg-orbit-border/50 border border-orbit-border text-orbit-gray-text text-xs font-bold rounded-lg hover:text-orbit-white cursor-pointer">
+            className="flex items-center gap-1.5 px-3 py-2 bg-line/50 border border-line text-muted text-xs font-bold rounded-lg hover:text-ink cursor-pointer">
             <RotateCcw size={12} /> Reset
           </button>
           <button onClick={handleSave} disabled={saving}
-            className="flex items-center gap-1.5 px-5 py-2 bg-orbit-accent text-orbit-bg text-xs font-bold uppercase rounded-lg hover:opacity-90 cursor-pointer disabled:opacity-50">
+            className="flex items-center gap-1.5 px-5 py-2 bg-accent text-ground text-xs font-bold uppercase rounded-lg hover:opacity-90 cursor-pointer disabled:opacity-50">
             <Save size={12} /> {saving ? "Saving..." : "Save All"}
           </button>
         </div>
@@ -78,20 +78,20 @@ export const AdminContentTab: React.FC = () => {
       {/* Fields */}
       <div className="space-y-4">
         {fields.map(field => (
-          <div key={field.key} className="bg-orbit-card border border-orbit-border rounded-xl p-4 space-y-2">
-            <label className="text-[10px] font-bold text-orbit-gray-text uppercase tracking-wider">{field.label}</label>
+          <div key={field.key} className="bg-surface border border-line rounded-xl p-4 space-y-2">
+            <label className="text-[10px] font-bold text-muted uppercase tracking-wider">{field.label}</label>
             {field.rows > 1 ? (
               <textarea
                 rows={field.rows}
                 value={(form as any)[field.key] || ""}
                 onChange={e => setForm(prev => ({ ...prev, [field.key]: e.target.value }))}
-                className="w-full px-4 py-2.5 bg-orbit-bg border border-orbit-border rounded-lg text-sm text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent resize-none"
+                className="w-full px-4 py-2.5 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none"
               />
             ) : (
               <input
                 value={(form as any)[field.key] || ""}
                 onChange={e => setForm(prev => ({ ...prev, [field.key]: e.target.value }))}
-                className="w-full px-4 py-2.5 bg-orbit-bg border border-orbit-border rounded-lg text-sm text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent"
+                className="w-full px-4 py-2.5 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent"
               />
             )}
           </div>
@@ -101,7 +101,7 @@ export const AdminContentTab: React.FC = () => {
       {/* Bottom Save */}
       <div className="flex justify-end">
         <button onClick={handleSave} disabled={saving}
-          className="flex items-center gap-2 px-8 py-3 bg-orbit-accent text-orbit-bg font-bold text-xs uppercase rounded-xl hover:opacity-90 cursor-pointer disabled:opacity-50">
+          className="flex items-center gap-2 px-8 py-3 bg-accent text-ground font-bold text-xs uppercase rounded-xl hover:opacity-90 cursor-pointer disabled:opacity-50">
           <Save size={14} /> {saving ? "Saving..." : "Save All Changes"}
         </button>
       </div>

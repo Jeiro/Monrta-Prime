@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from "react";
 import { History, ChevronDown, CheckCircle2, Clock, XCircle, AlertTriangle, ArrowDownLeft, ArrowUpRight, WalletCards } from "lucide-react";
-import { useOrbit } from "../context/OrbitContext";
+import { useApp } from "../context/AppContext";
 
 export const DashboardTransactions: React.FC = () => {
-  const { user } = useOrbit();
+  const { user } = useApp();
 
   const [filterType, setFilterType] = useState(""); 
   const [filterStatus, setFilterStatus] = useState<"" | "completed" | "pending" | "failed" | "rejected" | "approved">(""); 
@@ -33,7 +33,7 @@ export const DashboardTransactions: React.FC = () => {
       case "completed":
       case "approved":
         return (
-          <span className="flex items-center gap-1 text-[10px] font-bold text-orbit-green">
+          <span className="flex items-center gap-1 text-[10px] font-bold text-positive">
             <CheckCircle2 size={12} /> Completed
           </span>
         );
@@ -45,26 +45,26 @@ export const DashboardTransactions: React.FC = () => {
         );
       case "failed":
         return (
-          <span className="flex items-center gap-1 text-[10px] font-bold text-orbit-red">
+          <span className="flex items-center gap-1 text-[10px] font-bold text-negative">
             <XCircle size={12} /> Failed
           </span>
         );
       case "rejected":
         return (
-          <span className="flex items-center gap-1 text-[10px] font-bold text-orbit-red">
+          <span className="flex items-center gap-1 text-[10px] font-bold text-negative">
             <AlertTriangle size={12} /> Rejected
           </span>
         );
       default:
-        return <span className="text-[10px] text-orbit-gray-text">{status}</span>;
+        return <span className="text-[10px] text-muted">{status}</span>;
     }
   };
 
   return (
     <div className="space-y-4 pb-4 sm:pb-6 font-sans overflow-x-hidden">
       <div className="flex flex-col gap-4">
-        <h2 className="text-xl font-bold font-heading text-orbit-white flex items-center gap-2">
-          <History className="text-orbit-accent" size={24} />
+        <h2 className="text-xl font-bold font-heading text-ink flex items-center gap-2">
+          <History className="text-accent" size={24} />
           Transaction History
         </h2>
         
@@ -74,7 +74,7 @@ export const DashboardTransactions: React.FC = () => {
             <select 
               value={filterType}
               onChange={e => setFilterType(e.target.value as any)}
-              className="appearance-none bg-orbit-card border border-orbit-border text-[11px] py-1.5 px-3 pr-7 rounded-full hover:border-orbit-accent/50 transition-colors text-orbit-white cursor-pointer outline-none focus:border-orbit-accent"
+              className="appearance-none bg-surface border border-line text-[11px] py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
             >
               <option value="">All Types</option>
               <option value="deposit">Deposits</option>
@@ -83,13 +83,13 @@ export const DashboardTransactions: React.FC = () => {
               <option value="payout">Payouts</option>
               <option value="adjustment">Adjustments</option>
             </select>
-            <ChevronDown size={10} className="absolute top-1/2 right-2.5 -translate-y-1/2 text-orbit-gray-text pointer-events-none" />
+            <ChevronDown size={10} className="absolute top-1/2 right-2.5 -translate-y-1/2 text-muted pointer-events-none" />
           </div>
           <div className="relative">
             <select 
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value as any)}
-              className="appearance-none bg-orbit-card border border-orbit-border text-[11px] py-1.5 px-3 pr-7 rounded-full hover:border-orbit-accent/50 transition-colors text-orbit-white cursor-pointer outline-none focus:border-orbit-accent"
+              className="appearance-none bg-surface border border-line text-[11px] py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
             >
               <option value="">All Status</option>
               <option value="completed">Completed</option>
@@ -98,26 +98,26 @@ export const DashboardTransactions: React.FC = () => {
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
             </select>
-            <ChevronDown size={10} className="absolute top-1/2 right-2.5 -translate-y-1/2 text-orbit-gray-text pointer-events-none" />
+            <ChevronDown size={10} className="absolute top-1/2 right-2.5 -translate-y-1/2 text-muted pointer-events-none" />
           </div>
           <div className="relative">
             <select 
               value={filterTime}
               onChange={e => setFilterTime(e.target.value as any)}
-              className="appearance-none bg-orbit-card border border-orbit-border text-[11px] py-1.5 px-3 pr-7 rounded-full hover:border-orbit-accent/50 transition-colors text-orbit-white cursor-pointer outline-none focus:border-orbit-accent"
+              className="appearance-none bg-surface border border-line text-[11px] py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
             >
               <option value="">All Time</option>
               <option value="7">Last 7 Days</option>
               <option value="30">Last 30 Days</option>
               <option value="90">Last 90 Days</option>
             </select>
-            <ChevronDown size={10} className="absolute top-1/2 right-2.5 -translate-y-1/2 text-orbit-gray-text pointer-events-none" />
+            <ChevronDown size={10} className="absolute top-1/2 right-2.5 -translate-y-1/2 text-muted pointer-events-none" />
           </div>
 
           {(filterType || filterStatus || filterTime) && (
             <button
               onClick={() => { setFilterType(""); setFilterStatus(""); setFilterTime(""); }}
-              className="text-[10px] text-orbit-accent hover:text-orbit-white px-3 py-1.5 rounded-full border border-orbit-accent/30 bg-orbit-accent/5 font-bold cursor-pointer transition-colors"
+              className="text-[10px] text-accent hover:text-ink px-3 py-1.5 rounded-full border border-accent/30 bg-accent/5 font-bold cursor-pointer transition-colors"
             >
               Clear Filters
             </button>
@@ -125,15 +125,15 @@ export const DashboardTransactions: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-orbit-card border border-orbit-border rounded-xl">
+      <div className="bg-surface border border-line rounded-xl">
         {filtered.length === 0 ? (
-          <div className="text-center py-16 text-orbit-gray-text text-sm">
+          <div className="text-center py-16 text-muted text-sm">
             {user.transactions.length === 0 
               ? "No transactions yet. Deposit funds to get started." 
               : "No transactions match your filters."}
           </div>
         ) : (
-          <div className="flex flex-col divide-y divide-orbit-border/30">
+          <div className="flex flex-col divide-y divide-line/30">
             {filtered.map((tx) => {
               const isCredit = tx.type === "deposit" || tx.type === "payout";
               const isDebit = tx.type === "withdrawal" || tx.type === "investment";
@@ -142,19 +142,19 @@ export const DashboardTransactions: React.FC = () => {
               const Icon = isCredit ? ArrowDownLeft : isDebit ? ArrowUpRight : WalletCards;
 
               return (
-                <div key={tx.id} className="flex justify-between items-center py-4 px-4 hover:bg-orbit-darkcard/40 transition-colors gap-4">
+                <div key={tx.id} className="flex justify-between items-center py-4 px-4 hover:bg-panel/40 transition-colors gap-4">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isCredit ? "bg-orbit-green/10 text-orbit-green" : "bg-orbit-accent/10 text-orbit-accent"}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isCredit ? "bg-positive/10 text-positive" : "bg-accent/10 text-accent"}`}>
                       <Icon size={14} />
                     </div>
                     <div className="flex flex-col gap-0.5 min-w-0">
-                      <span className="text-sm font-medium text-orbit-white capitalize">{tx.type}</span>
-                      <span className="text-[10px] text-orbit-gray-text font-mono truncate">{tx.timestamp || tx.date} - {tx.currency || tx.asset}</span>
-                      <span className="text-[10px] text-orbit-gray-text font-mono truncate">ID: {tx.id}</span>
+                      <span className="text-sm font-medium text-ink capitalize">{tx.type}</span>
+                      <span className="text-[10px] text-muted font-mono truncate">{tx.timestamp || tx.date} - {tx.currency || tx.asset}</span>
+                      <span className="text-[10px] text-muted font-mono truncate">ID: {tx.id}</span>
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-0.5 shrink-0">
-                    <span className={`text-sm font-bold font-data ${isCredit ? "text-orbit-green" : "text-orbit-white"}`}>
+                    <span className={`text-sm font-bold font-data ${isCredit ? "text-positive" : "text-ink"}`}>
                       {amountDisplay}
                     </span>
                     {statusBadge(tx.status)}

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Share2, Users, Trophy, DollarSign, Copy, Check } from "lucide-react";
-import { useOrbit } from "../context/OrbitContext";
+import { useApp } from "../context/AppContext";
 
 export const DashboardReferral: React.FC = () => {
-  const { user, withdrawEarnings, addNotification } = useOrbit();
+  const { user, withdrawEarnings, addNotification } = useApp();
   const [copied, setCopied] = useState(false);
 
   const referralLink = `https://orbitriotrades.com/register?ref=${user.email?.split('@')[0] || 'user'}`;
@@ -22,38 +22,38 @@ export const DashboardReferral: React.FC = () => {
 
   return (
     <div className="space-y-4 pb-4 sm:pb-6 font-sans">
-      <h2 className="text-xl font-bold font-heading text-orbit-white flex items-center gap-2">
-        <Share2 className="text-orbit-accent" size={24} />
+      <h2 className="text-xl font-bold font-heading text-ink flex items-center gap-2">
+        <Share2 className="text-accent" size={24} />
         Refer & Earn
       </h2>
 
       {/* Hero Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-orbit-card border border-orbit-border rounded-xl p-4 flex flex-col items-center">
-          <Users className="text-orbit-gray-text mb-1.5" size={20} />
-          <p className="text-sm font-bold text-orbit-white font-data">{referralCount}</p>
-          <p className="text-[10px] text-orbit-gray-text mt-0.5">Referrals</p>
+        <div className="bg-surface border border-line rounded-xl p-4 flex flex-col items-center">
+          <Users className="text-muted mb-1.5" size={20} />
+          <p className="text-sm font-bold text-ink font-data">{referralCount}</p>
+          <p className="text-[10px] text-muted mt-0.5">Referrals</p>
         </div>
-        <div className="bg-orbit-card border border-orbit-border rounded-xl p-4 flex flex-col items-center">
-          <Trophy className="text-orbit-accent mb-1.5" size={20} />
-          <p className="text-sm font-bold text-orbit-white font-data">{points}</p>
-          <p className="text-[10px] text-orbit-gray-text mt-0.5">Points</p>
+        <div className="bg-surface border border-line rounded-xl p-4 flex flex-col items-center">
+          <Trophy className="text-accent mb-1.5" size={20} />
+          <p className="text-sm font-bold text-ink font-data">{points}</p>
+          <p className="text-[10px] text-muted mt-0.5">Points</p>
         </div>
-        <div className="bg-orbit-card border border-orbit-border rounded-xl p-4 flex flex-col items-center">
-          <DollarSign className="text-orbit-green mb-1.5" size={20} />
-          <p className="text-sm font-bold text-orbit-white font-data">${earnedBalance.toFixed(2)}</p>
-          <p className="text-[10px] text-orbit-gray-text mt-0.5">Balance</p>
+        <div className="bg-surface border border-line rounded-xl p-4 flex flex-col items-center">
+          <DollarSign className="text-positive mb-1.5" size={20} />
+          <p className="text-sm font-bold text-ink font-data">${earnedBalance.toFixed(2)}</p>
+          <p className="text-[10px] text-muted mt-0.5">Balance</p>
         </div>
       </div>
 
       {/* Referral Link Container */}
-      <div className="bg-orbit-card border border-orbit-border rounded-xl p-4 space-y-2">
-        <p className="text-xs text-orbit-gray-text font-bold">Your Referral Link:</p>
-        <div className="bg-orbit-bg border border-orbit-border rounded-lg p-3 flex justify-between items-center text-sm text-orbit-gray-text gap-2">
+      <div className="bg-surface border border-line rounded-xl p-4 space-y-2">
+        <p className="text-xs text-muted font-bold">Your Referral Link:</p>
+        <div className="bg-ground border border-line rounded-lg p-3 flex justify-between items-center text-sm text-muted gap-2">
           <span className="truncate font-mono text-xs">{referralLink}</span>
           <button 
             onClick={handleCopy} 
-            className="bg-orbit-accent text-orbit-bg px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 text-xs shrink-0 cursor-pointer hover:opacity-90 transition-colors"
+            className="bg-accent text-ground px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 text-xs shrink-0 cursor-pointer hover:opacity-90 transition-colors"
           >
             {copied ? <Check size={14}/> : <Copy size={14}/>}
             {copied ? "Copied" : "Copy"}
@@ -62,13 +62,13 @@ export const DashboardReferral: React.FC = () => {
       </div>
 
       {/* Milestone Progress */}
-      <div className="bg-orbit-card border border-orbit-border rounded-xl p-4 space-y-3">
-        <div className="flex justify-between text-[11px] text-orbit-gray-text">
+      <div className="bg-surface border border-line rounded-xl p-4 space-y-3">
+        <div className="flex justify-between text-[11px] text-muted">
           <span>Payout Threshold</span>
           <span className="font-data font-bold">{points} / 100 Points</span>
         </div>
-        <div className="w-full bg-orbit-border/50 h-2 rounded-full overflow-hidden">
-          <div className="bg-orbit-accent h-2 rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
+        <div className="w-full bg-line/50 h-2 rounded-full overflow-hidden">
+          <div className="bg-accent h-2 rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
         </div>
         
         <button 
@@ -76,8 +76,8 @@ export const DashboardReferral: React.FC = () => {
           disabled={points < 100}
           className={`w-full text-xs font-bold py-3 rounded-lg transition-all cursor-pointer ${
             points < 100 
-              ? "bg-orbit-border/50 text-orbit-gray-text cursor-not-allowed border border-orbit-border" 
-              : "bg-orbit-accent text-orbit-bg hover:opacity-90 shadow-sm shadow-orbit-accent/20"
+              ? "bg-line/50 text-muted cursor-not-allowed border border-line" 
+              : "bg-accent text-ground hover:opacity-90 shadow-sm shadow-accent/20"
           }`}
         >
           {points < 100 ? "Withdraw to Wallet ($100 Min)" : `Withdraw $${earnedBalance.toFixed(2)} to Wallet`}

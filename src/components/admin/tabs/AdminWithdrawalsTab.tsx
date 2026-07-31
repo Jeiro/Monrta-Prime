@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { motion } from "motion/react";
 import { AlertCircle, ArrowUpRight, Check, ClipboardList, Hash, Loader2, Search, X } from "lucide-react";
-import { useOrbit } from "../../../context/OrbitContext";
+import { useApp } from "../../../context/AppContext";
 import type { Transaction } from "../../../types";
 
 type WithdrawalStatus = "pending" | "approved" | "rejected";
@@ -80,7 +80,7 @@ const buildWithdrawalRows = (
     });
 
 export const AdminWithdrawalsTab: React.FC = () => {
-  const { adminTransactions, adminApproveWithdrawal, adminRejectWithdrawal, usersDirectory } = useOrbit();
+  const { adminTransactions, adminApproveWithdrawal, adminRejectWithdrawal, usersDirectory } = useApp();
   const directoryById = useMemo(
     () => new Map((usersDirectory ?? []).map(profile => [profile.id, { email: profile.email, name: profile.name }])),
     [usersDirectory],
@@ -166,12 +166,12 @@ export const AdminWithdrawalsTab: React.FC = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
+      <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
         <div>
-          <h1 className="text-xl font-bold text-orbit-white flex items-center gap-2">
+          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
             <ArrowUpRight size={20} className="text-[#DFAD12]" /> Withdrawal Management
           </h1>
-          <p className="text-xs text-orbit-gray-text mt-1">Review payout destinations, approve verified withdrawals, or reject unsafe requests.</p>
+          <p className="text-xs text-muted mt-1">Review payout destinations, approve verified withdrawals, or reject unsafe requests.</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
           <StatBadge label="Total" value={stats.total} />
@@ -187,22 +187,22 @@ export const AdminWithdrawalsTab: React.FC = () => {
         </motion.div>
       )}
 
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-orbit-border flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <div className="bg-surface border border-line rounded-2xl overflow-hidden">
+        <div className="px-5 py-4 border-b border-line flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div>
-            <h2 className="text-sm font-bold text-orbit-white flex items-center gap-2">
-              <ClipboardList size={16} className="text-orbit-accent" /> Withdrawal Queue
+            <h2 className="text-sm font-bold text-ink flex items-center gap-2">
+              <ClipboardList size={16} className="text-accent" /> Withdrawal Queue
             </h2>
-            <p className="text-[11px] text-orbit-gray-text mt-1">Pending withdrawals stay at the top for faster treasury review.</p>
+            <p className="text-[11px] text-muted mt-1">Pending withdrawals stay at the top for faster treasury review.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
             <div className="relative sm:w-72">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-orbit-gray-text" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
               <input
                 value={searchQuery}
                 onChange={event => setSearchQuery(event.target.value)}
                 placeholder="Search withdrawals"
-                className="w-full pl-9 pr-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-xs text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent"
+                className="w-full pl-9 pr-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent"
               />
             </div>
             <div className="flex flex-wrap gap-2">
@@ -210,7 +210,7 @@ export const AdminWithdrawalsTab: React.FC = () => {
                 <button
                   key={status}
                   onClick={() => setFilterStatus(status)}
-                  className={`px-3 py-2 text-[10px] font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-orbit-accent text-orbit-bg border-orbit-accent" : "bg-orbit-bg text-orbit-gray-text border-orbit-border hover:border-orbit-accent"}`}
+                  className={`px-3 py-2 text-[10px] font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-accent text-ground border-accent" : "bg-ground text-muted border-line hover:border-accent"}`}
                 >
                   {status === "all" ? "All" : statusLabels[status]}
                 </button>
@@ -231,8 +231,8 @@ export const AdminWithdrawalsTab: React.FC = () => {
           <>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[1260px] text-left">
-                <thead className="bg-orbit-bg/60 border-b border-orbit-border">
-                  <tr className="text-[10px] uppercase tracking-wider text-orbit-gray-text">
+                <thead className="bg-ground/60 border-b border-line">
+                  <tr className="text-[10px] uppercase tracking-wider text-muted">
                     <th className="px-5 py-3 font-bold">Withdrawal ID</th>
                     <th className="px-4 py-3 font-bold">User</th>
                     <th className="px-4 py-3 font-bold">Email</th>
@@ -246,25 +246,25 @@ export const AdminWithdrawalsTab: React.FC = () => {
                     <th className="px-5 py-3 font-bold text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-orbit-border/70">
+                <tbody className="divide-y divide-line/70">
                   {filteredWithdrawals.map(withdrawal => (
-                    <tr key={withdrawal.id} className="hover:bg-orbit-bg/40 transition-colors align-top">
+                    <tr key={withdrawal.id} className="hover:bg-ground/40 transition-colors align-top">
                       <td className="px-5 py-4">
-                        <div className="flex items-center gap-2 text-xs font-bold text-orbit-white">
-                          <Hash size={12} className="text-orbit-gray-text" />
+                        <div className="flex items-center gap-2 text-xs font-bold text-ink">
+                          <Hash size={12} className="text-muted" />
                           <span title={withdrawal.id}>{shortValue(withdrawal.id, 12, 5)}</span>
                         </div>
                       </td>
-                      <td className="px-4 py-4 text-xs font-bold text-orbit-white">{withdrawal.userName}</td>
-                      <td className="px-4 py-4 text-xs text-orbit-gray-text">{withdrawal.userEmail}</td>
-                      <td className="px-4 py-4 text-xs font-bold text-orbit-white">{withdrawal.coin}</td>
-                      <td className="px-4 py-4 text-xs text-orbit-accent font-bold">{withdrawal.network}</td>
+                      <td className="px-4 py-4 text-xs font-bold text-ink">{withdrawal.userName}</td>
+                      <td className="px-4 py-4 text-xs text-muted">{withdrawal.userEmail}</td>
+                      <td className="px-4 py-4 text-xs font-bold text-ink">{withdrawal.coin}</td>
+                      <td className="px-4 py-4 text-xs text-accent font-bold">{withdrawal.network}</td>
                       <td className="px-4 py-4">
-                        <span title={withdrawal.destinationWallet} className="block max-w-[220px] truncate text-xs text-orbit-white">{withdrawal.destinationWallet}</span>
-                        {withdrawal.destinationTag && <span className="mt-1 block text-[10px] text-orbit-gray-text">Tag: {withdrawal.destinationTag}</span>}
+                        <span title={withdrawal.destinationWallet} className="block max-w-[220px] truncate text-xs text-ink">{withdrawal.destinationWallet}</span>
+                        {withdrawal.destinationTag && <span className="mt-1 block text-[10px] text-muted">Tag: {withdrawal.destinationTag}</span>}
                       </td>
-                      <td className="px-4 py-4 text-xs font-bold text-orbit-white">{formatMoney(withdrawal.amount)}</td>
-                      <td className="px-4 py-4 text-xs text-orbit-gray-text">{withdrawal.date}</td>
+                      <td className="px-4 py-4 text-xs font-bold text-ink">{formatMoney(withdrawal.amount)}</td>
+                      <td className="px-4 py-4 text-xs text-muted">{withdrawal.date}</td>
                       <td className="px-4 py-4">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-[10px] font-bold ${statusStyles[withdrawal.displayStatus]}`}>
                           {statusLabels[withdrawal.displayStatus]}
@@ -277,10 +277,10 @@ export const AdminWithdrawalsTab: React.FC = () => {
                             placeholder="Optional admin notes"
                             value={adminNotes[withdrawal.id] || ""}
                             onChange={event => setNote(withdrawal.id, event.target.value)}
-                            className="w-[220px] px-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-xs text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent resize-none"
+                            className="w-[220px] px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none"
                           />
                         ) : (
-                          <p className="max-w-[220px] text-[11px] text-orbit-gray-text">{withdrawal.notes || "No admin notes"}</p>
+                          <p className="max-w-[220px] text-[11px] text-muted">{withdrawal.notes || "No admin notes"}</p>
                         )}
                       </td>
                       <td className="px-5 py-4">
@@ -294,7 +294,7 @@ export const AdminWithdrawalsTab: React.FC = () => {
                             </button>
                           </div>
                         ) : (
-                          <p className="text-right text-[10px] font-bold uppercase text-orbit-gray-text">Reviewed</p>
+                          <p className="text-right text-[10px] font-bold uppercase text-muted">Reviewed</p>
                         )}
                       </td>
                     </tr>
@@ -320,26 +320,26 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
       ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
       : tone === "red"
         ? "bg-red-500/10 border-red-500/20 text-red-400"
-        : "bg-orbit-bg border-orbit-border text-orbit-white";
+        : "bg-ground border-line text-ink";
 
   return (
     <div className={`px-3 py-2 border rounded-lg min-w-[78px] ${toneClass}`}>
-      <p className="text-[9px] uppercase text-orbit-gray-text tracking-wider">{label}</p>
+      <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
       <p className="text-sm font-bold">{value}</p>
     </div>
   );
 };
 
 const StateMessage: React.FC<{ icon?: React.ReactNode; title: string; message: string; tone?: "default" | "error" }> = ({ icon, title, message, tone = "default" }) => {
-  const toneClass = tone === "error" ? "text-red-400" : "text-orbit-gray-text";
+  const toneClass = tone === "error" ? "text-red-400" : "text-muted";
 
   return (
     <div className={`py-14 px-6 text-center ${toneClass}`}>
-      <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-orbit-bg border border-orbit-border">
+      <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-ground border border-line">
         {icon || <ClipboardList size={18} />}
       </div>
-      <p className="text-sm font-bold text-orbit-white">{title}</p>
-      <p className="mt-1 text-xs text-orbit-gray-text">{message}</p>
+      <p className="text-sm font-bold text-ink">{title}</p>
+      <p className="mt-1 text-xs text-muted">{message}</p>
     </div>
   );
 };

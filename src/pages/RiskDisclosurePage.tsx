@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { AlertTriangle, TrendingDown, History, Wallet, Info, Globe2, BookOpen, Mail } from "lucide-react";
-import { useOrbit } from "../context/OrbitContext";
+import { useApp } from "../context/AppContext";
 import { useSeo } from "../lib/useSeo";
 
 interface RiskDisclosurePageProps {
@@ -9,11 +9,11 @@ interface RiskDisclosurePageProps {
 }
 
 const Brand = () => (
-  <span className="lowercase text-orbit-white font-semibold">orbit<span className="text-orbit-accent">rio</span></span>
+  <span className="lowercase text-ink font-semibold">moneta <span className="text-accent">prime</span></span>
 );
 
 export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNavigate }) => {
-  const { appSettings } = useOrbit();
+  const { appSettings } = useApp();
 
   useSeo({
     title: "Risk Disclosure — Moneta Prime",
@@ -25,10 +25,10 @@ export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNaviga
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="max-w-4xl mx-auto px-4 py-16 text-orbit-gray-text"
+      className="max-w-4xl mx-auto px-4 py-16 text-muted"
     >
-      <h1 className="text-4xl font-extrabold text-orbit-white mb-6 font-heading flex items-center gap-3">
-        <AlertTriangle className="w-8 h-8 text-orbit-accent" />
+      <h1 className="text-4xl font-extrabold text-ink mb-6 font-heading flex items-center gap-3">
+        <AlertTriangle className="w-8 h-8 text-accent" />
         Risk Disclosure
       </h1>
       <p className="mb-10 text-lg">
@@ -38,8 +38,8 @@ export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNaviga
 
       <div className="space-y-8">
         <section>
-          <h2 className="text-2xl font-bold text-orbit-white mb-3 flex items-center gap-3">
-            <TrendingDown className="w-6 h-6 text-orbit-accent" />
+          <h2 className="text-2xl font-bold text-ink mb-3 flex items-center gap-3">
+            <TrendingDown className="w-6 h-6 text-accent" />
             1. Trading and Investing Involve Risk of Loss
           </h2>
           <p>
@@ -50,8 +50,8 @@ export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNaviga
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-orbit-white mb-3 flex items-center gap-3">
-            <History className="w-6 h-6 text-orbit-accent" />
+          <h2 className="text-2xl font-bold text-ink mb-3 flex items-center gap-3">
+            <History className="w-6 h-6 text-accent" />
             2. Past Performance Is Not Indicative of Future Results
           </h2>
           <p>
@@ -62,8 +62,8 @@ export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNaviga
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-orbit-white mb-3 flex items-center gap-3">
-            <Wallet className="w-6 h-6 text-orbit-accent" />
+          <h2 className="text-2xl font-bold text-ink mb-3 flex items-center gap-3">
+            <Wallet className="w-6 h-6 text-accent" />
             3. Only Invest What You Can Afford to Lose
           </h2>
           <p>
@@ -74,8 +74,8 @@ export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNaviga
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-orbit-white mb-3 flex items-center gap-3">
-            <Info className="w-6 h-6 text-orbit-accent" />
+          <h2 className="text-2xl font-bold text-ink mb-3 flex items-center gap-3">
+            <Info className="w-6 h-6 text-accent" />
             4. No Financial Advice
           </h2>
           <p>
@@ -87,8 +87,8 @@ export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNaviga
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-orbit-white mb-3 flex items-center gap-3">
-            <AlertTriangle className="w-6 h-6 text-orbit-accent" />
+          <h2 className="text-2xl font-bold text-ink mb-3 flex items-center gap-3">
+            <AlertTriangle className="w-6 h-6 text-accent" />
             5. Market Volatility and Digital Asset Risks
           </h2>
           <p>Digital asset markets carry additional risks, including but not limited to:</p>
@@ -101,8 +101,8 @@ export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNaviga
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-orbit-white mb-3 flex items-center gap-3">
-            <Globe2 className="w-6 h-6 text-orbit-accent" />
+          <h2 className="text-2xl font-bold text-ink mb-3 flex items-center gap-3">
+            <Globe2 className="w-6 h-6 text-accent" />
             6. Regulatory and Jurisdictional Considerations
           </h2>
           <p>
@@ -113,8 +113,8 @@ export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNaviga
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-orbit-white mb-3 flex items-center gap-3">
-            <BookOpen className="w-6 h-6 text-orbit-accent" />
+          <h2 className="text-2xl font-bold text-ink mb-3 flex items-center gap-3">
+            <BookOpen className="w-6 h-6 text-accent" />
             7. Do Your Own Research
           </h2>
           <p>
@@ -125,23 +125,23 @@ export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNaviga
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-orbit-white mb-3 flex items-center gap-3">
-            <Mail className="w-6 h-6 text-orbit-accent" />
+          <h2 className="text-2xl font-bold text-ink mb-3 flex items-center gap-3">
+            <Mail className="w-6 h-6 text-accent" />
             8. Questions
           </h2>
           <p>
             If you have questions about the risks described here, contact our team before trading or investing.
           </p>
           <p className="mt-2">
-            <a href={`mailto:${appSettings.supportEmail}`} className="text-orbit-accent hover:underline">
+            <a href={`mailto:${appSettings.supportEmail}`} className="text-accent hover:underline">
               {appSettings.supportEmail}
             </a>
           </p>
           <p className="mt-6 text-sm text-zinc-500">
             This risk disclosure is provided for general information and should be read together with our{" "}
-            <button type="button" onClick={() => onNavigate("terms")} className="text-orbit-accent hover:underline">Terms of Service</button>
+            <button type="button" onClick={() => onNavigate("terms")} className="text-accent hover:underline">Terms of Service</button>
             {" "}and{" "}
-            <button type="button" onClick={() => onNavigate("privacy")} className="text-orbit-accent hover:underline">Privacy Policy</button>.
+            <button type="button" onClick={() => onNavigate("privacy")} className="text-accent hover:underline">Privacy Policy</button>.
           </p>
         </section>
       </div>

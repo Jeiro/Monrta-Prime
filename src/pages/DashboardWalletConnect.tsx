@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useOrbit } from "../context/OrbitContext";
+import { useApp } from "../context/AppContext";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { Wallet, Info } from "lucide-react";
 
@@ -108,7 +108,7 @@ const walletLogos: Record<string, React.ReactNode> = {
 };
 
 export const DashboardWalletConnect: React.FC = () => {
-  const { saveWalletConnection, addNotification } = useOrbit();
+  const { saveWalletConnection, addNotification } = useApp();
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   useBodyScrollLock(showModal);
@@ -145,11 +145,11 @@ export const DashboardWalletConnect: React.FC = () => {
   return (
     <div className="space-y-5 pb-4 sm:pb-6 p-6 max-w-4xl mx-auto">
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold font-heading text-orbit-white flex items-center gap-2">
-          <Wallet className="text-orbit-accent" />
+        <h1 className="text-2xl font-bold font-heading text-ink flex items-center gap-2">
+          <Wallet className="text-accent" />
           Personal Wallet Connect
         </h1>
-        <p className="text-sm text-orbit-gray-text">
+        <p className="text-sm text-muted">
           Link your preferred external multi-sig custody or hot wallet. Secure end-to-end integration with orbitrio networks.
         </p>
       </div>
@@ -166,15 +166,15 @@ export const DashboardWalletConnect: React.FC = () => {
           <button 
             key={wallet} 
             onClick={() => { setSelectedWallet(wallet); setShowModal(true); }} 
-            className="bg-orbit-card border border-orbit-border/50 hover:border-orbit-accent p-4 rounded-xl flex items-center justify-between transition-all duration-300 group cursor-pointer text-orbit-white hover:shadow-lg hover:shadow-orbit-accent/5"
+            className="bg-surface border border-line/50 hover:border-accent p-4 rounded-xl flex items-center justify-between transition-all duration-300 group cursor-pointer text-ink hover:shadow-lg hover:shadow-accent/5"
           >
             <div className="flex items-center gap-3">
               <div className="transition-transform duration-300 group-hover:scale-110">
-                {walletLogos[wallet] || <Wallet className="text-orbit-accent" />}
+                {walletLogos[wallet] || <Wallet className="text-accent" />}
               </div>
               <span className="font-bold tracking-tight text-sm text-left">{wallet}</span>
             </div>
-            <div className="bg-orbit-bg group-hover:bg-orbit-accent/15 border border-orbit-border/80 group-hover:border-orbit-accent/30 rounded-lg py-1 px-2 text-[10px] uppercase font-bold tracking-wider text-orbit-gray-text group-hover:text-orbit-accent transition-colors">
+            <div className="bg-ground group-hover:bg-accent/15 border border-line/80 group-hover:border-accent/30 rounded-lg py-1 px-2 text-[10px] uppercase font-bold tracking-wider text-muted group-hover:text-accent transition-colors">
               Connect
             </div>
           </button>
@@ -183,10 +183,10 @@ export const DashboardWalletConnect: React.FC = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-orbit-card border border-orbit-border p-6 rounded-2xl w-full max-w-md space-y-5 animate-fade-in shadow-2xl relative">
+          <div className="bg-surface border border-line p-6 rounded-2xl w-full max-w-md space-y-5 animate-fade-in shadow-2xl relative">
             <button 
               onClick={() => setShowModal(false)}
-              className="absolute top-4 right-4 text-orbit-gray-text hover:text-orbit-white cursor-pointer bg-transparent border-none outline-none text-sm font-bold"
+              className="absolute top-4 right-4 text-muted hover:text-ink cursor-pointer bg-transparent border-none outline-none text-sm font-bold"
             >
               ✕
             </button>
@@ -194,13 +194,13 @@ export const DashboardWalletConnect: React.FC = () => {
             <div className="flex items-center gap-3">
               {selectedWallet && walletLogos[selectedWallet]}
               <div>
-                <h2 className="text-base font-bold text-orbit-white leading-tight">Connect to {selectedWallet}</h2>
-                <p className="text-[11px] text-orbit-gray-text mt-0.5">Confirm this wallet preference</p>
+                <h2 className="text-base font-bold text-ink leading-tight">Connect to {selectedWallet}</h2>
+                <p className="text-[11px] text-muted mt-0.5">Confirm this wallet preference</p>
               </div>
             </div>
 
-            <div className="text-xs text-orbit-gray-text flex items-start gap-2 bg-orbit-bg/50 p-3.5 rounded-lg border border-orbit-border/50 font-sans leading-relaxed">
-              <Info size={14} className="text-orbit-accent shrink-0 mt-0.5" />
+            <div className="text-xs text-muted flex items-start gap-2 bg-ground/50 p-3.5 rounded-lg border border-line/50 font-sans leading-relaxed">
+              <Info size={14} className="text-accent shrink-0 mt-0.5" />
               <span>Orbitrio will never ask for or store seed phrases, private keys, or recovery words. This action only records your selected wallet provider for support context.</span>
             </div>
 
@@ -208,18 +208,18 @@ export const DashboardWalletConnect: React.FC = () => {
               <button 
                 onClick={() => setShowModal(false)} 
                 disabled={isLoading}
-                className="flex-1 bg-orbit-bg border border-orbit-border/80 hover:border-orbit-white text-orbit-white font-bold p-3 rounded-xl hover:opacity-90 transition-all text-xs cursor-pointer disabled:opacity-50"
+                className="flex-1 bg-ground border border-line/80 hover:border-ink text-ink font-bold p-3 rounded-xl hover:opacity-90 transition-all text-xs cursor-pointer disabled:opacity-50"
               >
                 Cancel
               </button>
               <button 
                 onClick={handleConnect} 
                 disabled={isLoading}
-                className="flex-1 bg-orbit-accent text-orbit-bg font-extrabold p-3 rounded-xl hover:opacity-90 transition-all text-xs cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1"
+                className="flex-1 bg-accent text-ground font-extrabold p-3 rounded-xl hover:opacity-90 transition-all text-xs cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1"
               >
                 {isLoading ? (
                   <>
-                    <span className="w-3.5 h-3.5 border-2 border-orbit-bg border-t-transparent rounded-full animate-spin"></span>
+                    <span className="w-3.5 h-3.5 border-2 border-ground border-t-transparent rounded-full animate-spin"></span>
                     Saving...
                   </>
                 ) : (

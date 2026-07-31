@@ -20,7 +20,7 @@ import {
   Wallet,
   X
 } from "lucide-react";
-import { useOrbit } from "../../../context/OrbitContext";
+import { useApp } from "../../../context/AppContext";
 import { useBodyScrollLock } from "../../../hooks/useBodyScrollLock";
 import type { KycSubmission, Transaction } from "../../../types";
 import type { CoreUserProfile } from "../../../hooks/data/useUsersDirectory";
@@ -89,7 +89,7 @@ export const AdminUsersTab: React.FC = () => {
     adminActiveInvestments,
     adminCopyTrades,
     adminTransactions
-  } = useOrbit();
+  } = useApp();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedEmail, setSelectedEmail] = useState<string | null>(null);
@@ -205,12 +205,12 @@ export const AdminUsersTab: React.FC = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
+      <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
         <div>
-          <h1 className="text-xl font-bold text-orbit-white flex items-center gap-2">
-            <Users size={20} className="text-orbit-accent" /> User Management
+          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
+            <Users size={20} className="text-accent" /> User Management
           </h1>
-          <p className="text-xs text-orbit-gray-text mt-1">Monitor accounts, balances, verification, wallet activity, and administrative controls.</p>
+          <p className="text-xs text-muted mt-1">Monitor accounts, balances, verification, wallet activity, and administrative controls.</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
           <StatBadge label="Total Users" value={stats.total} />
@@ -227,21 +227,21 @@ export const AdminUsersTab: React.FC = () => {
         </motion.div>
       )}
 
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-orbit-border flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <div className="bg-surface border border-line rounded-2xl overflow-hidden">
+        <div className="px-5 py-4 border-b border-line flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div>
-            <h2 className="text-sm font-bold text-orbit-white flex items-center gap-2">
-              <ClipboardList size={16} className="text-orbit-accent" /> Accounts
+            <h2 className="text-sm font-bold text-ink flex items-center gap-2">
+              <ClipboardList size={16} className="text-accent" /> Accounts
             </h2>
-            <p className="text-[11px] text-orbit-gray-text mt-1">Use Manage to open a full account operations panel.</p>
+            <p className="text-[11px] text-muted mt-1">Use Manage to open a full account operations panel.</p>
           </div>
           <div className="relative w-full lg:w-80">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-orbit-gray-text" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
             <input
               value={searchQuery}
               onChange={event => setSearchQuery(event.target.value)}
               placeholder="Search users"
-              className="w-full pl-9 pr-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-xs text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent"
+              className="w-full pl-9 pr-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent"
             />
           </div>
         </div>
@@ -258,8 +258,8 @@ export const AdminUsersTab: React.FC = () => {
           <>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[1080px] text-left">
-                <thead className="bg-orbit-bg/60 border-b border-orbit-border">
-                  <tr className="text-[10px] uppercase tracking-wider text-orbit-gray-text">
+                <thead className="bg-ground/60 border-b border-line">
+                  <tr className="text-[10px] uppercase tracking-wider text-muted">
                     <th className="px-5 py-3 font-bold">Avatar</th>
                     <th className="px-4 py-3 font-bold">Name</th>
                     <th className="px-4 py-3 font-bold">Email</th>
@@ -270,22 +270,22 @@ export const AdminUsersTab: React.FC = () => {
                     <th className="px-5 py-3 font-bold text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-orbit-border/70">
+                <tbody className="divide-y divide-line/70">
                   {filteredUsers.map(user => {
                     const kycStatus: KycViewStatus = allKycSubmissions[user.email]?.status || "unverified";
                     return (
-                      <tr key={user.email} className="hover:bg-orbit-bg/40 transition-colors">
+                      <tr key={user.email} className="hover:bg-ground/40 transition-colors">
                         <td className="px-5 py-4">
-                          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-orbit-accent to-[#FF7F00] flex items-center justify-center text-orbit-bg text-xs font-black">
+                          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-accent to-[#3D7DFF] flex items-center justify-center text-ground text-xs font-black">
                             {getInitials(user.name || "")}
                           </div>
                         </td>
                         <td className="px-4 py-4">
-                          <p className="text-sm font-bold text-orbit-white">{user.name}</p>
-                          <p className="text-[10px] text-orbit-gray-text">{user.accountType || user.username || "Standard account"}</p>
+                          <p className="text-sm font-bold text-ink">{user.name}</p>
+                          <p className="text-[10px] text-muted">{user.accountType || user.username || "Standard account"}</p>
                         </td>
-                        <td className="px-4 py-4 text-xs text-orbit-gray-text">{user.email}</td>
-                        <td className="px-4 py-4 text-xs font-bold text-orbit-white font-data">{formatMoney(user.balance)}</td>
+                        <td className="px-4 py-4 text-xs text-muted">{user.email}</td>
+                        <td className="px-4 py-4 text-xs font-bold text-ink font-data">{formatMoney(user.balance)}</td>
                         <td className="px-4 py-4">
                           <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-[10px] font-bold ${kycStyles[kycStatus]}`}>
                             {kycStatus.toUpperCase()}
@@ -296,10 +296,10 @@ export const AdminUsersTab: React.FC = () => {
                             {user.status.toUpperCase()}
                           </span>
                         </td>
-                        <td className="px-4 py-4 text-xs text-orbit-gray-text">{formatDate(user.registrationDate || undefined)}</td>
+                        <td className="px-4 py-4 text-xs text-muted">{formatDate(user.registrationDate || undefined)}</td>
                         <td className="px-5 py-4">
                           <div className="flex justify-end">
-                            <button onClick={() => openDrawer(user)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-orbit-accent text-orbit-bg font-bold text-[10px] uppercase rounded-lg hover:bg-[#DFAD12] transition-colors cursor-pointer">
+                            <button onClick={() => openDrawer(user)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-accent text-ground font-bold text-[10px] uppercase rounded-lg hover:bg-[#DFAD12] transition-colors cursor-pointer">
                               <Edit3 size={12} /> Manage
                             </button>
                           </div>
@@ -394,24 +394,24 @@ const UserDrawer: React.FC<{
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-end" onClick={onClose}>
-      <motion.aside initial={{ x: 480 }} animate={{ x: 0 }} transition={{ type: "spring", damping: 28, stiffness: 260 }} onClick={event => event.stopPropagation()} className="h-full w-full max-w-2xl bg-orbit-bg border-l border-orbit-border shadow-2xl overflow-y-auto">
-        <div className="sticky top-0 z-10 bg-orbit-bg/95 backdrop-blur border-b border-orbit-border px-5 py-4 flex items-center justify-between gap-4">
+      <motion.aside initial={{ x: 480 }} animate={{ x: 0 }} transition={{ type: "spring", damping: 28, stiffness: 260 }} onClick={event => event.stopPropagation()} className="h-full w-full max-w-2xl bg-ground border-l border-line shadow-2xl overflow-y-auto">
+        <div className="sticky top-0 z-10 bg-ground/95 backdrop-blur border-b border-line px-5 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orbit-accent to-[#FF7F00] flex items-center justify-center text-orbit-bg text-sm font-black shrink-0">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-[#3D7DFF] flex items-center justify-center text-ground text-sm font-black shrink-0">
               {getInitials(user.name || "")}
             </div>
             <div className="min-w-0">
-              <h3 className="text-base font-bold text-orbit-white truncate">{user.name}</h3>
-              <p className="text-[11px] text-orbit-gray-text truncate">{user.email}</p>
+              <h3 className="text-base font-bold text-ink truncate">{user.name}</h3>
+              <p className="text-[11px] text-muted truncate">{user.email}</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg bg-orbit-card border border-orbit-border text-orbit-gray-text hover:text-orbit-white hover:border-orbit-accent cursor-pointer" title="Close panel">
+          <button onClick={onClose} className="p-2 rounded-lg bg-surface border border-line text-muted hover:text-ink hover:border-accent cursor-pointer" title="Close panel">
             <X size={16} />
           </button>
         </div>
 
         <div className="p-5 space-y-5">
-          <Section title="User Profile" icon={<Users size={15} className="text-orbit-accent" />}>
+          <Section title="User Profile" icon={<Users size={15} className="text-accent" />}>
             <div className="grid grid-cols-2 gap-3">
               <InfoItem label="Name" value={user.name || "Not set"} />
               <InfoItem label="Username" value={user.username || "Not set"} />
@@ -422,7 +422,7 @@ const UserDrawer: React.FC<{
             </div>
           </Section>
 
-          <Section title="Wallet Balances" icon={<Wallet size={15} className="text-orbit-accent" />}>
+          <Section title="Wallet Balances" icon={<Wallet size={15} className="text-accent" />}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Metric label="Available Balance" value={formatMoney(user.balance)} />
               <Metric label="Portfolio Value" value={formatMoney(user.portfolioValue)} />
@@ -433,16 +433,16 @@ const UserDrawer: React.FC<{
                 min="0"
                 value={balanceDraft}
                 onChange={event => onBalanceChange(event.target.value)}
-                className="w-full px-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-sm text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent"
+                className="w-full px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent"
                 placeholder="Set wallet balance"
               />
-              <button onClick={onSaveBalance} disabled={balanceBusy} className="flex items-center justify-center gap-1.5 px-4 py-2 bg-orbit-accent text-orbit-bg font-bold text-[10px] uppercase rounded-lg hover:bg-[#DFAD12] disabled:opacity-60 cursor-pointer">
+              <button onClick={onSaveBalance} disabled={balanceBusy} className="flex items-center justify-center gap-1.5 px-4 py-2 bg-accent text-ground font-bold text-[10px] uppercase rounded-lg hover:bg-[#DFAD12] disabled:opacity-60 cursor-pointer">
                 {balanceBusy ? <Loader2 size={12} className="animate-spin" /> : <DollarSign size={12} />} Save Balance
               </button>
             </div>
           </Section>
 
-          <Section title="KYC Information" icon={<Shield size={15} className="text-orbit-accent" />}>
+          <Section title="KYC Information" icon={<Shield size={15} className="text-accent" />}>
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-[10px] font-bold ${kycStyles[kycStatus]}`}>{kycStatus.toUpperCase()}</span>
               {kyc?.rejectionReason && <span className="text-[11px] text-red-400">Previous rejection: {kyc.rejectionReason}</span>}
@@ -457,7 +457,7 @@ const UserDrawer: React.FC<{
                 <InfoItem label="Address" value={kyc.address || "Not captured"} />
               </div>
             ) : (
-              <p className="text-xs text-orbit-gray-text">This user has not submitted identity documents.</p>
+              <p className="text-xs text-muted">This user has not submitted identity documents.</p>
             )}
             <div className="mt-3 flex flex-col sm:flex-row gap-2">
               <button onClick={onApproveKyc} className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-emerald-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-emerald-600 cursor-pointer">
@@ -467,7 +467,7 @@ const UserDrawer: React.FC<{
                 value={kycReason}
                 onChange={event => onKycReasonChange(event.target.value)}
                 placeholder="Rejection reason"
-                className="flex-1 px-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-xs text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent"
+                className="flex-1 px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent"
               />
               <button onClick={onRejectKyc} className="flex items-center justify-center gap-1.5 px-4 py-2 bg-red-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-red-600 cursor-pointer">
                 <X size={14} /> Reject
@@ -475,7 +475,7 @@ const UserDrawer: React.FC<{
             </div>
           </Section>
 
-          <Section title="Active Investments" icon={<TrendingUp size={15} className="text-orbit-accent" />}>
+          <Section title="Active Investments" icon={<TrendingUp size={15} className="text-accent" />}>
             <RecordList
               empty="No active investments."
               rows={investments.filter(investment => investment.status === "Running" || investment.status === "active").map(investment => ({
@@ -488,7 +488,7 @@ const UserDrawer: React.FC<{
             />
           </Section>
 
-          <Section title="Active Copy Trades" icon={<UserCheck size={15} className="text-orbit-accent" />}>
+          <Section title="Active Copy Trades" icon={<UserCheck size={15} className="text-accent" />}>
             <RecordList
               empty="No active copy trade allocations found."
               rows={copyTrades.map(copyTrade => ({
@@ -510,13 +510,13 @@ const UserDrawer: React.FC<{
             </Section>
           </div>
 
-          <Section title="Admin Notes" icon={<Edit3 size={15} className="text-orbit-accent" />}>
+          <Section title="Admin Notes" icon={<Edit3 size={15} className="text-accent" />}>
             <textarea
               rows={4}
               value={adminNote}
               onChange={event => onAdminNoteChange(event.target.value)}
               placeholder="Private admin notes for this review session"
-              className="w-full px-3 py-2 bg-orbit-bg border border-orbit-border rounded-lg text-xs text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent resize-none"
+              className="w-full px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none"
             />
           </Section>
 
@@ -528,7 +528,7 @@ const UserDrawer: React.FC<{
               <button onClick={onSuspend} className="flex items-center gap-1.5 px-3 py-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-[10px] font-bold rounded-lg hover:bg-yellow-500/20 cursor-pointer">
                 <Ban size={12} /> Suspend
               </button>
-              <button onClick={onResetPassword} className="flex items-center gap-1.5 px-3 py-2 bg-orbit-accent/10 border border-orbit-accent/30 text-orbit-accent text-[10px] font-bold rounded-lg hover:bg-orbit-accent/20 cursor-pointer">
+              <button onClick={onResetPassword} className="flex items-center gap-1.5 px-3 py-2 bg-accent/10 border border-accent/30 text-accent text-[10px] font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
                 <Key size={12} /> Reset Password
               </button>
             </div>
@@ -546,33 +546,33 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
       ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
       : tone === "red"
         ? "bg-red-500/10 border-red-500/20 text-red-400"
-        : "bg-orbit-bg border-orbit-border text-orbit-white";
+        : "bg-ground border-line text-ink";
 
   return (
     <div className={`px-3 py-2 border rounded-lg min-w-[92px] ${toneClass}`}>
-      <p className="text-[9px] uppercase text-orbit-gray-text tracking-wider">{label}</p>
+      <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
       <p className="text-sm font-bold">{value}</p>
     </div>
   );
 };
 
 const StateMessage: React.FC<{ icon?: React.ReactNode; title: string; message: string; tone?: "default" | "error" }> = ({ icon, title, message, tone = "default" }) => {
-  const toneClass = tone === "error" ? "text-red-400" : "text-orbit-gray-text";
+  const toneClass = tone === "error" ? "text-red-400" : "text-muted";
 
   return (
     <div className={`py-14 px-6 text-center ${toneClass}`}>
-      <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-orbit-bg border border-orbit-border">
+      <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-ground border border-line">
         {icon || <ClipboardList size={18} />}
       </div>
-      <p className="text-sm font-bold text-orbit-white">{title}</p>
-      <p className="mt-1 text-xs text-orbit-gray-text">{message}</p>
+      <p className="text-sm font-bold text-ink">{title}</p>
+      <p className="mt-1 text-xs text-muted">{message}</p>
     </div>
   );
 };
 
 const Section: React.FC<{ title: string; icon: React.ReactNode; children: React.ReactNode }> = ({ title, icon, children }) => (
-  <section className="bg-orbit-card border border-orbit-border rounded-xl p-4">
-    <h4 className="text-xs font-bold text-orbit-white flex items-center gap-2 mb-3">
+  <section className="bg-surface border border-line rounded-xl p-4">
+    <h4 className="text-xs font-bold text-ink flex items-center gap-2 mb-3">
       {icon} {title}
     </h4>
     {children}
@@ -581,32 +581,32 @@ const Section: React.FC<{ title: string; icon: React.ReactNode; children: React.
 
 const InfoItem: React.FC<{ label: string; value: string }> = ({ label, value }) => (
   <div className="min-w-0">
-    <p className="text-[9px] uppercase text-orbit-gray-text tracking-wider">{label}</p>
-    <p className="mt-1 text-xs font-bold text-orbit-white break-words">{value}</p>
+    <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
+    <p className="mt-1 text-xs font-bold text-ink break-words">{value}</p>
   </div>
 );
 
 const Metric: React.FC<{ label: string; value: string }> = ({ label, value }) => (
-  <div className="bg-orbit-bg border border-orbit-border rounded-lg p-3">
-    <p className="text-[9px] uppercase text-orbit-gray-text tracking-wider">{label}</p>
-    <p className="mt-1 text-sm font-bold text-orbit-white font-data">{value}</p>
+  <div className="bg-ground border border-line rounded-lg p-3">
+    <p className="text-[9px] uppercase text-muted tracking-wider">{label}</p>
+    <p className="mt-1 text-sm font-bold text-ink font-data">{value}</p>
   </div>
 );
 
 const RecordList: React.FC<{ rows: Array<{ id: string; title: string; meta: string; value: string; status: string }>; empty: string }> = ({ rows, empty }) => {
-  if (rows.length === 0) return <p className="text-xs text-orbit-gray-text">{empty}</p>;
+  if (rows.length === 0) return <p className="text-xs text-muted">{empty}</p>;
 
   return (
     <div className="space-y-2">
       {rows.map(row => (
-        <div key={row.id} className="flex items-start justify-between gap-3 bg-orbit-bg border border-orbit-border rounded-lg p-3">
+        <div key={row.id} className="flex items-start justify-between gap-3 bg-ground border border-line rounded-lg p-3">
           <div className="min-w-0">
-            <p className="text-xs font-bold text-orbit-white truncate">{row.title}</p>
-            <p className="text-[10px] text-orbit-gray-text mt-1">{row.meta}</p>
+            <p className="text-xs font-bold text-ink truncate">{row.title}</p>
+            <p className="text-[10px] text-muted mt-1">{row.meta}</p>
           </div>
           <div className="text-right shrink-0">
-            <p className="text-xs font-bold text-orbit-white font-data">{row.value}</p>
-            <p className="text-[10px] text-orbit-accent uppercase font-bold mt-1">{row.status}</p>
+            <p className="text-xs font-bold text-ink font-data">{row.value}</p>
+            <p className="text-[10px] text-accent uppercase font-bold mt-1">{row.status}</p>
           </div>
         </div>
       ))}
@@ -615,23 +615,23 @@ const RecordList: React.FC<{ rows: Array<{ id: string; title: string; meta: stri
 };
 
 const TransactionList: React.FC<{ rows: Transaction[]; empty: string }> = ({ rows, empty }) => {
-  if (rows.length === 0) return <p className="text-xs text-orbit-gray-text">{empty}</p>;
+  if (rows.length === 0) return <p className="text-xs text-muted">{empty}</p>;
 
   return (
     <div className="space-y-2">
       {rows.map(row => (
-        <div key={row.id} className="bg-orbit-bg border border-orbit-border rounded-lg p-3">
+        <div key={row.id} className="bg-ground border border-line rounded-lg p-3">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-xs font-bold text-orbit-white" title={row.id}>{shortValue(row.id)}</p>
-              <p className="text-[10px] text-orbit-gray-text mt-1">{row.asset} / {formatDate(row.date)}</p>
+              <p className="text-xs font-bold text-ink" title={row.id}>{shortValue(row.id)}</p>
+              <p className="text-[10px] text-muted mt-1">{row.asset} / {formatDate(row.date)}</p>
             </div>
             <div className="text-right shrink-0">
-              <p className="text-xs font-bold text-orbit-white font-data">{formatMoney(row.amount)}</p>
-              <p className="text-[10px] text-orbit-accent uppercase font-bold mt-1">{row.status}</p>
+              <p className="text-xs font-bold text-ink font-data">{formatMoney(row.amount)}</p>
+              <p className="text-[10px] text-accent uppercase font-bold mt-1">{row.status}</p>
             </div>
           </div>
-          {row.notes && <p className="mt-2 text-[10px] text-orbit-gray-text">{row.notes}</p>}
+          {row.notes && <p className="mt-2 text-[10px] text-muted">{row.notes}</p>}
         </div>
       ))}
     </div>

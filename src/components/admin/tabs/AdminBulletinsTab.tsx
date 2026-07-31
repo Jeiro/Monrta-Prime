@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { useOrbit } from "../../../context/OrbitContext";
+import { useApp } from "../../../context/AppContext";
 import { motion } from "motion/react";
 import {
   Calendar,
@@ -47,7 +47,7 @@ const priorityClass: Record<AnnouncementPriority, string> = {
 };
 
 export const AdminBulletinsTab: React.FC = () => {
-  const { adminAnnouncements, adminCreateAnnouncement, adminUpdateAnnouncement, adminDeleteAnnouncement } = useOrbit();
+  const { adminAnnouncements, adminCreateAnnouncement, adminUpdateAnnouncement, adminDeleteAnnouncement } = useApp();
 
   const [form, setForm] = useState<FormState>(emptyForm);
   const [query, setQuery] = useState("");
@@ -154,17 +154,17 @@ export const AdminBulletinsTab: React.FC = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl p-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-orbit-white flex items-center gap-2">
-            <Volume2 size={20} className="text-orbit-accent" /> Announcements Panel
+          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
+            <Volume2 size={20} className="text-accent" /> Announcements Panel
           </h1>
-          <p className="text-xs text-orbit-gray-text mt-1">Manage platform announcements with scheduling, priority, pinning, and status controls.</p>
+          <p className="text-xs text-muted mt-1">Manage platform announcements with scheduling, priority, pinning, and status controls.</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-          <span className="px-3 py-2 rounded-lg bg-orbit-bg border border-orbit-border text-orbit-gray-text">Total <strong className="block text-orbit-white">{stats.total}</strong></span>
+          <span className="px-3 py-2 rounded-lg bg-ground border border-line text-muted">Total <strong className="block text-ink">{stats.total}</strong></span>
           <span className="px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">Active <strong className="block">{stats.enabled}</strong></span>
-          <span className="px-3 py-2 rounded-lg bg-orbit-accent/10 border border-orbit-accent/20 text-orbit-accent">Pinned <strong className="block">{stats.pinned}</strong></span>
+          <span className="px-3 py-2 rounded-lg bg-accent/10 border border-accent/20 text-accent">Pinned <strong className="block">{stats.pinned}</strong></span>
           <span className="px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-300">Critical <strong className="block">{stats.critical}</strong></span>
         </div>
       </div>
@@ -175,14 +175,14 @@ export const AdminBulletinsTab: React.FC = () => {
         </motion.div>
       )}
 
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl p-6 space-y-4">
+      <div className="bg-surface border border-line rounded-2xl p-6 space-y-4">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="text-sm font-bold text-orbit-white flex items-center gap-2">
-            {editing ? <Edit3 size={14} className="text-orbit-accent" /> : <Plus size={14} className="text-orbit-accent" />}
+          <h3 className="text-sm font-bold text-ink flex items-center gap-2">
+            {editing ? <Edit3 size={14} className="text-accent" /> : <Plus size={14} className="text-accent" />}
             {editing ? "Edit Announcement" : "New Announcement"}
           </h3>
           {editing && (
-            <button onClick={resetForm} className="p-2 bg-orbit-bg border border-orbit-border text-orbit-gray-text rounded-lg hover:text-orbit-white" title="Cancel edit">
+            <button onClick={resetForm} className="p-2 bg-ground border border-line text-muted rounded-lg hover:text-ink" title="Cancel edit">
               <X size={14} />
             </button>
           )}
@@ -190,63 +190,63 @@ export const AdminBulletinsTab: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           <input placeholder="Announcement title" value={form.title} onChange={e => setForm(prev => ({ ...prev, title: e.target.value }))}
-            className="w-full px-4 py-3 bg-orbit-bg border border-orbit-border rounded-xl text-sm text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent" />
+            className="w-full px-4 py-3 bg-ground border border-line rounded-xl text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
           <select value={form.priority} onChange={e => setForm(prev => ({ ...prev, priority: e.target.value as AnnouncementPriority }))}
-            className="w-full px-4 py-3 bg-orbit-bg border border-orbit-border rounded-xl text-sm text-orbit-white focus:outline-none focus:border-orbit-accent">
+            className="w-full px-4 py-3 bg-ground border border-line rounded-xl text-sm text-ink focus:outline-none focus:border-accent">
             {priorities.map(priority => <option key={priority} value={priority}>{priority} Priority</option>)}
           </select>
         </div>
 
         <textarea placeholder="Announcement content..." value={form.content} onChange={e => setForm(prev => ({ ...prev, content: e.target.value }))} rows={4}
-          className="w-full px-4 py-3 bg-orbit-bg border border-orbit-border rounded-xl text-sm text-orbit-white placeholder:text-orbit-gray-text focus:outline-none focus:border-orbit-accent resize-none" />
+          className="w-full px-4 py-3 bg-ground border border-line rounded-xl text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-          <label className="flex items-center gap-2 px-3 py-2 bg-orbit-bg border border-orbit-border rounded-xl cursor-pointer">
-            <input type="checkbox" checked={form.enabled} onChange={e => setForm(prev => ({ ...prev, enabled: e.target.checked }))} className="w-4 h-4 accent-orbit-accent" />
-            <span className="text-xs text-orbit-gray-text font-bold flex items-center gap-1"><Eye size={12} /> Enabled</span>
+          <label className="flex items-center gap-2 px-3 py-2 bg-ground border border-line rounded-xl cursor-pointer">
+            <input type="checkbox" checked={form.enabled} onChange={e => setForm(prev => ({ ...prev, enabled: e.target.checked }))} className="w-4 h-4 accent-accent" />
+            <span className="text-xs text-muted font-bold flex items-center gap-1"><Eye size={12} /> Enabled</span>
           </label>
-          <label className="flex items-center gap-2 px-3 py-2 bg-orbit-bg border border-orbit-border rounded-xl cursor-pointer">
-            <input type="checkbox" checked={form.pinned} onChange={e => setForm(prev => ({ ...prev, pinned: e.target.checked }))} className="w-4 h-4 accent-orbit-accent" />
-            <span className="text-xs text-orbit-gray-text font-bold flex items-center gap-1"><Pin size={12} /> Pinned</span>
+          <label className="flex items-center gap-2 px-3 py-2 bg-ground border border-line rounded-xl cursor-pointer">
+            <input type="checkbox" checked={form.pinned} onChange={e => setForm(prev => ({ ...prev, pinned: e.target.checked }))} className="w-4 h-4 accent-accent" />
+            <span className="text-xs text-muted font-bold flex items-center gap-1"><Pin size={12} /> Pinned</span>
           </label>
-          <label className="flex items-center gap-2 px-3 py-2 bg-orbit-bg border border-orbit-border rounded-xl">
-            <Calendar size={12} className="text-orbit-gray-text" />
+          <label className="flex items-center gap-2 px-3 py-2 bg-ground border border-line rounded-xl">
+            <Calendar size={12} className="text-muted" />
             <input type="date" value={form.publishDate} onChange={e => setForm(prev => ({ ...prev, publishDate: e.target.value }))}
-              className="min-w-0 flex-1 bg-transparent text-xs text-orbit-white focus:outline-none" />
+              className="min-w-0 flex-1 bg-transparent text-xs text-ink focus:outline-none" />
           </label>
-          <label className="flex items-center gap-2 px-3 py-2 bg-orbit-bg border border-orbit-border rounded-xl">
-            <Calendar size={12} className="text-orbit-gray-text" />
+          <label className="flex items-center gap-2 px-3 py-2 bg-ground border border-line rounded-xl">
+            <Calendar size={12} className="text-muted" />
             <input type="date" value={form.expiryDate} onChange={e => setForm(prev => ({ ...prev, expiryDate: e.target.value }))}
-              className="min-w-0 flex-1 bg-transparent text-xs text-orbit-white focus:outline-none" />
+              className="min-w-0 flex-1 bg-transparent text-xs text-ink focus:outline-none" />
           </label>
         </div>
 
         <button onClick={handleSubmit} disabled={saving}
-          className="flex items-center gap-2 px-6 py-2.5 bg-orbit-accent text-orbit-bg font-bold text-xs uppercase rounded-lg hover:opacity-90 transition-colors cursor-pointer disabled:opacity-50">
+          className="flex items-center gap-2 px-6 py-2.5 bg-accent text-ground font-bold text-xs uppercase rounded-lg hover:opacity-90 transition-colors cursor-pointer disabled:opacity-50">
           {editing ? <Edit3 size={14} /> : <Plus size={14} />} {saving ? "Saving..." : editing ? "Save Announcement" : "Publish Announcement"}
         </button>
       </div>
 
-      <div className="bg-orbit-card border border-orbit-border rounded-2xl p-4 space-y-3">
+      <div className="bg-surface border border-line rounded-2xl p-4 space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <label className="md:col-span-2 flex items-center gap-2 px-3 py-2 bg-orbit-bg border border-orbit-border rounded-xl">
-            <Search size={14} className="text-orbit-gray-text" />
-            <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search announcements" className="w-full bg-transparent text-sm text-orbit-white placeholder:text-orbit-gray-text focus:outline-none" />
+          <label className="md:col-span-2 flex items-center gap-2 px-3 py-2 bg-ground border border-line rounded-xl">
+            <Search size={14} className="text-muted" />
+            <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search announcements" className="w-full bg-transparent text-sm text-ink placeholder:text-muted focus:outline-none" />
           </label>
-          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value as typeof statusFilter)} className="px-3 py-2 bg-orbit-bg border border-orbit-border rounded-xl text-xs text-orbit-white focus:outline-none focus:border-orbit-accent">
+          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value as typeof statusFilter)} className="px-3 py-2 bg-ground border border-line rounded-xl text-xs text-ink focus:outline-none focus:border-accent">
             <option value="all">All statuses</option>
             <option value="enabled">Enabled</option>
             <option value="disabled">Disabled</option>
           </select>
-          <select value={priorityFilter} onChange={e => setPriorityFilter(e.target.value as typeof priorityFilter)} className="px-3 py-2 bg-orbit-bg border border-orbit-border rounded-xl text-xs text-orbit-white focus:outline-none focus:border-orbit-accent">
+          <select value={priorityFilter} onChange={e => setPriorityFilter(e.target.value as typeof priorityFilter)} className="px-3 py-2 bg-ground border border-line rounded-xl text-xs text-ink focus:outline-none focus:border-accent">
             <option value="all">All priorities</option>
             {priorities.map(priority => <option key={priority} value={priority}>{priority}</option>)}
           </select>
         </div>
-        <div className="flex flex-wrap items-center gap-2 text-xs text-orbit-gray-text">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
           <Filter size={13} />
           {["all", "pinned", "unpinned"].map(item => (
-            <button key={item} onClick={() => setPinFilter(item as typeof pinFilter)} className={`px-3 py-1.5 rounded-lg border font-bold capitalize ${pinFilter === item ? "bg-orbit-accent text-orbit-bg border-orbit-accent" : "bg-orbit-bg border-orbit-border hover:text-orbit-white"}`}>
+            <button key={item} onClick={() => setPinFilter(item as typeof pinFilter)} className={`px-3 py-1.5 rounded-lg border font-bold capitalize ${pinFilter === item ? "bg-accent text-ground border-accent" : "bg-ground border-line hover:text-ink"}`}>
               {item}
             </button>
           ))}
@@ -258,27 +258,27 @@ export const AdminBulletinsTab: React.FC = () => {
           const priority = announcement.priority || "Normal";
           const disabled = announcement.enabled === false;
           return (
-            <div key={announcement.id} className={`bg-orbit-card border rounded-2xl p-5 space-y-3 ${announcement.pinned ? "border-orbit-accent/40" : "border-orbit-border"} ${disabled ? "opacity-60" : ""}`}>
+            <div key={announcement.id} className={`bg-surface border rounded-2xl p-5 space-y-3 ${announcement.pinned ? "border-accent/40" : "border-line"} ${disabled ? "opacity-60" : ""}`}>
               <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    {announcement.pinned && <Pin size={12} className="text-orbit-accent" />}
-                    <h3 className="text-sm font-bold text-orbit-white break-words">{announcement.title}</h3>
+                    {announcement.pinned && <Pin size={12} className="text-accent" />}
+                    <h3 className="text-sm font-bold text-ink break-words">{announcement.title}</h3>
                     <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${priorityClass[priority]}`}>{priority}</span>
                     <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${disabled ? "bg-slate-500/10 text-slate-400 border-slate-500/30" : "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"}`}>{disabled ? "Disabled" : "Enabled"}</span>
                   </div>
-                  <p className="text-xs text-orbit-gray-text mt-2 leading-relaxed break-words">{announcement.content}</p>
-                  <div className="flex flex-wrap items-center gap-3 mt-3 text-[10px] text-orbit-gray-text">
+                  <p className="text-xs text-muted mt-2 leading-relaxed break-words">{announcement.content}</p>
+                  <div className="flex flex-wrap items-center gap-3 mt-3 text-[10px] text-muted">
                     <span>Created: {announcement.date}</span>
-                    {announcement.publishDate && <span className="text-orbit-accent">Publishes: {announcement.publishDate}</span>}
+                    {announcement.publishDate && <span className="text-accent">Publishes: {announcement.publishDate}</span>}
                     {announcement.expiryDate && <span className="text-red-300">Expires: {announcement.expiryDate}</span>}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <button onClick={() => handleToggleEnabled(announcement)} className="p-2 bg-orbit-bg border border-orbit-border text-orbit-gray-text rounded-lg hover:text-orbit-white" title={disabled ? "Enable" : "Disable"}>
+                  <button onClick={() => handleToggleEnabled(announcement)} className="p-2 bg-ground border border-line text-muted rounded-lg hover:text-ink" title={disabled ? "Enable" : "Disable"}>
                     {disabled ? <Eye size={14} /> : <EyeOff size={14} />}
                   </button>
-                  <button onClick={() => handleEdit(announcement)} className="p-2 bg-orbit-bg border border-orbit-border text-orbit-accent rounded-lg hover:bg-orbit-accent/10" title="Edit">
+                  <button onClick={() => handleEdit(announcement)} className="p-2 bg-ground border border-line text-accent rounded-lg hover:bg-accent/10" title="Edit">
                     <Edit3 size={14} />
                   </button>
                   <button onClick={() => handleDelete(announcement)} className="p-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/20" title="Delete">
@@ -291,7 +291,7 @@ export const AdminBulletinsTab: React.FC = () => {
         })}
 
         {filteredAnnouncements.length === 0 && (
-          <div className="text-center py-12 text-orbit-gray-text text-sm bg-orbit-card border border-orbit-border rounded-2xl">No announcements match the current filters.</div>
+          <div className="text-center py-12 text-muted text-sm bg-surface border border-line rounded-2xl">No announcements match the current filters.</div>
         )}
       </div>
     </motion.div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSignUp, useSignIn } from "@clerk/clerk-react";
-import { useOrbit } from "../context/OrbitContext";
+import { useApp } from "../context/AppContext";
 import { useSupabaseClient, createUserProfile, createFreshAuthedClient } from "../lib/supabase";
 import {
   Mail, Lock, User, CheckCircle2, Phone, ChevronDown,
@@ -20,10 +20,10 @@ type FieldState = "idle" | "ok" | "err";
 
 const stateBorder = (state: FieldState) =>
   state === "ok"
-    ? "border-orbit-green/55"
+    ? "border-positive/55"
     : state === "err"
-      ? "border-orbit-red/60"
-      : "border-orbit-border/85 focus-within:border-orbit-accent focus-within:ring-2 focus-within:ring-orbit-accent/15";
+      ? "border-negative/60"
+      : "border-line/85 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/15";
 
 interface TextInputProps {
   icon?: React.ComponentType<{ size?: number }>;
@@ -49,12 +49,12 @@ const TextInput: React.FC<TextInputProps> = ({
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
-        <label className="text-[11px] uppercase font-subheading tracking-wider text-orbit-gray-text">
-          {label}{required && <span className="text-orbit-accent ml-0.5">*</span>}
+        <label className="text-[11px] uppercase font-subheading tracking-wider text-muted">
+          {label}{required && <span className="text-accent ml-0.5">*</span>}
         </label>
         {rightLabel}
       </div>
-      <div className={`relative flex items-center rounded-xl bg-orbit-bg border transition-all duration-150 ${stateBorder(state)}`}>
+      <div className={`relative flex items-center rounded-xl bg-ground border transition-all duration-150 ${stateBorder(state)}`}>
         {Icon && (
           <span className="absolute left-3.5 text-zinc-500 pointer-events-none">
             <Icon size={15} />
@@ -66,26 +66,26 @@ const TextInput: React.FC<TextInputProps> = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full bg-transparent rounded-xl py-3 text-orbit-white outline-none placeholder:text-zinc-600 font-sans ${Icon ? "pl-10" : "pl-4"} pr-10`}
+          className={`w-full bg-transparent rounded-xl py-3 text-ink outline-none placeholder:text-zinc-600 font-sans ${Icon ? "pl-10" : "pl-4"} pr-10`}
         />
         {password ? (
           <button
             type="button"
             tabIndex={-1}
             onClick={() => setShow((s) => !s)}
-            className="absolute right-3 text-zinc-500 hover:text-orbit-accent cursor-pointer bg-transparent border-none outline-none"
+            className="absolute right-3 text-zinc-500 hover:text-accent cursor-pointer bg-transparent border-none outline-none"
             aria-label={show ? "Hide password" : "Show password"}
           >
             {show ? <EyeOff size={15} /> : <Eye size={15} />}
           </button>
         ) : state === "ok" ? (
-          <span className="absolute right-3 text-orbit-green pointer-events-none"><Check size={16} /></span>
+          <span className="absolute right-3 text-positive pointer-events-none"><Check size={16} /></span>
         ) : state === "err" ? (
-          <span className="absolute right-3 text-orbit-red pointer-events-none"><X size={16} /></span>
+          <span className="absolute right-3 text-negative pointer-events-none"><X size={16} /></span>
         ) : null}
       </div>
       {hint && (
-        <p className={`text-[11px] leading-tight ${state === "err" ? "text-orbit-red" : "text-orbit-green"}`}>
+        <p className={`text-[11px] leading-tight ${state === "err" ? "text-negative" : "text-positive"}`}>
           {hint}
         </p>
       )}
@@ -104,14 +104,14 @@ interface SelectInputProps {
 
 const SelectInput: React.FC<SelectInputProps> = ({ label, required, value, onChange, state = "idle", children }) => (
   <div className="space-y-1.5">
-    <label className="text-[11px] uppercase font-subheading tracking-wider text-orbit-gray-text block">
-      {label}{required && <span className="text-orbit-accent ml-0.5">*</span>}
+    <label className="text-[11px] uppercase font-subheading tracking-wider text-muted block">
+      {label}{required && <span className="text-accent ml-0.5">*</span>}
     </label>
-    <div className={`relative flex items-center rounded-xl bg-orbit-bg border transition-all duration-150 ${stateBorder(state)}`}>
+    <div className={`relative flex items-center rounded-xl bg-ground border transition-all duration-150 ${stateBorder(state)}`}>
       <select
         value={value}
         onChange={onChange}
-        className="w-full bg-transparent rounded-xl px-4 py-3 text-orbit-white cursor-pointer outline-none appearance-none font-sans [&>option]:bg-orbit-card [&>option]:text-orbit-white"
+        className="w-full bg-transparent rounded-xl px-4 py-3 text-ink cursor-pointer outline-none appearance-none font-sans [&>option]:bg-surface [&>option]:text-ink"
       >
         {children}
       </select>
@@ -135,11 +135,11 @@ const passwordStrength = (pw: string): { score: number; label: string } => {
 };
 
 const pwBarColor = (i: number, score: number) => {
-  if (i > score) return "bg-orbit-border";
-  return ["", "bg-orbit-red", "bg-amber-500", "bg-yellow-400", "bg-orbit-green"][score];
+  if (i > score) return "bg-line";
+  return ["", "bg-negative", "bg-accent", "bg-yellow-400", "bg-positive"][score];
 };
 const pwTextColor = (score: number) =>
-  ["text-orbit-gray-text", "text-orbit-red", "text-amber-500", "text-yellow-400", "text-orbit-green"][score];
+  ["text-muted", "text-negative", "text-accent", "text-yellow-400", "text-positive"][score];
 
 /* Google mark — brand-tinted so it reads as a secondary path, not a rival CTA */
 const GoogleMark = () => (
@@ -155,9 +155,9 @@ const GoogleButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <button
     type="button"
     onClick={onClick}
-    className="w-full py-3.5 px-4 rounded-xl border border-orbit-border/90 hover:border-orbit-accent/50 bg-white/[0.02] hover:bg-orbit-accent/[0.04] text-orbit-white font-semibold font-subheading text-sm transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+    className="w-full py-3.5 px-4 rounded-xl border border-line/90 hover:border-accent/50 bg-white/[0.02] hover:bg-accent/[0.04] text-ink font-semibold font-subheading text-sm transition-all flex items-center justify-center gap-2.5 cursor-pointer"
   >
-    <span className="text-orbit-accent"><GoogleMark /></span>
+    <span className="text-accent"><GoogleMark /></span>
     Continue with Google
   </button>
 );
@@ -165,16 +165,16 @@ const GoogleButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
 const Divider = () => (
   <div className="relative my-5">
     <div className="absolute inset-0 flex items-center">
-      <div className="w-full border-t border-orbit-border/40" />
+      <div className="w-full border-t border-line/40" />
     </div>
     <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-[0.14em]">
-      <span className="bg-[#0e1116] px-3 text-orbit-gray-text">Or</span>
+      <span className="bg-[#0e1116] px-3 text-muted">Or</span>
     </div>
   </div>
 );
 
 export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "register" }) => {
-  const { appSettings, sendWelcomeNotification } = useOrbit();
+  const { appSettings, sendWelcomeNotification } = useApp();
   const supabase = useSupabaseClient();
   const { isLoaded: signUpLoaded, signUp, setActive: setActiveFromSignUp } = useSignUp();
   const { isLoaded: signInLoaded, signIn, setActive: setActiveFromSignIn } = useSignIn();
@@ -316,7 +316,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
         }
 
         // Branded welcome email (Clerk sends its own verification code, not a
-        // welcome). Dedup-guarded in OrbitContext so it fires exactly once.
+        // welcome). Dedup-guarded in AppContext so it fires exactly once.
         sendWelcomeNotification(email, `${firstName.trim()} ${lastName.trim()}`.trim());
 
         setIsSuccess(true);
@@ -586,51 +586,51 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
 
   return (
     <div className="mx-auto my-8 w-full max-w-5xl px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="grid overflow-hidden rounded-[28px] border border-orbit-border/70 bg-gradient-to-br from-[#12161D] via-[#0D1014] to-[#090B10] shadow-[0_40px_120px_rgba(0,0,0,0.55)] md:grid-cols-[0.92fr_1.08fr]">
+      <div className="grid overflow-hidden rounded-[28px] border border-line/70 bg-gradient-to-br from-[#12161D] via-[#0D1014] to-[#090B10] shadow-[0_40px_120px_rgba(0,0,0,0.55)] md:grid-cols-[0.92fr_1.08fr]">
 
         {/* ---------------- LEFT BRAND RAIL ---------------- */}
-        <aside className="relative order-2 flex flex-col overflow-hidden border-t border-orbit-border/50 p-8 md:order-1 md:border-r md:border-t-0 md:p-10">
+        <aside className="relative order-2 flex flex-col overflow-hidden border-t border-line/50 p-8 md:order-1 md:border-r md:border-t-0 md:p-10">
           <div
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(120% 80% at 0% 0%, rgba(255,177,26,0.12), transparent 55%), radial-gradient(60% 40% at 85% 95%, rgba(255,127,0,0.10), transparent 60%)",
+                "radial-gradient(120% 80% at 0% 0%, rgba(106,165,255,0.12), transparent 55%), radial-gradient(60% 40% at 85% 95%, rgba(61,125,255,0.10), transparent 60%)",
             }}
           />
-          <div className="relative z-10 font-brand text-[22px] font-bold tracking-tight">
-            <span className="text-orbit-white">orbit</span><span className="text-orbit-accent">rio</span>
+          <div className="relative z-10 font-display text-[22px] font-bold tracking-tight">
+            <span className="text-ink">moneta </span><span className="text-accent">prime</span>
           </div>
 
           <div className="relative z-10 mt-auto pt-10">
-            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-orbit-accent">
+            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
               Institutional-grade trading
             </div>
-            <h1 className="mt-3 mb-3 max-w-[13ch] font-brand text-[30px] font-bold leading-[1.1] tracking-tight text-balance text-orbit-white sm:text-[34px]">
+            <h1 className="mt-3 mb-3 max-w-[13ch] font-display text-[30px] font-bold leading-[1.1] tracking-tight text-balance text-ink sm:text-[34px]">
               Trade with{" "}
-              <span className="bg-gradient-to-r from-orbit-accent to-[#FF7F00] bg-clip-text text-transparent">precision</span>,
+              <span className="bg-gradient-to-r from-accent to-[#3D7DFF] bg-clip-text text-transparent">precision</span>,
               onboard in minutes.
             </h1>
-            <p className="mb-8 max-w-[34ch] text-sm leading-relaxed text-orbit-gray-text">
+            <p className="mb-8 max-w-[34ch] text-sm leading-relaxed text-muted">
               Real-time indicators, tiered yields, and copy-performance logs — in one workspace built for serious traders.
             </p>
 
             <div className="flex flex-col gap-4">
               {trustRows.map(({ icon: Icon, t1, t2 }) => (
                 <div key={t1} className="flex items-start gap-3">
-                  <span className="flex h-8 w-8 flex-none items-center justify-center rounded-[9px] border border-orbit-accent/30 bg-orbit-accent/10 text-orbit-accent">
+                  <span className="flex h-8 w-8 flex-none items-center justify-center rounded-[9px] border border-accent/30 bg-accent/10 text-accent">
                     <Icon size={15} />
                   </span>
                   <div>
-                    <div className="text-[13px] font-semibold leading-tight text-orbit-white">{t1}</div>
-                    <div className="text-xs leading-snug text-orbit-gray-text">{t2}</div>
+                    <div className="text-[13px] font-semibold leading-tight text-ink">{t1}</div>
+                    <div className="text-xs leading-snug text-muted">{t2}</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="relative z-10 mt-8 flex items-center gap-2 text-[11px] text-orbit-gray-text">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-orbit-green animate-ping" />
+          <div className="relative z-10 mt-8 flex items-center gap-2 text-[11px] text-muted">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-positive animate-ping" />
             Security node active · End-to-end encryption
           </div>
         </aside>
@@ -640,12 +640,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
 
           {/* Tab switcher — hidden mid-verify / mid-reset / mid-success */}
           {!pendingVerification && !showForgotPassword && !isSuccess && (
-            <div className="mb-7 inline-flex gap-1 self-start rounded-full border border-orbit-border/70 bg-white/[0.03] p-1">
+            <div className="mb-7 inline-flex gap-1 self-start rounded-full border border-line/70 bg-white/[0.03] p-1">
               <button
                 type="button"
                 onClick={() => switchTab("register")}
                 className={`rounded-full px-5 py-2 text-xs font-bold font-subheading transition-all cursor-pointer ${
-                  activeTab === "register" ? "bg-orbit-accent text-orbit-bg" : "text-orbit-gray-text hover:text-orbit-white"
+                  activeTab === "register" ? "bg-accent text-ground" : "text-muted hover:text-ink"
                 }`}
               >
                 Create account
@@ -654,7 +654,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                 type="button"
                 onClick={() => switchTab("login")}
                 className={`rounded-full px-5 py-2 text-xs font-bold font-subheading transition-all cursor-pointer ${
-                  activeTab === "login" ? "bg-orbit-accent text-orbit-bg" : "text-orbit-gray-text hover:text-orbit-white"
+                  activeTab === "login" ? "bg-accent text-ground" : "text-muted hover:text-ink"
                 }`}
               >
                 Sign in
@@ -666,21 +666,21 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
           {!isSuccess && (
             <div className="mb-7">
               {pendingVerification && (
-                <span className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-orbit-accent/30 bg-orbit-accent/10 text-orbit-accent">
+                <span className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-accent/30 bg-accent/10 text-accent">
                   <Mail size={26} />
                 </span>
               )}
-              <h2 className="font-brand text-[25px] font-bold tracking-tight text-orbit-white">{headerTitle}</h2>
-              <p className="mt-1.5 max-w-[46ch] text-[13px] leading-relaxed text-orbit-gray-text">{headerSub}</p>
+              <h2 className="font-display text-[25px] font-bold tracking-tight text-ink">{headerTitle}</h2>
+              <p className="mt-1.5 max-w-[46ch] text-[13px] leading-relaxed text-muted">{headerSub}</p>
             </div>
           )}
 
           {isSuccess ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-4 py-16 text-center">
-              <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-orbit-accent/30 bg-orbit-accent/10 text-orbit-accent">
+              <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
                 <CheckCircle2 size={26} className="animate-bounce" />
               </span>
-              <p className="font-subheading text-sm font-bold text-orbit-accent">
+              <p className="font-subheading text-sm font-bold text-accent">
                 {activeTab === "register" ? "Creating your account…" : "Signing you in…"}
               </p>
             </div>
@@ -693,7 +693,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                 </div>
               )}
               <div className="space-y-1.5">
-                <label className="block text-[11px] uppercase font-subheading tracking-wider text-orbit-gray-text">
+                <label className="block text-[11px] uppercase font-subheading tracking-wider text-muted">
                   Verification code
                 </label>
                 <input
@@ -702,20 +702,20 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value)}
                   placeholder="Enter 6-digit code"
-                  className="w-full rounded-xl border border-orbit-border/85 bg-orbit-bg px-4 py-3.5 text-center font-sans tracking-[0.4em] text-orbit-white outline-none transition-all focus:border-orbit-accent focus:ring-2 focus:ring-orbit-accent/15 tabular-nums"
+                  className="w-full rounded-xl border border-line/85 bg-ground px-4 py-3.5 text-center font-sans tracking-[0.4em] text-ink outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15 tabular-nums"
                   required
                 />
               </div>
               <button type="submit" disabled={isVerifying} className="orb-button w-full py-4 disabled:opacity-50 disabled:cursor-not-allowed">
                 {isVerifying ? (
-                  <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-orbit-bg/30 border-t-orbit-bg" />Verifying…</>
+                  <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-ground/30 border-t-ground" />Verifying…</>
                 ) : (<>Verify &amp; activate account <ArrowRight size={16} /></>)}
               </button>
               <div className="pt-1 text-center">
                 <button
                   type="button"
                   onClick={() => { setPendingVerification(false); setErrorMsg(null); }}
-                  className="cursor-pointer border-none bg-transparent text-xs font-semibold text-orbit-accent outline-none hover:underline"
+                  className="cursor-pointer border-none bg-transparent text-xs font-semibold text-accent outline-none hover:underline"
                 >
                   ← Back
                 </button>
@@ -751,17 +751,17 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                         <React.Fragment key={n}>
                           <div className="flex items-center gap-2">
                             <span className={`flex h-6 w-6 flex-none items-center justify-center rounded-full border text-[11px] font-bold tabular-nums transition-all ${
-                              active ? "border-orbit-accent bg-orbit-accent text-orbit-bg"
-                                : done ? "border-orbit-accent bg-orbit-accent/15 text-orbit-accent"
-                                : "border-orbit-border bg-white/[0.04] text-orbit-gray-text"
+                              active ? "border-accent bg-accent text-ground"
+                                : done ? "border-accent bg-accent/15 text-accent"
+                                : "border-line bg-white/[0.04] text-muted"
                             }`}>
                               {done ? <Check size={13} /> : n}
                             </span>
-                            <span className={`hidden text-[11px] font-semibold sm:block ${active ? "text-orbit-white" : "text-orbit-gray-text"}`}>
+                            <span className={`hidden text-[11px] font-semibold sm:block ${active ? "text-ink" : "text-muted"}`}>
                               {label}
                             </span>
                           </div>
-                          {i < 2 && <div className={`mx-2.5 h-0.5 flex-1 rounded-full transition-all ${regStep > n ? "bg-orbit-accent" : "bg-orbit-border"}`} />}
+                          {i < 2 && <div className={`mx-2.5 h-0.5 flex-1 rounded-full transition-all ${regStep > n ? "bg-accent" : "bg-line"}`} />}
                         </React.Fragment>
                       );
                     })}
@@ -786,7 +786,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                                   <span key={i} className={`h-1 flex-1 rounded-full transition-colors ${pwBarColor(i, pw.score)}`} />
                                 ))}
                               </div>
-                              <div className="mt-1.5 flex justify-between text-[11px] text-orbit-gray-text">
+                              <div className="mt-1.5 flex justify-between text-[11px] text-muted">
                                 <span>Password strength</span>
                                 <span className={`font-semibold ${pwTextColor(pw.score)}`}>{pw.label}</span>
                               </div>
@@ -861,19 +861,19 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                         </SelectInput>
                       </div>
 
-                      <label htmlFor="chk-terms" className="mt-1 flex cursor-pointer select-none items-start gap-2.5 text-xs leading-tight text-orbit-gray-text">
+                      <label htmlFor="chk-terms" className="mt-1 flex cursor-pointer select-none items-start gap-2.5 text-xs leading-tight text-muted">
                         <input
                           type="checkbox"
                           id="chk-terms"
                           checked={checkedTerms}
                           onChange={(e) => setCheckedTerms(e.target.checked)}
-                          className="mt-0.5 h-4 w-4 accent-orbit-accent"
+                          className="mt-0.5 h-4 w-4 accent-accent"
                         />
                         <span>
                           I accept the{" "}
-                          <button type="button" onClick={() => onNavigate("terms")} className="text-orbit-accent hover:underline">Terms of Service</button>
+                          <button type="button" onClick={() => onNavigate("terms")} className="text-accent hover:underline">Terms of Service</button>
                           {" "}and{" "}
-                          <button type="button" onClick={() => onNavigate("privacy")} className="text-orbit-accent hover:underline">Privacy Policy</button>.
+                          <button type="button" onClick={() => onNavigate("privacy")} className="text-accent hover:underline">Privacy Policy</button>.
                         </span>
                       </label>
 
@@ -887,11 +887,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                         </button>
                         <button type="submit" disabled={isSubmitting} className="orb-button flex-1 py-4 disabled:opacity-50 disabled:cursor-not-allowed">
                           {isSubmitting ? (
-                            <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-orbit-bg/30 border-t-orbit-bg" />Creating…</>
+                            <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-ground/30 border-t-ground" />Creating…</>
                           ) : (<>Create account <ArrowRight size={16} /></>)}
                         </button>
                       </div>
-                      <p className="text-center text-[11px] leading-tight text-orbit-gray-text">
+                      <p className="text-center text-[11px] leading-tight text-muted">
                         A 6-digit code will confirm your email next.
                       </p>
                     </div>
@@ -902,9 +902,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                     <>
                       <Divider />
                       <GoogleButton onClick={handleGoogleSignIn} />
-                      <div className="pt-1 text-center text-xs text-orbit-gray-text">
+                      <div className="pt-1 text-center text-xs text-muted">
                         Already have an account?{" "}
-                        <button type="button" onClick={() => switchTab("login")} className="font-semibold text-orbit-accent hover:underline">
+                        <button type="button" onClick={() => switchTab("login")} className="font-semibold text-accent hover:underline">
                           Sign in
                         </button>
                       </div>
@@ -921,21 +921,21 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                       <button type="button" disabled={forgotLoading} onClick={handleForgotPasswordRequest}
                         className="orb-button w-full py-4 disabled:opacity-50 disabled:cursor-not-allowed">
                         {forgotLoading ? (
-                          <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-orbit-bg/30 border-t-orbit-bg" />Processing…</>
+                          <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-ground/30 border-t-ground" />Processing…</>
                         ) : (<>Send reset code <ArrowRight size={16} /></>)}
                       </button>
                     </>
                   ) : (
                     <>
                       <div className="space-y-1.5">
-                        <label className="block text-[11px] uppercase font-subheading tracking-wider text-orbit-gray-text">Reset code</label>
+                        <label className="block text-[11px] uppercase font-subheading tracking-wider text-muted">Reset code</label>
                         <input
                           type="text"
                           inputMode="numeric"
                           value={resetCode}
                           onChange={(e) => setResetCode(e.target.value)}
                           placeholder="Enter 6-digit code"
-                          className="w-full rounded-xl border border-orbit-border/85 bg-orbit-bg px-4 py-3.5 text-center font-sans tracking-[0.4em] text-orbit-white outline-none transition-all focus:border-orbit-accent focus:ring-2 focus:ring-orbit-accent/15 tabular-nums"
+                          className="w-full rounded-xl border border-line/85 bg-ground px-4 py-3.5 text-center font-sans tracking-[0.4em] text-ink outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15 tabular-nums"
                           required
                         />
                       </div>
@@ -944,7 +944,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                       <button type="button" disabled={forgotLoading} onClick={handleForgotPasswordReset}
                         className="orb-button w-full py-4 disabled:opacity-50 disabled:cursor-not-allowed">
                         {forgotLoading ? (
-                          <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-orbit-bg/30 border-t-orbit-bg" />Resetting…</>
+                          <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-ground/30 border-t-ground" />Resetting…</>
                         ) : (<>Reset password &amp; sign in <ArrowRight size={16} /></>)}
                       </button>
                     </>
@@ -953,7 +953,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                     <button
                       type="button"
                       onClick={() => { setShowForgotPassword(false); setForgotStep("request"); setErrorMsg(null); setSuccessMsg(null); }}
-                      className="cursor-pointer border-none bg-transparent text-xs font-semibold text-orbit-accent outline-none hover:underline"
+                      className="cursor-pointer border-none bg-transparent text-xs font-semibold text-accent outline-none hover:underline"
                     >
                       ← Return to sign in
                     </button>
@@ -970,7 +970,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                       <button
                         type="button"
                         onClick={() => { setShowForgotPassword(true); setErrorMsg(null); setSuccessMsg(null); }}
-                        className="cursor-pointer border-none bg-transparent text-[11px] font-semibold text-orbit-accent outline-none hover:underline"
+                        className="cursor-pointer border-none bg-transparent text-[11px] font-semibold text-accent outline-none hover:underline"
                       >
                         Forgot password?
                       </button>
@@ -983,9 +983,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                   <Divider />
                   <GoogleButton onClick={handleGoogleSignIn} />
 
-                  <div className="pt-1 text-center text-xs text-orbit-gray-text">
+                  <div className="pt-1 text-center text-xs text-muted">
                     Don't have an account yet?{" "}
-                    <button type="button" onClick={() => switchTab("register")} className="font-semibold text-orbit-accent hover:underline">
+                    <button type="button" onClick={() => switchTab("register")} className="font-semibold text-accent hover:underline">
                       Register now
                     </button>
                   </div>
@@ -995,8 +995,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
           )}
 
           {/* Support signpost */}
-          <div className="mt-auto pt-8 text-center text-[11px] text-orbit-gray-text">
-            Need assistance? <a href={`mailto:${appSettings.supportEmail}`} className="text-orbit-accent hover:underline">Contact support</a>
+          <div className="mt-auto pt-8 text-center text-[11px] text-muted">
+            Need assistance? <a href={`mailto:${appSettings.supportEmail}`} className="text-accent hover:underline">Contact support</a>
           </div>
 
         </section>

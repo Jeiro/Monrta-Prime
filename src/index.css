@@ -1,28 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────
+   Moneta Prime design tokens
+
+   Ground rules:
+   - One accent (--color-accent). It marks primary CTAs, active
+     states, focus rings and the single most important number on
+     a screen. Nothing else.
+   - positive/negative are SEMANTIC, not decorative: they mean
+     market direction and approve/reject. Never use them for
+     emphasis, and never use the accent for outcome.
+   - Depth comes from the ground → panel → surface → raised
+     steps plus hairline borders, not from drop shadows.
+   ───────────────────────────────────────────────────────────── */
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-subheading: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-data: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  --font-brand: "Outfit", "Space Grotesk", "Plus Jakarta Sans", sans-serif;
-  --font-bybit: "IBM Plex Sans", "Inter", sans-serif;
-  
-  --color-orbit-bg: #0B0E11; /* Bybit signature background */
-  --color-orbit-card: #14181F; /* Bybit modular card */
-  --color-orbit-darkcard: #12161A; /* Bybit content panel background */
-  --color-orbit-accent: #FFB11A; /* Bybit primary brand yellow-gold */
-  --color-orbit-accent-hover: #E39C12;
-  --color-orbit-white: #FFFFFF; /* High-contrast white */
-  --color-orbit-gray-text: #848E9C; /* Bybit signature secondary text gray */
-  --color-orbit-border: #2B3139; /* Bybit subtle border contrast */
-  --color-orbit-green: #0ECB81; /* Success trade green */
-  --color-orbit-red: #F6465D; /* Danger bearish red */
+  /* Display: brand moments only — wordmark, hero, section openers. */
+  --font-display: "Instrument Serif", "Noto Serif", Georgia, serif;
+  /* Working UI. Plex Sans has genuine tabular figures. */
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-subheading: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  /* Balances, ledgers, tickers — anything where digits must align. */
+  --font-data: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-data--font-feature-settings: "tnum";
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-mono--font-feature-settings: "tnum";
+
+  /* Surfaces, darkest to lightest */
+  --color-ground: #0B0C0F;
+  --color-panel: #0F1115;
+  --color-surface: #131519;
+  --color-raised: #1B1E24;
+  --color-line: #262A32;
+
+  /* Cool-grey text scale — carries most of the UI */
+  --color-ink: #E9EBEF;
+  --color-muted: #949BA9;
+  --color-faint: #5C636F;
+
+  /* The one accent. 7.9:1 on --color-ground. */
+  --color-accent: #6AA5FF;
+  --color-accent-hover: #8ABAFF;
+  --color-accent-deep: #3D7DFF;
+  --color-accent-soft: #17202E;
+  --color-accent-line: #263752;
+
+  /* Semantic only */
+  --color-positive: #0ECB81;
+  --color-negative: #F6465D;
 }
 
-/* Base resets & custom global styles */
 @layer base {
   html, body {
     margin: 0;
@@ -35,13 +62,15 @@
   }
 
   body {
-    background-color: var(--color-orbit-bg);
+    background-color: var(--color-ground);
+    /* Two barely-there accent washes. Restraint is the point: at 5%/3%
+       they read as depth, not as a coloured background. */
     background-image:
-      radial-gradient(circle at top left, rgba(255, 177, 26, 0.10), transparent 28%),
-      radial-gradient(circle at bottom right, rgba(255, 177, 26, 0.06), transparent 24%),
-      linear-gradient(135deg, rgba(8, 10, 14, 0.95), rgba(11, 14, 17, 1));
+      radial-gradient(circle at top left, rgba(106, 165, 255, 0.05), transparent 30%),
+      radial-gradient(circle at bottom right, rgba(106, 165, 255, 0.03), transparent 26%),
+      linear-gradient(135deg, rgba(8, 9, 12, 0.95), rgba(11, 12, 15, 1));
     background-attachment: fixed;
-    color: var(--color-orbit-white);
+    color: var(--color-ink);
     font-family: var(--font-sans);
     touch-action: manipulation; /* Prevents double-tap zooming */
   }
@@ -52,12 +81,12 @@
   }
 
   ::selection {
-    background-color: rgba(255, 177, 26, 0.35);
+    background-color: rgba(106, 165, 255, 0.30);
     color: #fff;
   }
 
   :focus-visible {
-    outline: 2px solid rgba(255, 177, 26, 0.7);
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
   }
 
@@ -66,66 +95,43 @@
   }
 }
 
-/* Custom premium scrollbar */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B0E11;
+  background: var(--color-ground);
 }
 ::-webkit-scrollbar-thumb {
-  background: #2B3139;
+  background: var(--color-line);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-orbit-accent);
+  background: var(--color-accent);
 }
 
-/* Glow effects & micro-interactions */
-.gold-glow {
-  box-shadow: 0 0 15px rgba(255, 177, 26, 0.15);
-}
-.gold-glow-hover:hover {
-  box-shadow: 0 0 25px rgba(255, 177, 26, 0.35);
-  border-color: var(--color-orbit-accent);
-}
-.glass-panel {
-  background: rgba(15, 19, 28, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
+/* ── Legacy composite classes ──────────────────────────────────
+   Retained and restyled so existing pages pick up the new system
+   immediately. New work should use the primitives in
+   src/components/ui/ instead; these get retired in Phase 3 as each
+   page is rebuilt. */
 
 .orb-panel {
-  @apply rounded-[28px] border border-orbit-border/70 bg-gradient-to-br from-[#12161D] via-[#0D1014] to-[#090B10] shadow-[0_25px_90px_rgba(0,0,0,0.40)];
-}
-
-.orb-card-hover {
-  @apply transition-all duration-300 hover:-translate-y-1 hover:border-orbit-accent/60 hover:shadow-[0_18px_45px_rgba(255,177,26,0.12)];
-}
-
-.orb-input {
-  @apply w-full rounded-2xl border border-orbit-border/70 bg-[#0D1014]/90 px-4 py-3 text-sm text-orbit-white shadow-inner shadow-black/20 transition-all duration-200 placeholder:text-zinc-500 focus:border-orbit-accent focus:ring-2 focus:ring-orbit-accent/20;
+  @apply rounded-2xl border border-line/70 bg-gradient-to-br from-surface via-panel to-ground shadow-[0_20px_60px_rgba(0,0,0,0.35)];
 }
 
 .orb-button {
-  @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orbit-accent to-[#FF7F00] px-5 py-3 font-semibold text-orbit-bg shadow-lg shadow-orbit-accent/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-orbit-accent/30;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-3 font-semibold text-ground transition-colors duration-200 hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 }
 
 .orb-button-secondary {
-  @apply inline-flex items-center justify-center gap-2 rounded-2xl border border-orbit-border/70 bg-[#11151B]/80 px-5 py-3 font-semibold text-orbit-white transition-all duration-200 hover:border-orbit-accent/60 hover:text-orbit-accent;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-transparent px-5 py-3 font-semibold text-muted transition-colors duration-200 hover:border-faint hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 }
-
 
 @media (max-width: 767px) {
   body {
     background-attachment: scroll;
-  }
-
-  .orb-card-hover:hover,
-  .orb-button:hover,
-  .orb-button-secondary:hover {
-    transform: none;
   }
 }
 
@@ -139,6 +145,7 @@
     transition-duration: 0.01ms !important;
   }
 }
+
 /* Push Tawk.to chat bubble above mobile bottom nav */
 @media (max-width: 639px) {
   iframe[title="chat widget"],
@@ -149,4 +156,3 @@
     margin-bottom: 0 !important;
   }
 }
-
