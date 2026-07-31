@@ -31,7 +31,10 @@ export const DashboardAdmin: React.FC = () => {
   const { walletFeedback, adminTransactions, supportTickets } = useApp();
 
   // Role-based admin authentication — backed by Clerk + Supabase.
-  const { isLoggedIn: userIsLoggedIn, isAdmin: userIsAdmin } = useCurrentUser();
+  // isReady matters: until the Supabase role has resolved, isAdmin is false
+  // simply because it is not known yet. Treating that as "denied" is what
+  // made this page flash "Access Denied" before every admin load.
+  const { isLoggedIn: userIsLoggedIn, isAdmin: userIsAdmin, isReady } = useCurrentUser();
   const isAdminAuthenticated = userIsLoggedIn && userIsAdmin;
 
   const [activeTab, setActiveTab] = useState<
@@ -45,11 +48,20 @@ export const DashboardAdmin: React.FC = () => {
   const openTickets = supportTickets.filter(t => t.status === "open").length;
   const newWalletFeedbackCount = (walletFeedback || []).filter(fb => fb.status === "new").length;
 
+  // Role still resolving — hold, don't accuse.
+  if (!isReady) {
+    return (
+      <div className="min-h-screen bg-ground flex items-center justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-line border-t-accent" />
+      </div>
+    );
+  }
+
   if (!isAdminAuthenticated) {
     return (
       <div className="min-h-screen bg-ground flex items-center justify-center font-sans">
         <div className="text-center space-y-4">
-          <ShieldAlert size={48} className="text-red-500 mx-auto" />
+          <ShieldAlert size={48} className="text-negative mx-auto" />
           <h1 className="text-2xl font-bold text-ink font-heading">Access Denied</h1>
           <p className="text-muted">You do not have administrative privileges.</p>
           <button onClick={() => window.location.assign("/")} className="text-accent hover:underline font-bold text-sm">
