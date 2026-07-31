@@ -6,10 +6,10 @@ import { useEffect } from "react";
 // own, relevant metadata (and shared links render properly). It upserts the
 // SAME tags index.html declares, so there are never duplicates.
 
-const SITE_URL = "https://orbitriotrades.com";
+const SITE_URL = "https://PLACEHOLDER-DOMAIN.example";
 // 1200x630 social preview image. Drop the real asset at public/og-image.png.
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
-const SITE_NAME = "Orbitrio Trades";
+const SITE_NAME = "Moneta Prime";
 
 export interface SeoOptions {
   title: string;

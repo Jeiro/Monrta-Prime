@@ -24,7 +24,7 @@ const blankForm = (): CampaignForm => ({
   claimLimit: "",
   startDate: new Date().toISOString().split("T")[0],
   endDate: "",
-  eligibility: "All verified Orbitrio members",
+  eligibility: "All verified Moneta Prime members",
   description: "",
   enabled: true
 });
@@ -109,7 +109,7 @@ export const AdminAirdropsTab: React.FC = () => {
       claimLimit: airdrop.claimLimit?.toString() || "",
       startDate: airdrop.startDate || new Date().toISOString().split("T")[0],
       endDate: airdrop.endDate || "",
-      eligibility: airdrop.eligibility || "All verified Orbitrio members",
+      eligibility: airdrop.eligibility || "All verified Moneta Prime members",
       description: airdrop.description || "",
       enabled: airdrop.enabled !== false && airdrop.status !== "disabled"
     });

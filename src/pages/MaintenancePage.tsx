@@ -12,7 +12,7 @@ export const MaintenancePage: React.FC = () => {
         </div>
 
         <h1 className="mt-8 text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
-          Orbitrio is temporarily offline for improvements.
+          Moneta Prime is temporarily offline for improvements.
         </h1>
 
         <p className="mt-6 text-base sm:text-lg leading-8 text-slate-300">

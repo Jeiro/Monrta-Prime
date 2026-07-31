@@ -26,7 +26,7 @@ export const normalizeAirdrop = (airdrop: AirdropCampaignInput, fallbackId = tim
     claimLimit: airdrop.claimLimit && airdrop.claimLimit > 0 ? Math.floor(airdrop.claimLimit) : undefined,
     startDate: airdrop.startDate || todayIsoDate(),
     endDate: airdrop.endDate || "",
-    eligibility: airdrop.eligibility?.trim() || "All verified Orbitrio members",
+    eligibility: airdrop.eligibility?.trim() || "All verified Moneta Prime members",
     description: airdrop.description?.trim() || "",
     createdAt: airdrop.createdAt || now,
     updatedAt: now

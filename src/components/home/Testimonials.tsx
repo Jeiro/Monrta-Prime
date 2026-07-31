@@ -21,7 +21,7 @@ const TESTIMONIALS = [
   },
   {
     title: "Top-Tier Security",
-    text: "I feel completely safe with my assets on Orbitrio. The institutional-grade security combined with real-time execution makes it the best platform I've ever used.",
+    text: "I feel completely safe with my assets on Moneta Prime. The institutional-grade security combined with real-time execution makes it the best platform I've ever used.",
     name: "Daniel Okoye",
     initials: "DO",
     time: "1 week ago",
@@ -29,7 +29,7 @@ const TESTIMONIALS = [
   },
   {
     title: "Incredible Returns",
-    text: "The investment plans are transparent and the returns have been consistent. Orbitrio has exceeded my expectations as a professional trading platform.",
+    text: "The investment plans are transparent and the returns have been consistent. Moneta Prime has exceeded my expectations as a professional trading platform.",
     name: "Amara Obi",
     initials: "AO",
     time: "3 days ago",
@@ -37,7 +37,7 @@ const TESTIMONIALS = [
   },
   {
     title: "Fast & Professional",
-    text: "Withdrawals are processed quickly, the dashboard is intuitive, and the market data is always up to date. Orbitrio is the real deal for serious investors.",
+    text: "Withdrawals are processed quickly, the dashboard is intuitive, and the market data is always up to date. Moneta Prime is the real deal for serious investors.",
     name: "Kevin Brooks",
     initials: "KB",
     time: "1 week ago",

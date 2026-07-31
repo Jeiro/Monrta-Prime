@@ -1,4 +1,4 @@
-# Orbitrio Trades
+# Moneta Prime
 User-agent: *
 Allow: /$
 Allow: /markets
@@ -16,4 +16,4 @@ Disallow: /register
 Disallow: /sso-callback
 Disallow: /api/
 
-Sitemap: https://orbitriotrades.com/sitemap.xml
+Sitemap: https://PLACEHOLDER-DOMAIN.example/sitemap.xml

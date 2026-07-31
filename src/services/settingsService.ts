@@ -5,11 +5,11 @@ export const SETTINGS_DOC_PATH = "app_settings/business";
 export const SETTINGS_STORAGE_KEY = "orbitrio_app_settings";
 
 export const DEFAULT_APP_SETTINGS: AppSettings = {
-  companyName: "Orbitrio Trades",
-  supportEmail: "support@orbitriotrades.com",
+  companyName: "Moneta Prime",
+  supportEmail: "support@PLACEHOLDER-DOMAIN.example",
   supportPhone: "+1 (840) 234-4828",
   companyAddress: "2780 Candlelight Drive, La Porte, TX 77571, USA",
-  senderName: "Orbitrio Trades",
+  senderName: "Moneta Prime",
   replyToEmail: "",
   tawkPropertyId: "6a395d28c9a6011d42f66d6c",
   tawkWidgetId: "1jro17q8a"
@@ -22,7 +22,7 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
   dashboard_description: "Monitor positions, manage investments, and grow your assets with real-time insights.",
   investment_title: "Investment plans",
   investment_description: "Choose the right plan for your goals and start earning reliable returns today.",
-  footer_text: "© 2026 Orbitrio Trades. All rights reserved.",
+  footer_text: "© 2026 Moneta Prime. All rights reserved.",
   announcement_text: "Stay informed with the latest platform updates and market alerts.",
   faq_question_1: "How do I start investing?",
   faq_answer_1: "Sign up, verify your account, and choose a plan to begin funding your portfolio.",

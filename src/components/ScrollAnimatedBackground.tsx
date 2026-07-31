@@ -43,10 +43,10 @@ export const ScrollAnimatedBackground: React.FC = () => {
   }
   // Financial streams mock data for data waterfalls
   const dataColumns = [
-    ["BTC 94,820", "▲ 4.82%", "USDT TRC20", "TXN_7386", "ETH 3,450", "▲ 2.11%", "SOL 184.2", "SECURE", "orbitrio"],
+    ["BTC 94,820", "▲ 4.82%", "USDT TRC20", "TXN_7386", "ETH 3,450", "▲ 2.11%", "SOL 184.2", "SECURE", "moneta"],
     ["ETH 3,450", "▼ 1.05%", "GAS 12Gwei", "TXN_9912", "USDT ERC20", "ACTIVE", "BTC 94,820", "GOLD", "BL_0921"],
     ["ORBIT 4.50", "▲ 15.34%", "SWAP ACTIVE", "MKT_ORB_9", "BTC 94,820", "SOL 184.2", "▲ 7.42%", "USD_WIRE", "SECURE"],
-    ["SOL 184.2", "▲ 7.42%", "TRD_STB_2", "TXN_1120", "ETH 3,450", "▲ 2.11%", "MKT_EX", "USDT TRC20", "orbitrio"]
+    ["SOL 184.2", "▲ 7.42%", "TRD_STB_2", "TXN_1120", "ETH 3,450", "▲ 2.11%", "MKT_EX", "USDT TRC20", "moneta"]
   ];
 
   return (

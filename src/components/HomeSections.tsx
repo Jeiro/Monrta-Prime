@@ -1,7 +1,7 @@
 export { TradeFeaturesChart as TradeFeatures } from './charts/TradeFeaturesChart';
 export { ZeroPercentLoopCard } from './home/ZeroPercentLoopCard';
 export { InvestmentPlansSection } from './home/InvestmentPlansSection';
-export { WhyOrbitrio } from './home/WhyOrbitrio';
+export { WhyMonetaPrime } from './home/WhyMonetaPrime';
 export { Confidence } from './home/Confidence';
 export { HomeVideos } from './home/HomeVideos';
 export { AboutUs } from './home/AboutUs';

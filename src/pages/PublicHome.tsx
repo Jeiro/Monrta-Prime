@@ -17,7 +17,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { TradeFeatures, InvestmentPlansSection, WhyOrbitrio, Confidence, AboutUs, GetStarted, Footer, Testimonials, HomeVideos } from "../components/HomeSections";
+import { TradeFeatures, InvestmentPlansSection, WhyMonetaPrime, Confidence, AboutUs, GetStarted, Footer, Testimonials, HomeVideos } from "../components/HomeSections";
 
 // Micro-animation variants for staggering cards
 const containerVariants = {
@@ -50,7 +50,7 @@ const REVIEWS = [
     country: "Singapore",
     rating: 5,
     title: "Institutional execution speeds",
-    text: "The latency on order routing is virtually zero. Orbitrio's focus on dark mode visuals, combined with robust performance and responsive state machines, makes it my primary terminal.",
+    text: "The latency on order routing is virtually zero. Moneta Prime's focus on dark mode visuals, combined with robust performance and responsive state machines, makes it my primary terminal.",
     avatar: "MK"
   },
   {
@@ -81,8 +81,8 @@ const REVIEWS = [
 
 export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ onNavigate }) => {
   useSeo({
-    title: "Orbitrio Trades — Crypto Trading, Copy Trading & Investment Plans",
-    description: "Trade crypto with precision on Orbitrio Trades. Real-time markets, tiered investment plans, and copy trading in one workspace built for serious traders.",
+    title: "Moneta Prime — Crypto Trading, Copy Trading & Investment Plans",
+    description: "Trade crypto with precision on Moneta Prime. Real-time markets, tiered investment plans, and copy trading in one workspace built for serious traders.",
     path: "/",
   });
   const { marketCrypto, marketStocks, user } = useOrbit();
@@ -218,7 +218,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
             {/* Ambient gold starfields glow */}
             <div className="absolute w-56 h-56 bg-[#F7931A]/10 rounded-full blur-[60px]" />
             
-            {/* Central Orbitrio Logo Brand Core */}
+            {/* Central Moneta Prime Logo Brand Core */}
             <div className="absolute w-[180px] h-[180px] rounded-full bg-transparent border-2 border-[#F7931A]/20 flex flex-col items-center justify-center z-30 shadow-[0_0_50px_rgba(247,147,26,0.15)]">
               <svg className="w-[52px] h-[52px] transform hover:rotate-12 transition-transform duration-500 filter drop-shadow-[0_4px_16px_rgba(247,147,26,0.4)]" viewBox="0 0 100 100">
                 <defs>
@@ -360,7 +360,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
 
       <TradeFeatures onNavigate={onNavigate} />
       <InvestmentPlansSection onNavigate={onNavigate} />
-      <WhyOrbitrio />
+      <WhyMonetaPrime />
       <HomeVideos />
       <Confidence />
       <Testimonials />

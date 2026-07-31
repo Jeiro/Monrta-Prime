@@ -1,5 +1,5 @@
 // Generates public/og-image.png (1200x630 social card) and public/favicon.ico
-// from the Orbitrio Trades brand mark. Run: node scripts/generate-brand-assets.mjs
+// from the Moneta Prime brand mark. Run: node scripts/generate-brand-assets.mjs
 // Requires the dev dependency `sharp`.
 import sharp from "sharp";
 import { writeFileSync, existsSync } from "node:fs";
@@ -64,7 +64,7 @@ const ogSvg = `<?xml version="1.0" encoding="UTF-8"?>
 
   <!-- Wordmark -->
   <text x="600" y="380" text-anchor="middle" font-family="${FONT}" font-size="86" font-weight="800" letter-spacing="-1">
-    <tspan fill="#FFFFFF">Orbitrio</tspan><tspan fill="#FFB11A" dx="26">Trades</tspan>
+    <tspan fill="#FFFFFF">Moneta Prime</tspan><tspan fill="#FFB11A" dx="26">Trades</tspan>
   </text>
 
   <!-- Tagline -->
@@ -74,7 +74,7 @@ const ogSvg = `<?xml version="1.0" encoding="UTF-8"?>
 
   <!-- Domain -->
   <text x="600" y="552" text-anchor="middle" font-family="${FONT}" font-size="30" font-weight="700" letter-spacing="1" fill="#FFB11A">
-    orbitriotrades.com
+    PLACEHOLDER-DOMAIN.example
   </text>
 </svg>`;
 

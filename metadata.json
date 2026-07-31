@@ -1,5 +1,5 @@
 {
-  "name": "Orbitrio",
+  "name": "Moneta Prime",
   "description": "crypto and stock trading platform featuring real-time market data, live TradingView charts, professional copy trading, curated investment tiers, and a server-backed Gemini AI advisory assistant.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

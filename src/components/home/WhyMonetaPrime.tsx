@@ -4,7 +4,7 @@ import { Zap, Shield, ShieldCheck, BarChart3, Lock, Globe, Layers, Target, Users
 import { useOrbit } from '../../context/OrbitContext';
 
 // Section 2: Why Choose (Platform Trust Section redesigned based on User Request with gold orange theme and container-less sleekness)
-export const WhyOrbitrio = () => {
+export const WhyMonetaPrime = () => {
   const stats = [
     { value: "6,000+", label: "Active Investors", icon: Users, colorClass: "text-indigo-400 bg-indigo-500/5 border-indigo-500/10" },
     { value: "$600M+", label: "Profits Generated", icon: TrendingUp, colorClass: "text-emerald-400 bg-emerald-500/5 border-emerald-500/10" },
@@ -22,7 +22,7 @@ export const WhyOrbitrio = () => {
   const brands = ["Bloomberg", "Forbes", "Reuters", "CoinDesk", "TechCrunch"];
 
   return (
-    <section className="pt-10 pb-12 px-4 bg-[#0B0E11]/20 border-t border-[#2B3139]/5 overflow-hidden" id="why-orbitrio">
+    <section className="pt-10 pb-12 px-4 bg-[#0B0E11]/20 border-t border-[#2B3139]/5 overflow-hidden" id="why-moneta-prime">
       <div className="max-w-7xl mx-auto">
         
         {/* Header content with TRUSTED WORLDWIDE badge */}

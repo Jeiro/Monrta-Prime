@@ -9,7 +9,7 @@ declare global {
 }
 
 const removeTawkScript = () => {
-  document.querySelectorAll('script[data-orbitrio-tawk="true"]').forEach(script => script.remove());
+  document.querySelectorAll('script[data-moneta-prime-tawk="true"]').forEach(script => script.remove());
 };
 
 export const TawkChat: React.FC = () => {
@@ -41,7 +41,7 @@ export const TawkChat: React.FC = () => {
     script.src = `https://embed.tawk.to/${propertyId}/${widgetId}`;
     script.charset = "UTF-8";
     script.setAttribute("crossorigin", "*");
-    script.setAttribute("data-orbitrio-tawk", "true");
+    script.setAttribute("data-moneta-prime-tawk", "true");
 
     if (firstScript?.parentNode) {
       firstScript.parentNode.insertBefore(script, firstScript);

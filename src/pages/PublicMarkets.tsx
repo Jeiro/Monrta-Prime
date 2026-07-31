@@ -9,8 +9,8 @@ interface PublicMarketsProps {
 
 export const PublicMarkets: React.FC<PublicMarketsProps> = ({ onNavigate }) => {
   useSeo({
-    title: "Live Crypto & Stock Markets — Real-Time Prices | Orbitrio Trades",
-    description: "Track real-time cryptocurrency and stock prices, 24h changes, and volume on Orbitrio Trades. Live market data to inform every trade.",
+    title: "Live Crypto & Stock Markets — Real-Time Prices | Moneta Prime",
+    description: "Track real-time cryptocurrency and stock prices, 24h changes, and volume on Moneta Prime. Live market data to inform every trade.",
     path: "/markets",
   });
   const { marketCrypto, marketStocks, isLoadingMarkets } = useOrbit();

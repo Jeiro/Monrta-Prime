@@ -1,4 +1,4 @@
-# Orbitrio
+# Moneta Prime
 
 A trading / investment platform web app: user dashboard, investment plans with maturity payouts, copy trading, crypto deposit/withdrawal, portfolio trading, airdrop claims, KYC, support tickets, notifications, and a full admin console.
 
@@ -75,4 +75,4 @@ server.ts                    Express server (dev + prod) + /api routes
 
 - Switch Clerk from **development** to **production** keys.
 - Set `VITE_LOCAL_DEV`, `VITE_USE_MOCK_DATA`, `VITE_MAINTENANCE_MODE` to `false` in the production environment.
-- Ensure `RESEND_FROM_EMAIL` is a verified domain sender and `ORBITRIO_ALLOWED_ORIGINS` lists your real origin(s).
+- Ensure `RESEND_FROM_EMAIL` is a verified domain sender and `MONETA_PRIME_ALLOWED_ORIGINS` lists your real origin(s).

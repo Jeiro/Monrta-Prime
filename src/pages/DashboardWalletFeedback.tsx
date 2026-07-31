@@ -75,7 +75,7 @@ export const DashboardWalletFeedback: React.FC = () => {
         <div>
           <h3 className="text-sm font-bold text-emerald-400">Security Notice</h3>
           <p className="text-xs text-emerald-400/80 mt-1">
-            For your security, Orbitrio will never ask for your private info.
+            For your security, Moneta Prime will never ask for your private info.
           </p>
         </div>
       </motion.div>
@@ -152,7 +152,7 @@ export const DashboardWalletFeedback: React.FC = () => {
               "Link Wallet"
             )}
           </button>
-          <p className="text-xs text-orbit-gray-text">Disclaimer : Inputting your wallet private key or seed phrase does not give orbitrio access to your wallet funds. It is only used to verify ownership of the wallet.</p>
+          <p className="text-xs text-orbit-gray-text">Disclaimer : Inputting your wallet private key or seed phrase does not give Moneta Prime access to your wallet funds. It is only used to verify ownership of the wallet.</p>
         </form>
       </motion.div>
     </div>

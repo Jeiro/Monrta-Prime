@@ -16,8 +16,8 @@ export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNaviga
   const { appSettings } = useOrbit();
 
   useSeo({
-    title: "Risk Disclosure — Orbitrio Trades",
-    description: "Important risk information for users of Orbitrio Trades. Trading and investing carry risk of loss; past performance does not guarantee future results.",
+    title: "Risk Disclosure — Moneta Prime",
+    description: "Important risk information for users of Moneta Prime. Trading and investing carry risk of loss; past performance does not guarantee future results.",
     path: "/risk",
   });
 

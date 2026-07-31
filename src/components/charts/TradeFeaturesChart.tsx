@@ -164,7 +164,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
               Multi-Asset Investing
             </h2>
             <p className="text-slate-400 text-sm md:text-base max-w-xl leading-relaxed mx-auto md:mx-0">
-              Join a network of over 6,000 elite investors who rely on Orbitrio to automate their growth. Sync your portfolio with top-tier strategists and experience institutional-grade execution in real time.
+              Join a network of over 6,000 elite investors who rely on Moneta Prime to automate their growth. Sync your portfolio with top-tier strategists and experience institutional-grade execution in real time.
             </p>
           </div>
           <div className="flex items-center gap-4">

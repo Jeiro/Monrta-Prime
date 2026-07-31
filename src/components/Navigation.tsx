@@ -87,7 +87,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
             onClick={() => onNavigate(isLoggedIn ? "dashboard" : "home")}
             className="flex items-center gap-3 cursor-pointer group"
           >
-            {/* SVG high-fidelity Orbitrio brand replica */}
+            {/* SVG high-fidelity Moneta Prime brand replica */}
             <svg className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] transform group-hover:rotate-12 transition-transform duration-500 filter drop-shadow-[0_2px_8px_rgba(247,147,26,0.2)]" viewBox="0 0 100 100">
               <defs>
                 {/* Original Gold/Orange Gradient */}

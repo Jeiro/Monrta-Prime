@@ -45,15 +45,15 @@ export const AboutUs = () => (
             </svg>
         </div>
 
-        {/* Brand styled heading: lowercase 'orbitrio' with white/orange split, using the Bybit font layout */}
+        {/* Brand styled heading: lowercase 'moneta prime' with white/accent split, using the Bybit font layout */}
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-white tracking-tight leading-tight font-bybit mb-4">
-            About <span className="lowercase text-white">orbit<span className="text-[#FFB11A]">rio</span></span>
+            About <span className="lowercase text-white">moneta <span className="text-[#FFB11A]">prime</span></span>
         </h2>
         <p className="text-neutral-400 text-base md:text-lg max-w-2xl mx-auto mb-6 leading-relaxed font-sans">
-            <span className="lowercase text-white font-medium">orbit<span className="text-[#FFB11A]">rio</span></span> is a modern digital trading platform built to provide users with a secure, transparent, and efficient trading experience.
+            <span className="lowercase text-white font-medium">moneta <span className="text-[#FFB11A]">prime</span></span> is a modern digital trading platform built to provide users with a secure, transparent, and efficient trading experience.
         </p>
         <p className="text-neutral-400 text-sm sm:text-base max-w-3xl mx-auto mb-2 leading-relaxed font-sans">
-            Our mission is to make trading accessible and straightforward for everyone. By combining innovative technology with an intuitive interface, <span className="lowercase text-white font-medium">orbit<span className="text-[#FFB11A]">rio</span></span> empowers users to manage their investments confidently and stay connected to global financial markets. We focus on security, simplicity, and continuous innovation to create a platform that traders can rely on every day.
+            Our mission is to make trading accessible and straightforward for everyone. By combining innovative technology with an intuitive interface, <span className="lowercase text-white font-medium">moneta <span className="text-[#FFB11A]">prime</span></span> empowers users to manage their investments confidently and stay connected to global financial markets. We focus on security, simplicity, and continuous innovation to create a platform that traders can rely on every day.
         </p>
     </section>
 );

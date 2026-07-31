@@ -10,8 +10,8 @@ interface PublicCopyTradingProps {
 
 export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate }) => {
   useSeo({
-    title: "Copy Trading — Follow Top Traders | Orbitrio Trades",
-    description: "Automatically mirror the strategies of proven traders on Orbitrio Trades. Browse verified performance, allocate funds, and copy trades in real time.",
+    title: "Copy Trading — Follow Top Traders | Moneta Prime",
+    description: "Automatically mirror the strategies of proven traders on Moneta Prime. Browse verified performance, allocate funds, and copy trades in real time.",
     path: "/copy-trading",
   });
   const { traders, copyTrader, user, setInsufficientBalanceOpen } = useOrbit();

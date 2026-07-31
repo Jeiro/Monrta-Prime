@@ -195,7 +195,7 @@ async function startServer() {
 
   app.listen(PORT, "0.0.0.0", () => {
     if (process.env.NODE_ENV !== "production") {
-      console.info(`Orbitrio institutional platform listening at http://0.0.0.0:${PORT}`);
+      console.info(`Moneta Prime institutional platform listening at http://0.0.0.0:${PORT}`);
     }
   });
 }

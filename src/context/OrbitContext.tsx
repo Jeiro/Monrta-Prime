@@ -410,7 +410,7 @@ export const OrbitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [adminAuditLogs, setAdminAuditLogs] = useState<AuditLog[]>(() => {
     const saved = localStorage.getItem("orbitrio_audit_logs");
     return saved ? JSON.parse(saved) : [
-      { id: "log-1", action: "System Booted", details: "orbitrio financial core initialised on secured cluster nodes.", timestamp: "2026-06-19 00:01:00", email: "system", ip: "127.0.0.1", status: "success" },
+      { id: "log-1", action: "System Booted", details: "Moneta Prime financial core initialised on secured cluster nodes.", timestamp: "2026-06-19 00:01:00", email: "system", ip: "127.0.0.1", status: "success" },
       { id: "log-2", action: "Cold Storage Verified", details: "Multi-sig 10-layer physical vaults synchronised and validated.", timestamp: "2026-06-19 00:05:22", email: "sec-op", ip: "10.0.1.5", status: "success" }
     ];
   });
@@ -571,9 +571,9 @@ export const OrbitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [notifications, setNotifications] = useState<NotificationItem[]>(() => {
     const saved = localStorage.getItem("orbitrio_notifications");
     const fallback = [
-      buildNotification("Welcome to Orbitrio Crypto Hub! Verify security rules inside setting pane.", {
+      buildNotification("Welcome to Moneta Prime Crypto Hub! Verify security rules inside setting pane.", {
         id: "not-1",
-        title: "Welcome to Orbitrio",
+        title: "Welcome to Moneta Prime",
         type: "success"
       })
     ];
@@ -1376,7 +1376,7 @@ export const OrbitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
       // Auto simulated response
       setTimeout(() => {
-        replyToTicketAsSupport(ticketId, `Dear orbitrio Member, thank you for writing. Dynamic agent node assigned. We are actively auditing your ${category} logs. Please stand by.`)
+        replyToTicketAsSupport(ticketId, `Dear Moneta Prime Member, thank you for writing. Dynamic agent node assigned. We are actively auditing your ${category} logs. Please stand by.`)
           .catch(error => console.error("Failed to send ticket auto-response:", error));
       }, 4000);
     } catch (error) {

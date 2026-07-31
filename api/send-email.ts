@@ -29,7 +29,7 @@ const isAllowedOrigin = (req: VercelRequest) => {
   const host = getHeaderValue(req.headers["x-forwarded-host"]) || getHeaderValue(req.headers.host);
   const protocol = getHeaderValue(req.headers["x-forwarded-proto"]) || "https";
   const sameHostOrigin = host ? normalizeOrigin(`${protocol}://${host}`) : "";
-  const configuredOrigins = String(process.env.ORBITRIO_ALLOWED_ORIGINS || "")
+  const configuredOrigins = String(process.env.MONETA_PRIME_ALLOWED_ORIGINS || "")
     .split(",")
     .map(item => normalizeOrigin(item))
     .filter(Boolean);
@@ -374,10 +374,10 @@ const resolveEvent = (eventType: string, metadata: any) => {
 };
 
 function buildEmail(eventType: string, metadata: any = {}): { subject: string; html: string } {
-  const companyName = metadata.companyName || process.env.ORBITRIO_COMPANY_NAME || "Orbitrio Trades";
-  const supportEmail = metadata.supportEmail || process.env.ORBITRIO_SUPPORT_EMAIL || "support@orbitriotrades.com";
+  const companyName = metadata.companyName || process.env.MONETA_PRIME_COMPANY_NAME || "Moneta Prime";
+  const supportEmail = metadata.supportEmail || process.env.MONETA_PRIME_SUPPORT_EMAIL || "support@PLACEHOLDER-DOMAIN.example";
   const senderName = metadata.senderName || companyName;
-  const logoUrl = metadata.logoUrl || process.env.ORBITRIO_LOGO_URL || "";
+  const logoUrl = metadata.logoUrl || process.env.MONETA_PRIME_LOGO_URL || "";
   const greetingName = metadata.name || metadata.userName || "Trader";
   const event = resolveEvent(eventType, { ...metadata, companyName, supportEmail, senderName });
   const detailRows = buildDetails(event.details || []);

@@ -9,8 +9,8 @@ interface PublicPlansProps {
 
 export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
   useSeo({
-    title: "Investment Plans — Tiered Yields & Returns | Orbitrio Trades",
-    description: "Explore Orbitrio Trades investment plans across Bronze to Diamond tiers. Compare yields, durations, and expected returns, then start earning.",
+    title: "Investment Plans — Tiered Yields & Returns | Moneta Prime",
+    description: "Explore Moneta Prime investment plans across Bronze to Diamond tiers. Compare yields, durations, and expected returns, then start earning.",
     path: "/plans",
   });
   const { plans, user, siteContent } = useOrbit();
