@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useApp } from "../context/AppContext";
+import { getUID } from "../lib/format";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useClerk } from "@clerk/clerk-react";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
@@ -53,16 +54,6 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
     { id: "dashboard-settings", label: "Settings", icon: <Settings className="text-muted" size={14} /> }
   ];
 
-  const getUID = (email: string | null) => {
-    if (!email) return "0000000";
-    // Stable numeric UID derived from email hash (7 digits)
-    let hash = 0;
-    for (let i = 0; i < email.length; i++) {
-      hash = (email.charCodeAt(i) + ((hash << 5) - hash)) | 0;
-    }
-    const uid = Math.abs(hash) % 10000000;
-    return String(uid).padStart(7, "0");
-  };
 
   const handleAuthenticatedNav = (id: string) => {
     if (id === "dashboard-kyc" && user.kyc?.status === "approved") return;
@@ -80,7 +71,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
 
   return (
     <>
-      <nav role="navigation" aria-label="Main navigation" className="fixed top-0 left-0 right-0 w-full h-16 sm:h-20 bg-ground/95 backdrop-blur-md sm:bg-ground/85 sm:backdrop-blur-xl border-b border-line/80 z-50 shadow-[0_10px_40px_rgba(0,0,0,0.35)]">
+      <nav role="navigation" aria-label="Main navigation" className="fixed top-0 left-0 right-0 w-full h-16 sm:h-20 bg-ground border-b border-line/80 z-50 shadow-[0_10px_40px_rgba(0,0,0,0.35)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 lg:py-4 flex items-center justify-between">
 
           {/* Logo Brand Title (Upper Hemisphere Orange-Gold, Bottom Metallic White) */}
@@ -213,15 +204,6 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                       Admin
                     </button>
                   )}
-
-                  <div className="flex flex-col text-right">
-                    <span className="text-2xs font-mono text-ink font-bold leading-none">
-                      UID: {getUID(user.email)}
-                    </span>
-                    <span className="text-2xs text-muted font-mono mt-0.5 truncate max-w-[120px]" title={user.username || user.name || user.email || ""}>
-                      {user.username || user.name || user.email}
-                    </span>
-                  </div>
 
                   <button
                     onClick={() => { handleSignOut(); }}

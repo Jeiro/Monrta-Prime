@@ -41,3 +41,18 @@ export function formatRelative(value: string | number | Date | null | undefined)
   if (days === -1) return "yesterday";
   return days > 0 ? `in ${days} days` : `${Math.abs(days)} days ago`;
 }
+
+/**
+ * Stable numeric UID derived from the user's email (7 digits, zero-padded).
+ * Was defined independently in Navigation and DashboardOverview — one shared
+ * implementation so the two can never drift and show different UIDs.
+ */
+export function getUID(email: string | null): string {
+  if (!email) return "0000000";
+  let hash = 0;
+  for (let i = 0; i < email.length; i++) {
+    hash = (hash << 5) - hash + email.charCodeAt(i);
+    hash |= 0;
+  }
+  return String(Math.abs(hash) % 10_000_000).padStart(7, "0");
+}

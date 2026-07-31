@@ -23,7 +23,7 @@ import { motion } from "motion/react";
 import { DashboardEquityChart } from "../components/charts/DashboardEquityChart";
 import { UserAnnouncements } from "../components/announcements/UserAnnouncements";
 import { StatCard } from "../components/ui/StatCard";
-import { formatDate, formatDateTime } from "../lib/format";
+import { formatDate, formatDateTime, getUID } from "../lib/format";
 
 interface DashboardOverviewProps {
   onNavigate: (view: string) => void;
@@ -61,14 +61,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   };
   const [topUpAmount, setTopUpAmount] = useState<string>("");
 
-  const getUID = (email: string | null) => {
-    if (!email) return "0000000";
-    let hash = 0;
-    for (let i = 0; i < email.length; i++) {
-      hash = (email.charCodeAt(i) + ((hash << 5) - hash)) | 0;
-    }
-    return String(Math.abs(hash) % 10000000).padStart(7, "0");
-  };
 
   const uid = getUID(user.email);
 
