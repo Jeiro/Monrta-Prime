@@ -176,7 +176,7 @@ export const AdminInvestmentsTab: React.FC = () => {
       </div>
 
       {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center gap-2">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-positive/10 border border-positive/30 text-positive text-xs font-bold flex items-center gap-2">
           <Check size={14} /> {feedback}
         </motion.div>
       )}
@@ -221,7 +221,7 @@ export const AdminInvestmentsTab: React.FC = () => {
                 </div>
                 <p className="text-2xs text-muted mt-1">Order {plan.displayOrder}{plan.badge ? ` | ${plan.badge}` : ""}</p>
               </div>
-              <span className={`text-2xs font-bold px-2 py-0.5 rounded-full border ${plan.enabled ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" : "text-yellow-400 bg-yellow-500/10 border-yellow-500/30"}`}>
+              <span className={`text-2xs font-bold px-2 py-0.5 rounded-full border ${plan.enabled ? "text-positive bg-positive/10 border-positive/30" : "text-yellow-400 bg-yellow-500/10 border-yellow-500/30"}`}>
                 {plan.enabled ? "ENABLED" : "DISABLED"}
               </span>
             </div>
@@ -247,7 +247,7 @@ export const AdminInvestmentsTab: React.FC = () => {
                   } finally {
                     setIsSaving(false);
                   }
-                }} className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-2xs font-bold rounded-lg cursor-pointer border ${plan.enabled ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/20" : "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"}`}>
+                }} className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-2xs font-bold rounded-lg cursor-pointer border ${plan.enabled ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/20" : "bg-positive/10 border-positive/30 text-positive hover:bg-positive/20"}`}>
                 {plan.enabled ? <><Pause size={10} /> Disable</> : <><Play size={10} /> Enable</>}
               </button>
               <button onClick={async () => {
@@ -261,7 +261,7 @@ export const AdminInvestmentsTab: React.FC = () => {
                   } finally {
                     setIsSaving(false);
                   }
-                }} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-500/10 border border-red-500/30 text-red-400 text-2xs font-bold rounded-lg hover:bg-red-500/20 cursor-pointer"><Trash2 size={10} /></button>
+                }} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-negative/10 border border-negative/30 text-negative text-2xs font-bold rounded-lg hover:bg-negative/20 cursor-pointer"><Trash2 size={10} /></button>
             </div>
           </div>
         ))}

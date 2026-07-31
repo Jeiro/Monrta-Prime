@@ -91,7 +91,7 @@ export const DashboardKYC: React.FC = () => {
             <p className="text-xs text-muted mt-1">Submission date: {formatDate(currentKyc.submissionDate)}</p>
           </div>
           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border w-fit ${
-            currentKyc.status === "approved" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" :
+            currentKyc.status === "approved" ? "bg-positive/10 text-positive border-positive/30" :
             currentKyc.status === "pending" ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/30" :
             currentKyc.status === "rejected" ? "bg-negative/10 text-negative border-negative/30" :
             "bg-line/40 text-muted border-line"
@@ -107,7 +107,7 @@ export const DashboardKYC: React.FC = () => {
         </div>
 
         {currentKyc.status === "approved" && (
-          <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-sm text-emerald-400">
+          <div className="p-4 bg-positive/10 border border-positive/20 rounded-xl text-sm text-positive">
             Your identity profile is verified. Withdrawal access and verified-account features are enabled.
           </div>
         )}
@@ -147,7 +147,7 @@ export const DashboardKYC: React.FC = () => {
               </div>
             </div>
 
-            {submitError && <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-500 text-sm">{submitError}</div>}
+            {submitError && <div className="p-3 bg-negative/10 border border-negative/50 rounded-lg text-negative text-sm">{submitError}</div>}
 
             <button type="submit" disabled={isSubmitting} className="w-full bg-accent text-ground font-bold p-3 rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed">
               {isSubmitting ? "Submitting..." : currentKyc.status === "rejected" ? "Resubmit Verification" : "Submit Verification"}

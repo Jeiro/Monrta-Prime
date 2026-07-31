@@ -128,7 +128,7 @@ export const AdminWalletsTab: React.FC = () => {
       </div>
 
       {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center gap-2">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-positive/10 border border-positive/30 text-positive text-xs font-bold flex items-center gap-2">
           <Check size={14} /> {feedback}
         </motion.div>
       )}
@@ -186,7 +186,7 @@ export const AdminWalletsTab: React.FC = () => {
                 <div className="space-y-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <h3 className="text-sm font-bold text-ink">{getDepositWalletLabel(wallet)}</h3>
-                    <span className={`text-2xs px-2 py-0.5 rounded-full border ${wallet.enabled ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" : "border-negative/30 bg-negative/10 text-negative"}`}>
+                    <span className={`text-2xs px-2 py-0.5 rounded-full border ${wallet.enabled ? "border-positive/30 bg-positive/10 text-positive" : "border-negative/30 bg-negative/10 text-negative"}`}>
                       {wallet.enabled ? "Enabled" : "Disabled"}
                     </span>
                   </div>

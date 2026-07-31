@@ -137,7 +137,7 @@ export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNaviga
               {appSettings.supportEmail}
             </a>
           </p>
-          <p className="mt-6 text-sm text-zinc-500">
+          <p className="mt-6 text-sm text-faint">
             This risk disclosure is provided for general information and should be read together with our{" "}
             <button type="button" onClick={() => onNavigate("terms")} className="text-accent hover:underline">Terms of Service</button>
             {" "}and{" "}

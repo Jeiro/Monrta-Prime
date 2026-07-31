@@ -179,13 +179,13 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
           {/* Left: Beautiful spacious live chart panel */}
           <div className="lg:col-span-7 flex justify-center relative order-2 lg:order-1 w-full">
             <ScrollReveal>
-              <div className="relative w-full rounded-2xl border border-zinc-800/80 bg-ground p-5 sm:p-6 shadow-2xl flex flex-col group min-h-[460px]">
+              <div className="relative w-full rounded-2xl border border-line/80 bg-ground p-5 sm:p-6 shadow-2xl flex flex-col group min-h-[460px]">
                 
                 {/* Subtle Amber Accent Glow */}
                 <div className="absolute -inset-1 bg-gradient-to-tr from-accent/5 via-transparent to-transparent rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition-opacity" />
 
                 {/* Main Header inside Card */}
-                <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-800/60 pb-4 mb-4">
+                <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-line/60 pb-4 mb-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] animate-ping" />
@@ -201,14 +201,14 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                     <span className="text-2xs text-[#0ecb81] font-bold font-mono bg-[#0ecb81]/10 border border-[#0ecb81]/25 px-2.5 py-1 rounded">
                       +1.87%
                     </span>
-                    <span className="text-2xs font-mono text-zinc-500 bg-zinc-900 border border-zinc-800/80 px-2 py-1 rounded select-none uppercase">
+                    <span className="text-2xs font-mono text-faint bg-raised border border-line/80 px-2 py-1 rounded select-none uppercase">
                       Real-time Feed
                     </span>
                   </div>
                 </div>
 
                 {/* Interactive Candlestick Chart Widget Container */}
-                <div className="relative z-10 flex-1 bg-[#0b0e14] border border-zinc-850 rounded-xl overflow-hidden flex flex-col mb-5 min-h-[340px] shadow-inner">
+                <div className="relative z-10 flex-1 bg-[#0b0e14] border border-line rounded-xl overflow-hidden flex flex-col mb-5 min-h-[340px] shadow-inner">
                   <TradingViewWidget />
                 </div>
 
@@ -217,14 +217,14 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                   <button
                     type="button"
                     onClick={handleStartTrading}
-                    className="bg-[#0ecb81] hover:bg-[#0cb372] text-white font-extrabold text-xs uppercase tracking-wider py-3.5 px-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-lg shadow-[#0ecb81]/10 focus:outline-none"
+                    className="bg-[#0ecb81] hover:bg-[#0cb372] text-ink font-extrabold text-xs uppercase tracking-wider py-3.5 px-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-lg shadow-[#0ecb81]/10 focus:outline-none"
                   >
                     ↑ BUY BTC
                   </button>
                   <button
                     type="button"
                     onClick={handleStartTrading}
-                    className="bg-[#f6465d] hover:bg-[#e03f53] text-white font-extrabold text-xs uppercase tracking-wider py-3.5 px-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-lg shadow-[#f6465d]/10 focus:outline-none"
+                    className="bg-[#f6465d] hover:bg-[#e03f53] text-ink font-extrabold text-xs uppercase tracking-wider py-3.5 px-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-lg shadow-[#f6465d]/10 focus:outline-none"
                   >
                     ↓ SELL BTC
                   </button>
@@ -310,18 +310,18 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
               <div className="relative w-full max-w-[340px] aspect-square rounded-3xl bg-transparent flex items-center justify-center text-ink select-none">
                 
                 {/* Embedded Glowing background rings */}
-                <div className="absolute inset-0 rounded-full border border-zinc-800/40 scale-95" />
+                <div className="absolute inset-0 rounded-full border border-line/40 scale-95" />
                 <div className="absolute inset-0 rounded-full border border-accent/5 scale-105 blur-[1px]" />
                 
                 {/* Custom Vector Silver Chrome "0%" Graphic representing zero commissions */}
                 <motion.div
                   animate={{ rotateY: [0, 8, 0, -8, 0] }}
                   transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                  className="relative z-15 p-12 bg-zinc-950/40 rounded-full border border-zinc-800/40 shadow-2xl backdrop-blur-md flex items-center justify-center w-52 h-52 hover:scale-[1.05] transition-transform duration-500"
+                  className="relative z-15 p-12 bg-raised/40 rounded-full border border-line/40 shadow-2xl backdrop-blur-md flex items-center justify-center w-52 h-52 hover:scale-[1.05] transition-transform duration-500"
                 >
                   <div className="text-center">
-                    <span className="block text-2xs font-mono tracking-widest uppercase text-zinc-500">Makers Fee</span>
-                    <span className="block text-6xl font-black font-display tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-300 to-zinc-600">
+                    <span className="block text-2xs font-mono tracking-widest uppercase text-faint">Makers Fee</span>
+                    <span className="block text-6xl font-black font-display tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-ink via-muted to-faint">
                       0%
                     </span>
                     <span className="block text-2xs font-bold text-accent bg-accent/15 border border-accent/30 rounded-full py-0.5 px-2 mt-1 uppercase w-fit mx-auto">
@@ -342,7 +342,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                 >
                   {/* BTC Coin representation */}
                   <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-accent/15 to-accent/80 border border-accent flex items-center justify-center shadow-lg shadow-accent/10 backdrop-blur-sm">
-                    <span className="text-lg font-bold text-white">₿</span>
+                    <span className="text-lg font-bold text-ink">₿</span>
                   </div>
                 </motion.div>
 
@@ -357,7 +357,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                 >
                   {/* SOL / Custom purple coin */}
                   <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#9945FF]/10 to-[#14F195]/85 border border-[#9945FF] flex items-center justify-center shadow-lg shadow-[#14F195]/10 backdrop-blur-sm">
-                    <span className="text-xs font-bold text-white">S</span>
+                    <span className="text-xs font-bold text-ink">S</span>
                   </div>
                 </motion.div>
 
@@ -372,7 +372,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                 >
                   {/* ETH Purple Coin */}
                   <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#627eea]/15 to-[#627eea]/80 border border-[#627eea] flex items-center justify-center shadow-lg shadow-[#627eea]/10 backdrop-blur-sm">
-                    <span className="text-xs font-bold text-white">Ξ</span>
+                    <span className="text-xs font-bold text-ink">Ξ</span>
                   </div>
                 </motion.div>
 

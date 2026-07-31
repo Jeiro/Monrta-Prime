@@ -38,7 +38,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
           Price: ${payload[0].value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </p>
         {payload[1] && (
-          <p className="text-slate-400 text-xs mt-1">
+          <p className="text-muted text-xs mt-1">
             Vol: {Math.round(payload[1].value).toLocaleString()}
           </p>
         )}
@@ -159,12 +159,12 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent/10 border border-accent/30 text-accent mb-2">
               <Layers size={24} />
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-sans">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink tracking-tight font-sans">
               The Benchmark for Secure{" "}
               <br className="hidden sm:block" />
               Multi-Asset Investing
             </h2>
-            <p className="text-slate-400 text-sm md:text-base max-w-xl leading-relaxed mx-auto md:mx-0">
+            <p className="text-muted text-sm md:text-base max-w-xl leading-relaxed mx-auto md:mx-0">
               Join a network of over 6,000 elite investors who rely on Moneta Prime to automate their growth. Sync your portfolio with top-tier strategists and experience institutional-grade execution in real time.
             </p>
           </div>
@@ -193,9 +193,9 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
                   {selectedCoin.icon}
                 </div>
                 <div className="flex flex-col items-start">
-                  <span className="text-white font-bold text-sm leading-none">{selectedCoin.symbol}/USD</span>
+                  <span className="text-ink font-bold text-sm leading-none">{selectedCoin.symbol}/USD</span>
                 </div>
-                <ChevronDown size={14} className="text-slate-400" />
+                <ChevronDown size={14} className="text-muted" />
               </button>
 
               {dropdownOpen && (
@@ -210,8 +210,8 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
                         {coin.icon}
                       </div>
                       <div className="flex flex-col items-start">
-                        <span className="text-white font-bold text-sm">{coin.symbol}/USD</span>
-                        <span className="text-slate-400 text-xs">{coin.name}</span>
+                        <span className="text-ink font-bold text-sm">{coin.symbol}/USD</span>
+                        <span className="text-muted text-xs">{coin.name}</span>
                       </div>
                     </button>
                   ))}
@@ -226,17 +226,17 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
                   key={realtimePrice}
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`text-xl font-bold font-mono ${priceChangePercent >= 0 ? "text-emerald-400" : "text-rose-400"}`}
+                  className={`text-xl font-bold font-mono ${priceChangePercent >= 0 ? "text-positive" : "text-negative"}`}
                 >
                   {realtimePrice.toLocaleString(undefined, { minimumFractionDigits: selectedCoin.basePrice < 10 ? 4 : 2 })}
                 </motion.span>
-                <span className="text-2xs text-slate-500 font-mono tracking-widest uppercase">Current Price</span>
+                <span className="text-2xs text-faint font-mono tracking-widest uppercase">Current Price</span>
               </div>
               <div className="flex flex-col">
-                <span className={`text-sm font-bold font-mono ${priceChangePercent >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                <span className={`text-sm font-bold font-mono ${priceChangePercent >= 0 ? "text-positive" : "text-negative"}`}>
                   {priceChangePercent >= 0 ? "+" : ""}{priceChangeAbs} ({priceChangePercent}%)
                 </span>
-                <span className="text-2xs text-slate-500 font-mono tracking-widest uppercase">24h Change</span>
+                <span className="text-2xs text-faint font-mono tracking-widest uppercase">24h Change</span>
               </div>
             </div>
 
@@ -248,7 +248,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
                     key={tf}
                     onClick={() => setTimeframe(tf)}
                     className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
-                      timeframe === tf ? "bg-line text-white" : "text-slate-400 hover:text-white"
+                      timeframe === tf ? "bg-line text-ink" : "text-muted hover:text-ink"
                     }`}
                   >
                     {tf}
@@ -258,7 +258,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
               
               <button 
                 onClick={() => setChartType(prev => prev === "area" ? "line" : "area")}
-                className="p-2 bg-raised hover:bg-[#252A33] border border-line rounded-lg text-slate-400 hover:text-white transition-colors"
+                className="p-2 bg-raised hover:bg-[#252A33] border border-line rounded-lg text-muted hover:text-ink transition-colors"
                 title="Toggle Chart Type"
               >
                 <Activity size={16} />
@@ -266,7 +266,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
               
               <button 
                 onClick={() => setShowVolume(!showVolume)}
-                className={`p-2 border rounded-lg transition-colors ${showVolume ? "bg-accent/10 border-accent/30 text-accent" : "bg-raised border-line text-slate-400 hover:text-white"}`}
+                className={`p-2 border rounded-lg transition-colors ${showVolume ? "bg-accent/10 border-accent/30 text-accent" : "bg-raised border-line text-muted hover:text-ink"}`}
                 title="Toggle Volume"
               >
                 <BarChart3 size={16} />

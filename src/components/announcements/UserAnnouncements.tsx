@@ -6,7 +6,7 @@ import type { AnnouncementPriority } from "../../types";
 
 const priorityStyle: Record<AnnouncementPriority, { badge: string; border: string; icon: React.ReactNode }> = {
   Normal: {
-    badge: "bg-slate-500/10 text-slate-300 border-slate-500/30",
+    badge: "bg-surface/10 text-muted border-line/30",
     border: "border-line",
     icon: <Megaphone size={15} className="text-accent" />
   },
@@ -16,9 +16,9 @@ const priorityStyle: Record<AnnouncementPriority, { badge: string; border: strin
     icon: <AlertTriangle size={15} className="text-amber-300" />
   },
   Critical: {
-    badge: "bg-red-500/10 text-red-300 border-red-500/30",
-    border: "border-red-500/40",
-    icon: <AlertTriangle size={15} className="text-red-300" />
+    badge: "bg-negative/10 text-negative border-negative/30",
+    border: "border-negative/40",
+    icon: <AlertTriangle size={15} className="text-negative" />
   }
 };
 
@@ -66,7 +66,7 @@ export const UserAnnouncements: React.FC = () => {
                 <button
                   onClick={() => markAnnouncementRead(announcement.id)}
                   disabled={!unread}
-                  className={`shrink-0 p-2 rounded-lg border transition-colors ${unread ? "bg-ground border-line text-accent hover:bg-accent hover:text-ground" : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 cursor-default"}`}
+                  className={`shrink-0 p-2 rounded-lg border transition-colors ${unread ? "bg-ground border-line text-accent hover:bg-accent hover:text-ground" : "bg-positive/10 border-positive/20 text-positive cursor-default"}`}
                   title={unread ? "Mark as read" : "Read"}
                 >
                   <Check size={14} />

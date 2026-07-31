@@ -28,9 +28,9 @@ export const DashboardPlans: React.FC = () => {
       case "plan-gold":
         return <Crown size={18} className="text-[#eab308] shrink-0" />;
       case "plan-platinum":
-        return <Sparkles size={18} className="text-zinc-300 shrink-0" />;
+        return <Sparkles size={18} className="text-muted shrink-0" />;
       case "plan-diamond":
-        return <Gem size={18} className="text-cyan-200 shrink-0" />;
+        return <Gem size={18} className="text-accent shrink-0" />;
       default:
         return <Coins size={18} className="text-accent shrink-0" />;
     }
@@ -124,7 +124,7 @@ export const DashboardPlans: React.FC = () => {
                 isSelected 
                   ? "border-accent bg-accent/5 shadow-lg shadow-accent/10 scale-[1.01]" 
                   : "border-line bg-panel/40 hover:border-accent/40 hover:bg-panel/60"
-              } ${isPaused ? "opacity-50 cursor-not-allowed border-red-500/10" : ""}`}
+              } ${isPaused ? "opacity-50 cursor-not-allowed border-negative/10" : ""}`}
             >
               {isSelected && (
                 <div className="absolute top-0 right-0 bg-accent text-ground font-black uppercase text-2xs py-1 px-3 rounded-bl-xl tracking-widest font-subheading">
@@ -141,7 +141,7 @@ export const DashboardPlans: React.FC = () => {
                     {getPlanIcon(p.id)}
                     <span>{p.name}</span>
                   </h3>
-                  <p className="text-2xs text-zinc-400 mt-1.5 leading-normal font-sans line-clamp-2">{p.description}</p>
+                  <p className="text-2xs text-muted mt-1.5 leading-normal font-sans line-clamp-2">{p.description}</p>
                 </div>
 
                 <div className="space-y-1.5 border-t border-line/50 pt-3">
@@ -181,7 +181,7 @@ export const DashboardPlans: React.FC = () => {
                   }}
                   className={`w-full py-2 rounded-xl text-center text-2xs font-black uppercase tracking-wider font-subheading transition-all ${
                     isPaused
-                      ? "bg-red-500/10 text-red-400 border border-red-500/20"
+                      ? "bg-negative/10 text-negative border border-negative/20"
                       : isSelected
                         ? "bg-accent text-ground shadow hover:bg-opacity-95"
                         : "bg-line text-ink hover:text-accent hover:border-accent border border-line"
@@ -205,7 +205,7 @@ export const DashboardPlans: React.FC = () => {
               <Coins size={16} className="text-accent animate-spin" style={{ animationDuration: "12s" }} />
               <span>Invest to Earn: <span className="text-accent font-sans font-extrabold">{activePlanObj.name}</span></span>
             </span>
-            <span className="flex items-center gap-1.5 bg-surface/50 border border-line/40 py-1 px-2.5 rounded-lg text-2xs font-sans font-medium text-slate-400">
+            <span className="flex items-center gap-1.5 bg-surface/50 border border-line/40 py-1 px-2.5 rounded-lg text-2xs font-sans font-medium text-muted">
               {getPlanIcon(activePlanObj.id)}
               <span className="text-ink font-semibold">{activePlanObj.name}</span>
             </span>
@@ -242,12 +242,12 @@ export const DashboardPlans: React.FC = () => {
 
             {/* Input Capital mount size */}
             <div className="space-y-2 font-sans">
-              <div className="flex justify-between text-2xs uppercase text-slate-400 font-bold font-sans">
+              <div className="flex justify-between text-2xs uppercase text-muted font-bold font-sans">
                 <span>Amount ($)</span>
-                <span className="text-slate-400 font-sans font-semibold">Available: ${user.balance.toLocaleString()}</span>
+                <span className="text-muted font-sans font-semibold">Available: ${user.balance.toLocaleString()}</span>
               </div>
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 font-bold font-sans">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-faint font-bold font-sans">
                   $
                 </span>
                 <input

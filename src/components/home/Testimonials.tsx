@@ -54,13 +54,13 @@ export const Testimonials = () => {
 
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-5">
+          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-positive/15 border border-positive/30 text-positive text-xs font-bold uppercase tracking-widest mb-5">
             <Star size={12} fill="currentColor" /> Trusted Reviews
           </div>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-extrabold text-ink tracking-tight">
             What Our Clients Say
           </h2>
-          <p className="mt-4 text-slate-400 max-w-lg mx-auto text-sm md:text-base">
+          <p className="mt-4 text-muted max-w-lg mx-auto text-sm md:text-base">
             Join thousands of satisfied investors who trust us with their financial goals
           </p>
         </div>
@@ -72,8 +72,8 @@ export const Testimonials = () => {
               <Star key={i} size={26} fill="currentColor" />
             ))}
           </div>
-          <p className="text-slate-400 text-sm">
-            Rated <span className="text-emerald-400 font-bold">4.8</span> / 5 based on <span className="text-emerald-400 font-bold">2,782</span> reviews
+          <p className="text-muted text-sm">
+            Rated <span className="text-positive font-bold">4.8</span> / 5 based on <span className="text-positive font-bold">2,782</span> reviews
           </p>
         </div>
 
@@ -102,16 +102,16 @@ export const Testimonials = () => {
                     <Star key={i} size={14} className="text-line" />
                   ))}
                 </div>
-                <span className="text-2xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <span className="text-2xs font-bold px-2.5 py-0.5 rounded-full bg-positive/15 text-positive border border-positive/30">
                   {t.rating} Stars
                 </span>
               </div>
 
               {/* Title */}
-              <h3 className="text-white font-extrabold text-lg mb-3">{t.title}</h3>
+              <h3 className="text-ink font-extrabold text-lg mb-3">{t.title}</h3>
 
               {/* Body */}
-              <p className="text-slate-400 text-sm leading-relaxed flex-1 mb-6">
+              <p className="text-muted text-sm leading-relaxed flex-1 mb-6">
                 {t.text}
               </p>
 
@@ -120,12 +120,12 @@ export const Testimonials = () => {
 
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                <div className="w-10 h-10 rounded-full bg-positive flex items-center justify-center text-ink font-bold text-sm shrink-0">
                   {t.initials}
                 </div>
                 <div>
-                  <h4 className="text-white font-bold text-sm">{t.name}</h4>
-                  <p className="text-slate-500 text-xs">{t.time}</p>
+                  <h4 className="text-ink font-bold text-sm">{t.name}</h4>
+                  <p className="text-faint text-xs">{t.time}</p>
                 </div>
               </div>
             </motion.div>
@@ -133,7 +133,7 @@ export const Testimonials = () => {
         </div>
 
         {/* Swipe hint */}
-        <div className="flex items-center justify-center gap-2 mt-8 text-slate-500 text-sm">
+        <div className="flex items-center justify-center gap-2 mt-8 text-faint text-sm">
           Swipe to see more <ArrowRight size={16} />
         </div>
 

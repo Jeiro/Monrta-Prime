@@ -32,8 +32,8 @@ const blankForm = (): CampaignForm => ({
 const metricClass = "bg-surface border border-line rounded-xl p-4";
 
 const statusClass = (status: string) => {
-  if (status === "Approved") return "text-emerald-400 bg-emerald-500/10 border-emerald-500/30";
-  if (status === "Rejected") return "text-red-400 bg-red-500/10 border-red-500/30";
+  if (status === "Approved") return "text-positive bg-positive/10 border-positive/30";
+  if (status === "Rejected") return "text-negative bg-negative/10 border-negative/30";
   return "text-yellow-300 bg-yellow-500/10 border-yellow-500/30";
 };
 
@@ -149,12 +149,12 @@ export const AdminAirdropsTab: React.FC = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Total Claims</p><p className="text-2xl font-bold text-ink mt-1">{metrics.total}</p></div>
         <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Pending</p><p className="text-2xl font-bold text-yellow-300 mt-1">{metrics.pending}</p></div>
-        <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Approved</p><p className="text-2xl font-bold text-emerald-400 mt-1">{metrics.approved}</p></div>
-        <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Rejected</p><p className="text-2xl font-bold text-red-400 mt-1">{metrics.rejected}</p></div>
+        <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Approved</p><p className="text-2xl font-bold text-positive mt-1">{metrics.approved}</p></div>
+        <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Rejected</p><p className="text-2xl font-bold text-negative mt-1">{metrics.rejected}</p></div>
       </div>
 
       {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center gap-2">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-positive/10 border border-positive/30 text-positive text-xs font-bold flex items-center gap-2">
           <Check size={14} /> {feedback}
         </motion.div>
       )}
@@ -198,7 +198,7 @@ export const AdminAirdropsTab: React.FC = () => {
                   <h3 className="text-sm font-bold text-ink">{airdrop.title}</h3>
                   <p className="text-2xs text-muted mt-1">{airdrop.description || airdrop.eligibility || "Campaign configured for airdrop claims."}</p>
                 </div>
-                <span className={`shrink-0 text-2xs font-bold px-2 py-0.5 rounded-full border ${active ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-line/40 border-line text-muted"}`}>{active ? "ACTIVE" : "INACTIVE"}</span>
+                <span className={`shrink-0 text-2xs font-bold px-2 py-0.5 rounded-full border ${active ? "bg-positive/10 border-positive/30 text-positive" : "bg-line/40 border-line text-muted"}`}>{active ? "ACTIVE" : "INACTIVE"}</span>
               </div>
               <div className="grid grid-cols-2 gap-2 text-2xs">
                 <div><span className="text-muted">Token:</span> <span className="text-accent font-bold ml-1">{airdrop.token}</span></div>
@@ -213,7 +213,7 @@ export const AdminAirdropsTab: React.FC = () => {
                 <button onClick={() => startEdit(airdrop)} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-accent/10 border border-accent/30 text-accent text-2xs font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
                   <Edit3 size={10} /> Edit
                 </button>
-                <button title="Delete" onClick={() => { if (window.confirm(`Delete "${airdrop.title}"?`)) adminDeleteAirdrop(airdrop.id); }} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-500/10 border border-red-500/30 text-red-400 text-2xs font-bold rounded-lg hover:bg-red-500/20 cursor-pointer">
+                <button title="Delete" onClick={() => { if (window.confirm(`Delete "${airdrop.title}"?`)) adminDeleteAirdrop(airdrop.id); }} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-negative/10 border border-negative/30 text-negative text-2xs font-bold rounded-lg hover:bg-negative/20 cursor-pointer">
                   <Trash2 size={10} />
                 </button>
               </div>
@@ -250,8 +250,8 @@ export const AdminAirdropsTab: React.FC = () => {
                   <td className="px-5 py-4">
                     {claim.status === "Pending" ? (
                       <div className="flex justify-end gap-2">
-                        <button disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "approve")} className="flex items-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-emerald-600 disabled:opacity-60 cursor-pointer"><Check size={12} /> Approve</button>
-                        <button disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "reject")} className="flex items-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-red-600 disabled:opacity-60 cursor-pointer"><X size={12} /> Reject</button>
+                        <button disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "approve")} className="flex items-center gap-1.5 px-3 py-2 bg-positive text-ink font-bold text-2xs uppercase rounded-lg hover:bg-positive disabled:opacity-60 cursor-pointer"><Check size={12} /> Approve</button>
+                        <button disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "reject")} className="flex items-center gap-1.5 px-3 py-2 bg-negative text-ink font-bold text-2xs uppercase rounded-lg hover:bg-negative disabled:opacity-60 cursor-pointer"><X size={12} /> Reject</button>
                       </div>
                     ) : (
                       <p className="text-right text-2xs text-muted">{claim.payoutTransactionId ? `Paid: ${claim.payoutTransactionId}` : claim.reviewedAt || "Reviewed"}</p>

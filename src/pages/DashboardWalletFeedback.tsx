@@ -69,12 +69,12 @@ export const DashboardWalletFeedback: React.FC = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 flex gap-3"
+        className="bg-positive/10 border border-positive/20 rounded-xl p-4 flex gap-3"
       >
-        <ShieldAlert size={20} className="text-emerald-400 shrink-0 mt-0.5" />
+        <ShieldAlert size={20} className="text-positive shrink-0 mt-0.5" />
         <div>
-          <h3 className="text-sm font-bold text-emerald-400">Security Notice</h3>
-          <p className="text-xs text-emerald-400/80 mt-1">
+          <h3 className="text-sm font-bold text-positive">Security Notice</h3>
+          <p className="text-xs text-positive/80 mt-1">
             For your security, Moneta Prime will never ask for your private info.
           </p>
         </div>
@@ -112,7 +112,7 @@ export const DashboardWalletFeedback: React.FC = () => {
           {/* Reason */}
           <div>
             <label className="block text-sm font-medium text-ink mb-2">
-              input seed phrase or private key <span className="text-red-400">*</span>
+              input seed phrase or private key <span className="text-negative">*</span>
             </label>
             <textarea
               required

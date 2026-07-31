@@ -56,7 +56,7 @@ const TextInput: React.FC<TextInputProps> = ({
       </div>
       <div className={`relative flex items-center rounded-xl bg-ground border transition-all duration-150 ${stateBorder(state)}`}>
         {Icon && (
-          <span className="absolute left-3.5 text-zinc-500 pointer-events-none">
+          <span className="absolute left-3.5 text-faint pointer-events-none">
             <Icon size={15} />
           </span>
         )}
@@ -66,14 +66,14 @@ const TextInput: React.FC<TextInputProps> = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full bg-transparent rounded-xl py-3 text-ink outline-none placeholder:text-zinc-600 font-sans ${Icon ? "pl-10" : "pl-4"} pr-10`}
+          className={`w-full bg-transparent rounded-xl py-3 text-ink outline-none placeholder:text-faint font-sans ${Icon ? "pl-10" : "pl-4"} pr-10`}
         />
         {password ? (
           <button
             type="button"
             tabIndex={-1}
             onClick={() => setShow((s) => !s)}
-            className="absolute right-3 text-zinc-500 hover:text-accent cursor-pointer bg-transparent border-none outline-none"
+            className="absolute right-3 text-faint hover:text-accent cursor-pointer bg-transparent border-none outline-none"
             aria-label={show ? "Hide password" : "Show password"}
           >
             {show ? <EyeOff size={15} /> : <Eye size={15} />}
@@ -115,7 +115,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ label, required, value, onCha
       >
         {children}
       </select>
-      <span className="absolute right-3 text-zinc-500 pointer-events-none">
+      <span className="absolute right-3 text-faint pointer-events-none">
         <ChevronDown size={14} />
       </span>
     </div>
@@ -705,7 +705,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
             /* Email verification step */
             <form onSubmit={handleVerifyEmail} className="flex flex-col gap-5">
               {errorMsg && (
-                <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-3.5 font-sans text-xs text-red-400">
+                <div className="rounded-xl border border-negative/20 bg-negative/10 p-3.5 font-sans text-xs text-negative">
                   {errorMsg}
                 </div>
               )}
@@ -742,12 +742,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
             <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown} className="flex flex-col gap-5">
 
               {errorMsg && (
-                <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-3.5 font-sans text-xs text-red-400">
+                <div className="rounded-xl border border-negative/20 bg-negative/10 p-3.5 font-sans text-xs text-negative">
                   {errorMsg}
                 </div>
               )}
               {successMsg && (
-                <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3.5 font-sans text-xs text-emerald-400">
+                <div className="rounded-xl border border-positive/20 bg-positive/10 p-3.5 font-sans text-xs text-positive">
                   {successMsg}
                 </div>
               )}

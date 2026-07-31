@@ -48,7 +48,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
           {item.label}
         </span>
         {!!item.alert && (
-          <span className={`text-2xs font-black px-1.5 py-0.5 rounded-full ${isActive ? "bg-ground text-accent" : "bg-red-500/15 text-red-400 border border-red-500/30 animate-pulse"}`}>
+          <span className={`text-2xs font-black px-1.5 py-0.5 rounded-full ${isActive ? "bg-ground text-accent" : "bg-negative/15 text-negative border border-negative/30 animate-pulse"}`}>
             {item.alert}
           </span>
         )}
@@ -60,7 +60,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
     <div className="min-h-screen bg-ground font-sans pb-20">
       <header className="lg:hidden flex items-center justify-between p-4 bg-surface border-b border-line sticky top-0 z-40">
         <div className="flex items-center gap-2">
-          <ShieldAlert size={20} className="text-red-500" />
+          <ShieldAlert size={20} className="text-negative" />
           <span className="text-sm font-bold text-ink uppercase tracking-widest">Admin</span>
         </div>
         <button
@@ -90,7 +90,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
                     <h3 className="text-xs font-bold text-ink uppercase font-heading">
                       <span className="lowercase text-ink font-bold">moneta <span className="text-accent">prime</span></span> Node
                     </h3>
-                    <span className="text-2xs bg-red-500/10 border border-red-500/30 text-red-500 py-0.5 px-2 font-bold rounded-full block w-fit mt-0.5">
+                    <span className="text-2xs bg-negative/10 border border-negative/30 text-negative py-0.5 px-2 font-bold rounded-full block w-fit mt-0.5">
                       MASTER ADMIN
                     </span>
                   </div>
@@ -127,7 +127,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
               </span>
               <div>
                 <h3 className="text-sm font-bold text-ink uppercase font-heading"><span className="lowercase text-ink font-bold">moneta <span className="text-accent">prime</span></span> Node</h3>
-                <span className="text-2xs bg-red-500/10 border border-red-500/30 text-red-500 py-0.5 px-2.5 font-bold rounded-full block w-fit mt-1">
+                <span className="text-2xs bg-negative/10 border border-negative/30 text-negative py-0.5 px-2.5 font-bold rounded-full block w-fit mt-1">
                   MASTER ADMIN
                 </span>
               </div>
@@ -151,7 +151,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
               <p className="text-2xs uppercase tracking-[0.3em] text-muted font-bold">Secure Admin Terminal</p>
               <h1 className="text-lg font-bold text-ink font-heading mt-1">Control Center</h1>
             </div>
-            <span className="text-2xs bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+            <span className="text-2xs bg-negative/10 border border-negative/30 text-negative px-3 py-1 rounded-full font-bold uppercase tracking-wider">
               Admin Only
             </span>
           </div>

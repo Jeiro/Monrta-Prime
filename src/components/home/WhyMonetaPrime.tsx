@@ -6,17 +6,17 @@ import { useApp } from '../../context/AppContext';
 // Section 2: Why Choose (Platform Trust Section redesigned based on User Request with gold orange theme and container-less sleekness)
 export const WhyMonetaPrime = () => {
   const stats = [
-    { value: "6,000+", label: "Active Investors", icon: Users, colorClass: "text-indigo-400 bg-indigo-500/5 border-indigo-500/10" },
-    { value: "$600M+", label: "Profits Generated", icon: TrendingUp, colorClass: "text-emerald-400 bg-emerald-500/5 border-emerald-500/10" },
-    { value: "99%", label: "Client Satisfaction", icon: ThumbsUp, colorClass: "text-pink-400 bg-pink-500/5 border-pink-500/10" },
-    { value: "24/7", label: "Expert Support", icon: Headset, colorClass: "text-blue-400 bg-blue-500/5 border-blue-500/10" }
+    { value: "6,000+", label: "Active Investors", icon: Users, colorClass: "text-accent bg-accent/5 border-accent/10" },
+    { value: "$600M+", label: "Profits Generated", icon: TrendingUp, colorClass: "text-positive bg-positive/5 border-positive/10" },
+    { value: "99%", label: "Client Satisfaction", icon: ThumbsUp, colorClass: "text-accent bg-accent/5 border-accent/10" },
+    { value: "24/7", label: "Expert Support", icon: Headset, colorClass: "text-accent bg-accent/5 border-accent/10" }
   ];
 
   const trustItems = [
-    { icon: Lock, title: "SSL Secured", desc: "256-bit Encryption", colorClass: "text-indigo-400 bg-indigo-500/5 border-indigo-500/10 fill-indigo-500/10" },
-    { icon: Shield, title: "Regulated", desc: "Licensed Platform", colorClass: "text-emerald-400 bg-emerald-500/5 border-emerald-500/10 fill-emerald-500/10" },
+    { icon: Lock, title: "SSL Secured", desc: "256-bit Encryption", colorClass: "text-accent bg-accent/5 border-accent/10 fill-accent/10" },
+    { icon: Shield, title: "Regulated", desc: "Licensed Platform", colorClass: "text-positive bg-positive/5 border-positive/10 fill-positive/10" },
     { icon: Zap, title: "Fast Withdrawals", desc: "Within 24 Hours", colorClass: "text-accent bg-accent/5 border-accent/10 fill-accent/10" },
-    { icon: Globe, title: "Data Privacy", desc: "GDPR Compliant", colorClass: "text-sky-400 bg-sky-500/5 border-sky-500/10 fill-sky-500/10" }
+    { icon: Globe, title: "Data Privacy", desc: "GDPR Compliant", colorClass: "text-accent bg-accent/5 border-accent/10 fill-accent/10" }
   ];
 
   const brands = ["Bloomberg", "Forbes", "Reuters", "CoinDesk", "TechCrunch"];
@@ -43,7 +43,7 @@ export const WhyMonetaPrime = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 14 }}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-white tracking-tight leading-tight max-w-4xl mx-auto font-display"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-ink tracking-tight leading-tight max-w-4xl mx-auto font-display"
           >
             A Platform Traders Rely On
           </motion.h2>
@@ -53,7 +53,7 @@ export const WhyMonetaPrime = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 14, delay: 0.1 }}
-            className="text-neutral-400 max-w-2xl mx-auto text-base md:text-lg leading-relaxed font-sans"
+            className="text-muted max-w-2xl mx-auto text-base md:text-lg leading-relaxed font-sans"
           >
             Backed by Consensys infrastructure, global regulatory compliance, and the trust of thousands of active digital asset investors.
           </motion.p>
@@ -80,7 +80,7 @@ export const WhyMonetaPrime = () => {
                 <div className="font-display font-black text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-accent via-[#FF9900] to-accent-deep select-none group-hover:scale-105 transition-transform duration-300">
                   {stat.value}
                 </div>
-                <div className="text-xs sm:text-sm font-bold text-neutral-400 tracking-widest uppercase mt-3.5 font-sans">
+                <div className="text-xs sm:text-sm font-bold text-muted tracking-widest uppercase mt-3.5 font-sans">
                   {stat.label}
                 </div>
               </motion.div>
@@ -89,7 +89,7 @@ export const WhyMonetaPrime = () => {
         </div>
 
         {/* Mini Trust items below (Container-less, scroll-animated, premium colorful icons) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mt-10 md:mt-12 border-t border-neutral-900/40 pt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mt-10 md:mt-12 border-t border-line/40 pt-8">
           {trustItems.map((item, idx) => (
             <motion.div
               key={idx}
@@ -103,10 +103,10 @@ export const WhyMonetaPrime = () => {
                 <item.icon className="w-5.5 h-5.5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-extrabold text-white text-base font-sans tracking-tight">
+                <h4 className="font-extrabold text-ink text-base font-sans tracking-tight">
                   {item.title}
                 </h4>
-                <p className="text-neutral-400 text-xs sm:text-sm font-sans">
+                <p className="text-muted text-xs sm:text-sm font-sans">
                   {item.desc}
                 </p>
               </div>
@@ -120,7 +120,7 @@ export const WhyMonetaPrime = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 0.7 }}
             viewport={{ once: true }}
-            className="text-2xs sm:text-xs font-mono tracking-[0.35em] text-neutral-500 uppercase font-semibold"
+            className="text-2xs sm:text-xs font-mono tracking-[0.35em] text-faint uppercase font-semibold"
           >
             AS SEEN IN
           </motion.span>
@@ -133,7 +133,7 @@ export const WhyMonetaPrime = () => {
                 whileHover={{ opacity: 0.95, scale: 1.05 }}
                 viewport={{ once: true }}
                 transition={{ type: "spring", stiffness: 90, damping: 15, delay: bIdx * 0.05 }}
-                className="font-serif text-xl sm:text-2xl md:text-3xl font-black text-neutral-400 tracking-tight cursor-default select-none"
+                className="font-serif text-xl sm:text-2xl md:text-3xl font-black text-muted tracking-tight cursor-default select-none"
               >
                 {brand}
               </motion.span>

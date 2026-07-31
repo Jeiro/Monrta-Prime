@@ -41,9 +41,9 @@ const emptyForm: FormState = {
 };
 
 const priorityClass: Record<AnnouncementPriority, string> = {
-  Normal: "bg-slate-500/10 text-slate-300 border-slate-500/30",
+  Normal: "bg-surface/10 text-muted border-line/30",
   Important: "bg-amber-500/10 text-amber-300 border-amber-500/30",
-  Critical: "bg-red-500/10 text-red-300 border-red-500/30"
+  Critical: "bg-negative/10 text-negative border-negative/30"
 };
 
 export const AdminBulletinsTab: React.FC = () => {
@@ -163,14 +163,14 @@ export const AdminBulletinsTab: React.FC = () => {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
           <span className="px-3 py-2 rounded-lg bg-ground border border-line text-muted">Total <strong className="block text-ink">{stats.total}</strong></span>
-          <span className="px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">Active <strong className="block">{stats.enabled}</strong></span>
+          <span className="px-3 py-2 rounded-lg bg-positive/10 border border-positive/20 text-positive">Active <strong className="block">{stats.enabled}</strong></span>
           <span className="px-3 py-2 rounded-lg bg-accent/10 border border-accent/20 text-accent">Pinned <strong className="block">{stats.pinned}</strong></span>
-          <span className="px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-300">Critical <strong className="block">{stats.critical}</strong></span>
+          <span className="px-3 py-2 rounded-lg bg-negative/10 border border-negative/20 text-negative">Critical <strong className="block">{stats.critical}</strong></span>
         </div>
       </div>
 
       {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center gap-2">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-positive/10 border border-positive/30 text-positive text-xs font-bold flex items-center gap-2">
           <Check size={14} /> {feedback}
         </motion.div>
       )}
@@ -265,13 +265,13 @@ export const AdminBulletinsTab: React.FC = () => {
                     {announcement.pinned && <Pin size={12} className="text-accent" />}
                     <h3 className="text-sm font-bold text-ink break-words">{announcement.title}</h3>
                     <span className={`px-2 py-0.5 rounded-full border text-2xs font-bold ${priorityClass[priority]}`}>{priority}</span>
-                    <span className={`px-2 py-0.5 rounded-full border text-2xs font-bold ${disabled ? "bg-slate-500/10 text-slate-400 border-slate-500/30" : "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"}`}>{disabled ? "Disabled" : "Enabled"}</span>
+                    <span className={`px-2 py-0.5 rounded-full border text-2xs font-bold ${disabled ? "bg-surface/10 text-muted border-line/30" : "bg-positive/10 text-positive border-positive/30"}`}>{disabled ? "Disabled" : "Enabled"}</span>
                   </div>
                   <p className="text-xs text-muted mt-2 leading-relaxed break-words">{announcement.content}</p>
                   <div className="flex flex-wrap items-center gap-3 mt-3 text-2xs text-muted">
                     <span>Created: {announcement.date}</span>
                     {announcement.publishDate && <span className="text-accent">Publishes: {announcement.publishDate}</span>}
-                    {announcement.expiryDate && <span className="text-red-300">Expires: {announcement.expiryDate}</span>}
+                    {announcement.expiryDate && <span className="text-negative">Expires: {announcement.expiryDate}</span>}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -281,7 +281,7 @@ export const AdminBulletinsTab: React.FC = () => {
                   <button onClick={() => handleEdit(announcement)} className="p-2 bg-ground border border-line text-accent rounded-lg hover:bg-accent/10" title="Edit">
                     <Edit3 size={14} />
                   </button>
-                  <button onClick={() => handleDelete(announcement)} className="p-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/20" title="Delete">
+                  <button onClick={() => handleDelete(announcement)} className="p-2 bg-negative/10 border border-negative/30 text-negative rounded-lg hover:bg-negative/20" title="Delete">
                     <Trash2 size={14} />
                   </button>
                 </div>

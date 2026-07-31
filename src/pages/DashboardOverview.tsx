@@ -175,40 +175,40 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             </h1>
           </div>
           <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-sans">
-            <span className="text-slate-400">
+            <span className="text-muted">
               Welcome back, <span className="text-ink font-medium">{(user.name || user.email || "").toLowerCase()}</span>
             </span>
             
-            <span className="hidden sm:inline text-slate-700 select-none font-normal">•</span>
+            <span className="hidden sm:inline text-faint select-none font-normal">•</span>
 
             {/* UID Badge with Copy Action */}
-            <div className="flex items-center gap-1.5 text-2xs text-slate-500 bg-surface/50 hover:bg-surface border border-line/40 py-0.5 px-2 rounded-md transition-all">
-              <span className="text-2xs uppercase tracking-wider text-slate-600 font-bold font-mono">UID</span>
-              <span className="font-mono text-slate-400 font-medium select-all">{uid}</span>
+            <div className="flex items-center gap-1.5 text-2xs text-faint bg-surface/50 hover:bg-surface border border-line/40 py-0.5 px-2 rounded-md transition-all">
+              <span className="text-2xs uppercase tracking-wider text-faint font-bold font-mono">UID</span>
+              <span className="font-mono text-muted font-medium select-all">{uid}</span>
               <button 
                 onClick={() => {
                   navigator.clipboard.writeText(uid);
                   setCopiedUid(true);
                   setTimeout(() => setCopiedUid(false), 2000);
                 }}
-                className="text-slate-500 hover:text-accent transition-colors p-0.5"
+                className="text-faint hover:text-accent transition-colors p-0.5"
                 title="Copy UID"
               >
-                {copiedUid ? <Check size={11} className="text-emerald-500" /> : <Copy size={11} />}
+                {copiedUid ? <Check size={11} className="text-positive" /> : <Copy size={11} />}
               </button>
             </div>
 
             {/* Security Badge */}
-            <div className="flex items-center gap-1.5 text-2xs text-slate-500 bg-surface/50 border border-line/40 py-0.5 px-2 rounded-md">
-              <Shield size={11} className="text-slate-500 shrink-0" />
-              <span className="text-slate-400">Security:</span>
-              <span className="text-emerald-500 font-bold tracking-wide">High</span>
+            <div className="flex items-center gap-1.5 text-2xs text-faint bg-surface/50 border border-line/40 py-0.5 px-2 rounded-md">
+              <Shield size={11} className="text-faint shrink-0" />
+              <span className="text-muted">Security:</span>
+              <span className="text-positive font-bold tracking-wide">High</span>
             </div>
 
             {/* Verification Badge */}
             {user.kyc?.status === "approved" ? (
-              <div className="flex items-center gap-1 text-2xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
-                <CheckCircle2 size={11} className="text-emerald-400 shrink-0" />
+              <div className="flex items-center gap-1 text-2xs bg-positive/10 text-positive border border-positive/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
+                <CheckCircle2 size={11} className="text-positive shrink-0" />
                 <span>Identity Verified</span>
               </div>
             ) : user.kyc?.status === "pending" ? (
@@ -217,8 +217,8 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                 <span>Verification Pending</span>
               </div>
             ) : (
-              <div className="flex items-center gap-1 text-2xs bg-rose-500/10 text-rose-400 border border-rose-500/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
-                <AlertTriangle size={11} className="text-rose-400 shrink-0" />
+              <div className="flex items-center gap-1 text-2xs bg-negative/10 text-negative border border-negative/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
+                <AlertTriangle size={11} className="text-negative shrink-0" />
                 <span>Unverified Identity</span>
               </div>
             )}
@@ -250,8 +250,8 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         {/* Net Worth */}
         <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
           <div className="flex justify-between items-start text-muted">
-            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Total Equity</span>
-            <span className="p-1.5 rounded-lg bg-blue-500/10 text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-muted group-hover:text-ink transition-colors">Total Equity</span>
+            <span className="p-1.5 rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-ink transition-colors">
               <Briefcase size={16} />
             </span>
           </div>
@@ -260,15 +260,15 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               <span className="text-xl font-black font-data text-ink select-all">
                 ${aggregateNetWorth.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </span>
-              <span className="text-2xs text-slate-500 font-data font-medium">
+              <span className="text-2xs text-faint font-data font-medium">
                 ≈ {((aggregateNetWorth) / 68500).toFixed(4)} BTC
               </span>
             </div>
             <div className="flex items-center gap-1 text-2xs">
-              <span className={`flex items-center font-data font-bold ${netPnL >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+              <span className={`flex items-center font-data font-bold ${netPnL >= 0 ? "text-positive" : "text-negative"}`}>
                 {netPnL >= 0 ? "+" : ""}{netPnL.toLocaleString()} ({netPnLPercent}%)
               </span>
-              <span className="text-slate-400 font-medium font-sans">Today's P&L</span>
+              <span className="text-muted font-medium font-sans">Today's P&L</span>
             </div>
           </div>
         </div>
@@ -276,8 +276,8 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         {/* Available Cash balance */}
         <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
           <div className="flex justify-between items-start text-muted">
-            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Available Balance</span>
-            <span className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-muted group-hover:text-ink transition-colors">Available Balance</span>
+            <span className="p-1.5 rounded-lg bg-positive/10 text-positive group-hover:bg-positive group-hover:text-ink transition-colors">
               <DollarSign size={16} />
             </span>
           </div>
@@ -285,7 +285,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             <span className="text-2xl font-black font-data text-ink select-all">
               ${availableCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
-            <p className="text-2xs text-slate-400 tracking-normal font-sans font-medium">
+            <p className="text-2xs text-muted tracking-normal font-sans font-medium">
               In Orders: <span className="font-data">${(activePlanCapital + activeCopyCapital).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> USD
             </p>
           </div>
@@ -294,8 +294,8 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         {/* Portfolio Assets value */}
         <div className="bg-gradient-to-br from-surface to-surface/50 border border-line rounded-xl p-5 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
           <div className="flex justify-between items-start text-muted">
-            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Derivatives Account</span>
-            <span className="p-1.5 rounded-lg bg-rose-500/10 text-rose-500 group-hover:bg-rose-500 group-hover:text-white transition-colors">
+            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-muted group-hover:text-ink transition-colors">Derivatives Account</span>
+            <span className="p-1.5 rounded-lg bg-negative/10 text-negative group-hover:bg-negative group-hover:text-ink transition-colors">
               <Activity size={16} />
             </span>
           </div>
@@ -303,7 +303,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             <span className="text-xl font-black font-data text-ink animate-pulse">
               ${portfolioAssetsValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
-            <p className="text-2xs text-slate-400 font-sans font-medium">
+            <p className="text-2xs text-muted font-sans font-medium">
               Fluctuating with global indexes
             </p>
           </div>
@@ -314,8 +314,8 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           {/* Subtle gold flare for yield */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-3xl rounded-full" />
           <div className="flex justify-between items-start text-muted relative z-10">
-            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-slate-400 group-hover:text-ink transition-colors">Plan Yield Capital</span>
-            <span className="p-1.5 rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-white transition-colors">
+            <span className="text-2xs uppercase font-sans font-medium tracking-wider text-muted group-hover:text-ink transition-colors">Plan Yield Capital</span>
+            <span className="p-1.5 rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-ink transition-colors">
               <Layers size={16} />
             </span>
           </div>
@@ -323,7 +323,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             <span className="text-xl font-black font-data text-accent">
               ${(activePlanCapital + activePlanProfits).toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
-            <p className="text-2xs text-emerald-400 font-data">
+            <p className="text-2xs text-positive font-data">
               +{activePlanProfits > 0 ? `$${activePlanProfits.toFixed(2)} accrued` : "0.00 accruals"}
             </p>
           </div>
@@ -596,7 +596,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           </div>
           <button 
             onClick={() => onNavigate("dashboard-transactions")}
-            className="text-xs text-neutral-400 hover:text-accent transition-colors"
+            className="text-xs text-muted hover:text-accent transition-colors"
           >
             View All
           </button>

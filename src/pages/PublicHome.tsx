@@ -176,7 +176,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
   };
 
   return (
-    <div className="min-h-screen bg-transparent text-white font-sans selection:bg-accent/20 overflow-x-hidden pt-0">
+    <div className="min-h-screen bg-transparent text-ink font-sans selection:bg-accent/20 overflow-x-hidden pt-0">
       
       {/* 1. HERO BANNER: METRICS & EXQUISITE CELESTIAL ORBITING SYSTEM */}
       <section className="relative flex flex-col justify-center items-center bg-gradient-to-b from-ground via-panel to-black border-b border-line/30 px-4 overflow-hidden pt-14 sm:pt-16 pb-14">
@@ -189,10 +189,10 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
           
           {/* Main Display Typography */}
           <div className="space-y-4 max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-extrabold text-white tracking-tight leading-tight max-w-4xl mx-auto font-sans">
-              Trade Smarter With <span className="lowercase text-white font-extrabold">moneta <span className="text-accent">prime</span></span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-extrabold text-ink tracking-tight leading-tight max-w-4xl mx-auto font-sans">
+              Trade Smarter With <span className="lowercase text-ink font-extrabold">moneta <span className="text-accent">prime</span></span>
             </h1>
-            <p className="text-neutral-400 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+            <p className="text-muted text-sm sm:text-base max-w-md mx-auto leading-relaxed">
               Access global markets through a secure, data-driven trading platform. Built for traders and investors who demand precision, speed, and reliability.
             </p>
           </div>
@@ -222,7 +222,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
             {/* Central Moneta Prime Logo Brand Core */}
             <div className="absolute w-[180px] h-[180px] rounded-full bg-transparent border-2 border-accent/20 flex flex-col items-center justify-center z-30 shadow-[0_0_50px_rgba(106,165,255,0.15)]">
               <Brandmark className="w-[52px] h-[52px] transition-transform duration-500 hover:rotate-6 drop-shadow-[0_4px_16px_rgba(106,165,255,0.4)]" />
-              <span className="text-base text-white font-bold tracking-[0.05em] mt-2 font-sans lowercase">
+              <span className="text-base text-ink font-bold tracking-[0.05em] mt-2 font-sans lowercase">
                 moneta <span className="text-accent">prime</span>
               </span>
             </div>
@@ -234,9 +234,9 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
               className="absolute w-[190px] h-[190px] rounded-full border border-line/60 border-dashed z-10"
             >
               {[
-                { label: "₿", symbol: "BTC", bg: "bg-accent", color: "text-white", angle: 0 },
-                { label: "Ξ", symbol: "ETH", bg: "bg-[#4E62CC]", color: "text-white", angle: 120 },
-                { label: "₮", symbol: "USDT", bg: "bg-[#26A17B]", color: "text-white", angle: 240 }
+                { label: "₿", symbol: "BTC", bg: "bg-accent", color: "text-ink", angle: 0 },
+                { label: "Ξ", symbol: "ETH", bg: "bg-[#4E62CC]", color: "text-ink", angle: 120 },
+                { label: "₮", symbol: "USDT", bg: "bg-[#26A17B]", color: "text-ink", angle: 240 }
               ].map((token, index) => (
                 <div
                   key={index}
@@ -266,10 +266,10 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
               className="absolute w-[300px] h-[300px] rounded-full border border-line/40 border-dotted z-10"
             >
               {[
-                { label: "T", bg: "bg-[#E82127]", color: "text-white", angle: 0 },
+                { label: "T", bg: "bg-[#E82127]", color: "text-ink", angle: 0 },
                 { label: "", bg: "bg-white", color: "text-black", angle: 72 },
-                { label: "NV", bg: "bg-[#76B900]", color: "text-white", angle: 144 },
-                { label: "G", bg: "bg-[#4285F4]", color: "text-white", angle: 216 },
+                { label: "NV", bg: "bg-[#76B900]", color: "text-ink", angle: 144 },
+                { label: "G", bg: "bg-[#4285F4]", color: "text-ink", angle: 216 },
                 { label: "a", bg: "bg-[#FF9900]", color: "text-black", angle: 288 }
               ].map((token, index) => (
                 <div
@@ -299,14 +299,14 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
               className="absolute w-[420px] h-[420px] rounded-full border border-line/20 z-10"
             >
               {[
-                { label: "AVAX", bg: "bg-[#E84142]", color: "text-white text-2xs", angle: 0 },
-                { label: "Đ", bg: "bg-[#C2A633]", color: "text-white text-xs", angle: 45 },
-                { label: "LINK", bg: "bg-[#375BD2]", color: "text-white text-2xs", angle: 90 },
-                { label: "DOT", bg: "bg-[#E6007A]", color: "text-white text-2xs", angle: 135 },
-                { label: "TRX", bg: "bg-[#EC0623]", color: "text-white text-2xs", angle: 180 },
-                { label: "LTC", bg: "bg-[#345D9D]", color: "text-white text-2xs", angle: 225 },
-                { label: "🚀", bg: "bg-gradient-to-tr from-[#1D4ED8] to-[#1E3A8A]", color: "text-white text-xs", angle: 270 },
-                { label: "MS", bg: "bg-[#00A4EF]", color: "text-white text-xs", angle: 315 }
+                { label: "AVAX", bg: "bg-[#E84142]", color: "text-ink text-2xs", angle: 0 },
+                { label: "Đ", bg: "bg-[#C2A633]", color: "text-ink text-xs", angle: 45 },
+                { label: "LINK", bg: "bg-[#375BD2]", color: "text-ink text-2xs", angle: 90 },
+                { label: "DOT", bg: "bg-[#E6007A]", color: "text-ink text-2xs", angle: 135 },
+                { label: "TRX", bg: "bg-[#EC0623]", color: "text-ink text-2xs", angle: 180 },
+                { label: "LTC", bg: "bg-[#345D9D]", color: "text-ink text-2xs", angle: 225 },
+                { label: "🚀", bg: "bg-gradient-to-tr from-[#1D4ED8] to-[#1E3A8A]", color: "text-ink text-xs", angle: 270 },
+                { label: "MS", bg: "bg-[#00A4EF]", color: "text-ink text-xs", angle: 315 }
               ].map((token, index) => (
                 <div
                   key={index}

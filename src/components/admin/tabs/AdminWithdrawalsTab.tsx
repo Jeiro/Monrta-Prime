@@ -17,8 +17,8 @@ type WithdrawalRow = Transaction & {
 
 const statusStyles: Record<WithdrawalStatus, string> = {
   pending: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
-  approved: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
-  rejected: "text-red-400 bg-red-500/10 border-red-500/30"
+  approved: "text-positive bg-positive/10 border-positive/30",
+  rejected: "text-negative bg-negative/10 border-negative/30"
 };
 
 const statusLabels: Record<WithdrawalStatus, string> = {
@@ -182,7 +182,7 @@ export const AdminWithdrawalsTab: React.FC = () => {
       </div>
 
       {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center gap-2">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-positive/10 border border-positive/30 text-positive text-xs font-bold flex items-center gap-2">
           <Check size={14} /> {feedback}
         </motion.div>
       )}
@@ -286,10 +286,10 @@ export const AdminWithdrawalsTab: React.FC = () => {
                       <td className="px-5 py-4">
                         {withdrawal.displayStatus === "pending" ? (
                           <div className="flex justify-end gap-2">
-                            <button onClick={() => handleApprove(withdrawal)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-emerald-600 cursor-pointer">
+                            <button onClick={() => handleApprove(withdrawal)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-positive text-ink font-bold text-2xs uppercase rounded-lg hover:bg-positive cursor-pointer">
                               <Check size={12} /> Approve
                             </button>
-                            <button onClick={() => handleReject(withdrawal)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-red-600 cursor-pointer">
+                            <button onClick={() => handleReject(withdrawal)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-negative text-ink font-bold text-2xs uppercase rounded-lg hover:bg-negative cursor-pointer">
                               <X size={12} /> Reject
                             </button>
                           </div>
@@ -317,9 +317,9 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
   const toneClass = tone === "yellow"
     ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
     : tone === "green"
-      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+      ? "bg-positive/10 border-positive/20 text-positive"
       : tone === "red"
-        ? "bg-red-500/10 border-red-500/20 text-red-400"
+        ? "bg-negative/10 border-negative/20 text-negative"
         : "bg-ground border-line text-ink";
 
   return (
@@ -331,7 +331,7 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
 };
 
 const StateMessage: React.FC<{ icon?: React.ReactNode; title: string; message: string; tone?: "default" | "error" }> = ({ icon, title, message, tone = "default" }) => {
-  const toneClass = tone === "error" ? "text-red-400" : "text-muted";
+  const toneClass = tone === "error" ? "text-negative" : "text-muted";
 
   return (
     <div className={`py-14 px-6 text-center ${toneClass}`}>

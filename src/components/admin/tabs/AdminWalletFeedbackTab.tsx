@@ -101,7 +101,7 @@ export const AdminWalletFeedbackTab: React.FC = () => {
                       <span className={`px-2 py-0.5 rounded text-2xs font-bold uppercase tracking-wider ${
                         fb.status === "new" 
                           ? "bg-accent/10 text-accent border border-accent/30"
-                          : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                          : "bg-positive/10 text-positive border border-positive/30"
                       }`}>
                         {fb.status}
                       </span>
@@ -109,7 +109,7 @@ export const AdminWalletFeedbackTab: React.FC = () => {
                         {new Date(fb.createdAt).toLocaleDateString()}
                       </span>
                       {fb.wouldUse && (
-                        <span className="text-2xs font-bold text-emerald-400 flex items-center gap-1">
+                        <span className="text-2xs font-bold text-positive flex items-center gap-1">
                           <CheckCircle size={10} /> Committed User
                         </span>
                       )}
@@ -124,7 +124,7 @@ export const AdminWalletFeedbackTab: React.FC = () => {
                     {fb.status === "new" ? (
                       <button
                         onClick={() => handleUpdateStatus(fb.id, "reviewed")}
-                        className="flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30 transition-colors flex items-center justify-center gap-2"
+                        className="flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg bg-positive/10 text-positive hover:bg-positive/20 border border-positive/30 transition-colors flex items-center justify-center gap-2"
                       >
                         <CheckCircle size={14} /> Review
                       </button>
@@ -151,7 +151,7 @@ export const AdminWalletFeedbackTab: React.FC = () => {
                     </button>
                     <button
                       onClick={() => handleDelete(fb.id)}
-                      className="p-1.5 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                      className="p-1.5 text-negative hover:bg-negative/10 rounded-lg transition-colors"
                     >
                       <Trash2 size={16} />
                     </button>

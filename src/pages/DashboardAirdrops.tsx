@@ -4,8 +4,8 @@ import { useApp } from "../context/AppContext";
 import { findUserCampaignClaim, getCampaignClaimCount, hasReachedClaimLimit, isAirdropActive } from "../services";
 
 const claimBadgeClass = (status: string) => {
-  if (status === "Approved") return "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-  if (status === "Rejected") return "bg-red-500/10 text-red-400 border-red-500/30";
+  if (status === "Approved") return "bg-positive/10 text-positive border-positive/30";
+  if (status === "Rejected") return "bg-negative/10 text-negative border-negative/30";
   return "bg-yellow-500/10 text-yellow-300 border-yellow-500/30";
 };
 

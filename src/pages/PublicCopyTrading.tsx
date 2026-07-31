@@ -191,10 +191,10 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                       <div className="flex justify-center">
                         <span className={`px-2 py-0.5 rounded-full text-2xs font-bold font-mono border select-none ${
                           trader.riskScore <= 2 
-                            ? "bg-green-500/10 border-green-500/20 text-green-400" 
+                            ? "bg-positive/10 border-positive/20 text-positive" 
                             : trader.riskScore === 3 
                               ? "bg-amber-500/10 border-amber-500/20 text-amber-400" 
-                              : "bg-red-500/10 border-red-500/20 text-red-500"
+                              : "bg-negative/10 border-negative/20 text-negative"
                         }`}>
                           Lv {trader.riskScore}
                         </span>
@@ -302,7 +302,7 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                   </span>
                 </div>
                 <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 text-xs font-mono font-bold">$</span>
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-faint text-xs font-mono font-bold">$</span>
                   <input
                     type="number"
                     value={allocateAmt}
@@ -316,7 +316,7 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                 </div>
               </div>
 
-              <div className="p-3 text-2xs leading-relaxed text-zinc-400 bg-surface/50 border border-line/30 rounded-xl flex items-start gap-2.5">
+              <div className="p-3 text-2xs leading-relaxed text-muted bg-surface/50 border border-line/30 rounded-xl flex items-start gap-2.5">
                 <Info size={14} className="text-accent shrink-0 mt-0.5" />
                 <span>
                   Copy range: ${(allocatingTrader.minimumCopyAmount ?? 10).toLocaleString()} - {allocatingTrader.maximumCopyAmount ? `$${allocatingTrader.maximumCopyAmount.toLocaleString()}` : "No max"}. ROI is locked at confirmation and paid from the stored total return at maturity.

@@ -18,8 +18,8 @@ type DepositRow = Transaction & {
 
 const statusStyles: Record<DepositStatus, string> = {
   pending: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
-  approved: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
-  rejected: "text-red-400 bg-red-500/10 border-red-500/30"
+  approved: "text-positive bg-positive/10 border-positive/30",
+  rejected: "text-negative bg-negative/10 border-negative/30"
 };
 
 const statusLabels: Record<DepositStatus, string> = {
@@ -171,7 +171,7 @@ export const AdminDepositsTab: React.FC = () => {
       <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
         <div>
           <h1 className="text-xl font-bold text-ink flex items-center gap-2">
-            <ArrowDownLeft size={20} className="text-emerald-400" /> Crypto Deposit Management
+            <ArrowDownLeft size={20} className="text-positive" /> Crypto Deposit Management
           </h1>
           <p className="text-xs text-muted mt-1">Review incoming crypto deposits, wallet destinations, hashes, and admin decisions.</p>
         </div>
@@ -184,7 +184,7 @@ export const AdminDepositsTab: React.FC = () => {
       </div>
 
       {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center gap-2">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-positive/10 border border-positive/30 text-positive text-xs font-bold flex items-center gap-2">
           <Check size={14} /> {feedback}
         </motion.div>
       )}
@@ -288,10 +288,10 @@ export const AdminDepositsTab: React.FC = () => {
                   <td className="px-5 py-4">
                     {deposit.displayStatus === "pending" ? (
                       <div className="flex justify-end gap-2">
-                        <button onClick={() => handleApprove(deposit)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-emerald-600 cursor-pointer">
+                        <button onClick={() => handleApprove(deposit)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-positive text-ink font-bold text-2xs uppercase rounded-lg hover:bg-positive cursor-pointer">
                           <Check size={12} /> Approve
                         </button>
-                        <button onClick={() => handleReject(deposit)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-red-600 cursor-pointer">
+                        <button onClick={() => handleReject(deposit)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-negative text-ink font-bold text-2xs uppercase rounded-lg hover:bg-negative cursor-pointer">
                           <X size={12} /> Reject
                         </button>
                       </div>
@@ -317,9 +317,9 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
   const toneClass = tone === "yellow"
     ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
     : tone === "green"
-      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+      ? "bg-positive/10 border-positive/20 text-positive"
       : tone === "red"
-        ? "bg-red-500/10 border-red-500/20 text-red-400"
+        ? "bg-negative/10 border-negative/20 text-negative"
         : "bg-ground border-line text-ink";
 
   return (

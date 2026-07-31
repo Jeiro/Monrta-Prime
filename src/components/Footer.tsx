@@ -33,12 +33,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="mb-4">
           <div className="flex items-center gap-2.5 mb-2">
             <Brandmark className="w-[28px] h-[28px] transition-transform duration-500 hover:rotate-6" />
-            <h4 className="font-bold text-white text-brand font-sans text-lg tracking-tight">
+            <h4 className="font-bold text-ink text-brand font-sans text-lg tracking-tight">
               <span className="lowercase">moneta <span className="text-accent">prime</span></span>
             </h4>
           </div>
-          <p className="text-neutral-400 mb-4">Trade smarter with confidence.</p>
-          <p className="text-neutral-500">
+          <p className="text-muted mb-4">Trade smarter with confidence.</p>
+          <p className="text-faint">
             <span className="lowercase text-ink font-medium">moneta <span className="text-accent">prime</span></span> is committed to delivering a secure and seamless trading experience through innovation, transparency, and reliability.
           </p>
         </div>
@@ -48,20 +48,20 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               key={link.label}
               type="button"
               onClick={() => onNavigate(link.view)}
-              className="text-neutral-400 hover:text-accent transition-colors text-left cursor-pointer"
+              className="text-muted hover:text-accent transition-colors text-left cursor-pointer"
             >
               {link.label}
             </button>
           ))}
         </div>
         <div>
-          <h4 className="font-bold text-white mb-4">Contact Us</h4>
-          <p className="text-neutral-400 mb-2">Need help? Our support team is here for you.</p>
+          <h4 className="font-bold text-ink mb-4">Contact Us</h4>
+          <p className="text-muted mb-2">Need help? Our support team is here for you.</p>
           <a href={`mailto:${appSettings.supportEmail}`} className="text-accent hover:text-accent-hover hover:underline transition-colors flex items-center gap-2">
             {appSettings.supportEmail}
           </a>
-          <p className="text-neutral-500 mt-2">{appSettings.supportPhone}</p>
-          <p className="text-neutral-500 mt-3 not-italic leading-relaxed">{appSettings.companyAddress}</p>
+          <p className="text-faint mt-2">{appSettings.supportPhone}</p>
+          <p className="text-faint mt-3 not-italic leading-relaxed">{appSettings.companyAddress}</p>
         </div>
       </div>
     </footer>

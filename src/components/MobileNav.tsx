@@ -43,7 +43,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, onNavigate })
               aria-current={isActive ? "page" : undefined}
               onClick={() => handleTabClick(tab.id)}
               className={`flex flex-col items-center gap-1 cursor-pointer rounded-2xl px-2 py-2 transition-colors duration-150 ${
-                isActive ? "text-accent bg-accent/10 shadow-sm" : "text-neutral-400 hover:text-white"
+                isActive ? "text-accent bg-accent/10 shadow-sm" : "text-muted hover:text-ink"
               }`}
             >
               <div className={`p-1.5 rounded-full ${tab.isSpecial ? "bg-accent/20 text-accent" : isActive ? "bg-white/10" : "bg-transparent"}`}>

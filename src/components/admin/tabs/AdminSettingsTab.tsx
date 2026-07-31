@@ -120,7 +120,7 @@ export const AdminSettingsTab: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`p-3 rounded-xl border text-xs font-bold flex items-center gap-2 ${feedback.type === "success" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-red-500/10 border-red-500/30 text-red-400"}`}
+          className={`p-3 rounded-xl border text-xs font-bold flex items-center gap-2 ${feedback.type === "success" ? "bg-positive/10 border-positive/30 text-positive" : "bg-negative/10 border-negative/30 text-negative"}`}
         >
           {feedback.type === "success" ? <Check size={14} /> : <AlertCircle size={14} />}
           {feedback.message}

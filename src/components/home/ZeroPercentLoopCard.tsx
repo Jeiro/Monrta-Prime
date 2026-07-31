@@ -97,7 +97,7 @@ export const ZeroPercentLoopCard = () => {
                     zIndex: [25, 25, 5, 5, 25, 25, 25]
                   }}
                   transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
-                  className="absolute left-1/2 top-1/2 -ml-5 -mt-5 w-10 h-10 rounded-full bg-gradient-to-br from-[#26A17B] to-[#1a7d5f] border-2 border-[#FFFFFF]/80 flex items-center justify-center text-white text-xs font-black font-sans shadow-lg shadow-[#26A17B]/30 transform-gpu"
+                  className="absolute left-1/2 top-1/2 -ml-5 -mt-5 w-10 h-10 rounded-full bg-gradient-to-br from-[#26A17B] to-[#1a7d5f] border-2 border-[#FFFFFF]/80 flex items-center justify-center text-ink text-xs font-black font-sans shadow-lg shadow-[#26A17B]/30 transform-gpu"
                 >
                   USDT
                 </motion.div>
@@ -111,7 +111,7 @@ export const ZeroPercentLoopCard = () => {
                     zIndex: [5, 5, 25, 25, 25, 5, 5]
                   }}
                   transition={{ duration: 8.5, repeat: Infinity, ease: "linear" }}
-                  className="absolute left-1/2 top-1/2 -ml-5 -mt-5 w-10 h-10 rounded-full bg-gradient-to-br from-[#FF9900] to-[#FF5500] border-2 border-slate-200/90 flex items-center justify-center text-white text-lg font-black font-mono shadow-lg shadow-[#FF9900]/30 transform-gpu"
+                  className="absolute left-1/2 top-1/2 -ml-5 -mt-5 w-10 h-10 rounded-full bg-gradient-to-br from-[#FF9900] to-[#FF5500] border-2 border-line/90 flex items-center justify-center text-ink text-lg font-black font-mono shadow-lg shadow-[#FF9900]/30 transform-gpu"
                 >
                   ₿
                 </motion.div>
@@ -125,7 +125,7 @@ export const ZeroPercentLoopCard = () => {
                     zIndex: [25, 25, 5, 25, 25, 25, 25]
                   }}
                   transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                  className="absolute left-1/2 top-1/2 -ml-4.5 -mt-4.5 w-9 h-9 rounded-full bg-gradient-to-tr from-[#9945FF] via-[#14F195] to-[#9945FF] border border-white/50 flex items-center justify-center text-neutral-900 text-2xs font-black shadow-lg transform-gpu"
+                  className="absolute left-1/2 top-1/2 -ml-4.5 -mt-4.5 w-9 h-9 rounded-full bg-gradient-to-tr from-[#9945FF] via-[#14F195] to-[#9945FF] border border-white/50 flex items-center justify-center text-faint text-2xs font-black shadow-lg transform-gpu"
                 >
                   SOL
                 </motion.div>
@@ -139,7 +139,7 @@ export const ZeroPercentLoopCard = () => {
                     zIndex: [25, 25, 25, 5, 5, 25, 25]
                   }}
                   transition={{ duration: 9.2, repeat: Infinity, ease: "linear" }}
-                  className="absolute left-1/2 top-1/2 -ml-4 -mt-4 w-8 h-8 rounded-full bg-gradient-to-br from-[#FF0013] to-[#b3000e] border border-white/40 flex items-center justify-center text-white text-2xs font-bold shadow-lg transform-gpu"
+                  className="absolute left-1/2 top-1/2 -ml-4 -mt-4 w-8 h-8 rounded-full bg-gradient-to-br from-[#FF0013] to-[#b3000e] border border-white/40 flex items-center justify-center text-ink text-2xs font-bold shadow-lg transform-gpu"
                 >
                   TRX
                 </motion.div>
@@ -152,7 +152,7 @@ export const ZeroPercentLoopCard = () => {
           <span className="text-2xs font-mono font-bold tracking-[0.3em] text-accent uppercase block drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
             Derivative Fee Rate
           </span>
-          <span className="text-2xs text-neutral-300 font-sans mt-1 max-w-[210px] mx-auto block leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+          <span className="text-2xs text-muted font-sans mt-1 max-w-[210px] mx-auto block leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
             Institutional liquidity with zero standard maker commission charges.
           </span>
         </div>

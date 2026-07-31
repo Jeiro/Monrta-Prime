@@ -54,16 +54,16 @@ const shortValue = (value: string, left = 12, right = 5) =>
 type AccountStatus = "active" | "suspended" | "banned";
 
 const statusStyles: Record<AccountStatus, string> = {
-  active: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
+  active: "text-positive bg-positive/10 border-positive/30",
   suspended: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
-  banned: "text-red-400 bg-red-500/10 border-red-500/30"
+  banned: "text-negative bg-negative/10 border-negative/30"
 };
 
 const kycStyles: Record<KycViewStatus, string> = {
   pending: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
-  approved: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
-  rejected: "text-red-400 bg-red-500/10 border-red-500/30",
-  unverified: "text-zinc-400 bg-zinc-500/10 border-zinc-500/30"
+  approved: "text-positive bg-positive/10 border-positive/30",
+  rejected: "text-negative bg-negative/10 border-negative/30",
+  unverified: "text-muted bg-surface/10 border-line/30"
 };
 
 const recentTransactionsFor = (transactions: Transaction[], userId: string, type: Transaction["type"]) =>
@@ -221,7 +221,7 @@ export const AdminUsersTab: React.FC = () => {
       </div>
 
       {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={`p-3 rounded-xl border text-xs font-bold flex items-center gap-2 ${feedback.type === "success" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-red-500/10 border-red-500/30 text-red-400"}`}>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={`p-3 rounded-xl border text-xs font-bold flex items-center gap-2 ${feedback.type === "success" ? "bg-positive/10 border-positive/30 text-positive" : "bg-negative/10 border-negative/30 text-negative"}`}>
           {feedback.type === "success" ? <Check size={14} /> : <X size={14} />}
           {feedback.message}
         </motion.div>
@@ -445,7 +445,7 @@ const UserDrawer: React.FC<{
           <Section title="KYC Information" icon={<Shield size={15} className="text-accent" />}>
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${kycStyles[kycStatus]}`}>{kycStatus.toUpperCase()}</span>
-              {kyc?.rejectionReason && <span className="text-2xs text-red-400">Previous rejection: {kyc.rejectionReason}</span>}
+              {kyc?.rejectionReason && <span className="text-2xs text-negative">Previous rejection: {kyc.rejectionReason}</span>}
             </div>
             {kyc ? (
               <div className="grid grid-cols-2 gap-3">
@@ -460,7 +460,7 @@ const UserDrawer: React.FC<{
               <p className="text-xs text-muted">This user has not submitted identity documents.</p>
             )}
             <div className="mt-3 flex flex-col sm:flex-row gap-2">
-              <button onClick={onApproveKyc} className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-emerald-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-emerald-600 cursor-pointer">
+              <button onClick={onApproveKyc} className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-positive text-ink font-bold text-xs uppercase rounded-lg hover:bg-positive cursor-pointer">
                 <Check size={14} /> Approve KYC
               </button>
               <input
@@ -469,7 +469,7 @@ const UserDrawer: React.FC<{
                 placeholder="Rejection reason"
                 className="flex-1 px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent"
               />
-              <button onClick={onRejectKyc} className="flex items-center justify-center gap-1.5 px-4 py-2 bg-red-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-red-600 cursor-pointer">
+              <button onClick={onRejectKyc} className="flex items-center justify-center gap-1.5 px-4 py-2 bg-negative text-ink font-bold text-xs uppercase rounded-lg hover:bg-negative cursor-pointer">
                 <X size={14} /> Reject
               </button>
             </div>
@@ -502,7 +502,7 @@ const UserDrawer: React.FC<{
           </Section>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Section title="Recent Deposits" icon={<ArrowDownLeft size={15} className="text-emerald-400" />}>
+            <Section title="Recent Deposits" icon={<ArrowDownLeft size={15} className="text-positive" />}>
               <TransactionList rows={deposits} empty="No recent deposits." />
             </Section>
             <Section title="Recent Withdrawals" icon={<ArrowUpRight size={15} className="text-accent" />}>
@@ -522,7 +522,7 @@ const UserDrawer: React.FC<{
 
           <Section title="Account Actions" icon={<AlertTriangle size={15} className="text-yellow-400" />}>
             <div className="flex flex-wrap gap-2">
-              <button onClick={onActivate} className="flex items-center gap-1.5 px-3 py-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-2xs font-bold rounded-lg hover:bg-emerald-500/20 cursor-pointer">
+              <button onClick={onActivate} className="flex items-center gap-1.5 px-3 py-2 bg-positive/10 border border-positive/30 text-positive text-2xs font-bold rounded-lg hover:bg-positive/20 cursor-pointer">
                 <UserCheck size={12} /> Activate
               </button>
               <button onClick={onSuspend} className="flex items-center gap-1.5 px-3 py-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-2xs font-bold rounded-lg hover:bg-yellow-500/20 cursor-pointer">
@@ -543,9 +543,9 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
   const toneClass = tone === "yellow"
     ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
     : tone === "green"
-      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+      ? "bg-positive/10 border-positive/20 text-positive"
       : tone === "red"
-        ? "bg-red-500/10 border-red-500/20 text-red-400"
+        ? "bg-negative/10 border-negative/20 text-negative"
         : "bg-ground border-line text-ink";
 
   return (
@@ -557,7 +557,7 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
 };
 
 const StateMessage: React.FC<{ icon?: React.ReactNode; title: string; message: string; tone?: "default" | "error" }> = ({ icon, title, message, tone = "default" }) => {
-  const toneClass = tone === "error" ? "text-red-400" : "text-muted";
+  const toneClass = tone === "error" ? "text-negative" : "text-muted";
 
   return (
     <div className={`py-14 px-6 text-center ${toneClass}`}>

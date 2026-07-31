@@ -15,21 +15,21 @@ export const Confidence = () => (
            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-accent/10 border border-accent/30 text-accent mb-4 shadow-[0_0_15px_rgba(106,165,255,0.15)]">
              <ShieldCheck className="w-6 h-6 animate-pulse" style={{ animationDuration: '3s' }} />
            </div>
-           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-white tracking-tight leading-tight mb-4 font-display">Trade With Confidence</h2>
-           <p className="text-neutral-400 text-sm sm:text-base max-w-xl mx-auto mb-10">Security and transparency are at the center of everything we build.</p>
+           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-ink tracking-tight leading-tight mb-4 font-display">Trade With Confidence</h2>
+           <p className="text-muted text-sm sm:text-base max-w-xl mx-auto mb-10">Security and transparency are at the center of everything we build.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-              {[ { title: "Account Security", desc: "Advanced authentication and encryption technologies keep your account protected.", icon: Fingerprint, colorClass: "text-indigo-400 hover:border-indigo-500/20" },
-                 { title: "Transparent Transactions", desc: "Monitor your balances and transaction history anytime.", icon: BarChart3, colorClass: "text-emerald-400 hover:border-emerald-500/20" },
+              {[ { title: "Account Security", desc: "Advanced authentication and encryption technologies keep your account protected.", icon: Fingerprint, colorClass: "text-accent hover:border-accent/20" },
+                 { title: "Transparent Transactions", desc: "Monitor your balances and transaction history anytime.", icon: BarChart3, colorClass: "text-positive hover:border-positive/20" },
                  { title: "Reliable Infrastructure", desc: "Built on modern cloud technology for speed and stability.", icon: Database, colorClass: "text-accent-hover hover:border-accent/20" } ].map((item, i) => {
                     const ItemIcon = item.icon;
                     return (
-                      <div key={i} className={`flex flex-col gap-5 p-6 sm:p-7 rounded-2xl bg-neutral-900/10 border border-neutral-800/15 backdrop-blur-sm transition-all duration-300 ${item.colorClass}`}>
-                          <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-neutral-900/40 border border-neutral-800/80 flex items-center justify-center">
+                      <div key={i} className={`flex flex-col gap-5 p-6 sm:p-7 rounded-2xl bg-raised/10 border border-line/15 backdrop-blur-sm transition-all duration-300 ${item.colorClass}`}>
+                          <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-raised/40 border border-line/80 flex items-center justify-center">
                               <ItemIcon className="w-5 h-5" />
                           </div>
                           <div>
-                               <h4 className="font-bold text-white text-base mb-2 font-sans">{item.title}</h4>
-                               <p className="text-neutral-400 text-xs leading-relaxed">{item.desc}</p>
+                               <h4 className="font-bold text-ink text-base mb-2 font-sans">{item.title}</h4>
+                               <p className="text-muted text-xs leading-relaxed">{item.desc}</p>
                           </div>
                       </div>
                     );

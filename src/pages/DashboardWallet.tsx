@@ -271,7 +271,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
             <button 
               type="button"
               onClick={() => setShowBalance(!showBalance)} 
-              className="text-neutral-400 hover:text-ink focus:outline-none transition-colors cursor-pointer"
+              className="text-muted hover:text-ink focus:outline-none transition-colors cursor-pointer"
               title={showBalance ? "Hide balance" : "Show balance"}
             >
               {showBalance ? <Eye size={12} /> : <EyeOff size={12} />}
@@ -478,7 +478,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                   <p className="text-2xs font-sans font-medium">
                     {depositProofName ? "✓ Receipt Proof Attached" : "📸 Upload transfer receipt or block explorer snapshot"}
                   </p>
-                  <span className="text-2xs text-zinc-500 font-mono block mt-1">
+                  <span className="text-2xs text-faint font-mono block mt-1">
                     {depositProofName || "Supports JPG, PNG (Max size: 5MB)"}
                   </span>
                 </div>
@@ -491,7 +491,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                 >
                   Confirm Deposit
                 </button>
-                <p className="text-xs text-neutral-400 text-center mt-2 font-sans">
+                <p className="text-xs text-muted text-center mt-2 font-sans">
                   Please only click the Confirm Deposit button if you have already transferred the funds.
                 </p>
               </div>
@@ -682,7 +682,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
               >
                 Withdraw
               </button>
-              <p className="text-xs text-neutral-400 text-center mt-2 font-sans select-none px-4 leading-normal">
+              <p className="text-xs text-muted text-center mt-2 font-sans select-none px-4 leading-normal">
                 Please ensure your settlement coordinates are flawless. Incorrect instructions will result in permanent loss or queue rejection.
               </p>
             </div>

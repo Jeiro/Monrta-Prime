@@ -253,7 +253,7 @@ export const AdminTradersTab: React.FC = () => {
       </div>
 
       {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center gap-2">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-positive/10 border border-positive/30 text-positive text-xs font-bold flex items-center gap-2">
           <Check size={14} /> {feedback}
         </motion.div>
       )}
@@ -370,7 +370,7 @@ export const AdminTradersTab: React.FC = () => {
                   </td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-3 text-2xs">
-                      <span className="font-bold text-emerald-400">{trader.roi ?? 0}% ROI</span>
+                      <span className="font-bold text-positive">{trader.roi ?? 0}% ROI</span>
                       <span className="text-ink">{trader.winRate ?? 0}% win</span>
                       <span className="text-accent">R{trader.riskScore ?? 2}</span>
                     </div>
@@ -384,7 +384,7 @@ export const AdminTradersTab: React.FC = () => {
                       <button onClick={() => startEdit(trader)} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-accent/10 border border-accent/30 text-accent text-2xs font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
                         <Edit3 size={10} /> Edit
                       </button>
-                      <button onClick={() => { if (window.confirm(`Delete \"${trader.name}\"?`)) void adminDeleteTrader(trader.id); }} className="flex items-center justify-center px-3 py-1.5 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/20 cursor-pointer" aria-label={`Delete ${trader.name}`}>
+                      <button onClick={() => { if (window.confirm(`Delete \"${trader.name}\"?`)) void adminDeleteTrader(trader.id); }} className="flex items-center justify-center px-3 py-1.5 bg-negative/10 border border-negative/30 text-negative rounded-lg hover:bg-negative/20 cursor-pointer" aria-label={`Delete ${trader.name}`}>
                         <Trash2 size={12} />
                       </button>
                     </div>
@@ -411,7 +411,7 @@ const NumberInput: React.FC<{ placeholder: string; value: string; onChange: (val
 
 const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "green" | "accent" }> = ({ label, value, tone = "default" }) => {
   const toneClass = tone === "green"
-    ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+    ? "bg-positive/10 border-positive/20 text-positive"
     : tone === "accent"
       ? "bg-accent/10 border-accent/20 text-accent"
       : "bg-ground border-line text-ink";
@@ -425,14 +425,14 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "gr
 };
 
 const ToggleButton: React.FC<{ label: string; enabled: boolean; onClick: () => void }> = ({ label, enabled, onClick }) => (
-  <button type="button" onClick={onClick} className={`flex items-center justify-center gap-1.5 px-3 py-2 border rounded-lg text-2xs font-bold cursor-pointer ${enabled ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-ground border-line text-muted"}`}>
+  <button type="button" onClick={onClick} className={`flex items-center justify-center gap-1.5 px-3 py-2 border rounded-lg text-2xs font-bold cursor-pointer ${enabled ? "bg-positive/10 border-positive/30 text-positive" : "bg-ground border-line text-muted"}`}>
     {enabled ? <ToggleRight size={14} /> : <ToggleLeft size={14} />}
     {label}
   </button>
 );
 
 const TableToggle: React.FC<{ enabled: boolean; onClick: () => void; onText: string; offText: string }> = ({ enabled, onClick, onText, offText }) => (
-  <button type="button" onClick={onClick} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-2xs font-bold cursor-pointer ${enabled ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-ground border-line text-muted"}`}>
+  <button type="button" onClick={onClick} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-2xs font-bold cursor-pointer ${enabled ? "bg-positive/10 border-positive/30 text-positive" : "bg-ground border-line text-muted"}`}>
     {enabled ? <ToggleRight size={13} /> : <ToggleLeft size={13} />}
     {enabled ? onText : offText}
     {enabled && onText === "Featured" ? <Star size={11} /> : null}

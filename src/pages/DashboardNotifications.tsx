@@ -14,13 +14,13 @@ const PAGE_SIZE = 12;
 const typeStyles: Record<NotificationType, { icon: React.ReactNode; tone: string; dot: string }> = {
   success: {
     icon: <CheckCircle2 size={18} />,
-    tone: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
-    dot: "bg-emerald-400"
+    tone: "text-positive bg-positive/10 border-positive/20",
+    dot: "bg-positive"
   },
   info: {
     icon: <Info size={18} />,
-    tone: "text-sky-400 bg-sky-500/10 border-sky-500/20",
-    dot: "bg-sky-400"
+    tone: "text-accent bg-accent/10 border-accent/20",
+    dot: "bg-accent"
   },
   warning: {
     icon: <AlertTriangle size={18} />,
@@ -29,8 +29,8 @@ const typeStyles: Record<NotificationType, { icon: React.ReactNode; tone: string
   },
   error: {
     icon: <XCircle size={18} />,
-    tone: "text-rose-400 bg-rose-500/10 border-rose-500/20",
-    dot: "bg-rose-400"
+    tone: "text-negative bg-negative/10 border-negative/20",
+    dot: "bg-negative"
   }
 };
 
@@ -122,7 +122,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
                         <h2 className="text-sm font-bold text-ink">{notification.title}</h2>
                         <span className="text-2xs uppercase tracking-wide text-muted">{notification.type}</span>
                       </div>
-                      <p className="mt-1.5 text-sm leading-6 text-slate-300">{notification.message}</p>
+                      <p className="mt-1.5 text-sm leading-6 text-muted">{notification.message}</p>
                       <p className="mt-2 text-xs text-muted">{formatRelativeTimestamp(notification.timestamp)}</p>
                     </div>
                   </div>
@@ -142,7 +142,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
                       <button
                         type="button"
                         onClick={() => markNotificationRead(notification.id)}
-                        className="rounded-lg border border-line bg-panel p-2 text-muted transition-colors hover:text-emerald-400"
+                        className="rounded-lg border border-line bg-panel p-2 text-muted transition-colors hover:text-positive"
                         title="Mark as read"
                       >
                         <CheckCircle2 size={15} />
@@ -151,7 +151,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
                     <button
                       type="button"
                       onClick={() => deleteNotification(notification.id)}
-                      className="rounded-lg border border-line bg-panel p-2 text-muted transition-colors hover:text-rose-400"
+                      className="rounded-lg border border-line bg-panel p-2 text-muted transition-colors hover:text-negative"
                       title="Delete notification"
                     >
                       <Trash2 size={15} />

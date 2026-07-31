@@ -158,15 +158,15 @@ export const AdminOverviewTab: React.FC = () => {
                 </div>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-zinc-500 font-medium uppercase tracking-wider">Hedged Revenue Base</span>
+                    <span className="text-faint font-medium uppercase tracking-wider">Hedged Revenue Base</span>
                     <span className="font-bold text-positive font-data text-sm">+${platformHedgedRevenue.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-zinc-500 font-medium uppercase tracking-wider">Projected Next Month</span>
+                    <span className="text-faint font-medium uppercase tracking-wider">Projected Next Month</span>
                     <span className="font-bold text-ink font-data text-sm">+${(platformHedgedRevenue * 1.15).toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-zinc-500 font-medium uppercase tracking-wider">System Yield Rate</span>
+                    <span className="text-faint font-medium uppercase tracking-wider">System Yield Rate</span>
                     <span className="font-bold text-accent font-data text-sm">4.2%</span>
                   </div>
                   

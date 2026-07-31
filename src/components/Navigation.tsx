@@ -36,21 +36,21 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
   ];
 
   const primaryLinks = [
-    { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard className="text-blue-400" size={14} /> },
-    { id: "dashboard-trading", label: "Trade", icon: <TrendingUp className="text-emerald-400" size={14} /> },
-    { id: "dashboard-wallet", label: "Wallet", icon: <Wallet2 className="text-cyan-400" size={14} /> },
+    { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard className="text-accent" size={14} /> },
+    { id: "dashboard-trading", label: "Trade", icon: <TrendingUp className="text-positive" size={14} /> },
+    { id: "dashboard-wallet", label: "Wallet", icon: <Wallet2 className="text-accent" size={14} /> },
     { id: "dashboard-plans", label: "Investments", icon: <Briefcase className="text-accent-hover" size={14} /> },
-    { id: "dashboard-transactions", label: "History", icon: <History className="text-gray-400" size={14} /> }
+    { id: "dashboard-transactions", label: "History", icon: <History className="text-muted" size={14} /> }
   ];
 
   const secondaryLinks = [
-    { id: "copy-trading", label: "Copy Trading", icon: <User className="text-violet-400" size={14} /> },
-    { id: "dashboard-airdrops", label: "Airdrops", icon: <Gift className="text-rose-400" size={14} /> },
-    { id: "dashboard-wallet-feedback", label: "Link Wallet", icon: <Wallet2 className="text-pink-400" size={14} /> },
-    { id: "dashboard-kyc", label: user.kyc?.status === "approved" ? "Verified" : "Verify Identity", icon: user.kyc?.status === "approved" ? <CheckCircle2 size={14} className="text-emerald-400" /> : <Shield size={14} className="text-accent-hover" /> },
+    { id: "copy-trading", label: "Copy Trading", icon: <User className="text-accent" size={14} /> },
+    { id: "dashboard-airdrops", label: "Airdrops", icon: <Gift className="text-negative" size={14} /> },
+    { id: "dashboard-wallet-feedback", label: "Link Wallet", icon: <Wallet2 className="text-accent" size={14} /> },
+    { id: "dashboard-kyc", label: user.kyc?.status === "approved" ? "Verified" : "Verify Identity", icon: user.kyc?.status === "approved" ? <CheckCircle2 size={14} className="text-positive" /> : <Shield size={14} className="text-accent-hover" /> },
     { id: "dashboard-notifications", label: "Notifications", icon: <Bell className="text-accent" size={14} />, badge: unreadNotificationsCount },
-    { id: "dashboard-support", label: "Support", icon: <MessageSquare className="text-sky-400" size={14} /> },
-    { id: "dashboard-settings", label: "Settings", icon: <Settings className="text-slate-400" size={14} /> }
+    { id: "dashboard-support", label: "Support", icon: <MessageSquare className="text-accent" size={14} /> },
+    { id: "dashboard-settings", label: "Settings", icon: <Settings className="text-muted" size={14} /> }
   ];
 
   const getUID = (email: string | null) => {
@@ -313,7 +313,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                     <div className="mt-auto pt-6 pb-2" />
 
                     {/* Divider */}
-                    <div className="w-full h-[1px] bg-neutral-900/60 mb-6" />
+                    <div className="w-full h-[1px] bg-raised/60 mb-6" />
 
                     {/* Auth Buttons */}
                     <div className="grid grid-cols-2 gap-4">
@@ -382,7 +382,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
 
                     {/* Authenticated User Profile & Sign Out - Integrated Flow */}
                     <div className="mt-auto pt-2">
-                      <div className="w-full h-[1px] bg-neutral-900/60 mb-4" />
+                      <div className="w-full h-[1px] bg-raised/60 mb-4" />
                       <div className="flex flex-col gap-4 px-2">
                         <div className="flex items-center justify-between p-3 rounded-xl bg-surface/30 border border-line/40">
                           <div className="flex flex-col text-left">

@@ -218,7 +218,7 @@ export const PublicMarkets: React.FC<PublicMarketsProps> = ({ onNavigate }) => {
  
                       {/* CTA link */}
                       <td className="p-4 pr-6 text-right font-subheading">
-                        <span className="inline-flex items-center gap-1 text-2xs font-bold font-subheading text-accent group-hover:text-white transition-colors bg-accent/15 px-2.5 py-1 rounded">
+                        <span className="inline-flex items-center gap-1 text-2xs font-bold font-subheading text-accent group-hover:text-ink transition-colors bg-accent/15 px-2.5 py-1 rounded">
                           TRADE
                           <ArrowRight size={10} className="transform group-hover:translate-x-0.5 transition-transform" />
                         </span>
@@ -238,7 +238,7 @@ export const PublicMarkets: React.FC<PublicMarketsProps> = ({ onNavigate }) => {
         </div>
         <button 
           onClick={() => onNavigate("dashboard-trading")}
-          className="px-5 py-2 rounded-lg text-accent hover:text-white text-2xs font-medium font-subheading transition-all shrink-0 cursor-pointer"
+          className="px-5 py-2 rounded-lg text-accent hover:text-ink text-2xs font-medium font-subheading transition-all shrink-0 cursor-pointer"
         >
           Go to Trading Terminal
         </button>

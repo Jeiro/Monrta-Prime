@@ -36,9 +36,9 @@ const shortValue = (value?: string, left = 12, right = 6) => {
 };
 
 const statusClass = (status: Transaction["status"]) => {
-  if (status === "completed" || status === "approved") return "border-emerald-500/30 bg-emerald-500/10 text-emerald-400";
+  if (status === "completed" || status === "approved") return "border-positive/30 bg-positive/10 text-positive";
   if (status === "pending") return "border-yellow-500/30 bg-yellow-500/10 text-yellow-400";
-  return "border-red-500/30 bg-red-500/10 text-red-400";
+  return "border-negative/30 bg-negative/10 text-negative";
 };
 
 const StatusIcon: React.FC<{ status: Transaction["status"] }> = ({ status }) => {
@@ -193,9 +193,9 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "ye
   const toneClass = tone === "yellow"
     ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
     : tone === "green"
-      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+      ? "bg-positive/10 border-positive/20 text-positive"
       : tone === "red"
-        ? "bg-red-500/10 border-red-500/20 text-red-400"
+        ? "bg-negative/10 border-negative/20 text-negative"
         : "bg-ground border-line text-ink";
 
   return (

@@ -46,7 +46,7 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 14 }}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-white tracking-tight leading-tight max-w-4xl mx-auto font-display"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-ink tracking-tight leading-tight max-w-4xl mx-auto font-display"
           >
             Choose your plan and target
           </motion.h2>
@@ -56,7 +56,7 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 14, delay: 0.1 }}
-            className="text-neutral-400 max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed font-sans"
+            className="text-muted max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed font-sans"
           >
             Select a plan that fits your budget and timeline. Track progress from your dashboard.
           </motion.p>
@@ -74,7 +74,7 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, amount: 0.05 }}
                 transition={{ type: "spring", stiffness: 65, damping: 13, delay: idx * 0.08 }}
-                className={`bg-neutral-900/15 backdrop-blur-md border border-neutral-800/30 rounded-3xl p-6 flex flex-col justify-between text-left shadow-2xl relative group transition-all duration-300 hover:scale-[1.02] hover:border-white/10 transform-gpu min-h-[300px]`}
+                className={`bg-raised/15 backdrop-blur-md border border-line/30 rounded-3xl p-6 flex flex-col justify-between text-left shadow-2xl relative group transition-all duration-300 hover:scale-[1.02] hover:border-white/10 transform-gpu min-h-[300px]`}
               >
                 <div className="absolute inset-0 bg-gradient-to-b from-white/[0.005] to-transparent rounded-3xl pointer-events-none" />
                 
@@ -93,22 +93,22 @@ export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: stri
                     </h3>
                     
                     <div className="space-y-2">
-                      <p className="text-neutral-400 font-sans text-xs leading-relaxed line-clamp-2">
+                      <p className="text-muted font-sans text-xs leading-relaxed line-clamp-2">
                         {plan.description}
                       </p>
-                      <p className="text-neutral-400 font-sans text-xs leading-relaxed">
-                        Expected return: <span className="font-semibold text-white">{plan.roiPercent}%</span>
+                      <p className="text-muted font-sans text-xs leading-relaxed">
+                        Expected return: <span className="font-semibold text-ink">{plan.roiPercent}%</span>
                       </p>
-                      <p className="text-neutral-500 font-sans text-2xs leading-relaxed">
+                      <p className="text-faint font-sans text-2xs leading-relaxed">
                         Min: ${plan.minDeposit.toLocaleString()} | Max: {plan.maxDeposit >= 10000000 ? "Unlimited" : `${plan.maxDeposit.toLocaleString()}`}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-8 border-t border-neutral-900/40 pt-4 relative z-10">
-                  <p className="text-neutral-400 font-sans text-xs">
-                    Duration: <span className="font-semibold text-white">{plan.durationDays} Days</span>
+                <div className="mt-8 border-t border-line/40 pt-4 relative z-10">
+                  <p className="text-muted font-sans text-xs">
+                    Duration: <span className="font-semibold text-ink">{plan.durationDays} Days</span>
                   </p>
                   <button
                     onClick={() => {

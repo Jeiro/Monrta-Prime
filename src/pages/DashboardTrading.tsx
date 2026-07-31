@@ -99,7 +99,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
                 }}
               >
                 {activeAsset.symbol}
-                <ChevronDown size={11} className="text-neutral-500 shrink-0" />
+                <ChevronDown size={11} className="text-faint shrink-0" />
               </button>
             </div>
           </div>
@@ -135,7 +135,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
               <button
                 type="button"
                 onClick={() => setShowBalance(!showBalance)}
-                className="text-neutral-400 hover:text-ink transition-colors cursor-pointer"
+                className="text-muted hover:text-ink transition-colors cursor-pointer"
                 title={showBalance ? "Hide balance" : "Show balance"}
               >
                 {showBalance ? <Eye size={12} /> : <EyeOff size={12} />}
@@ -328,7 +328,7 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
             <button
               type="submit"
               className={`w-full py-3 mt-4 rounded-xl font-bold font-subheading text-xs uppercase shadow transition-all transform hover:-translate-y-0.5 cursor-pointer shadow-accent/10 ${
-                tradeType === "buy" ? "bg-positive text-ground" : "bg-negative text-white"
+                tradeType === "buy" ? "bg-positive text-ground" : "bg-negative text-ink"
               }`}
             >
               {tradeType === "buy" ? "BUY LONG" : "SELL SHORT"}

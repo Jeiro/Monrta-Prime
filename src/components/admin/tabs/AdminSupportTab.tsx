@@ -26,15 +26,15 @@ export const AdminSupportTab: React.FC = () => {
   const openCount = allTickets.filter(t => t.status === "open").length;
 
   const statusColors: Record<string, string> = {
-    open: "text-red-400 bg-red-500/10 border-red-500/30",
+    open: "text-negative bg-negative/10 border-negative/30",
     pending: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
-    resolved: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30"
+    resolved: "text-positive bg-positive/10 border-positive/30"
   };
 
   const priorityColors: Record<string, string> = {
-    high: "text-red-400 bg-red-500/10 border-red-500/30",
+    high: "text-negative bg-negative/10 border-negative/30",
     medium: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
-    low: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30"
+    low: "text-positive bg-positive/10 border-positive/30"
   };
 
   const handleReply = (ticketId: string) => {
@@ -58,7 +58,7 @@ export const AdminSupportTab: React.FC = () => {
             <p className="text-xs text-muted mt-1">Manage and respond to user support tickets.</p>
           </div>
           {openCount > 0 && (
-            <span className="flex items-center gap-2 text-2xs font-bold text-red-400 bg-red-500/10 border border-red-500/30 px-3 py-1.5 rounded-full animate-pulse">
+            <span className="flex items-center gap-2 text-2xs font-bold text-negative bg-negative/10 border border-negative/30 px-3 py-1.5 rounded-full animate-pulse">
               <AlertTriangle size={12} /> {openCount} Open Tickets
             </span>
           )}
@@ -67,7 +67,7 @@ export const AdminSupportTab: React.FC = () => {
 
       {/* Feedback */}
       {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-positive/10 border border-positive/30 text-positive text-xs font-bold">
           {feedback}
         </motion.div>
       )}
@@ -84,11 +84,11 @@ export const AdminSupportTab: React.FC = () => {
         {filtered.map(ticket => {
           const isExpanded = expandedTicket === ticket.id;
           return (
-            <div key={ticket.id} className={`bg-surface border rounded-2xl overflow-hidden ${ticket.status === "open" ? "border-red-500/30" : "border-line"}`}>
+            <div key={ticket.id} className={`bg-surface border rounded-2xl overflow-hidden ${ticket.status === "open" ? "border-negative/30" : "border-line"}`}>
               <button onClick={() => setExpandedTicket(isExpanded ? null : ticket.id)}
                 className="w-full flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-line/20 transition-colors cursor-pointer text-left gap-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-accent-deep flex items-center justify-center text-white text-2xs font-black">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-accent-deep flex items-center justify-center text-ink text-2xs font-black">
                     {ticket.userName?.charAt(0)}
                   </div>
                   <div>
@@ -141,7 +141,7 @@ export const AdminSupportTab: React.FC = () => {
                       </button>
                     ))}
                     <button onClick={() => { adminCloseTicket(ticket.id); setFeedback("Ticket closed."); setTimeout(() => setFeedback(null), 3000); }}
-                      className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-2xs font-bold rounded-lg hover:bg-emerald-500/20 cursor-pointer">
+                      className="px-3 py-1 bg-positive/10 border border-positive/30 text-positive text-2xs font-bold rounded-lg hover:bg-positive/20 cursor-pointer">
                       Mark Resolved
                     </button>
                   </div>

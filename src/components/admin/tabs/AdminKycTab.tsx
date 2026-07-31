@@ -9,9 +9,9 @@ type KycRow = CoreUserProfile & { kyc?: KycSubmission; kycStatus: KycStatus };
 
 const statusColors: Record<KycStatus, string> = {
   pending: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
-  approved: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
-  rejected: "text-red-400 bg-red-500/10 border-red-500/30",
-  unverified: "text-zinc-400 bg-zinc-500/10 border-zinc-500/30"
+  approved: "text-positive bg-positive/10 border-positive/30",
+  rejected: "text-negative bg-negative/10 border-negative/30",
+  unverified: "text-muted bg-surface/10 border-line/30"
 };
 
 const formatDate = (value?: string) => {
@@ -108,7 +108,7 @@ export const AdminKycTab: React.FC = () => {
       </div>
 
       {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-positive/10 border border-positive/30 text-positive text-xs font-bold">
           {feedback}
         </motion.div>
       )}
@@ -178,10 +178,10 @@ export const AdminKycTab: React.FC = () => {
                       <td className="px-5 py-4">
                         {kyc?.status === "pending" ? (
                           <div className="flex justify-end gap-2">
-                            <button onClick={() => approve(user)} disabled={isReviewing} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-emerald-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                            <button onClick={() => approve(user)} disabled={isReviewing} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-positive text-ink font-bold text-2xs uppercase rounded-lg hover:bg-positive cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                               <Check size={12} /> Approve
                             </button>
-                            <button onClick={() => reject(user)} disabled={isReviewing} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500 text-white font-bold text-2xs uppercase rounded-lg hover:bg-red-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                            <button onClick={() => reject(user)} disabled={isReviewing} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-negative text-ink font-bold text-2xs uppercase rounded-lg hover:bg-negative cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                               <X size={12} /> Reject
                             </button>
                           </div>
