@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { TradeFeatures, InvestmentPlansSection, WhyMonetaPrime, Confidence, AboutUs, GetStarted, Footer, Testimonials, HomeVideos } from "../components/HomeSections";
+import { Brandmark } from "../components/ui/Brandmark";
 
 // Micro-animation variants for staggering cards
 const containerVariants = {
@@ -220,24 +221,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
             
             {/* Central Moneta Prime Logo Brand Core */}
             <div className="absolute w-[180px] h-[180px] rounded-full bg-transparent border-2 border-[#6AA5FF]/20 flex flex-col items-center justify-center z-30 shadow-[0_0_50px_rgba(106,165,255,0.15)]">
-              <svg className="w-[52px] h-[52px] transform hover:rotate-12 transition-transform duration-500 filter drop-shadow-[0_4px_16px_rgba(106,165,255,0.4)]" viewBox="0 0 100 100">
-                <defs>
-                  <linearGradient id="orbCoreGold" x1="0%" y1="100%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#2E6BE0" />
-                    <stop offset="45%" stopColor="#6AA5FF" />
-                    <stop offset="100%" stopColor="#8ABAFF" />
-                  </linearGradient>
-                  <linearGradient id="orbCoreSilver" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FFFFFF" />
-                    <stop offset="50%" stopColor="#E6E8EF" />
-                    <stop offset="100%" stopColor="#A3AABF" />
-                  </linearGradient>
-                </defs>
-                <path d="M 18,50 A 30,30 0 0,1 78,28 L 71,35 A 20,20 0 0,0 26,50 Z" fill="url(#orbCoreGold)" />
-                <path d="M 18,50 C 23,48 45,38 78,28 C 65,37 40,45 18,50" fill="url(#orbCoreGold)" />
-                <path d="M 23,55 A 30,30 0 0,0 82,50 A 30,30 0 0,0 78,28 L 71,35 A 20,20 0 0,1 74,50 A 20,20 0 0,1 28,54 Z" fill="url(#orbCoreSilver)" />
-                <circle cx="85" cy="22" r="5.5" fill="#6AA5FF" />
-              </svg>
+              <Brandmark className="w-[52px] h-[52px] transition-transform duration-500 hover:rotate-6 drop-shadow-[0_4px_16px_rgba(106,165,255,0.4)]" />
               <span className="text-base text-white font-bold tracking-[0.05em] mt-2 font-display lowercase">
                 moneta <span className="text-accent">prime</span>
               </span>
@@ -347,7 +331,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
             {/* Glowing Trademark Brand Motto underneath orbit - Borderless and containerless, staying horizontal */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap">
               <span className="text-[10px] font-mono tracking-[0.25em] font-semibold text-accent uppercase">
-                Trade • Elevate • Orbit
+                Trade • Compound • Preserve
               </span>
             </div>
             

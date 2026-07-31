@@ -45,7 +45,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
   const dataColumns = [
     ["BTC 94,820", "▲ 4.82%", "USDT TRC20", "TXN_7386", "ETH 3,450", "▲ 2.11%", "SOL 184.2", "SECURE", "moneta"],
     ["ETH 3,450", "▼ 1.05%", "GAS 12Gwei", "TXN_9912", "USDT ERC20", "ACTIVE", "BTC 94,820", "GOLD", "BL_0921"],
-    ["ORBIT 4.50", "▲ 15.34%", "SWAP ACTIVE", "MKT_ORB_9", "BTC 94,820", "SOL 184.2", "▲ 7.42%", "USD_WIRE", "SECURE"],
+    ["MPRX 4.50", "▲ 15.34%", "SWAP ACTIVE", "MKT_MPX_9", "BTC 94,820", "SOL 184.2", "▲ 7.42%", "USD_WIRE", "SECURE"],
     ["SOL 184.2", "▲ 7.42%", "TRD_STB_2", "TXN_1120", "ETH 3,450", "▲ 2.11%", "MKT_EX", "USDT TRC20", "moneta"]
   ];
 
@@ -101,7 +101,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
           <div className="absolute -top-1.5 left-1/2 w-3 h-3 rounded-full bg-accent shadow-[0_0_12px_#3b82f6] border border-[#04060b]" />
           <div className="absolute -bottom-1.5 left-1/2 w-3 h-3 rounded-full bg-accent shadow-[0_0_12px_#6AA5FF] border border-[#04060b]" />
         </div>
-        {/* Inner ring: Double orbit gold accent */}
+        {/* Inner ring: double accent ring */}
         <div 
           className="absolute w-[60%] h-[60%] rounded-full border-2 border-double border-accent/15 animate-spin"
           style={{ animationDuration: "60s" }}

@@ -160,7 +160,8 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
               <Layers size={24} />
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-sans">
-              The Benchmark for Secure<br className="hidden sm:block" />
+              The Benchmark for Secure{" "}
+              <br className="hidden sm:block" />
               Multi-Asset Investing
             </h2>
             <p className="text-slate-400 text-sm md:text-base max-w-xl leading-relaxed mx-auto md:mx-0">
