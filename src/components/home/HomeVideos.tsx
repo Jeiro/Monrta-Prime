@@ -1,68 +1,138 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { LineChart, Bitcoin, Globe } from 'lucide-react';
 import videoForex from '../../video-forex.mp4';
 import videoStpo from '../../video-stpo.mp4';
 import zeroCrypo from '../../zero-crypo.mp4';
+import { Section, Container, SectionHeading } from '../ui/Layout';
 
-const SECTIONS = [
+/**
+ * Market showcase.
+ *
+ * Was three full-width videos stacked in a max-w-4xl column with 96-128px
+ * gaps — 3,752px of page, and all three videos decoding at once on load.
+ * Now one band with the markets as tabs: same three markets, same copy, but
+ * only the selected video is mounted, so exactly one decodes.
+ */
+
+const MARKETS = [
   {
-    title: "Stocks Trading",
-    text: "Trade over 100 global markets, including popular stocks such as AAPL, TSLA, NVDA, and many more. Access a diverse range of equities, indices, and ETFs, all from a single platform designed for both new and experienced traders. Take advantage of real-time data, advanced charting tools, and seamless execution to maximize your trading opportunities across the world's leading financial markets.",
+    id: 'stocks',
+    label: 'Stocks',
+    title: 'Stocks Trading',
+    icon: LineChart,
+    text: "Trade over 100 global markets, including popular stocks such as AAPL, TSLA, and NVDA. Access equities, indices, and ETFs from a single platform with real-time data, advanced charting, and seamless execution.",
+    stats: [['Markets', '100+'], ['Order types', '8'], ['Settlement', 'T+0']],
     video: videoStpo,
   },
   {
-    title: "Crypto Futures Trading",
-    text: "Access deep liquidity and institutional-grade trading infrastructure. Trade Bitcoin, Ethereum, and a wide array of altcoins with industry-leading conditions. Our platform offers advanced order types, zero-latency execution, and robust risk management tools to help you capitalize on crypto market volatility 24/7.",
+    id: 'crypto',
+    label: 'Crypto Futures',
+    title: 'Crypto Futures Trading',
+    icon: Bitcoin,
+    text: "Deep liquidity and institutional-grade infrastructure. Trade Bitcoin, Ethereum, and a wide array of altcoins with advanced order types, zero-latency execution, and robust risk management, 24/7.",
+    stats: [['Pairs', '40+'], ['Uptime', '99.9%'], ['Availability', '24/7']],
     video: zeroCrypo,
   },
   {
-    title: "Forex Markets",
-    text: "Trade major, minor, and exotic currency pairs with ultra-tight spreads and rapid execution. Our professional-grade forex trading environment provides access to global liquidity pools, advanced technical indicators, and comprehensive market analysis to support your trading strategies around the clock.",
+    id: 'forex',
+    label: 'Forex',
+    title: 'Forex Markets',
+    icon: Globe,
+    text: "Major, minor, and exotic currency pairs with ultra-tight spreads and rapid execution. Access global liquidity pools, advanced technical indicators, and comprehensive market analysis around the clock.",
+    stats: [['Pairs', '60+'], ['Spreads', 'from 0.1'], ['Execution', '<10ms']],
     video: videoForex,
-  }
-];
+  },
+] as const;
 
 export const HomeVideos = () => {
+  const [active, setActive] = useState(0);
+  const market = MARKETS[active];
+
   return (
-    <section className="py-16 bg-ground relative overflow-hidden">
-      <div className="max-w-4xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 flex flex-col gap-24 md:gap-32">
+    <Section divided className="bg-ground overflow-hidden">
+      <Container>
+        <SectionHeading
+          eyebrow="Markets"
+          title="Three markets, one workspace"
+          description="Switch between equities, crypto futures, and FX without leaving the terminal."
+        />
 
-        {SECTIONS.map((section, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="flex flex-col gap-6 md:gap-8"
+        {/* Market tabs */}
+        <div className="mt-8 flex justify-center">
+          <div
+            role="tablist"
+            aria-label="Markets"
+            className="inline-flex items-center gap-1 rounded-lg border border-line bg-surface p-1"
           >
-            {/* Text Content */}
-            <div>
-              <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight mb-5 md:mb-6">
-                {section.title}
-              </h2>
-              <p className="text-slate-400 text-base md:text-lg leading-relaxed md:leading-loose">
-                {section.text}
-              </p>
-            </div>
+            {MARKETS.map((m, i) => {
+              const Icon = m.icon;
+              const on = i === active;
+              return (
+                <button
+                  key={m.id}
+                  role="tab"
+                  aria-selected={on}
+                  aria-controls="market-panel"
+                  onClick={() => setActive(i)}
+                  className={`inline-flex items-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                    on ? 'bg-accent text-ground' : 'text-muted hover:text-ink hover:bg-raised'
+                  }`}
+                >
+                  <Icon size={15} />
+                  {m.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-            {/* Video Container */}
-            <div className="w-full rounded-3xl overflow-hidden border border-line/60 shadow-2xl bg-black relative">
-              <video
-                src={section.video}
-                className="w-full h-auto object-cover"
-                autoPlay
-                loop
-                muted
-                playsInline
-              />
-              {/* Optional glowing effect behind video container */}
-              <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] pointer-events-none" />
-            </div>
-          </motion.div>
-        ))}
+        <motion.div
+          id="market-panel"
+          role="tabpanel"
+          key={market.id}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+          className="mt-8 grid gap-6 lg:grid-cols-[1fr_1.15fr] lg:items-center"
+        >
+          <div className="flex flex-col gap-4">
+            <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight text-ink">
+              {market.title}
+            </h3>
+            <p className="text-base leading-relaxed text-muted">{market.text}</p>
 
-      </div>
-    </section>
+            <dl className="mt-1 grid grid-cols-3 gap-3">
+              {market.stats.map(([label, value]) => (
+                <div key={label} className="rounded-lg border border-line bg-surface px-3 py-2.5">
+                  <dt className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                    {label}
+                  </dt>
+                  <dd className="mt-1 font-data tabular-nums text-lg font-semibold text-ink">
+                    {value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          {/* Only the active video is mounted, so only one decodes.
+              The source clips are portrait; h-auto let them run ~900px tall
+              and dragged the whole band with them. Fixed landscape frame. */}
+          <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-line bg-black">
+            <video
+              key={market.video}
+              src={market.video}
+              className="absolute inset-0 h-full w-full object-cover"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+            />
+          </div>
+        </motion.div>
+      </Container>
+    </Section>
   );
 };

@@ -17,7 +17,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { TradeFeatures, InvestmentPlansSection, WhyMonetaPrime, Confidence, AboutUs, GetStarted, Footer, Testimonials, HomeVideos } from "../components/HomeSections";
+import { TradeFeatures, InvestmentPlansSection, Proof, Closing, Footer, Testimonials, HomeVideos } from "../components/HomeSections";
 import { Brandmark } from "../components/ui/Brandmark";
 
 // Micro-animation variants for staggering cards
@@ -342,15 +342,18 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
 
       </section>
 
+      {/* Five bands, down from ten. WhyMonetaPrime + Confidence merged into
+          <Proof />; AboutUs + GetStarted merged into <Closing />; HomeVideos
+          is now a tabbed market showcase rather than three stacked videos.
+          No content was dropped — the old components remain exported for the
+          dashboard/legal pages that still import them. */}
       <TradeFeatures onNavigate={onNavigate} />
       <InvestmentPlansSection onNavigate={onNavigate} />
-      <WhyMonetaPrime />
       <HomeVideos />
-      <Confidence />
+      <Proof />
       <Testimonials />
-      <AboutUs />
-      <GetStarted />
-      
+      <Closing onNavigate={onNavigate} />
+
       <Footer onNavigate={onNavigate} />
     </div>
   );

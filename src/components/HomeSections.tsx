@@ -9,3 +9,5 @@ export { GetStarted } from './home/GetStarted';
 export { Testimonials } from './home/Testimonials';
 export { ContactUs } from './home/ContactUs';
 export { Footer } from './Footer';
+export { Proof } from "./home/Proof";
+export { Closing } from "./home/Closing";
