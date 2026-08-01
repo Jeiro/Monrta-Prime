@@ -6,7 +6,13 @@ export const DashboardReferral: React.FC = () => {
   const { user, withdrawEarnings, addNotification } = useApp();
   const [copied, setCopied] = useState(false);
 
-  const referralLink = `https://orbitriotrades.com/register?ref=${user.email?.split('@')[0] || 'user'}`;
+  // Was hardcoded to https://orbitriotrades.com — the pre-rebrand domain, so
+  // every referral link handed out pointed at a site that is no longer this
+  // product. Deriving it from the current origin is also the only version
+  // that stays correct across local, preview and production without another
+  // constant to forget.
+  const referralOrigin = typeof window !== "undefined" ? window.location.origin : "";
+  const referralLink = `${referralOrigin}/register?ref=${user.email?.split("@")[0] || "user"}`;
   
   const referralCount = user.referralCount || 0;
   const points = user.points || 0;
@@ -32,17 +38,17 @@ export const DashboardReferral: React.FC = () => {
         <div className="bg-surface border border-line rounded-xl p-4 flex flex-col items-center">
           <Users className="text-muted mb-1.5" size={20} />
           <p className="text-sm font-bold text-ink font-data">{referralCount}</p>
-          <p className="text-[10px] text-muted mt-0.5">Referrals</p>
+          <p className="text-2xs text-muted mt-0.5">Referrals</p>
         </div>
         <div className="bg-surface border border-line rounded-xl p-4 flex flex-col items-center">
           <Trophy className="text-accent mb-1.5" size={20} />
           <p className="text-sm font-bold text-ink font-data">{points}</p>
-          <p className="text-[10px] text-muted mt-0.5">Points</p>
+          <p className="text-2xs text-muted mt-0.5">Points</p>
         </div>
         <div className="bg-surface border border-line rounded-xl p-4 flex flex-col items-center">
           <DollarSign className="text-positive mb-1.5" size={20} />
           <p className="text-sm font-bold text-ink font-data">${earnedBalance.toFixed(2)}</p>
-          <p className="text-[10px] text-muted mt-0.5">Balance</p>
+          <p className="text-2xs text-muted mt-0.5">Balance</p>
         </div>
       </div>
 
@@ -63,7 +69,7 @@ export const DashboardReferral: React.FC = () => {
 
       {/* Milestone Progress */}
       <div className="bg-surface border border-line rounded-xl p-4 space-y-3">
-        <div className="flex justify-between text-[11px] text-muted">
+        <div className="flex justify-between text-2xs text-muted">
           <span>Payout Threshold</span>
           <span className="font-data font-bold">{points} / 100 Points</span>
         </div>

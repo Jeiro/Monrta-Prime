@@ -1,7 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useApp } from "../context/AppContext";
 import { TradingViewWidget } from "../components/TradingViewWidget";
-import { TrendingUp, TrendingDown, DollarSign, RefreshCw, Layers, ShieldCheck, ShieldAlert, ChevronDown, Activity, Eye, EyeOff, BarChart2 } from "lucide-react";
+import {
+  Activity,
+  BarChart2,
+  Eye,
+  EyeOff,
+  Search,
+  ShieldAlert,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
+import {
+  Alert,
+  Button,
+  Column,
+  DataTable,
+  EmptyState,
+  Input,
+  SectionCard,
+  Tabs,
+} from "../components/ui";
+import { formatMoney } from "../lib/format";
 
 interface DashboardTradingProps {
   initialAsset?: string;
@@ -9,21 +29,39 @@ interface DashboardTradingProps {
 }
 
 export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset, onNavigate }) => {
-  const { marketCrypto, marketStocks, user, deposit, executeTrade, setInsufficientBalanceOpen } = useApp();
+  const { marketCrypto, marketStocks, user, executeTrade, setInsufficientBalanceOpen } = useApp();
   const [selectedAssetSymbol, setSelectedAssetSymbol] = useState(initialAsset || "BTC/USD");
   const [showBalance, setShowBalance] = useState(true);
+  const [watchlistQuery, setWatchlistQuery] = useState("");
+  const watchlistRef = useRef<HTMLDivElement>(null);
 
   const fullMarketList = [...marketCrypto, ...marketStocks];
-  const activeAsset = fullMarketList.find(a => a.symbol === selectedAssetSymbol) || marketCrypto[0] || {
-    symbol: "BTC/USD", name: "Bitcoin", price: 98400.00, change: 2.45, high: 99200, low: 97100, volume: "24.1B"
-  };
+  const activeAsset = fullMarketList.find((a) => a.symbol === selectedAssetSymbol) ||
+    marketCrypto[0] || {
+      symbol: "BTC/USD",
+      name: "Bitcoin",
+      price: 98400.0,
+      change: 2.45,
+      high: 99200,
+      low: 97100,
+      volume: "24.1B",
+    };
+
+  const filteredMarket = useMemo(() => {
+    const q = watchlistQuery.trim().toLowerCase();
+    if (!q) return fullMarketList;
+    return fullMarketList.filter(
+      (item) =>
+        item.symbol.toLowerCase().includes(q) || item.name.toLowerCase().includes(q)
+    );
+  }, [fullMarketList, watchlistQuery]);
 
   // Buy/Sell form parameters
   const [tradeType, setTradeType] = useState<"buy" | "sell">("buy");
   const [orderType, setOrderType] = useState<"market" | "limit">("market");
   const [amountInputTxt, setAmountInputTxt] = useState("");
   const [priceInput, setPriceInput] = useState(activeAsset.price.toString());
-  const [leverage, setLeverage] = useState(1); // 1x to 50x multiplier list
+  const [submitting, setSubmitting] = useState(false);
 
   // Execution notification logs
   const [log, setLog] = useState<string | null>(null);
@@ -31,6 +69,11 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
   useEffect(() => {
     setPriceInput(activeAsset.price.toString());
   }, [selectedAssetSymbol]); // Intentional: Only reset price input when switching assets, not on every market tick
+
+  const triggerLog = (msg: string) => {
+    setLog(msg);
+    setTimeout(() => setLog(null), 6000);
+  };
 
   const handleOrderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,345 +96,388 @@ export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset
       return;
     }
 
-    const result = await executeTrade(
-      selectedAssetSymbol,
-      activeAsset.name,
-      tradeType,
-      amountValue,
-      orderPrice,
-      selectedAssetSymbol.includes("/")
-    );
+    setSubmitting(true);
+    try {
+      const result = await executeTrade(
+        selectedAssetSymbol,
+        activeAsset.name,
+        tradeType,
+        amountValue,
+        orderPrice,
+        selectedAssetSymbol.includes("/")
+      );
 
-    if (result.success) {
-      setAmountInputTxt("");
-      triggerLog(result.message);
-    } else {
-      if (result.message === "INSUFFICIENT_BALANCE") {
+      if (result.success) {
+        setAmountInputTxt("");
+        triggerLog(result.message);
+      } else if (result.message === "INSUFFICIENT_BALANCE") {
         setInsufficientBalanceOpen(true);
       } else {
         triggerLog(`Error: ${result.message}`);
       }
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  const triggerLog = (msg: string) => {
-    setLog(msg);
-    setTimeout(() => setLog(null), 6000);
-  };
+  const baseSymbol = activeAsset.symbol.split("/")[0];
+  const effectivePrice = orderType === "market" ? activeAsset.price : parseFloat(priceInput) || 0;
+  const parsedAmount = parseFloat(amountInputTxt) || 0;
+  const estimatedQty = effectivePrice > 0 ? +(parsedAmount / effectivePrice).toFixed(6) : 0;
+
+  const positionColumns: Column<(typeof user.portfolio)[number]>[] = [
+    {
+      key: "symbol",
+      header: "Asset",
+      primary: true,
+      cell: (a) => <span className="font-data font-semibold text-ink">{a.symbol}</span>,
+    },
+    { key: "amount", header: "Size", numeric: true, cell: (a) => a.amount },
+    {
+      key: "avg",
+      header: "Avg cost",
+      numeric: true,
+      cell: (a) => <span className="text-muted">{formatMoney(a.avgBuyPrice)}</span>,
+    },
+    { key: "price", header: "Mark price", numeric: true, cell: (a) => formatMoney(a.currentPrice) },
+    {
+      key: "pl",
+      header: "Unrealised P/L",
+      numeric: true,
+      cell: (a) => {
+        const buyValue = a.amount * a.avgBuyPrice;
+        const curValue = a.amount * a.currentPrice;
+        const pl = +(curValue - buyValue).toFixed(2);
+        const plpct = buyValue > 0 ? +((pl / buyValue) * 100).toFixed(2) : 0;
+        return (
+          <span className={pl >= 0 ? "text-positive" : "text-negative"}>
+            {formatMoney(pl, { sign: true })} ({plpct}%)
+          </span>
+        );
+      },
+    },
+    {
+      key: "value",
+      header: "Value",
+      numeric: true,
+      cell: (a) => formatMoney(a.amount * a.currentPrice),
+    },
+  ];
 
   return (
     <div className="space-y-4 pb-4 sm:pb-6">
-      
-      {/* 1. Mini top stats banner */}
-      <div className="flex flex-wrap items-center justify-between gap-4 py-3.5 px-5 sm:px-6 rounded-xl border border-line bg-surface text-xs font-sans">
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+      {/* ── Ticker bar ──────────────────────────────────────────── */}
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 rounded-xl border border-line bg-surface px-5 py-3.5">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
           <div>
-            <span className="text-2xs text-muted select-none font-subheading">Active Trading Pair</span>
-            <div className="mt-1">
-              <button
-                type="button"
-                className="text-xs text-ink font-bold leading-none font-data flex items-center gap-1.5 hover:text-accent hover:bg-accent/5 px-2 py-1 rounded border border-line/50 hover:border-accent/50 transition-all cursor-pointer focus:outline-none"
-                onClick={() => {
-                  const el = document.querySelector(".lg\\:col-span-3");
-                  if (el) {
-                    el.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-              >
-                {activeAsset.symbol}
-                <ChevronDown size={11} className="text-faint shrink-0" />
-              </button>
-            </div>
+            <span className="block text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+              Pair
+            </span>
+            <button
+              type="button"
+              // Was a querySelector on the escaped Tailwind class
+              // ".lg\\:col-span-3" — a DOM lookup keyed to a layout utility,
+              // which silently breaks the moment the grid changes. A ref
+              // points at the actual element.
+              onClick={() => watchlistRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+              className="mt-1 flex items-center gap-1.5 rounded-md font-data text-sm font-semibold text-ink transition-colors duration-[--duration-fast] hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent cursor-pointer"
+            >
+              {activeAsset.symbol}
+            </button>
           </div>
 
-          <div className="border-l border-line/50 h-8 hidden sm:block" />
+          <div className="hidden h-8 border-l border-line sm:block" />
 
           <div>
-            <span className="text-2xs text-muted select-none font-subheading flex items-center gap-1">
-              <Activity size={10} className="text-muted shrink-0" />
-              Mark Price
+            <span className="flex items-center gap-1 text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+              <Activity size={10} aria-hidden="true" /> Mark price
             </span>
-            <strong className="font-data text-xs text-ink animate-pulse block mt-1.5">
-              ${activeAsset.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+            {/* Was animate-pulse. A permanently throbbing price is unreadable
+                and implies a staleness state that isn't real. */}
+            <strong className="mt-1 block font-data text-sm font-semibold tabular-nums text-ink">
+              {formatMoney(activeAsset.price)}
             </strong>
           </div>
 
-          <div className="border-l border-line/50 h-8 hidden sm:block" />
+          <div className="hidden h-8 border-l border-line sm:block" />
 
           <div>
-            <span className="text-2xs text-muted block select-none font-subheading">24h Change</span>
-            <span className={`font-data font-bold flex items-center gap-1 mt-1.5 ${activeAsset.change >= 0 ? "text-positive" : "text-negative"}`}>
-              {activeAsset.change >= 0 ? <TrendingUp size={12} className="text-positive shrink-0" /> : <TrendingDown size={12} className="text-negative shrink-0" />}
-              {activeAsset.change >= 0 ? "+" : ""}{activeAsset.change}%
+            <span className="block text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+              24h change
+            </span>
+            <span
+              className={`mt-1 flex items-center gap-1 font-data text-sm font-semibold tabular-nums ${
+                activeAsset.change >= 0 ? "text-positive" : "text-negative"
+              }`}
+            >
+              {activeAsset.change >= 0 ? (
+                <TrendingUp size={13} aria-hidden="true" />
+              ) : (
+                <TrendingDown size={13} aria-hidden="true" />
+              )}
+              {activeAsset.change >= 0 ? "+" : ""}
+              {activeAsset.change}%
             </span>
           </div>
         </div>
 
-        {/* Available user metrics */}
-        <div className="flex items-center gap-6 font-data font-semibold">
-          <div className="text-right">
-            <div className="flex items-center gap-2 justify-end text-muted">
-              <span className="text-2xs select-none font-subheading">Available Balance</span>
-              <button
-                type="button"
-                onClick={() => setShowBalance(!showBalance)}
-                className="text-muted hover:text-ink transition-colors cursor-pointer"
-                title={showBalance ? "Hide balance" : "Show balance"}
-              >
-                {showBalance ? <Eye size={12} /> : <EyeOff size={12} />}
-              </button>
-            </div>
-            <span className="text-accent block text-sm mt-0.5">
-              {showBalance ? `$${user.balance.toLocaleString()}` : "••••••"}
+        <div className="text-right">
+          <div className="flex items-center justify-end gap-2">
+            <span className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+              Available
             </span>
+            <button
+              type="button"
+              onClick={() => setShowBalance(!showBalance)}
+              className="rounded-sm p-0.5 text-faint transition-colors duration-[--duration-fast] hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent cursor-pointer"
+              aria-label={showBalance ? "Hide balance" : "Show balance"}
+              aria-pressed={!showBalance}
+            >
+              {showBalance ? <Eye size={13} /> : <EyeOff size={13} />}
+            </button>
           </div>
+          <span className="mt-0.5 block font-data text-sm font-semibold tabular-nums text-ink">
+            {showBalance ? formatMoney(user.balance) : "••••••"}
+          </span>
         </div>
       </div>
 
-      {/* 2. Main Two-Column Advanced Layout Workspace */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        
-        {/* Left Watchlist column (col-span-3) */}
-        <div className="lg:col-span-3 bg-surface border border-line rounded-xl p-4 flex flex-col justify-between font-sans">
-          <div className="space-y-4">
-            <h3 className="text-xs font-bold font-heading text-ink border-b border-line/50 pb-2 flex items-center gap-1.5">
-              <BarChart2 size={13} className="text-muted shrink-0" />
-              Market Watchlist
-            </h3>
+      {/* ── Workspace ───────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
+        {/*
+          Source order is the desktop reading order (watchlist → chart →
+          ticket), but on a phone that buries the order ticket under a full
+          watchlist and a 420px chart — on a trading screen, the one thing
+          the user came to do. Below `lg` the order becomes
+          chart → ticket → watchlist, so the ticket is one short scroll away.
+        */}
+        {/* Watchlist */}
+        <div ref={watchlistRef} className="order-3 lg:order-1 lg:col-span-3">
+          <SectionCard title="Watchlist" icon={BarChart2} className="h-full">
+            <Input
+              aria-label="Filter watchlist"
+              placeholder="Filter assets"
+              value={watchlistQuery}
+              onChange={(e) => setWatchlistQuery(e.target.value)}
+              prefix={<Search size={13} />}
+            />
 
-            <div className="space-y-1.5 h-[340px] overflow-y-auto pr-1">
-              {fullMarketList.map((item) => (
-                <div
-                  key={item.symbol}
-                  onClick={() => setSelectedAssetSymbol(item.symbol)}
-                  className={`p-2 rounded-lg cursor-pointer flex items-center justify-between text-xs transition-colors border ${
-                    selectedAssetSymbol === item.symbol 
-                      ? "bg-accent/15 border-accent/40" 
-                      : "border-transparent hover:bg-panel/50"
-                  }`}
-                >
-                  <div className="font-data">
-                    <span className="block font-bold text-ink">{item.symbol}</span>
-                    <span className="text-2xs text-muted font-sans line-clamp-1">{item.name}</span>
-                  </div>
-
-                  <div className="text-right font-data font-medium">
-                    <span className="block text-ink">${item.price.toLocaleString(undefined, { minimumFractionDigits: item.price > 10 ? 2 : 4 })}</span>
-                    <span className={`text-2xs font-bold ${item.change >= 0 ? "text-positive" : "text-negative"}`}>
-                      {item.change >= 0 ? "+" : ""}{item.change}%
-                    </span>
-                  </div>
-                </div>
-              ))}
+            <div
+              role="listbox"
+              aria-label="Trading pairs"
+              className="mt-3 max-h-[340px] space-y-1 overflow-y-auto pr-1"
+            >
+              {filteredMarket.length === 0 ? (
+                <p className="py-6 text-center text-xs text-muted">No assets match “{watchlistQuery}”.</p>
+              ) : (
+                filteredMarket.map((item) => {
+                  const selected = selectedAssetSymbol === item.symbol;
+                  return (
+                    // Was a <div onClick> — the entire watchlist was
+                    // unreachable by keyboard, so the pair could only be
+                    // changed with a mouse.
+                    <button
+                      key={item.symbol}
+                      type="button"
+                      role="option"
+                      aria-selected={selected}
+                      onClick={() => setSelectedAssetSymbol(item.symbol)}
+                      className={
+                        "flex w-full items-center justify-between gap-2 rounded-lg border px-2.5 py-2 text-left " +
+                        "transition-colors duration-[--duration-fast] cursor-pointer " +
+                        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent " +
+                        (selected
+                          ? "border-accent-line bg-accent-soft"
+                          : "border-transparent hover:bg-raised")
+                      }
+                    >
+                      <span className="min-w-0">
+                        <span className="block font-data text-xs font-semibold text-ink">
+                          {item.symbol}
+                        </span>
+                        <span className="line-clamp-1 text-2xs text-muted">{item.name}</span>
+                      </span>
+                      <span className="shrink-0 text-right">
+                        <span className="block font-data text-xs tabular-nums text-ink">
+                          {formatMoney(item.price, { decimals: item.price > 10 ? 2 : 4 })}
+                        </span>
+                        <span
+                          className={`font-data text-2xs font-semibold tabular-nums ${
+                            item.change >= 0 ? "text-positive" : "text-negative"
+                          }`}
+                        >
+                          {item.change >= 0 ? "+" : ""}
+                          {item.change}%
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })
+              )}
             </div>
-          </div>
-
-          <div className="pt-4 border-t border-line/40 text-2xs text-muted text-center font-sans">
-            Real-time market data feed.
-          </div>
+          </SectionCard>
         </div>
 
-        {/* Middle Interactive TV Candlestick chart (col-span-6) */}
-        <div className="lg:col-span-6">
+        {/* Chart */}
+        <div className="order-1 lg:order-2 lg:col-span-6 min-h-[420px]">
           <TradingViewWidget symbol={selectedAssetSymbol} />
         </div>
 
-        {/* Right Collateral Order execution ticket column (col-span-3) */}
-        <div className="lg:col-span-3 bg-surface border border-line rounded-xl p-5 flex flex-col justify-between font-sans">
-          <form onSubmit={handleOrderSubmit} className="space-y-4">
-            
-            {/* Buy / Sell Tab selector */}
-            <div className="flex bg-ground border border-line rounded-lg p-1">
-              <button
-                type="button"
-                onClick={() => setTradeType("buy")}
-                className={`flex-1 py-1.5 text-xs font-bold rounded font-subheading cursor-pointer transition-all ${
-                  tradeType === "buy" ? "bg-positive text-ground" : "text-muted hover:text-ink"
-                }`}
+        {/* Order ticket */}
+        <div className="order-2 lg:order-3 lg:col-span-3">
+          <SectionCard title="Place order" className="h-full">
+            <form onSubmit={handleOrderSubmit} className="space-y-4">
+              {/* Buy/sell. Semantic colour: these ARE the outcome. */}
+              <div
+                role="radiogroup"
+                aria-label="Order side"
+                className="grid grid-cols-2 gap-1 rounded-lg border border-line bg-panel p-1"
               >
-                BUY LONG
-              </button>
-              <button
-                type="button"
-                onClick={() => setTradeType("sell")}
-                className={`flex-1 py-1.5 text-xs font-bold rounded font-subheading cursor-pointer transition-all ${
-                  tradeType === "sell" ? "bg-negative text-ink" : "text-muted hover:text-ink"
-                }`}
-              >
-                SELL SHORT
-              </button>
-            </div>
-
-            {/* Limit vs Market trigger options */}
-            <div className="flex justify-between items-center text-2xs text-muted border-b border-line/40 pb-2">
-              <span className="font-subheading">Order Execution Type</span>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setOrderType("market")}
-                  className={`underline cursor-pointer font-subheading ${orderType === "market" ? "text-accent" : ""}`}
-                >
-                  Market
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setOrderType("limit")}
-                  className={`underline cursor-pointer font-subheading ${orderType === "limit" ? "text-accent" : ""}`}
-                >
-                  Limit
-                </button>
+                {(["buy", "sell"] as const).map((side) => {
+                  const active = tradeType === side;
+                  return (
+                    <button
+                      key={side}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      onClick={() => setTradeType(side)}
+                      className={
+                        "rounded-md py-2 text-xs font-semibold uppercase tracking-wide " +
+                        "transition-colors duration-[--duration-fast] cursor-pointer " +
+                        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent " +
+                        (active
+                          ? side === "buy"
+                            ? "bg-positive text-ground"
+                            : "bg-negative text-ground"
+                          : "text-muted hover:text-ink")
+                      }
+                    >
+                      {side === "buy" ? "Buy" : "Sell"}
+                    </button>
+                  );
+                })}
               </div>
-            </div>
 
-            {/* Display message logs */}
-            {log && (
-              <div className={`p-2 text-2xs rounded-lg border font-medium font-sans ${
-                log.startsWith("Error") ? "bg-negative/10 border-negative/30 text-negative" : "bg-positive/10 border-positive/30 text-positive"
-              }`}>
-                {log}
-              </div>
-            )}
+              <Tabs<"market" | "limit">
+                variant="pill"
+                layoutGroup="order-type"
+                aria-label="Order type"
+                value={orderType}
+                onChange={setOrderType}
+                className="w-full [&>button]:flex-1"
+                items={[
+                  { id: "market", label: "Market" },
+                  { id: "limit", label: "Limit" },
+                ]}
+              />
 
-            {/* Render input trigger rates for LIMIT orders */}
-            {orderType === "limit" && (
-              <div className="space-y-1">
-                <label className="text-2xs font-subheading text-muted uppercase">
-                  Order Price
-                </label>
-                <input
+              {log && (
+                <Alert tone={log.startsWith("Error") ? "error" : "success"}>{log}</Alert>
+              )}
+
+              {orderType === "limit" && (
+                <Input
+                  label="Limit price"
                   type="number"
                   step="0.01"
+                  numeric
+                  prefix="$"
                   value={priceInput}
                   onChange={(e) => setPriceInput(e.target.value)}
-                  className="w-full bg-ground border border-line rounded-lg py-2 px-3 text-xs font-data font-bold text-ink focus:border-accent focus:outline-none"
                 />
-              </div>
-            )}
+              )}
 
-            {/* Capital Allocation Size */}
-            <div className="space-y-1.5 font-sans">
-              <div className="flex justify-between text-2xs uppercase font-subheading text-muted">
-                <span>Order Qty</span>
-                <span>Limits: min $10</span>
-              </div>
-              <input
+              <Input
+                label="Order amount"
                 type="number"
                 min="10"
                 required
+                numeric
+                prefix="$"
                 value={amountInputTxt}
                 onChange={(e) => setAmountInputTxt(e.target.value)}
-                placeholder="Amount (USDT)"
-                className="w-full bg-ground border border-line rounded-lg py-2 px-3 text-xs font-data font-bold text-ink focus:border-accent focus:outline-none"
+                placeholder="0.00"
+                hint="Minimum $10"
               />
+
+              {/*
+                The leverage slider (1x–50x) that used to sit here has been
+                removed, not restyled.
+
+                `executeTrade` takes no leverage argument, and its body checks
+                `user.balance < amount` and deducts the full amount. So the
+                control changed nothing about the order — but the summary
+                below it displayed "Order Cost: amount / leverage", telling a
+                user placing a $1,000 order at 50x that it would cost $20 when
+                $1,000 was actually required and taken.
+
+                A false cost figure on the confirm step of a financial
+                transaction is not a styling issue, so the control is gone
+                until margin is genuinely implemented end to end.
+              */}
+
+              <dl className="space-y-1.5 border-t border-line pt-3 text-2xs">
+                <div className="flex justify-between gap-3">
+                  <dt className="text-muted">Estimated quantity</dt>
+                  <dd className="font-data tabular-nums text-ink">
+                    {estimatedQty.toFixed(6)} {baseSymbol}
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <dt className="text-muted">Price</dt>
+                  <dd className="font-data tabular-nums text-ink">{formatMoney(effectivePrice)}</dd>
+                </div>
+                <div className="flex justify-between gap-3 border-t border-line pt-1.5">
+                  <dt className="font-semibold text-ink">Order cost</dt>
+                  <dd className="font-data font-semibold tabular-nums text-ink">
+                    {formatMoney(parsedAmount)}
+                  </dd>
+                </div>
+              </dl>
+
+              <Button
+                type="submit"
+                block
+                size="lg"
+                loading={submitting}
+                variant={tradeType === "buy" ? "positive" : "danger"}
+              >
+                {tradeType === "buy" ? `Buy ${baseSymbol}` : `Sell ${baseSymbol}`}
+              </Button>
+            </form>
+
+            <div className="mt-4 flex gap-2 border-t border-line pt-3 text-2xs leading-relaxed text-muted">
+              <ShieldAlert size={16} className="mt-px shrink-0 text-warning" aria-hidden="true" />
+              <span>
+                Trading carries risk. Only commit capital you can afford to lose.
+              </span>
             </div>
-
-            {/* Leverage Sliders */}
-            <div className="space-y-1.5 font-sans">
-              <div className="flex justify-between text-2xs font-subheading text-muted uppercase select-none">
-                <span>Leverage</span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="50"
-                value={leverage}
-                onChange={(e) => setLeverage(parseInt(e.target.value))}
-                className="w-full h-1 bg-line rounded appearance-none cursor-pointer accent-accent"
-              />
-              <div className="flex justify-between text-2xs font-data text-muted">
-                <span>1x (Cash)</span>
-                <span>25x</span>
-                <span>50x Max</span>
-              </div>
-            </div>
-
-            {/* Margin calculation stats summary */}
-            <div className="pt-2 border-t border-line/40 space-y-1.5 text-2xs text-muted font-sans">
-              <div className="flex justify-between">
-                <span>Order Qty ({activeAsset.symbol.split("/")[0]}):</span>
-                <span className="font-data text-ink">
-                  {amountInputTxt ? +(parseFloat(amountInputTxt) / (orderType === "market" ? activeAsset.price : parseFloat(priceInput))).toFixed(6) : "0.0000"}  {activeAsset.symbol.split("/")[0]}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span>Order Cost:</span>
-                <span className="font-data text-ink">
-                  ${amountInputTxt ? +(parseFloat(amountInputTxt) / leverage).toFixed(2) : "0.00"} USD
-                </span>
-              </div>
-              <div className="flex justify-between font-data font-bold border-t border-line/30 pt-1.5">
-                <span className="text-accent font-subheading">Order Value:</span>
-                <span className="text-ink">${amountInputTxt || "0.00"}</span>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className={`w-full py-3 mt-4 rounded-xl font-bold font-subheading text-xs uppercase shadow transition-all transform hover:-translate-y-0.5 cursor-pointer shadow-accent/10 ${
-                tradeType === "buy" ? "bg-positive text-ground" : "bg-negative text-ink"
-              }`}
-            >
-              {tradeType === "buy" ? "BUY LONG" : "SELL SHORT"}
-            </button>
-          </form>
-
-          {/* Quick solicitation helper */}
-          <div className="text-2xs text-muted leading-snug border-t border-line/30 pt-3 flex gap-2 font-sans">
-            <ShieldAlert size={18} className="text-amber-500 shrink-0 mt-0.5" />
-            <span>Risk Warning: High leverage carries liquidation risks. Manage your exposure accordingly.</span>
-          </div>
+          </SectionCard>
         </div>
-
       </div>
 
-      {/* 3. Bottom List: Open Positions / Portfolio holdings detail summaries */}
-      <section className="bg-surface border border-line rounded-xl p-5 space-y-4 font-sans">
-        <h3 className="text-xs font-bold font-heading tracking-widest text-accent border-b border-line/50 pb-2">
-          Open Positions
-        </h3>
-
-        {user.portfolio.length === 0 ? (
-          <p className="text-xs text-center text-muted py-4 font-sans">No open positions.</p>
-        ) : (
-          <div className="overflow-x-auto text-xs text-left font-sans">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="border-b border-line font-subheading uppercase tracking-wider text-2xs text-muted bg-panel/40">
-                  <th className="p-3 pl-4">Asset Ticker</th>
-                  <th className="p-3">Current Size</th>
-                  <th className="p-3">Average purchase basis</th>
-                  <th className="p-3">Settlement Index</th>
-                  <th className="p-3">Cumulative net Return</th>
-                  <th className="p-3 text-right pr-4">Hedge Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-line/30 font-data">
-                {user.portfolio.map((asset) => {
-                  const buyValue = asset.amount * asset.avgBuyPrice;
-                  const curValue = asset.amount * asset.currentPrice;
-                  const pl = +(curValue - buyValue).toFixed(2);
-                  const plpct = buyValue > 0 ? +((pl / buyValue) * 100).toFixed(2) : 0;
-                  return (
-                    <tr key={asset.symbol} className="hover:bg-panel/50 transition-colors">
-                      <td className="p-3 pl-4 font-bold text-ink">{asset.symbol}</td>
-                      <td className="p-3 text-ink font-semibold">{asset.amount}</td>
-                      <td className="p-3 text-muted font-sans">${asset.avgBuyPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                      <td className="p-3 text-ink font-semibold animate-pulse">${asset.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                      <td className={`p-3 font-bold ${pl >= 0 ? "text-positive" : "text-negative"}`}>
-                        {pl >= 0 ? "+" : ""}{pl.toLocaleString()} ({plpct}%)
-                      </td>
-                      <td className="p-3 pr-4 text-right text-positive font-bold font-subheading">
-                        🟢 HEDGED COLD SECURE
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-
+      {/* ── Open positions ──────────────────────────────────────── */}
+      <SectionCard flush title="Open positions" icon={Activity}>
+        <div className="p-3 sm:p-0">
+          {user.portfolio.length === 0 ? (
+            <EmptyState
+              icon={Activity}
+              size="sm"
+              title="No open positions"
+              description="Place an order above and it will appear here."
+            />
+          ) : (
+            <DataTable
+              caption="Your open positions"
+              columns={positionColumns}
+              rows={user.portfolio}
+              rowKey={(a) => a.symbol}
+              className="sm:[&>div]:rounded-none sm:[&>div]:border-0"
+            />
+          )}
+        </div>
+      </SectionCard>
     </div>
   );
 };

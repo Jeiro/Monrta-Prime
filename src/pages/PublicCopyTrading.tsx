@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSeo } from "../lib/useSeo";
 import { useApp } from "../context/AppContext";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
+import { Avatar } from "../components/ui";
 import { UserCheck, Users, TrendingUp, ShieldAlert, Award, ArrowUpRight, CheckCircle2, Calendar, X, DollarSign, Wallet, ShieldCheck, Info, Loader2 } from "lucide-react";
 
 interface PublicCopyTradingProps {
@@ -145,11 +146,7 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                 <div>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-4">
-                      <img 
-                        src={trader.avatar} 
-                        alt={trader.name} 
-                        className="w-14 h-14 rounded-full object-cover border-2 border-line"
-                      />
+                      <Avatar src={trader.avatar} name={trader.name} size="lg" />
                       <div>
                         <h3 className="text-base font-bold font-subheading text-ink flex items-center gap-2">
                           {trader.name}
@@ -193,7 +190,7 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                           trader.riskScore <= 2 
                             ? "bg-positive/10 border-positive/20 text-positive" 
                             : trader.riskScore === 3 
-                              ? "bg-amber-500/10 border-amber-500/20 text-amber-400" 
+                              ? "bg-warning-soft border-warning-line text-warning" 
                               : "bg-negative/10 border-negative/20 text-negative"
                         }`}>
                           Lv {trader.riskScore}
@@ -264,7 +261,7 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
 
       {/* Copy trading risk disclosure */}
       <div className="p-5 flex gap-3 text-xs leading-relaxed text-muted font-sans bg-transparent border-none shadow-none">
-        <ShieldAlert size={18} className="text-accent shrink-0 mt-0.5 animate-pulse" />
+        <ShieldAlert size={18} className="text-warning shrink-0 mt-0.5" />
         <div>
           <strong className="text-ink block mb-0.5 font-subheading font-bold">Risk Warning:</strong>
           Copy trading carries risk. Past performance does not guarantee future results. Manage your investment sizes carefully (we recommend allocating no more than 30% of your account balance to a single trader).
@@ -273,7 +270,7 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
 
       {/* Allocation Configuration Modal */}
       {allocatingTrader && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] flex items-center justify-center p-4 animate-fade-in text-left">
+        <div className="fixed inset-0 bg-ground/75 backdrop-blur-sm z-[150] flex items-center justify-center p-4 animate-fade-in text-left">
           <div className="bg-surface border border-line rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-5">
             <button 
               onClick={() => { setAllocatingTrader(null); setAllocateAmt(""); }}

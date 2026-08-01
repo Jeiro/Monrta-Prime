@@ -1,29 +1,40 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useApp } from "../context/AppContext";
-import { 
-  DollarSign, 
-  ArrowUpRight, 
-  ArrowDownRight, 
-  Briefcase, 
-  Layers, 
-  Activity, 
-  PlusCircle, 
-  MinusCircle, 
-  History,
-  CheckCircle2,
+import {
+  Activity,
   AlertTriangle,
-  FileText,
-  Wallet,
-  Shield,
-  Copy,
+  ArrowRight,
+  Briefcase,
   Check,
-  Plus
+  CheckCircle2,
+  Copy,
+  DollarSign,
+  FileText,
+  History,
+  Layers,
+  LineChart,
+  MinusCircle,
+  PlusCircle,
+  Users,
+  Wallet,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { DashboardEquityChart } from "../components/charts/DashboardEquityChart";
 import { UserAnnouncements } from "../components/announcements/UserAnnouncements";
-import { StatCard } from "../components/ui/StatCard";
-import { formatDate, formatDateTime, getUID } from "../lib/format";
+import {
+  AnimatedNumber,
+  Badge,
+  Button,
+  Column,
+  DataTable,
+  EmptyState,
+  Input,
+  Progress,
+  SectionCard,
+  SectionCardAction,
+  StatCard,
+} from "../components/ui";
+import { formatDate, formatDateTime, formatMoney, getUID } from "../lib/format";
 
 interface DashboardOverviewProps {
   onNavigate: (view: string) => void;
@@ -31,16 +42,44 @@ interface DashboardOverviewProps {
   onOpenWithdraw: () => void;
 }
 
-export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ 
-  onNavigate, 
-  onOpenDeposit, 
-  onOpenWithdraw 
+/* Sections rise in sequence rather than all at once. The stagger is 60ms —
+   long enough to read as an order, short enough that the last card is in
+   place well before the eye reaches it. */
+const container = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.06 } },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 12 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 320, damping: 30 },
+  },
+};
+
+export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
+  onNavigate,
+  onOpenDeposit,
+  onOpenWithdraw,
 }) => {
-  const { user, plans, topUpInvestment, claimPlanPayout, claimCopyTradePayout, addNotification, siteContent, setInsufficientBalanceOpen } = useApp();
+  const {
+    user,
+    topUpInvestment,
+    claimPlanPayout,
+    claimCopyTradePayout,
+    addNotification,
+    setInsufficientBalanceOpen,
+  } = useApp();
+
   const [copiedUid, setCopiedUid] = useState(false);
   const [claimingCopyId, setClaimingCopyId] = useState<string | null>(null);
   const [claimingInvId, setClaimingInvId] = useState<string | null>(null);
   const [topUpTarget, setTopUpTarget] = useState<string | null>(null);
+  const [topUpAmount, setTopUpAmount] = useState<string>("");
+
+  const uid = getUID(user.email);
 
   const handleClaimCopyPayout = async (copyTradeId: string) => {
     setClaimingCopyId(copyTradeId);
@@ -59,10 +98,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       setClaimingInvId(null);
     }
   };
-  const [topUpAmount, setTopUpAmount] = useState<string>("");
-
-
-  const uid = getUID(user.email);
 
   const handleTopUp = async (invId: string) => {
     const val = parseFloat(topUpAmount);
@@ -74,240 +109,310 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     if (res.success) {
       setTopUpTarget(null);
       setTopUpAmount("");
+    } else if (res.message === "INSUFFICIENT_BALANCE") {
+      setInsufficientBalanceOpen(true);
     } else {
-      if (res.message === "INSUFFICIENT_BALANCE") {
-        setInsufficientBalanceOpen(true);
-      } else {
-        addNotification(res.message);
-      }
+      addNotification(res.message);
     }
   };
 
-  // Compute stats
   const stats = useMemo(() => {
     const availableCash = user.balance;
     const portfolioAssetsValue = user.portfolioValue; // Auto-updates via context market loops
-    const runningInvestments = user.activeInvestments.filter(item => item.status === "Running" || item.status === "active");
+    const runningInvestments = user.activeInvestments.filter(
+      (item) => item.status === "Running" || item.status === "active"
+    );
     // Matured-but-unclaimed copy trades (live-derived status "Completed" but
     // payout not yet claimed) count as still-active for net-worth purposes —
     // their capital+profit hasn't hit the balance yet. Only actually-paid
     // trades (payoutCompleted) move to the completed/history bucket. Without
     // this, a matured trade's value would vanish from equity until claimed.
-    const runningCopyTrades = user.copyTrades.filter(item => item.status === "Running" || (item.status === "Completed" && !item.payoutCompleted));
-    const completedCopyTrades = user.copyTrades.filter(item => item.status === "Completed" && item.payoutCompleted);
-    const activePlanCapital = runningInvestments.reduce((acc, current) => acc + current.amount, 0);
-    const activePlanProfits = runningInvestments.reduce((acc, current) => acc + current.accumulatedProfit, 0);
-    const activeCopyCapital = runningCopyTrades.reduce((acc, current) => acc + current.amountInvested, 0);
-    const activeCopyExpectedProfit = runningCopyTrades.reduce((acc, current) => acc + current.expectedProfit, 0);
-    
-    const aggregateNetWorth = +(availableCash + portfolioAssetsValue + activePlanCapital + activePlanProfits + activeCopyCapital + activeCopyExpectedProfit).toFixed(2);
-    
+    const runningCopyTrades = user.copyTrades.filter(
+      (item) => item.status === "Running" || (item.status === "Completed" && !item.payoutCompleted)
+    );
+    const completedCopyTrades = user.copyTrades.filter(
+      (item) => item.status === "Completed" && item.payoutCompleted
+    );
+    const activePlanCapital = runningInvestments.reduce((acc, cur) => acc + cur.amount, 0);
+    const activePlanProfits = runningInvestments.reduce(
+      (acc, cur) => acc + cur.accumulatedProfit,
+      0
+    );
+    const activeCopyCapital = runningCopyTrades.reduce((acc, cur) => acc + cur.amountInvested, 0);
+    const activeCopyExpectedProfit = runningCopyTrades.reduce(
+      (acc, cur) => acc + cur.expectedProfit,
+      0
+    );
+
+    const aggregateNetWorth = +(
+      availableCash +
+      portfolioAssetsValue +
+      activePlanCapital +
+      activePlanProfits +
+      activeCopyCapital +
+      activeCopyExpectedProfit
+    ).toFixed(2);
+
     // Calculate P/L matching average purchase prices
-    const totalCostBasis = user.portfolio.reduce((acc, cur) => acc + (cur.amount * cur.avgBuyPrice), 0);
+    const totalCostBasis = user.portfolio.reduce(
+      (acc, cur) => acc + cur.amount * cur.avgBuyPrice,
+      0
+    );
     const netPnL = totalCostBasis > 0 ? +(portfolioAssetsValue - totalCostBasis).toFixed(2) : 0;
-    const netPnLPercent = totalCostBasis > 0 ? +((netPnL / totalCostBasis) * 100).toFixed(2) : 0;
+    const netPnLPercent =
+      totalCostBasis > 0 ? +((netPnL / totalCostBasis) * 100).toFixed(2) : 0;
 
     return {
       availableCash,
       portfolioAssetsValue,
-      runningInvestments,
       runningCopyTrades,
       completedCopyTrades,
       activePlanCapital,
       activePlanProfits,
       activeCopyCapital,
-      activeCopyExpectedProfit,
       aggregateNetWorth,
       netPnL,
-      netPnLPercent
+      netPnLPercent,
     };
   }, [user]);
 
   const {
     availableCash,
     portfolioAssetsValue,
-    runningInvestments,
     runningCopyTrades,
     completedCopyTrades,
     activePlanCapital,
     activePlanProfits,
     activeCopyCapital,
-    activeCopyExpectedProfit,
     aggregateNetWorth,
     netPnL,
-    netPnLPercent
+    netPnLPercent,
   } = stats;
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
-
-  const itemVariants: any = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
-  };
+  const transactionColumns: Column<(typeof user.transactions)[number]>[] = [
+    {
+      key: "id",
+      header: "Tx ID",
+      primary: true,
+      cell: (tx) => <span className="font-data text-ink">{tx.id}</span>,
+    },
+    {
+      key: "date",
+      header: "Date",
+      cell: (tx) => <span className="text-muted">{formatDateTime(tx.date)}</span>,
+    },
+    {
+      key: "type",
+      header: "Type",
+      cell: (tx) => (
+        <Badge
+          tone={
+            tx.type === "deposit"
+              ? "positive"
+              : tx.type === "withdrawal"
+                ? "negative"
+                : tx.type === "investment"
+                  ? "accent"
+                  : "neutral"
+          }
+        >
+          {tx.type}
+        </Badge>
+      ),
+    },
+    {
+      key: "asset",
+      header: "Asset",
+      // Not every transaction has one (plan top-ups, payouts). An em dash
+      // says "no value"; a blank cell reads as a rendering failure, and on
+      // the mobile card it left a label with nothing beside it.
+      cell: (tx) => tx.asset || <span className="text-faint">—</span>,
+    },
+    { key: "amount", header: "Amount", numeric: true, cell: (tx) => formatMoney(tx.amount) },
+    {
+      key: "status",
+      header: "Status",
+      align: "right",
+      cell: (tx) => {
+        const done = tx.status === "completed" || tx.status === "approved";
+        const failed = tx.status === "rejected" || tx.status === "failed";
+        return (
+          <Badge tone={done ? "positive" : failed ? "negative" : tx.status === "pending" ? "warning" : "neutral"}>
+            {done ? <CheckCircle2 size={11} /> : <AlertTriangle size={11} />}
+            {tx.status}
+          </Badge>
+        );
+      },
+    },
+  ];
 
   return (
-    <motion.div 
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-      className="space-y-4 pb-4 sm:pb-6"
-    >
-      
-      {/* 1. Header welcome */}
-      <motion.div variants={itemVariants} className="flex flex-col gap-3 border-b border-line/50 pb-4 md:flex-row md:items-center md:justify-between">
-        <div>
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 pb-4 sm:pb-6">
+      {/* ── Header ───────────────────────────────────────────────
+          The old header carried five chips, one of which read
+          "Security: High" — hardcoded, identical for every account and
+          every security posture. A fabricated assurance is worse than no
+          assurance on a screen whose whole job is trust, so it's gone
+          rather than restyled. */}
+      <motion.header
+        variants={item}
+        className="flex flex-col gap-4 border-b border-line pb-4 md:flex-row md:items-start md:justify-between"
+      >
+        <div className="min-w-0">
           <div className="flex items-center gap-2.5">
-            <Wallet size={24} className="text-accent shrink-0" />
-            <h1 className="text-2xl font-bold font-sans tracking-tight text-ink">
-              Asset Overview
-            </h1>
+            <Wallet size={20} className="shrink-0 text-faint" aria-hidden="true" />
+            <h1 className="text-2xl font-semibold tracking-tight text-ink">Asset overview</h1>
           </div>
-          <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-sans">
-            <span className="text-muted">
-              Welcome back, <span className="text-ink font-medium">{(user.name || user.email || "").toLowerCase()}</span>
-            </span>
-            
-            <span className="hidden sm:inline text-faint select-none font-normal">•</span>
 
-            {/* UID Badge with Copy Action */}
-            <div className="flex items-center gap-1.5 text-2xs text-faint bg-surface/50 hover:bg-surface border border-line/40 py-0.5 px-2 rounded-md transition-all">
-              <span className="text-2xs uppercase tracking-wider text-faint font-bold font-mono">UID</span>
-              <span className="font-mono text-muted font-medium select-all">{uid}</span>
-              <button 
+          <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs">
+            {/* Guarded: the name can legitimately be absent (profile still
+                loading, or an account created without one), and "Welcome
+                back," trailing into nothing reads as a rendering fault. */}
+            <span className="text-muted">
+              {user.name || user.email ? (
+                <>
+                  Welcome back,{" "}
+                  <span className="font-medium text-ink">{user.name || user.email}</span>
+                </>
+              ) : (
+                "Welcome back"
+              )}
+            </span>
+
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-2 py-1">
+              <span className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">UID</span>
+              <span className="select-all font-data text-2xs text-muted">{uid}</span>
+              <button
+                type="button"
                 onClick={() => {
                   navigator.clipboard.writeText(uid);
                   setCopiedUid(true);
                   setTimeout(() => setCopiedUid(false), 2000);
                 }}
-                className="text-faint hover:text-accent transition-colors p-0.5"
-                title="Copy UID"
+                className="rounded-sm p-0.5 text-faint transition-colors duration-[--duration-fast] hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent cursor-pointer"
+                aria-label={copiedUid ? "UID copied" : "Copy UID"}
               >
                 {copiedUid ? <Check size={11} className="text-positive" /> : <Copy size={11} />}
               </button>
-            </div>
+              {/* Announced, not just shown — the icon swap is invisible to a
+                  screen reader on its own. */}
+              <span aria-live="polite" className="sr-only">
+                {copiedUid ? "UID copied to clipboard" : ""}
+              </span>
+            </span>
 
-            {/* Security Badge */}
-            <div className="flex items-center gap-1.5 text-2xs text-faint bg-surface/50 border border-line/40 py-0.5 px-2 rounded-md">
-              <Shield size={11} className="text-faint shrink-0" />
-              <span className="text-muted">Security:</span>
-              <span className="text-positive font-bold tracking-wide">High</span>
-            </div>
-
-            {/* Verification Badge */}
             {user.kyc?.status === "approved" ? (
-              <div className="flex items-center gap-1 text-2xs bg-positive/10 text-positive border border-positive/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
-                <CheckCircle2 size={11} className="text-positive shrink-0" />
-                <span>Identity Verified</span>
-              </div>
+              <Badge tone="positive">
+                <CheckCircle2 size={11} /> Identity verified
+              </Badge>
             ) : user.kyc?.status === "pending" ? (
-              <div className="flex items-center gap-1 text-2xs bg-amber-500/10 text-amber-400 border border-amber-500/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
-                <AlertTriangle size={11} className="text-amber-400 shrink-0" />
-                <span>Verification Pending</span>
-              </div>
+              <Badge tone="warning">
+                <AlertTriangle size={11} /> Verification pending
+              </Badge>
             ) : (
-              <div className="flex items-center gap-1 text-2xs bg-negative/10 text-negative border border-negative/20 py-0.5 px-2.5 rounded-full font-medium shadow-sm">
-                <AlertTriangle size={11} className="text-negative shrink-0" />
-                <span>Unverified Identity</span>
-              </div>
+              // Unverified is an action, not just a state — it links to the
+              // thing that resolves it.
+              <button
+                type="button"
+                onClick={() => onNavigate("dashboard-kyc")}
+                className="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent cursor-pointer"
+              >
+                <Badge tone="negative" className="hover:brightness-110">
+                  <AlertTriangle size={11} /> Verify identity
+                  <ArrowRight size={11} />
+                </Badge>
+              </button>
             )}
           </div>
         </div>
- 
-        {/* Quick Deposit/Withdraw Actions */}
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={onOpenDeposit}
-            className="flex items-center gap-1.5 px-4 py-2 bg-accent text-ground font-bold font-subheading text-xs rounded-xl hover:opacity-95 shadow shadow-accent/20 hover:-translate-y-0.5 transition-all cursor-pointer"
-          >
-            <PlusCircle size={14} /> Deposit
-          </button>
-          <button
-            onClick={onOpenWithdraw}
-            className="flex items-center gap-1.5 px-4 py-2 bg-surface border border-line hover:bg-surface/80 text-ink font-semibold font-subheading text-xs rounded-xl hover:-translate-y-0.5 transition-all cursor-pointer"
-          >
-            <MinusCircle size={14} /> Withdraw
-          </button>
+
+        <div className="flex shrink-0 items-center gap-2">
+          <Button icon={PlusCircle} onClick={onOpenDeposit}>
+            Deposit
+          </Button>
+          <Button variant="secondary" icon={MinusCircle} onClick={onOpenWithdraw}>
+            Withdraw
+          </Button>
         </div>
-      </motion.div>
+      </motion.header>
 
       <UserAnnouncements />
- 
-      {/* 2. Core balances cards row. Four <StatCard>s replacing ~100 lines of
-          duplicated markup that gave each tile a different icon hue. */}
-      <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+
+      {/* ── Balances ─────────────────────────────────────────────
+          Figures count on mount and on material change only. A live
+          balance that re-animates on every market tick is unreadable. */}
+      <motion.div variants={item} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* No delta on total equity. The figure that used to sit here was
+            `portfolioValue − costBasis` labelled "today" — but it is
+            all-time unrealised P/L on open positions, and its percentage is
+            of cost basis, not of equity. Shown against total equity it read
+            as "+89% today", which is wrong twice over. It now lives on the
+            card whose value it actually describes. */}
         <StatCard
           emphasis
           label="Total equity"
           icon={Briefcase}
-          value={`$${aggregateNetWorth.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
-          delta={{ value: netPnL, percent: netPnLPercent, label: "today" }}
+          value={<AnimatedNumber value={aggregateNetWorth} prefix="$" />}
+          hint="Cash, positions, plans and copy trades"
         />
         <StatCard
           label="Available balance"
           icon={DollarSign}
-          value={`$${availableCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
-          hint={`$${(activePlanCapital + activeCopyCapital).toLocaleString(undefined, { minimumFractionDigits: 2 })} in orders`}
+          value={<AnimatedNumber value={availableCash} prefix="$" />}
+          hint={`${formatMoney(activePlanCapital + activeCopyCapital)} in orders`}
         />
         <StatCard
           label="Derivatives account"
           icon={Activity}
-          value={`$${portfolioAssetsValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
-          hint="Fluctuating with global indexes"
+          value={<AnimatedNumber value={portfolioAssetsValue} prefix="$" />}
+          delta={{ value: netPnL, percent: netPnLPercent, label: "unrealised" }}
         />
         <StatCard
           label="Plan yield capital"
           icon={Layers}
-          value={`$${(activePlanCapital + activePlanProfits).toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
-          hint={activePlanProfits > 0 ? `$${activePlanProfits.toFixed(2)} accrued` : "No accruals yet"}
+          value={<AnimatedNumber value={activePlanCapital + activePlanProfits} prefix="$" />}
+          hint={
+            activePlanProfits > 0 ? `${formatMoney(activePlanProfits)} accrued` : "No accruals yet"
+          }
         />
       </motion.div>
 
-      {/* 2.5 Portfolio Performance Chart */}
-      <motion.div variants={itemVariants} className="bg-surface border border-line rounded-2xl p-4 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
-        <div className="flex justify-between items-center border-b border-line/60 pb-3">
-          <div className="flex items-center gap-2">
-            <Activity className="text-accent" size={18} />
-            <h3 className="text-sm font-bold font-heading text-ink">30-Day Equity Trend</h3>
-          </div>
-          <span className="text-xs text-muted font-data">Live Updates</span>
-        </div>
-        <DashboardEquityChart currentEquity={aggregateNetWorth} />
+      <motion.div variants={item}>
+        <SectionCard
+          title="Equity trend"
+          icon={LineChart}
+          action={<span className="text-2xs text-faint">Live</span>}
+        >
+          <DashboardEquityChart currentEquity={aggregateNetWorth} />
+        </SectionCard>
       </motion.div>
 
-      {/* 3. Middle split grid */}
-      <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-12 gap-5 font-sans">
-        
-        {/* Left column: Active Investment plans */}
-        <div className="lg:col-span-7 bg-surface border border-line rounded-2xl p-4 space-y-4">
-          <div className="flex items-center justify-between border-b border-line/60 pb-3">
-            <h3 className="text-sm font-bold font-heading text-ink">Active Investments</h3>
-            <button 
-              onClick={() => onNavigate("dashboard-plans")}
-              className="text-xs text-accent font-subheading hover:underline cursor-pointer"
-            >
-              View Plans
-            </button>
-          </div>
-
+      {/* ── Investments + positions ──────────────────────────── */}
+      <motion.div variants={item} className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+        <SectionCard
+          className="lg:col-span-7"
+          title="Active investments"
+          icon={Layers}
+          action={
+            <SectionCardAction onClick={() => onNavigate("dashboard-plans")}>
+              View plans
+            </SectionCardAction>
+          }
+        >
           {user.activeInvestments.length === 0 ? (
-            <div className="py-8 text-center text-muted space-y-3 font-sans">
-              <FileText className="mx-auto text-line" size={32} />
-              <p className="text-xs">No active investments found.</p>
-              <button
-                onClick={() => onNavigate("dashboard-plans")}
-                className="px-4 py-1.5 bg-line hover:bg-accent hover:text-ground text-2xs font-bold font-subheading text-ink rounded transition-colors cursor-pointer"
-              >
-                Explore Investment Plans
-              </button>
-            </div>
+            <EmptyState
+              icon={FileText}
+              size="sm"
+              title="No active investments"
+              description="Investment plans accrue daily and pay out on maturity."
+              action={
+                <Button size="sm" onClick={() => onNavigate("dashboard-plans")} iconRight={ArrowRight}>
+                  Explore plans
+                </Button>
+              }
+            />
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {user.activeInvestments.map((inv) => {
                 const isCompleted = inv.status === "Completed" || inv.status === "completed";
                 const isPaid = isCompleted && Boolean(inv.payoutTransactionId);
@@ -316,281 +421,316 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                 const expectedProfit = inv.expectedProfit ?? inv.accumulatedProfit;
                 const totalReturn = inv.totalReturn ?? inv.amount + expectedProfit;
                 const remainingDays = inv.remainingDays ?? 0;
+
                 return (
-                  <div 
+                  <article
                     key={inv.id}
-                    className="p-4 border border-line bg-panel/50 rounded-xl space-y-3"
+                    className="rounded-lg border border-line bg-panel p-4"
                   >
-                    <div className="flex justify-between items-center text-xs">
-                      <div>
-                        <span className="font-bold text-ink font-subheading">{inv.name}</span>
-                        <span className="block text-2xs text-muted font-data">
-                          Matures: {formatDate(inv.endDate)}
-                        </span>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <h3 className="truncate text-sm font-semibold text-ink">{inv.name}</h3>
+                        <p className="mt-0.5 text-2xs text-muted">
+                          Matures {formatDate(inv.endDate)}
+                        </p>
                       </div>
-                      <div className="text-right">
-                        <span className="block text-2xs text-muted uppercase font-subheading">Compounded profit</span>
-                        <strong className="font-data text-positive font-bold">
-                          +${(isCompleted ? expectedProfit : inv.accumulatedProfit).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      <div className="shrink-0 text-right">
+                        <span className="block text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                          Profit
+                        </span>
+                        <strong className="font-data text-sm font-semibold tabular-nums text-positive">
+                          {formatMoney(isCompleted ? expectedProfit : inv.accumulatedProfit, {
+                            sign: true,
+                          })}
                         </strong>
                       </div>
                     </div>
 
-                    {/* Progress & Actions */}
-                    <div className="flex items-center justify-between text-2xs mt-2">
-                      <span className="text-muted">Allocated: ${inv.amount.toLocaleString()}</span>
+                    <div className="mt-3 flex items-center justify-between gap-3 text-2xs">
+                      <span className="text-muted">
+                        Allocated{" "}
+                        <span className="font-data tabular-nums text-ink">
+                          {formatMoney(inv.amount)}
+                        </span>
+                      </span>
                       <div className="flex items-center gap-2">
-                        <span className="text-muted">{isPaid ? "Completed" : isClaimable ? "Matured" : `${remainingDays}d left`}</span>
-                        {!isCompleted && (<button
-                          onClick={() => setTopUpTarget(topUpTarget === inv.id ? null : inv.id)}
-                          className="text-2xs text-accent border border-accent/30 bg-accent/10 px-2 py-0.5 rounded flex items-center gap-1 hover:bg-accent/20 transition-colors"
-                        >
-                          <Plus size={10} /> Top Up
-                        </button>)}
+                        <span className="text-muted">
+                          {isPaid ? "Completed" : isClaimable ? "Matured" : `${remainingDays}d left`}
+                        </span>
+                        {/* Secondary, not ghost: at this size a ghost button
+                            beside plain text reads as a label rather than
+                            something you can press. */}
+                        {!isCompleted && (
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => setTopUpTarget(topUpTarget === inv.id ? null : inv.id)}
+                            aria-expanded={topUpTarget === inv.id}
+                          >
+                            Top up
+                          </Button>
+                        )}
                       </div>
                     </div>
 
-                    {/* Top Up Inline Form */}
+                    <Progress
+                      className="mt-2.5"
+                      value={inv.progress}
+                      label={`${inv.name} progress`}
+                    />
+
                     {!isCompleted && topUpTarget === inv.id && (
-                      <div className="pt-2 mt-2 border-t border-line/50 flex gap-2 animate-in slide-in-from-top-2">
-                        <input 
+                      <div className="mt-3 flex items-end gap-2 border-t border-line pt-3">
+                        <Input
+                          className="flex-1"
                           type="number"
-                          placeholder="Amount to add ($)"
+                          numeric
+                          prefix="$"
+                          label="Amount to add"
+                          placeholder="0.00"
                           value={topUpAmount}
                           onChange={(e) => setTopUpAmount(e.target.value)}
-                          className="w-full bg-ground border border-line rounded px-3 py-1 text-xs text-ink outline-none focus:border-accent"
                         />
-                        <button 
-                          onClick={() => handleTopUp(inv.id)}
-                          className="bg-accent text-ground px-3 py-1 rounded text-xs font-bold hover:opacity-90"
-                        >
-                          Confirm
-                        </button>
+                        <Button onClick={() => handleTopUp(inv.id)}>Confirm</Button>
                       </div>
                     )}
-                    
-                    <div className="w-full bg-ground rounded-full h-1.5 mt-2">
-                      <div 
-                        className="bg-accent h-1.5 rounded-full" 
-                        style={{ width: `${inv.progress}%` }}
-                      />
-                    </div>
+
                     {isClaimable && (
-                      <button
-                        type="button"
+                      <Button
+                        block
+                        variant="positive"
+                        size="sm"
+                        className="mt-3"
+                        loading={isClaimingInv}
                         onClick={() => handleClaimInvPayout(inv.id)}
-                        disabled={isClaimingInv}
-                        className="w-full py-2 bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading text-2xs rounded text-center uppercase transition-colors"
                       >
-                        {isClaimingInv ? "Claiming…" : `Claim Payout $${totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
-                      </button>
+                        Claim {formatMoney(totalReturn)}
+                      </Button>
                     )}
+
                     {isPaid && (
-                      <div className="w-full py-2 bg-positive/10 border border-positive/30 text-positive font-bold font-subheading text-2xs rounded text-center uppercase">
-                        Paid ${totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      <div className="mt-3 rounded-md border border-positive-line bg-positive-soft py-2 text-center text-2xs font-semibold text-positive">
+                        Paid {formatMoney(totalReturn)}
                       </div>
                     )}
-                  </div>
+                  </article>
                 );
               })}
             </div>
           )}
-        </div>
+        </SectionCard>
 
-        {/* Right column: Quick overview portfolio holdings */}
-        <div className="lg:col-span-5 bg-surface border border-line rounded-xl p-6 space-y-6">
-          <div className="flex items-center justify-between border-b border-line/60 pb-4">
-            <h3 className="text-sm font-bold font-heading text-ink">Open Positions</h3>
-            <button 
-              onClick={() => onNavigate("dashboard-portfolio")}
-              className="text-xs font-subheading text-accent hover:underline cursor-pointer"
-            >
-              View Details
-            </button>
-          </div>
-
+        <SectionCard
+          className="lg:col-span-5"
+          title="Open positions"
+          icon={Activity}
+          action={
+            <SectionCardAction onClick={() => onNavigate("dashboard-portfolio")}>
+              View details
+            </SectionCardAction>
+          }
+        >
           {user.portfolio.length === 0 ? (
-            <div className="py-12 text-center text-muted font-sans">
-              <p className="text-xs">No open positions. Go to Trade to get started.</p>
-            </div>
+            <EmptyState
+              icon={Activity}
+              size="sm"
+              title="No open positions"
+              description="Positions you open will track here in real time."
+              action={
+                <Button size="sm" onClick={() => onNavigate("dashboard-trading")} iconRight={ArrowRight}>
+                  Start trading
+                </Button>
+              }
+            />
           ) : (
-            <div className="space-y-3">
+            <ul className="space-y-2">
               {user.portfolio.map((asset) => {
                 const totalCost = asset.amount * asset.avgBuyPrice;
                 const totalMarket = asset.amount * asset.currentPrice;
                 const profitLoss = +(totalMarket - totalCost).toFixed(2);
-                
-                return (
-                  <div 
-                    key={asset.symbol}
-                    className="flex justify-between items-center p-3 border border-line/40 bg-ground/40 rounded-lg text-xs"
-                  >
-                    <div>
-                      <strong className="font-data text-ink block">{asset.symbol}</strong>
-                      <span className="text-2xs text-muted font-sans">{asset.amount} holdings</span>
-                    </div>
 
-                    <div className="text-right font-data">
-                      <span className="text-ink block font-semibold">${totalMarket.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                      <span className={`text-2xs font-bold ${profitLoss >= 0 ? "text-positive" : "text-negative"}`}>
-                        {profitLoss >= 0 ? "+" : ""}{profitLoss.toLocaleString()}
+                return (
+                  <li
+                    key={asset.symbol}
+                    className="flex items-center justify-between gap-3 rounded-lg border border-line bg-panel p-3"
+                  >
+                    <div className="min-w-0">
+                      <strong className="block font-data text-sm text-ink">{asset.symbol}</strong>
+                      <span className="text-2xs text-muted">{asset.amount} holdings</span>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <span className="block font-data text-sm font-semibold tabular-nums text-ink">
+                        {formatMoney(totalMarket)}
+                      </span>
+                      <span
+                        className={`font-data text-2xs font-semibold tabular-nums ${
+                          profitLoss >= 0 ? "text-positive" : "text-negative"
+                        }`}
+                      >
+                        {formatMoney(profitLoss, { sign: true })}
                       </span>
                     </div>
-                  </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </SectionCard>
+      </motion.div>
+
+      {/* ── Copy trading ─────────────────────────────────────── */}
+      <motion.div variants={item}>
+        <SectionCard
+          title="Copy trades"
+          icon={Users}
+          action={
+            <SectionCardAction onClick={() => onNavigate("copy-trading")}>
+              View traders
+            </SectionCardAction>
+          }
+        >
+          {runningCopyTrades.length === 0 ? (
+            <EmptyState
+              icon={Users}
+              size="sm"
+              title="No running copy trades"
+              description="Follow a trader to mirror their positions automatically."
+              action={
+                <Button size="sm" onClick={() => onNavigate("copy-trading")} iconRight={ArrowRight}>
+                  Browse traders
+                </Button>
+              }
+            />
+          ) : (
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+              {runningCopyTrades.map((trade) => {
+                const isClaimable = trade.status === "Completed" && !trade.payoutCompleted;
+                const isClaiming = claimingCopyId === trade.id;
+
+                return (
+                  <article
+                    key={trade.id}
+                    className="rounded-lg border border-line bg-panel p-4"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <h3 className="truncate text-sm font-semibold text-ink">
+                          {trade.traderName}
+                        </h3>
+                        <p className="mt-0.5 text-2xs text-muted">
+                          Ends {formatDateTime(trade.endTimestamp)}
+                        </p>
+                      </div>
+                      <Badge tone={isClaimable ? "positive" : "accent"}>
+                        {isClaimable ? "Matured" : trade.status}
+                      </Badge>
+                    </div>
+
+                    <dl className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                      {[
+                        { label: "Invested", value: formatMoney(trade.amountInvested), tone: "text-ink" },
+                        { label: "ROI", value: `${trade.roiPercent}%`, tone: "text-positive" },
+                        { label: "Profit", value: formatMoney(trade.expectedProfit), tone: "text-positive" },
+                        { label: "Total", value: formatMoney(trade.totalReturn), tone: "text-ink" },
+                      ].map((cell) => (
+                        <div key={cell.label}>
+                          <dt className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                            {cell.label}
+                          </dt>
+                          <dd className={`font-data text-xs font-semibold tabular-nums ${cell.tone}`}>
+                            {cell.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+
+                    <div className="mt-3 flex items-center justify-between text-2xs text-muted">
+                      <span>{isClaimable ? "Matured" : `${trade.remainingDays}d remaining`}</span>
+                      <span className="font-data tabular-nums">{trade.progress}%</span>
+                    </div>
+                    <Progress
+                      className="mt-1.5"
+                      value={trade.progress}
+                      label={`${trade.traderName} copy trade progress`}
+                    />
+
+                    {isClaimable && (
+                      <Button
+                        block
+                        variant="positive"
+                        size="sm"
+                        className="mt-3"
+                        loading={isClaiming}
+                        onClick={() => handleClaimCopyPayout(trade.id)}
+                      >
+                        Claim {formatMoney(trade.totalReturn)}
+                      </Button>
+                    )}
+                  </article>
                 );
               })}
             </div>
           )}
-        </div>
 
-      </motion.div>
-
-      {/* 3.5 Copy trading engine */}
-      <motion.section variants={itemVariants} className="bg-surface border border-line rounded-xl p-5 space-y-5 font-sans hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
-        <div className="flex items-center justify-between border-b border-line/60 pb-3">
-          <h3 className="text-sm font-bold font-heading text-ink">Active Copy Trades</h3>
-          <button 
-            onClick={() => onNavigate("copy-trading")}
-            className="text-xs text-accent font-subheading hover:underline cursor-pointer"
-          >
-            View Traders
-          </button>
-        </div>
-
-        {runningCopyTrades.length === 0 ? (
-          <p className="text-xs text-center text-muted py-6 font-sans">No running copy trades.</p>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {runningCopyTrades.map(trade => {
-              const isClaimable = trade.status === "Completed" && !trade.payoutCompleted;
-              const isClaiming = claimingCopyId === trade.id;
-              return (
-              <div key={trade.id} className="p-4 border border-line bg-panel/50 rounded-xl space-y-3 text-xs">
-                <div className="flex justify-between items-start gap-3">
-                  <div>
-                    <span className="font-bold text-ink font-subheading">{trade.traderName}</span>
-                    <span className="block text-2xs text-muted font-data">Ends: {new Date(trade.endTimestamp).toLocaleString()}</span>
-                  </div>
-                  <span className={`px-2 py-1 rounded text-2xs font-bold font-subheading border ${isClaimable ? "bg-positive/10 border-positive/30 text-positive" : "bg-accent/10 border-accent/30 text-accent"}`}>{isClaimable ? "Matured" : trade.status}</span>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-2xs font-data">
-                  <span className="text-muted">Invested<strong className="block text-ink text-xs">${trade.amountInvested.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
-                  <span className="text-muted">ROI<strong className="block text-positive text-xs">{trade.roiPercent}%</strong></span>
-                  <span className="text-muted">Profit<strong className="block text-positive text-xs">${trade.expectedProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
-                  <span className="text-muted">Total<strong className="block text-ink text-xs">${trade.totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
-                </div>
-
-                <div className="flex items-center justify-between text-2xs text-muted">
-                  <span>{isClaimable ? "Matured" : `${trade.remainingDays}d remaining`}</span>
-                  <span>{trade.progress}%</span>
-                </div>
-                <div className="w-full bg-ground rounded-full h-1.5">
-                  <div className="bg-accent h-1.5 rounded-full" style={{ width: `${trade.progress}%` }} />
-                </div>
-                {isClaimable && (
-                  <button
-                    type="button"
-                    onClick={() => handleClaimCopyPayout(trade.id)}
-                    disabled={isClaiming}
-                    className="w-full bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading py-1.5 rounded text-center uppercase text-2xs transition-colors"
+          {completedCopyTrades.length > 0 && (
+            <div className="mt-5 border-t border-line pt-4">
+              <h3 className="mb-2.5 text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                History
+              </h3>
+              <ul className="space-y-2">
+                {completedCopyTrades.slice(0, 4).map((trade) => (
+                  <li
+                    key={trade.id}
+                    className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-lg border border-line bg-panel px-3 py-2.5 text-2xs"
                   >
-                    {isClaiming ? "Claiming…" : `Claim Payout $${trade.totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
-                  </button>
-                )}
-              </div>
-              );
-            })}
-          </div>
-        )}
-
-        <div className="border-t border-line/60 pt-4 space-y-3">
-          <h4 className="text-xs font-bold font-heading text-ink">History</h4>
-          {completedCopyTrades.length === 0 ? (
-            <p className="text-xs text-muted">No completed copy trades yet.</p>
-          ) : (
-            <div className="space-y-2">
-              {completedCopyTrades.slice(0, 4).map(trade => (
-                <div key={trade.id} className="grid grid-cols-2 md:grid-cols-5 gap-2 p-3 rounded-lg border border-line/50 bg-ground/30 text-2xs font-data">
-                  <span className="text-ink font-bold">{trade.traderName}</span>
-                  <span className="text-muted">ROI {trade.roiPercent}%</span>
-                  <span className="text-muted">Invested ${trade.amountInvested.toLocaleString()}</span>
-                  <span className="text-positive">Returned ${trade.totalReturn.toLocaleString()}</span>
-                  <span className="text-positive font-subheading">{trade.payoutCompleted ? "Paid" : trade.status}</span>
-                </div>
-              ))}
+                    <span className="font-semibold text-ink">{trade.traderName}</span>
+                    <span className="font-data tabular-nums text-muted">
+                      ROI {trade.roiPercent}%
+                    </span>
+                    <span className="font-data tabular-nums text-muted">
+                      Invested {formatMoney(trade.amountInvested)}
+                    </span>
+                    <span className="font-data tabular-nums text-positive">
+                      Returned {formatMoney(trade.totalReturn)}
+                    </span>
+                    <Badge tone="positive">{trade.payoutCompleted ? "Paid" : trade.status}</Badge>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
-        </div>
-      </motion.section>
+        </SectionCard>
+      </motion.div>
 
-      {/* 4. Bottom Paginated Ledger Transactions */}
-      <motion.section variants={itemVariants} className="bg-surface border border-line rounded-xl p-6 space-y-6 font-sans hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
-        <div className="flex items-center justify-between border-b border-line/60 pb-4">
-          <div className="flex items-center gap-2">
-            <History className="text-accent animate-pulse" size={16} />
-            <h3 className="text-sm font-bold font-heading text-ink">Recent Transactions</h3>
+      {/* ── Transactions ─────────────────────────────────────── */}
+      <motion.div variants={item}>
+        <SectionCard
+          flush
+          title="Recent transactions"
+          icon={History}
+          action={
+            <SectionCardAction onClick={() => onNavigate("dashboard-transactions")}>
+              View all
+            </SectionCardAction>
+          }
+        >
+          <div className="p-3 sm:p-0">
+            <DataTable
+              caption="Your four most recent transactions"
+              columns={transactionColumns}
+              rows={user.transactions.slice(0, 4)}
+              rowKey={(tx) => tx.id}
+              className="sm:[&>div]:rounded-none sm:[&>div]:border-0"
+              empty={{
+                icon: History,
+                title: "No transactions yet",
+                description: "Deposits, withdrawals and trades appear here.",
+                action: <Button size="sm" icon={PlusCircle} onClick={onOpenDeposit}>Make a deposit</Button>,
+              }}
+            />
           </div>
-          <button 
-            onClick={() => onNavigate("dashboard-transactions")}
-            className="text-xs text-muted hover:text-accent transition-colors"
-          >
-            View All
-          </button>
-        </div>
-
-        {user.transactions.length === 0 ? (
-          <p className="text-xs text-center text-muted py-6 font-sans">No past transactions found.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse font-sans">
-              <thead>
-                <tr className="border-b border-line text-2xs uppercase font-subheading tracking-wider text-muted">
-                  <th className="p-3">TxID</th>
-                  <th className="p-3">Date</th>
-                  <th className="p-3">Type</th>
-                  <th className="p-3">Asset</th>
-                  <th className="p-3">Amount</th>
-                  <th className="p-3 pr-4 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-line/30 font-data">
-                {user.transactions.slice(0, 4).map((tx) => (
-                  <tr key={tx.id} className="hover:bg-panel/40 transition-colors">
-                    <td className="p-3 font-semibold text-ink">{tx.id}</td>
-                    <td className="p-3 text-muted font-sans">{formatDateTime(tx.date)}</td>
-                    <td className="p-3 uppercase">
-                      <span className={`px-2 py-0.5 rounded text-2xs font-semibold font-subheading ${
-                        tx.type === "deposit" ? "bg-positive/10 text-positive" : 
-                        tx.type === "withdrawal" ? "bg-negative/10 text-negative" : 
-                        tx.type === "investment" ? "bg-accent/15 text-accent" : 
-                        "bg-white/10 text-ink"
-                      }`}>
-                        {tx.type}
-                      </span>
-                    </td>
-                    <td className="p-3 font-bold text-ink">{tx.asset}</td>
-                    <td className="p-3 font-bold text-ink">${tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                    <td className="p-3 pr-4 text-right">
-                      <span className={`inline-flex items-center gap-1 text-2xs font-semibold font-subheading ${
-                        tx.status === "completed" || tx.status === "approved" ? "text-positive" :
-                        tx.status === "pending" ? "text-yellow-400" :
-                        tx.status === "rejected" || tx.status === "failed" ? "text-negative" :
-                        "text-muted"
-                      }`}>
-                        {tx.status === "pending" ? <AlertTriangle size={12} /> : tx.status === "rejected" || tx.status === "failed" ? <AlertTriangle size={12} /> : <CheckCircle2 size={12} />}
-                        {tx.status.toUpperCase()}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </motion.section>
-
+        </SectionCard>
+      </motion.div>
     </motion.div>
   );
 };
-
