@@ -1,85 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSeo } from "../lib/useSeo";
 import { useSession } from "../context/domains/SessionContext";
-import { useMarkets } from "../context/domains/MarketsContext";
-import { 
-  ArrowUpRight, 
-  TrendingUp, 
-  Zap, 
-  Flame, 
-  Users, 
-  Settings, 
-  Circle, 
-  ChevronLeft, 
-  ChevronRight, 
-  Star, 
-  Coins,
-  Search,
-  ArrowRight
-} from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
-import { TradeFeatures, InvestmentPlansSection, Proof, Closing, Footer, Testimonials, HomeVideos } from "../components/HomeSections";
+import { ArrowUpRight } from "lucide-react";
+import { motion } from "motion/react";
+import { TradeFeatures, InvestmentPlansSection, Proof, Closing, Footer, HomeVideos } from "../components/HomeSections";
 import { Brandmark } from "../components/ui/Brandmark";
-
-// Micro-animation variants for staggering cards
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 15,
-    },
-  },
-};
-
-// Testimonials data representing real-world user reviews
-const REVIEWS = [
-  {
-    name: "Marcus Aurelius K.",
-    country: "Singapore",
-    rating: 5,
-    title: "Institutional execution speeds",
-    text: "The latency on order routing is virtually zero. Moneta Prime's focus on dark mode visuals, combined with robust performance and responsive state machines, makes it my primary terminal.",
-    avatar: "MK"
-  },
-  {
-    name: "Elena Rostova",
-    country: "United Kingdom",
-    rating: 5,
-    title: "Absolute masterpiece design",
-    text: "By far the most intuitive and beautifully crafted dashboard in crypto. The portfolio trackers are synchronized instantly and the visual gradients are deep and eye-friendly.",
-    avatar: "ER"
-  },
-  {
-    name: "David Vance",
-    country: "United States",
-    rating: 5,
-    title: "Seamless liquidity & support",
-    text: "I was skeptical about automated payouts, but security vaults here are top-tier. Support tickets are resolved without standard AI-bot delays. Absolute gold standard of exchanges.",
-    avatar: "DV"
-  },
-  {
-    name: "Satoshi Tanaka",
-    country: "Japan",
-    rating: 5,
-    title: "Elite mobile & desktop sync",
-    text: "The copy trading feature has perfectly matched execution fills. Clean typography, excellent UX, and transparent tracking. Highly recommended for retail and pro trading.",
-    avatar: "ST"
-  }
-];
 
 export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ onNavigate }) => {
   useSeo({
@@ -88,94 +13,6 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
     path: "/",
   });
   const { user } = useSession();
-  const { marketCrypto, marketStocks } = useMarkets();
-  const [activeSpotlightTab, setActiveSpotlightTab] = useState<"crypto" | "stocks">("crypto");
-  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
-  const [marketSearch, setMarketSearch] = useState("");
-  const [selectedMarketTab, setSelectedMarketTab] = useState<"crypto" | "stocks">("crypto");
-
-  // Auto-rotate reviews every 6 seconds as a premium landing page feature
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentReviewIndex((prev) => (prev + 1) % REVIEWS.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const handlePrevReview = () => {
-    setCurrentReviewIndex((prev) => (prev - 1 + REVIEWS.length) % REVIEWS.length);
-  };
-
-  const handleNextReview = () => {
-    setCurrentReviewIndex((prev) => (prev + 1) % REVIEWS.length);
-  };
-
-  // Safe slice & check fallback for asset showcases
-  const spotlightCrypto = marketCrypto && marketCrypto.length > 0 ? marketCrypto.slice(0, 5) : [
-    { symbol: "BTC", name: "Bitcoin", price: 98400.00, change: 4.82, sparkline: [98000, 98200, 98500, 98300, 98700, 99100, 98400] },
-    { symbol: "ETH", name: "Ethereum", price: 3412.80, change: 2.15, sparkline: [3350, 3360, 3390, 3380, 3400, 3405, 3412] },
-    { symbol: "SOL", name: "Solana", price: 184.20, change: -1.45, sparkline: [189, 187, 186, 185, 184, 185, 184] },
-    { symbol: "BNB", name: "BNB", price: 588.60, change: 0.95, sparkline: [582, 584, 585, 583, 587, 588, 588] },
-    { symbol: "XRP", name: "Ripple", price: 1.12, change: 12.30, sparkline: [0.98, 1.01, 1.04, 1.03, 1.10, 1.09, 1.12] },
-  ];
-
-  const spotlightStocks = marketStocks && marketStocks.length > 0 ? marketStocks.slice(0, 5) : [
-    { symbol: "AAPL", name: "Apple Inc.", price: 194.50, change: 1.25, sparkline: [192, 193, 192.5, 194, 193.8, 194.2, 194.5] },
-    { symbol: "TSLA", name: "Tesla Inc.", price: 218.30, change: -3.21, sparkline: [224, 222, 220, 221, 219, 217, 218.3] },
-    { symbol: "NVDA", name: "NVIDIA Corp.", price: 875.12, change: 5.82, sparkline: [830, 842, 850, 848, 860, 868, 875] },
-    { symbol: "GOOGL", name: "Alphabet Inc.", price: 172.40, change: 0.45, sparkline: [171.5, 172, 171.8, 172.2, 172.1, 172.3, 172.4] },
-    { symbol: "AMD", name: "Advanced Micro Devices", price: 164.80, change: -2.10, sparkline: [168, 167, 166.5, 165.2, 164.9, 165, 164.8] },
-  ];
-
-  const tableRawAssets = selectedMarketTab === "crypto" ? spotlightCrypto : spotlightStocks;
-  const filteredTableAssets = tableRawAssets
-    .filter(asset => 
-      asset.symbol.toLowerCase().includes(marketSearch.toLowerCase()) || 
-      asset.name.toLowerCase().includes(marketSearch.toLowerCase())
-    )
-    .slice(0, 4);
-
-  // Helper to render real-time sparkline SVG curves
-  const renderMiniSparkline = (points: number[], isPositive: boolean) => {
-    if (!points || points.length === 0) return null;
-    const width = 120;
-    const height = 36;
-    const min = Math.min(...points);
-    const max = Math.max(...points);
-    const range = max - min || 1;
-    
-    const svgPoints = points.map((p, index) => {
-      const x = (index / (points.length - 1)) * width;
-      const y = height - 3 - ((p - min) / range) * (height - 6);
-      return `${x},${y}`;
-    }).join(" ");
-
-    const strokeColor = isPositive ? "#10B981" : "#EF4444"; // emerald vs rose
-    const fillGradientId = `grad-${Math.random()}`;
-
-    return (
-      <svg width={width} height={height} className="overflow-visible">
-        <defs>
-          <linearGradient id={fillGradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor={strokeColor} stopOpacity="0.2" />
-            <stop offset="100%" stopColor={strokeColor} stopOpacity="0.0" />
-          </linearGradient>
-        </defs>
-        <polyline
-          fill="none"
-          stroke={strokeColor}
-          strokeWidth="1.75"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          points={svgPoints}
-        />
-        <polygon
-          points={`0,${height} ${svgPoints} ${width},${height}`}
-          fill={`url(#${fillGradientId})`}
-        />
-      </svg>
-    );
-  };
 
   return (
     <div className="min-h-screen bg-transparent text-ink font-sans selection:bg-accent/20 overflow-x-hidden pt-0">
@@ -353,7 +190,11 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
       <InvestmentPlansSection onNavigate={onNavigate} />
       <HomeVideos />
       <Proof />
-      <Testimonials />
+      {/* Testimonials section intentionally absent: the previous one shipped
+          invented customer reviews and an invented aggregate rating. Pending
+          real, attributable customer testimonials — do not re-add a version
+          with placeholder or sample names. <Testimonials /> still exists and
+          now takes its content as a prop; give it real data to bring it back. */}
       <Closing onNavigate={onNavigate} />
 
       <Footer onNavigate={onNavigate} />

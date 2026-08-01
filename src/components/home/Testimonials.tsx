@@ -2,51 +2,42 @@ import React, { useRef } from 'react';
 import { motion } from 'motion/react';
 import { Star, ArrowRight } from 'lucide-react';
 
-const TESTIMONIALS = [
-  {
-    title: "Outstanding Platform",
-    text: "This broker is incredibly reliable with excellent customer support. My investments have been performing consistently well. Highly recommended!",
-    name: "James Miller",
-    initials: "JM",
-    time: "2 days ago",
-    rating: 5,
-  },
-  {
-    title: "Trading Made Easy",
-    text: "The copy trading feature is a game changer. I've been able to mirror top-performing traders and my portfolio has grown significantly since joining.",
-    name: "Sarah Clarke",
-    initials: "SC",
-    time: "5 days ago",
-    rating: 5,
-  },
-  {
-    title: "Top-Tier Security",
-    text: "I feel completely safe with my assets on Moneta Prime. The institutional-grade security combined with real-time execution makes it the best platform I've ever used.",
-    name: "Daniel Okoye",
-    initials: "DO",
-    time: "1 week ago",
-    rating: 5,
-  },
-  {
-    title: "Incredible Returns",
-    text: "The investment plans are transparent and the returns have been consistent. Moneta Prime has exceeded my expectations as a professional trading platform.",
-    name: "Amara Obi",
-    initials: "AO",
-    time: "3 days ago",
-    rating: 5,
-  },
-  {
-    title: "Fast & Professional",
-    text: "Withdrawals are processed quickly, the dashboard is intuitive, and the market data is always up to date. Moneta Prime is the real deal for serious investors.",
-    name: "Kevin Brooks",
-    initials: "KB",
-    time: "1 week ago",
-    rating: 4,
-  },
-];
+export interface Testimonial {
+  title: string;
+  text: string;
+  name: string;
+  initials: string;
+  /** Human-readable age of the review, e.g. "2 days ago". */
+  time: string;
+  rating: number;
+}
 
-export const Testimonials = () => {
+export interface TestimonialsProps {
+  /** Real, attributable customer reviews. Never sample or illustrative data. */
+  items: Testimonial[];
+  /**
+   * Aggregate rating, shown only when supplied. It must come from a real
+   * count of real reviews — the previous hardcoded "4.8 / 5 from 2,782
+   * reviews" was invented, which is why this is now a required input rather
+   * than a default baked into the component.
+   */
+  aggregate?: { score: number; count: number };
+}
+
+/**
+ * Display component for customer testimonials.
+ *
+ * It deliberately holds NO content of its own. It previously shipped five
+ * invented reviews and an invented aggregate rating, which rendered on the
+ * public homepage as though they were real customers. The markup was never
+ * the problem; the fabricated data was. Callers now have to supply reviews
+ * they can actually attribute, and if there are none the component renders
+ * nothing rather than falling back to samples.
+ */
+export const Testimonials: React.FC<TestimonialsProps> = ({ items, aggregate }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  if (!items.length) return null;
 
   return (
     <section className="py-16 bg-ground border-t border-line/50 relative overflow-hidden">
@@ -54,28 +45,35 @@ export const Testimonials = () => {
 
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-positive/15 border border-positive/30 text-positive text-xs font-bold uppercase tracking-widest mb-5">
+          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-accent-soft border border-accent-line text-accent text-xs font-bold uppercase tracking-widest mb-5">
             <Star size={12} fill="currentColor" /> Trusted Reviews
           </div>
           <h2 className="text-3xl md:text-5xl font-extrabold text-ink tracking-tight">
             What Our Clients Say
           </h2>
+          {/* No "join thousands of investors" line here. That was the same
+              fabricated-claim problem as the reviews themselves — an
+              unverifiable count asserted in the markup. If there is a real
+              figure to cite, pass `aggregate` and it renders below. */}
           <p className="mt-4 text-muted max-w-lg mx-auto text-sm md:text-base">
-            Join thousands of satisfied investors who trust us with their financial goals
+            What our customers say about trading on Moneta Prime
           </p>
         </div>
 
-        {/* Overall rating */}
-        <div className="flex flex-col items-center gap-2 mb-12">
-          <div className="flex items-center gap-1 text-accent">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} size={26} fill="currentColor" />
-            ))}
+        {/* Overall rating — only when a real aggregate is supplied. */}
+        {aggregate ? (
+          <div className="flex flex-col items-center gap-2 mb-12">
+            <div className="flex items-center gap-1 text-accent">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} size={26} fill={i < Math.round(aggregate.score) ? "currentColor" : "none"} />
+              ))}
+            </div>
+            <p className="text-muted text-sm">
+              Rated <span className="text-ink font-bold">{aggregate.score}</span> / 5 based on{" "}
+              <span className="text-ink font-bold">{aggregate.count.toLocaleString()}</span> reviews
+            </p>
           </div>
-          <p className="text-muted text-sm">
-            Rated <span className="text-positive font-bold">4.8</span> / 5 based on <span className="text-positive font-bold">2,782</span> reviews
-          </p>
-        </div>
+        ) : null}
 
         {/* Scrollable Cards */}
         <div
@@ -83,7 +81,7 @@ export const Testimonials = () => {
           className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {TESTIMONIALS.map((t, idx) => (
+          {items.map((t, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 24 }}
@@ -102,7 +100,7 @@ export const Testimonials = () => {
                     <Star key={i} size={14} className="text-line" />
                   ))}
                 </div>
-                <span className="text-2xs font-bold px-2.5 py-0.5 rounded-full bg-positive/15 text-positive border border-positive/30">
+                <span className="text-2xs font-bold px-2.5 py-0.5 rounded-full bg-raised text-muted border border-line">
                   {t.rating} Stars
                 </span>
               </div>
@@ -120,7 +118,7 @@ export const Testimonials = () => {
 
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-positive flex items-center justify-center text-ink font-bold text-sm shrink-0">
+                <div className="w-10 h-10 rounded-full bg-raised border border-line flex items-center justify-center text-ink font-bold text-sm shrink-0">
                   {t.initials}
                 </div>
                 <div>
