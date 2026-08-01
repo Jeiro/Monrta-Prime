@@ -43,6 +43,39 @@ export function formatRelative(value: string | number | Date | null | undefined)
 }
 
 /**
+ * Money.
+ *
+ * `$${n.toLocaleString(undefined, { minimumFractionDigits: 2 })}` appeared
+ * ~20 times on the dashboard alone, and not always with the same options —
+ * some sites passed `maximumFractionDigits`, some didn't, so the same figure
+ * could render as "1,204.5" in one card and "1,204.50" in the next. Both
+ * bounds are pinned here so a column of figures always has the same number
+ * of decimals.
+ */
+export function formatMoney(
+  value: number,
+  options: { decimals?: number; sign?: boolean } = {}
+): string {
+  const { decimals = 2, sign = false } = options;
+  const body = Math.abs(value).toLocaleString(undefined, {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+  // U+2212 minus, not a hyphen: it matches the digit width in a tabular
+  // font, so signed figures stay aligned down a column.
+  const prefix = value < 0 ? "−" : sign ? "+" : "";
+  return `${prefix}$${body}`;
+}
+
+/** "$1.2M" / "$62k" — axis ticks and dense tiles, never a primary figure. */
+export function formatCompactMoney(value: number): string {
+  return `$${Intl.NumberFormat(undefined, {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(value)}`;
+}
+
+/**
  * Stable numeric UID derived from the user's email (7 digits, zero-padded).
  * Was defined independently in Navigation and DashboardOverview — one shared
  * implementation so the two can never drift and show different UIDs.

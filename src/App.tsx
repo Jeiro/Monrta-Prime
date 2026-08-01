@@ -7,6 +7,7 @@ import { Footer } from "./components/Footer";
 import { ScrollAnimatedBackground } from "./components/ScrollAnimatedBackground";
 import { TawkChat } from "./components/TawkChat";
 import { GlobalModals } from "./components/GlobalModals";
+import { RouteTransition } from "./components/RouteTransition";
 
 import { useUser, AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
 import { useSupabaseClient, ensureUserRow } from "./lib/supabase";
@@ -107,9 +108,19 @@ class DecorativeErrorBoundary extends React.Component<{ children: React.ReactNod
   }
 }
 
+// Route-level fallback. Deliberately understated: a large spinner in the
+// middle of an empty page makes a 200ms chunk fetch feel like a stall.
+// aria-busy + a polite live region so the wait is announced rather than
+// being silence for a screen reader.
 const RouteSpinner = () => (
-  <div className="flex h-[70vh] items-center justify-center">
-    <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-accent"></div>
+  <div
+    className="flex h-[60vh] items-center justify-center"
+    role="status"
+    aria-busy="true"
+    aria-live="polite"
+  >
+    <div className="h-6 w-6 animate-spin rounded-full border-2 border-line border-t-accent" />
+    <span className="sr-only">Loading…</span>
   </div>
 );
 
@@ -265,7 +276,7 @@ function AppShell() {
   );
 
   return (
-    <div className={`relative flex min-h-screen flex-col bg-ground text-[#F5F6F8] font-sans ${showUserNavigation ? "pt-16 sm:pt-20" : ""}`}>
+    <div className={`relative flex min-h-screen flex-col bg-ground text-ink font-sans ${showUserNavigation ? "pt-16 sm:pt-20" : ""}`}>
       <DecorativeErrorBoundary>
         <ScrollAnimatedBackground />
       </DecorativeErrorBoundary>
@@ -282,6 +293,7 @@ function AppShell() {
             : "max-w-7xl mx-auto px-3 sm:px-5 lg:px-6 mt-2 pb-20 sm:pb-24"
       }`}>
         <Suspense fallback={<RouteSpinner />}>
+          <RouteTransition routeKey={location.pathname}>
           <Routes>
             <Route path="/" element={guestOnly(<PublicHome onNavigate={handleNavigate} />)} />
             <Route path="/markets" element={guestOnly(<PublicMarkets onNavigate={handleNavigate} />)} />
@@ -319,6 +331,7 @@ function AppShell() {
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          </RouteTransition>
         </Suspense>
       </main>
 

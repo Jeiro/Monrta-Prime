@@ -62,7 +62,7 @@ export function StatCard({
       <div
         className={
           `mt-3 font-data tabular-nums font-semibold tracking-tight text-ink ` +
-          (emphasis ? "text-2xl" : "text-xl")
+          (emphasis ? "text-3xl" : "text-xl")
         }
       >
         {value}
