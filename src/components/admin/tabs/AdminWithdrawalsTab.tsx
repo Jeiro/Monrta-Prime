@@ -1,9 +1,21 @@
 import React, { useMemo, useState } from "react";
-import { motion } from "motion/react";
-import { AlertCircle, ArrowUpRight, Check, ClipboardList, Hash, Loader2, Search, X } from "lucide-react";
+import { AlertCircle, ArrowUpRight, Check, ClipboardList, Search, X } from "lucide-react";
 import { useApp } from "../../../context/AppContext";
 import type { Transaction } from "../../../types";
-import { formatDateTime } from "../../../lib/format";
+import { formatDateTime, formatMoney } from "../../../lib/format";
+import {
+  Alert,
+  Badge,
+  Button,
+  Column,
+  DataTable,
+  Drawer,
+  Input,
+  SectionCard,
+  Tabs,
+  Textarea,
+} from "../../ui";
+import { AdminTabHeader, AdminTabShell } from "../AdminTabShell";
 
 type WithdrawalStatus = "pending" | "approved" | "rejected";
 
@@ -16,16 +28,16 @@ type WithdrawalRow = Transaction & {
   displayStatus: WithdrawalStatus;
 };
 
-const statusStyles: Record<WithdrawalStatus, string> = {
-  pending: "text-warning bg-warning-soft border-warning-line",
-  approved: "text-positive bg-positive/10 border-positive/30",
-  rejected: "text-negative bg-negative/10 border-negative/30"
+const statusTone: Record<WithdrawalStatus, "warning" | "positive" | "negative"> = {
+  pending: "warning",
+  approved: "positive",
+  rejected: "negative",
 };
 
 const statusLabels: Record<WithdrawalStatus, string> = {
   pending: "Pending",
   approved: "Approved",
-  rejected: "Rejected"
+  rejected: "Rejected",
 };
 
 const normalizeStatus = (status: Transaction["status"]): WithdrawalStatus => {
@@ -44,11 +56,8 @@ const parseAsset = (asset: string) => {
   return { coin, network };
 };
 
-const formatMoney = (amount: number) =>
-  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 }).format(amount);
-
 const shortValue = (value: string, left = 10, right = 6) =>
-  value.length > left + right + 3 ? `${value.slice(0, left)}...${value.slice(-right)}` : value;
+  value.length > left + right + 3 ? `${value.slice(0, left)}…${value.slice(-right)}` : value;
 
 const getDestinationWallet = (transaction: Transaction) => {
   if (transaction.paypalEmail) return `PayPal: ${transaction.paypalEmail}`;
@@ -60,11 +69,11 @@ const getDestinationWallet = (transaction: Transaction) => {
 
 const buildWithdrawalRows = (
   transactions: Transaction[],
-  directory: Map<string, { email: string; name: string | null }>,
+  directory: Map<string, { email: string; name: string | null }>
 ): WithdrawalRow[] =>
   transactions
-    .filter(transaction => transaction.type === "withdrawal")
-    .map(transaction => {
+    .filter((transaction) => transaction.type === "withdrawal")
+    .map((transaction) => {
       const asset = parseAsset(transaction.asset);
       // Older rows can have blank denormalized user_email/user_name — fall back
       // to the users directory by user_id so the requester is always shown.
@@ -76,20 +85,30 @@ const buildWithdrawalRows = (
         coin: asset.coin,
         network: asset.network,
         destinationWallet: getDestinationWallet(transaction),
-        displayStatus: normalizeStatus(transaction.status)
+        displayStatus: normalizeStatus(transaction.status),
       };
     });
 
 export const AdminWithdrawalsTab: React.FC = () => {
-  const { adminTransactions, adminApproveWithdrawal, adminRejectWithdrawal, usersDirectory } = useApp();
+  const { adminTransactions, adminApproveWithdrawal, adminRejectWithdrawal, usersDirectory } =
+    useApp();
   const directoryById = useMemo(
-    () => new Map((usersDirectory ?? []).map(profile => [profile.id, { email: profile.email, name: profile.name }])),
-    [usersDirectory],
+    () =>
+      new Map(
+        (usersDirectory ?? []).map((profile) => [
+          profile.id,
+          { email: profile.email, name: profile.name },
+        ])
+      ),
+    [usersDirectory]
   );
   const [adminNotes, setAdminNotes] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<"all" | WithdrawalStatus>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [reviewingId, setReviewingId] = useState<string | null>(null);
+  /** Second step for an irreversible payout. Reset whenever the drawer moves. */
+  const [confirming, setConfirming] = useState<"approve" | "reject" | null>(null);
 
   const isLoading = !Array.isArray(adminTransactions);
 
@@ -106,7 +125,8 @@ export const AdminWithdrawalsTab: React.FC = () => {
 
       return { rows, error: null as string | null };
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Unable to prepare withdrawal records.";
+      const message =
+        error instanceof Error ? error.message : "Unable to prepare withdrawal records.";
       return { rows: [] as WithdrawalRow[], error: message };
     }
   }, [adminTransactions, directoryById]);
@@ -115,7 +135,7 @@ export const AdminWithdrawalsTab: React.FC = () => {
 
   const filteredWithdrawals = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
-    return withdrawals.filter(withdrawal => {
+    return withdrawals.filter((withdrawal) => {
       const matchesStatus = filterStatus === "all" || withdrawal.displayStatus === filterStatus;
       if (!query) return matchesStatus;
 
@@ -126,22 +146,27 @@ export const AdminWithdrawalsTab: React.FC = () => {
         withdrawal.coin,
         withdrawal.network,
         withdrawal.destinationWallet,
-        withdrawal.amount.toString()
-      ].join(" ").toLowerCase();
+        withdrawal.amount.toString(),
+      ]
+        .join(" ")
+        .toLowerCase();
 
       return matchesStatus && searchable.includes(query);
     });
   }, [withdrawals, filterStatus, searchQuery]);
 
-  const stats = useMemo(() => ({
-    total: withdrawals.length,
-    pending: withdrawals.filter(withdrawal => withdrawal.displayStatus === "pending").length,
-    approved: withdrawals.filter(withdrawal => withdrawal.displayStatus === "approved").length,
-    rejected: withdrawals.filter(withdrawal => withdrawal.displayStatus === "rejected").length
-  }), [withdrawals]);
+  const stats = useMemo(
+    () => ({
+      total: withdrawals.length,
+      pending: withdrawals.filter((w) => w.displayStatus === "pending").length,
+      approved: withdrawals.filter((w) => w.displayStatus === "approved").length,
+      rejected: withdrawals.filter((w) => w.displayStatus === "rejected").length,
+    }),
+    [withdrawals]
+  );
 
   const setNote = (withdrawalId: string, value: string) => {
-    setAdminNotes(prev => ({ ...prev, [withdrawalId]: value }));
+    setAdminNotes((prev) => ({ ...prev, [withdrawalId]: value }));
   };
 
   const showFeedback = (message: string) => {
@@ -149,198 +174,290 @@ export const AdminWithdrawalsTab: React.FC = () => {
     setTimeout(() => setFeedback(null), 3500);
   };
 
-  const handleApprove = (withdrawal: WithdrawalRow) => {
-    const confirmed = window.confirm(`Approve withdrawal ${withdrawal.id} for ${withdrawal.userEmail}?`);
-    if (!confirmed) return;
+  const closeDrawer = () => {
+    setReviewingId(null);
+    setConfirming(null);
+  };
 
+  const handleApprove = (withdrawal: WithdrawalRow) => {
     adminApproveWithdrawal(withdrawal.id, adminNotes[withdrawal.id] || undefined);
     showFeedback(`Approved withdrawal ${withdrawal.id}`);
+    closeDrawer();
   };
 
   const handleReject = (withdrawal: WithdrawalRow) => {
-    const confirmed = window.confirm(`Reject withdrawal ${withdrawal.id} for ${withdrawal.userEmail}?`);
-    if (!confirmed) return;
-
     adminRejectWithdrawal(withdrawal.id, adminNotes[withdrawal.id] || undefined);
     showFeedback(`Rejected withdrawal ${withdrawal.id}`);
+    closeDrawer();
   };
 
-  return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
-      <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
-        <div>
-          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
-            <ArrowUpRight size={20} className="text-accent" /> Withdrawal Management
-          </h1>
-          <p className="text-xs text-muted mt-1">Review payout destinations, approve verified withdrawals, or reject unsafe requests.</p>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-          <StatBadge label="Total" value={stats.total} />
-          <StatBadge label="Pending" value={stats.pending} tone="yellow" />
-          <StatBadge label="Approved" value={stats.approved} tone="green" />
-          <StatBadge label="Rejected" value={stats.rejected} tone="red" />
-        </div>
-      </div>
+  const reviewing = withdrawals.find((w) => w.id === reviewingId) || null;
 
-      {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-positive/10 border border-positive/30 text-positive text-xs font-bold flex items-center gap-2">
-          <Check size={14} /> {feedback}
-        </motion.div>
+  const columns: Column<WithdrawalRow>[] = [
+    {
+      key: "id",
+      header: "Withdrawal ID",
+      primary: true,
+      cell: (w) => (
+        <span className="font-data text-xs text-ink" title={w.id}>
+          {shortValue(w.id, 12, 5)}
+        </span>
+      ),
+    },
+    {
+      key: "user",
+      header: "User",
+      cell: (w) => (
+        <div className="min-w-0">
+          <span className="block truncate font-medium text-ink">{w.userName || "—"}</span>
+          <span className="block truncate text-2xs text-muted">{w.userEmail}</span>
+        </div>
+      ),
+    },
+    {
+      key: "asset",
+      header: "Asset",
+      cell: (w) => (
+        <div>
+          <span className="block font-medium text-ink">{w.coin}</span>
+          <span className="block text-2xs text-muted">{w.network}</span>
+        </div>
+      ),
+    },
+    {
+      key: "destination",
+      header: "Destination",
+      hideOnMobile: true,
+      cell: (w) => (
+        <span
+          title={w.destinationWallet}
+          className="block max-w-[220px] truncate font-data text-2xs text-muted"
+        >
+          {w.destinationWallet}
+        </span>
+      ),
+    },
+    { key: "amount", header: "Amount", numeric: true, cell: (w) => formatMoney(w.amount) },
+    {
+      key: "date",
+      header: "Date",
+      cell: (w) => <span className="whitespace-nowrap text-muted">{formatDateTime(w.date)}</span>,
+    },
+    {
+      key: "status",
+      header: "Status",
+      cell: (w) => <Badge tone={statusTone[w.displayStatus]}>{statusLabels[w.displayStatus]}</Badge>,
+    },
+    {
+      key: "review",
+      header: "",
+      align: "right",
+      cell: (w) => (
+        <span className="whitespace-nowrap text-2xs font-semibold text-accent">
+          {w.displayStatus === "pending" ? "Review →" : "View →"}
+        </span>
+      ),
+    },
+  ];
+
+  return (
+    <AdminTabShell>
+      <AdminTabHeader
+        icon={ArrowUpRight}
+        title="Withdrawals"
+        description="Review payout destinations before releasing funds."
+        stats={[
+          { label: "Total", value: stats.total },
+          { label: "Pending", value: stats.pending, tone: "warning" },
+          { label: "Approved", value: stats.approved, tone: "positive" },
+          { label: "Rejected", value: stats.rejected, tone: "negative" },
+        ]}
+      />
+
+      {feedback && <Alert tone="success">{feedback}</Alert>}
+      {!isLoading && withdrawalResult.error && (
+        <Alert tone="error" title="Unable to load withdrawals">
+          {withdrawalResult.error}
+        </Alert>
       )}
 
-      <div className="bg-surface border border-line rounded-2xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-line flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-          <div>
-            <h2 className="text-sm font-bold text-ink flex items-center gap-2">
-              <ClipboardList size={16} className="text-accent" /> Withdrawal Queue
-            </h2>
-            <p className="text-2xs text-muted mt-1">Pending withdrawals stay at the top for faster treasury review.</p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
-            <div className="relative sm:w-72">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
-              <input
-                value={searchQuery}
-                onChange={event => setSearchQuery(event.target.value)}
-                placeholder="Search withdrawals"
-                className="w-full pl-9 pr-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent"
-              />
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {(["all", "pending", "approved", "rejected"] as const).map(status => (
-                <button
-                  key={status}
-                  onClick={() => setFilterStatus(status)}
-                  className={`px-3 py-2 text-2xs font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-accent text-ground border-accent" : "bg-ground text-muted border-line hover:border-accent"}`}
-                >
-                  {status === "all" ? "All" : statusLabels[status]}
-                </button>
-              ))}
-            </div>
-          </div>
+      <SectionCard
+        flush
+        icon={ClipboardList}
+        title="Withdrawal queue"
+        action={
+          <span className="text-2xs tabular-nums text-faint">
+            {filteredWithdrawals.length} of {withdrawals.length}
+          </span>
+        }
+      >
+        <div className="flex flex-col gap-3 border-b border-line px-5 py-4 lg:flex-row lg:items-end lg:justify-between">
+          <Input
+            className="lg:w-72"
+            aria-label="Search withdrawals"
+            placeholder="Search by ID, user, destination…"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            prefix={<Search size={14} />}
+          />
+          <Tabs<"all" | WithdrawalStatus>
+            variant="pill"
+            layoutGroup="withdrawal-status"
+            aria-label="Filter by status"
+            value={filterStatus}
+            onChange={setFilterStatus}
+            items={[
+              { id: "all", label: "All" },
+              { id: "pending", label: "Pending", badge: stats.pending || undefined },
+              { id: "approved", label: "Approved" },
+              { id: "rejected", label: "Rejected" },
+            ]}
+          />
         </div>
 
-        {isLoading && (
-          <StateMessage icon={<Loader2 size={18} className="animate-spin" />} title="Loading withdrawals" message="Preparing withdrawal requests for review." />
-        )}
+        <div className="p-3 sm:p-0">
+          <DataTable
+            caption="Withdrawal review queue"
+            columns={columns}
+            rows={filteredWithdrawals}
+            rowKey={(w) => w.id}
+            loading={isLoading}
+            onRowClick={(w) => {
+              setReviewingId(w.id);
+              setConfirming(null);
+            }}
+            className="sm:[&>div]:rounded-none sm:[&>div]:border-0"
+            empty={{
+              icon: ClipboardList,
+              title: "No withdrawals match this view",
+              description:
+                searchQuery || filterStatus !== "all"
+                  ? "Try clearing the search or status filter."
+                  : "Payout requests will appear here for review.",
+            }}
+          />
+        </div>
+      </SectionCard>
 
-        {!isLoading && withdrawalResult.error && (
-          <StateMessage icon={<AlertCircle size={18} />} title="Unable to load withdrawals" message={withdrawalResult.error} tone="error" />
-        )}
+      <Drawer
+        open={Boolean(reviewing)}
+        onClose={closeDrawer}
+        title={reviewing ? `Withdrawal ${shortValue(reviewing.id, 14, 6)}` : ""}
+        footer={
+          reviewing?.displayStatus === "pending" ? (
+            /*
+              Two-step, in-drawer.
 
-        {!isLoading && !withdrawalResult.error && (
-          <>
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[1260px] text-left">
-                <thead className="bg-ground/60 border-b border-line">
-                  <tr className="text-2xs uppercase tracking-wider text-muted">
-                    <th className="px-5 py-3 font-bold">Withdrawal ID</th>
-                    <th className="px-4 py-3 font-bold">User</th>
-                    <th className="px-4 py-3 font-bold">Email</th>
-                    <th className="px-4 py-3 font-bold">Coin</th>
-                    <th className="px-4 py-3 font-bold">Network</th>
-                    <th className="px-4 py-3 font-bold">Destination Wallet</th>
-                    <th className="px-4 py-3 font-bold">Amount</th>
-                    <th className="px-4 py-3 font-bold">Date</th>
-                    <th className="px-4 py-3 font-bold">Status</th>
-                    <th className="px-5 py-3 font-bold">Admin Notes</th>
-                    <th className="px-5 py-3 font-bold text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-line/70">
-                  {filteredWithdrawals.map(withdrawal => (
-                    <tr key={withdrawal.id} className="hover:bg-ground/40 transition-colors align-top">
-                      <td className="px-5 py-4">
-                        <div className="flex items-center gap-2 text-xs font-bold text-ink">
-                          <Hash size={12} className="text-muted" />
-                          <span title={withdrawal.id}>{shortValue(withdrawal.id, 12, 5)}</span>
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 text-xs font-bold text-ink">{withdrawal.userName}</td>
-                      <td className="px-4 py-4 text-xs text-muted">{withdrawal.userEmail}</td>
-                      <td className="px-4 py-4 text-xs font-bold text-ink">{withdrawal.coin}</td>
-                      <td className="px-4 py-4 text-xs text-accent font-bold">{withdrawal.network}</td>
-                      <td className="px-4 py-4">
-                        <span title={withdrawal.destinationWallet} className="block max-w-[220px] truncate text-xs text-ink">{withdrawal.destinationWallet}</span>
-                        {withdrawal.destinationTag && <span className="mt-1 block text-2xs text-muted">Tag: {withdrawal.destinationTag}</span>}
-                      </td>
-                      <td className="px-4 py-4 text-xs font-bold text-ink">{formatMoney(withdrawal.amount)}</td>
-                      <td className="px-4 py-4 text-xs text-muted">{formatDateTime(withdrawal.date)}</td>
-                      <td className="px-4 py-4">
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${statusStyles[withdrawal.displayStatus]}`}>
-                          {statusLabels[withdrawal.displayStatus]}
-                        </span>
-                      </td>
-                      <td className="px-5 py-4">
-                        {withdrawal.displayStatus === "pending" ? (
-                          <textarea
-                            rows={2}
-                            placeholder="Optional admin notes"
-                            value={adminNotes[withdrawal.id] || ""}
-                            onChange={event => setNote(withdrawal.id, event.target.value)}
-                            className="w-[220px] px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none"
-                          />
-                        ) : (
-                          <p className="max-w-[220px] text-2xs text-muted">{withdrawal.notes || "No admin notes"}</p>
-                        )}
-                      </td>
-                      <td className="px-5 py-4">
-                        {withdrawal.displayStatus === "pending" ? (
-                          <div className="flex justify-end gap-2">
-                            <button onClick={() => handleApprove(withdrawal)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-positive text-ink font-bold text-2xs uppercase rounded-lg hover:bg-positive cursor-pointer">
-                              <Check size={12} /> Approve
-                            </button>
-                            <button onClick={() => handleReject(withdrawal)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-negative text-ink font-bold text-2xs uppercase rounded-lg hover:bg-negative cursor-pointer">
-                              <X size={12} /> Reject
-                            </button>
-                          </div>
-                        ) : (
-                          <p className="text-right text-2xs font-bold uppercase text-muted">Reviewed</p>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              This used to be window.confirm(), which blocks the JS thread,
+              can't be styled or themed, and on some browsers is suppressible
+              — a poor gate for money leaving the platform. The confirmation
+              is kept (it should be deliberate) but now lives in the UI, so it
+              is themed, focus-trapped with the rest of the drawer, and names
+              the amount and destination it is about to release.
+            */
+            confirming ? (
+              <div className="space-y-2">
+                <p className="text-xs text-muted">
+                  {confirming === "approve" ? "Release" : "Reject"}{" "}
+                  <span className="font-data font-semibold text-ink">
+                    {formatMoney(reviewing.amount)}
+                  </span>{" "}
+                  to <span className="text-ink">{reviewing.userEmail}</span>?
+                </p>
+                <div className="flex gap-2">
+                  <Button block variant="secondary" onClick={() => setConfirming(null)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    block
+                    variant={confirming === "approve" ? "positive" : "danger"}
+                    onClick={() =>
+                      confirming === "approve" ? handleApprove(reviewing) : handleReject(reviewing)
+                    }
+                  >
+                    Confirm {confirming}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Button block variant="positive" icon={Check} onClick={() => setConfirming("approve")}>
+                  Approve
+                </Button>
+                <Button block variant="danger" icon={X} onClick={() => setConfirming("reject")}>
+                  Reject
+                </Button>
+              </div>
+            )
+          ) : (
+            <p className="text-center text-2xs uppercase tracking-[0.09em] text-faint">
+              Already reviewed
+            </p>
+          )
+        }
+      >
+        {reviewing && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between gap-3">
+              <Badge tone={statusTone[reviewing.displayStatus]}>
+                {statusLabels[reviewing.displayStatus]}
+              </Badge>
+              <span className="font-data text-lg font-semibold tabular-nums text-ink">
+                {formatMoney(reviewing.amount)}
+              </span>
             </div>
 
-            {filteredWithdrawals.length === 0 && (
-              <StateMessage title="No withdrawal records" message="No withdrawal requests match this view." />
+            <dl className="space-y-3">
+              {[
+                { label: "User", value: reviewing.userName || "—" },
+                { label: "Email", value: reviewing.userEmail || "—" },
+                { label: "Asset", value: `${reviewing.coin} · ${reviewing.network}` },
+                { label: "Requested", value: formatDateTime(reviewing.date) },
+              ].map((row) => (
+                <div key={row.label} className="flex items-baseline justify-between gap-3">
+                  <dt className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                    {row.label}
+                  </dt>
+                  <dd className="text-right text-sm text-ink">{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+
+            {/* The destination is the one field that must be read in full —
+                it was truncated to 220px in the old table. */}
+            <div className="rounded-lg border border-line bg-panel p-3">
+              <p className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                Destination
+              </p>
+              <p className="mt-1 break-all font-data text-xs text-ink">
+                {reviewing.destinationWallet}
+              </p>
+              {reviewing.destinationTag && (
+                <p className="mt-2 break-all font-data text-2xs text-warning">
+                  Destination tag: {reviewing.destinationTag}
+                </p>
+              )}
+            </div>
+
+            {reviewing.displayStatus === "pending" ? (
+              <Textarea
+                label="Admin notes"
+                rows={3}
+                placeholder="Optional — recorded against this decision"
+                value={adminNotes[reviewing.id] || ""}
+                onChange={(event) => setNote(reviewing.id, event.target.value)}
+              />
+            ) : (
+              <div className="rounded-lg border border-line bg-panel p-3">
+                <p className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                  Admin notes
+                </p>
+                <p className="mt-1 text-sm text-ink">{reviewing.notes || "No notes recorded"}</p>
+              </div>
             )}
-          </>
+          </div>
         )}
-      </div>
-    </motion.div>
-  );
-};
-
-const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "yellow" | "green" | "red" }> = ({ label, value, tone = "default" }) => {
-  const toneClass = tone === "yellow"
-    ? "bg-warning-soft border-warning-line text-warning"
-    : tone === "green"
-      ? "bg-positive/10 border-positive/20 text-positive"
-      : tone === "red"
-        ? "bg-negative/10 border-negative/20 text-negative"
-        : "bg-ground border-line text-ink";
-
-  return (
-    <div className={`px-3 py-2 border rounded-lg min-w-[78px] ${toneClass}`}>
-      <p className="text-2xs uppercase text-muted tracking-wider">{label}</p>
-      <p className="text-sm font-bold">{value}</p>
-    </div>
-  );
-};
-
-const StateMessage: React.FC<{ icon?: React.ReactNode; title: string; message: string; tone?: "default" | "error" }> = ({ icon, title, message, tone = "default" }) => {
-  const toneClass = tone === "error" ? "text-negative" : "text-muted";
-
-  return (
-    <div className={`py-14 px-6 text-center ${toneClass}`}>
-      <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-ground border border-line">
-        {icon || <ClipboardList size={18} />}
-      </div>
-      <p className="text-sm font-bold text-ink">{title}</p>
-      <p className="mt-1 text-xs text-muted">{message}</p>
-    </div>
+      </Drawer>
+    </AdminTabShell>
   );
 };

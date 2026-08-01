@@ -1,64 +1,92 @@
 import React, { useMemo, useState } from "react";
 import { useApp } from "../../../context/AppContext";
-import { motion } from "motion/react";
-import { UserCheck, Check, X, Search, Eye, FileText, ExternalLink } from "lucide-react";
+import { Check, ExternalLink, FileText, Search, UserCheck, X } from "lucide-react";
 import type { KycSubmission, KycStatus } from "../../../types";
 import type { CoreUserProfile } from "../../../hooks/data/useUsersDirectory";
+import { formatDateTime } from "../../../lib/format";
+import {
+  Alert,
+  Badge,
+  Button,
+  Column,
+  DataTable,
+  Drawer,
+  Input,
+  SectionCard,
+  Tabs,
+  Textarea,
+} from "../../ui";
+import { AdminTabHeader, AdminTabShell } from "../AdminTabShell";
 
 type KycRow = CoreUserProfile & { kyc?: KycSubmission; kycStatus: KycStatus };
 
-const statusColors: Record<KycStatus, string> = {
-  pending: "text-warning bg-warning-soft border-warning-line",
-  approved: "text-positive bg-positive/10 border-positive/30",
-  rejected: "text-negative bg-negative/10 border-negative/30",
-  unverified: "text-muted bg-surface/10 border-line/30"
+const statusTone: Record<KycStatus, "warning" | "positive" | "negative" | "neutral"> = {
+  pending: "warning",
+  approved: "positive",
+  rejected: "negative",
+  unverified: "neutral",
 };
 
-const formatDate = (value?: string) => {
-  if (!value) return "Not submitted";
-  const parsed = Date.parse(value);
-  if (!Number.isFinite(parsed)) return value;
-  return new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(parsed));
-};
+const whenOr = (value: string | undefined, fallback: string) =>
+  value ? formatDateTime(value) : fallback;
 
-const getDocumentCount = (kyc?: KycSubmission) => [kyc?.frontImage, kyc?.backImage, kyc?.proofOfAddressImage].filter(Boolean).length;
+const getDocumentCount = (kyc?: KycSubmission) =>
+  [kyc?.frontImage, kyc?.backImage, kyc?.proofOfAddressImage].filter(Boolean).length;
 
 export const AdminKycTab: React.FC = () => {
   const { usersDirectory, allKycSubmissions, adminKycReview } = useApp();
   const [searchQuery, setSearchQuery] = useState("");
   const [adminNotes, setAdminNotes] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<string | null>(null);
-  const [expandedUser, setExpandedUser] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<"all" | KycStatus>("all");
   const [reviewingEmail, setReviewingEmail] = useState<string | null>(null);
+  const [openEmail, setOpenEmail] = useState<string | null>(null);
 
-  const rows = useMemo<KycRow[]>(() => usersDirectory.map(user => {
-    const kyc = allKycSubmissions[user.email];
-    return { ...user, kyc, kycStatus: kyc?.status || "unverified" };
-  }), [usersDirectory, allKycSubmissions]);
+  const rows = useMemo<KycRow[]>(
+    () =>
+      usersDirectory.map((user) => {
+        const kyc = allKycSubmissions[user.email];
+        return { ...user, kyc, kycStatus: kyc?.status || "unverified" };
+      }),
+    [usersDirectory, allKycSubmissions]
+  );
 
   const filtered = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
-    return rows.filter(user => {
-      const matchesStatus = filterStatus === "all" || user.kycStatus === filterStatus;
-      if (!query) return matchesStatus;
-      const searchable = [
-        user.name,
-        user.email,
-        user.kyc?.documentType || user.kyc?.idType || "",
-        user.kyc?.idNumber || "",
-        user.kyc?.country || "",
-        user.kyc?.adminNotes || user.kyc?.rejectionReason || ""
-      ].join(" ").toLowerCase();
-      return matchesStatus && searchable.includes(query);
-    }).sort((a, b) => {
-      if (a.kycStatus === "pending" && b.kycStatus !== "pending") return -1;
-      if (b.kycStatus === "pending" && a.kycStatus !== "pending") return 1;
-      return Date.parse(b.kyc?.submissionDate || "0") - Date.parse(a.kyc?.submissionDate || "0");
-    });
+    return rows
+      .filter((user) => {
+        const matchesStatus = filterStatus === "all" || user.kycStatus === filterStatus;
+        if (!query) return matchesStatus;
+        const searchable = [
+          user.name,
+          user.email,
+          user.kyc?.documentType || user.kyc?.idType || "",
+          user.kyc?.idNumber || "",
+          user.kyc?.country || "",
+          user.kyc?.adminNotes || user.kyc?.rejectionReason || "",
+        ]
+          .join(" ")
+          .toLowerCase();
+        return matchesStatus && searchable.includes(query);
+      })
+      .sort((a, b) => {
+        if (a.kycStatus === "pending" && b.kycStatus !== "pending") return -1;
+        if (b.kycStatus === "pending" && a.kycStatus !== "pending") return 1;
+        return (
+          Date.parse(b.kyc?.submissionDate || "0") - Date.parse(a.kyc?.submissionDate || "0")
+        );
+      });
   }, [rows, filterStatus, searchQuery]);
 
-  const pendingCount = rows.filter(user => user.kycStatus === "pending").length;
+  const stats = useMemo(
+    () => ({
+      total: rows.length,
+      pending: rows.filter((u) => u.kycStatus === "pending").length,
+      approved: rows.filter((u) => u.kycStatus === "approved").length,
+      rejected: rows.filter((u) => u.kycStatus === "rejected").length,
+    }),
+    [rows]
+  );
 
   const showFeedback = (message: string) => {
     setFeedback(message);
@@ -71,6 +99,7 @@ export const AdminKycTab: React.FC = () => {
     try {
       await adminKycReview(user.email, "approved", note);
       showFeedback(`KYC approved for ${user.email}`);
+      setOpenEmail(null);
     } catch {
       showFeedback(`Unable to approve KYC for ${user.email}`);
     } finally {
@@ -84,6 +113,7 @@ export const AdminKycTab: React.FC = () => {
     try {
       await adminKycReview(user.email, "rejected", reason);
       showFeedback(`KYC rejected for ${user.email}`);
+      setOpenEmail(null);
     } catch {
       showFeedback(`Unable to reject KYC for ${user.email}`);
     } finally {
@@ -91,157 +121,266 @@ export const AdminKycTab: React.FC = () => {
     }
   };
 
+  const open = filtered.find((u) => u.email === openEmail) || null;
+  const isReviewing = reviewingEmail === open?.email;
+
+  const columns: Column<KycRow>[] = [
+    {
+      key: "user",
+      header: "User",
+      primary: true,
+      cell: (u) => (
+        <div className="min-w-0">
+          <span className="block truncate font-medium text-ink">{u.name || "—"}</span>
+          <span className="block truncate text-2xs text-muted">{u.email}</span>
+        </div>
+      ),
+    },
+    {
+      key: "submitted",
+      header: "Submitted",
+      cell: (u) => (
+        <span className="whitespace-nowrap text-muted">
+          {whenOr(u.kyc?.submissionDate, "Not submitted")}
+        </span>
+      ),
+    },
+    {
+      key: "document",
+      header: "Document",
+      cell: (u) => u.kyc?.documentType || u.kyc?.idType || <span className="text-faint">—</span>,
+    },
+    {
+      key: "docs",
+      header: "Files",
+      numeric: true,
+      cell: (u) => getDocumentCount(u.kyc),
+    },
+    {
+      key: "status",
+      header: "Status",
+      cell: (u) => <Badge tone={statusTone[u.kycStatus]}>{u.kycStatus}</Badge>,
+    },
+    {
+      key: "review",
+      header: "",
+      align: "right",
+      cell: (u) => (
+        <span className="whitespace-nowrap text-2xs font-semibold text-accent">
+          {u.kycStatus === "pending" ? "Review →" : "View →"}
+        </span>
+      ),
+    },
+  ];
+
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
-      <div className="bg-surface border border-line rounded-2xl p-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-bold text-ink flex items-center gap-2">
-              <UserCheck size={20} className="text-accent" /> ID Verifications
-            </h1>
-            <p className="text-xs text-muted mt-1">Review identity documents, proof of address, notes, and verification outcomes.</p>
-          </div>
-          <span className="flex items-center gap-2 text-2xs font-bold text-warning bg-warning-soft border border-warning-line px-3 py-1.5 rounded-full">
-            {pendingCount} Pending Reviews
+    <AdminTabShell>
+      <AdminTabHeader
+        icon={UserCheck}
+        title="Identity verification"
+        description="Review identity documents and proof of address before approving an account."
+        stats={[
+          { label: "Total", value: stats.total },
+          { label: "Pending", value: stats.pending, tone: "warning" },
+          { label: "Approved", value: stats.approved, tone: "positive" },
+          { label: "Rejected", value: stats.rejected, tone: "negative" },
+        ]}
+      />
+
+      {feedback && <Alert tone="success">{feedback}</Alert>}
+
+      <SectionCard
+        flush
+        icon={UserCheck}
+        title="Verification queue"
+        action={
+          <span className="text-2xs tabular-nums text-faint">
+            {filtered.length} of {rows.length}
           </span>
+        }
+      >
+        <div className="flex flex-col gap-3 border-b border-line px-5 py-4 lg:flex-row lg:items-end lg:justify-between">
+          <Input
+            className="lg:w-80"
+            aria-label="Search verifications"
+            placeholder="Search by name, email, document…"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            prefix={<Search size={14} />}
+          />
+          <Tabs<"all" | KycStatus>
+            variant="pill"
+            layoutGroup="kyc-status"
+            aria-label="Filter by status"
+            value={filterStatus}
+            onChange={setFilterStatus}
+            items={[
+              { id: "all", label: "All" },
+              { id: "pending", label: "Pending", badge: stats.pending || undefined },
+              { id: "approved", label: "Approved" },
+              { id: "rejected", label: "Rejected" },
+              { id: "unverified", label: "Unverified" },
+            ]}
+          />
         </div>
-      </div>
 
-      {feedback && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-xl bg-positive/10 border border-positive/30 text-positive text-xs font-bold">
-          {feedback}
-        </motion.div>
-      )}
+        <div className="p-3 sm:p-0">
+          <DataTable
+            caption="Identity verification queue"
+            columns={columns}
+            rows={filtered}
+            rowKey={(u) => u.email}
+            onRowClick={(u) => setOpenEmail(u.email)}
+            className="sm:[&>div]:rounded-none sm:[&>div]:border-0"
+            empty={{
+              icon: UserCheck,
+              title: "No verifications match this view",
+              description: "Submitted identity documents will appear here for review.",
+            }}
+          />
+        </div>
+      </SectionCard>
 
-      <div className="bg-surface border border-line rounded-2xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-line flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-          <div className="relative lg:w-80">
-            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
-            <input type="text" placeholder="Search verifications" value={searchQuery} onChange={event => setSearchQuery(event.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-ground border border-line rounded-xl text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
+      {/*
+        Documents, notes and the decision all move into the drawer.
+
+        The queue previously carried a 250px notes <input> and two action
+        buttons as columns, forcing min-w-[1180px] and a horizontal scroller,
+        and expanded document details into a colSpan={7} row underneath. The
+        notes input also rendered on every row including already-reviewed
+        ones, where typing in it did nothing because the actions were hidden.
+      */}
+      <Drawer
+        open={Boolean(open)}
+        onClose={() => setOpenEmail(null)}
+        title={open ? open.name || open.email : ""}
+        footer={
+          open?.kycStatus === "pending" ? (
+            <div className="flex gap-2">
+              <Button
+                block
+                variant="positive"
+                icon={Check}
+                loading={isReviewing}
+                onClick={() => open && approve(open)}
+              >
+                Approve
+              </Button>
+              <Button
+                block
+                variant="danger"
+                icon={X}
+                loading={isReviewing}
+                onClick={() => open && reject(open)}
+              >
+                Reject
+              </Button>
+            </div>
+          ) : (
+            <p className="text-center text-2xs uppercase tracking-[0.09em] text-faint">
+              {open?.kycStatus === "unverified" ? "Nothing submitted" : "Already reviewed"}
+            </p>
+          )
+        }
+      >
+        {open && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between gap-3">
+              <Badge tone={statusTone[open.kycStatus]}>{open.kycStatus}</Badge>
+              <span className="truncate text-xs text-muted">{open.email}</span>
+            </div>
+
+            {!open.kyc ? (
+              <Alert tone="info">This user has not submitted identity documents yet.</Alert>
+            ) : (
+              <>
+                <dl className="space-y-3">
+                  {[
+                    {
+                      label: "Document type",
+                      value: open.kyc.documentType || open.kyc.idType || "—",
+                    },
+                    { label: "Document number", value: open.kyc.idNumber || "Not captured" },
+                    { label: "Date of birth", value: open.kyc.dob || "Not captured" },
+                    { label: "Country", value: open.kyc.country || "Not captured" },
+                    {
+                      label: "Address",
+                      value:
+                        [open.kyc.address, open.kyc.city].filter(Boolean).join(", ") ||
+                        "Not captured",
+                    },
+                    {
+                      label: "Submitted",
+                      value: whenOr(open.kyc.submissionDate, "Not submitted"),
+                    },
+                    { label: "Reviewed", value: whenOr(open.kyc.reviewedAt, "Not yet reviewed") },
+                  ].map((row) => (
+                    <div key={row.label} className="flex items-baseline justify-between gap-3">
+                      <dt className="shrink-0 text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                        {row.label}
+                      </dt>
+                      <dd className="text-right text-sm break-words text-ink">{row.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+
+                <div className="space-y-2">
+                  <p className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                    Documents
+                  </p>
+                  {[
+                    { title: "Primary document", url: open.kyc.frontImage },
+                    { title: "Back of document", url: open.kyc.backImage },
+                    { title: "Proof of address", url: open.kyc.proofOfAddressImage, optional: true },
+                  ].map((doc) => (
+                    <div key={doc.title}>
+                      {doc.url ? (
+                        <a
+                          href={doc.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center justify-between gap-2 rounded-lg border border-line bg-panel p-3 text-xs text-accent transition-colors duration-[--duration-fast] hover:border-accent-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        >
+                          <span className="flex items-center gap-2">
+                            <FileText size={14} /> {doc.title}
+                          </span>
+                          <ExternalLink size={12} />
+                        </a>
+                      ) : (
+                        <div className="flex items-center gap-2 rounded-lg border border-line bg-panel p-3 text-xs text-faint">
+                          <FileText size={14} /> {doc.title} —{" "}
+                          {doc.optional ? "not provided" : "missing"}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {open.kycStatus === "pending" ? (
+                  <Textarea
+                    label="Approval note or rejection reason"
+                    rows={3}
+                    placeholder="Recorded against this decision and shown to the user"
+                    value={adminNotes[open.email] ?? ""}
+                    onChange={(event) =>
+                      setAdminNotes((prev) => ({ ...prev, [open.email]: event.target.value }))
+                    }
+                  />
+                ) : (
+                  <div className="rounded-lg border border-line bg-panel p-3">
+                    <p className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                      Review notes
+                    </p>
+                    <p className="mt-1 text-sm text-ink">
+                      {open.kyc.adminNotes || open.kyc.rejectionReason || "No notes recorded"}
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
           </div>
-          <div className="flex gap-2 flex-wrap">
-            {(["all", "pending", "approved", "rejected", "unverified"] as const).map(status => (
-              <button key={status} onClick={() => setFilterStatus(status)}
-                className={`px-3 py-2 text-2xs font-bold uppercase rounded-lg border transition-colors cursor-pointer ${filterStatus === status ? "bg-accent text-ground border-accent" : "bg-ground text-muted border-line hover:border-accent"}`}>
-                {status}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[1180px] text-left">
-            <thead className="bg-ground/60 border-b border-line">
-              <tr className="text-2xs uppercase tracking-wider text-muted">
-                <th className="px-5 py-3 font-bold">User</th>
-                <th className="px-4 py-3 font-bold">Submission Date</th>
-                <th className="px-4 py-3 font-bold">Document Type</th>
-                <th className="px-4 py-3 font-bold">Documents</th>
-                <th className="px-4 py-3 font-bold">Status</th>
-                <th className="px-4 py-3 font-bold">Admin Notes</th>
-                <th className="px-5 py-3 font-bold text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-line/70">
-              {filtered.map(user => {
-                const kyc = user.kyc;
-                const isExpanded = expandedUser === user.email;
-                const isReviewing = reviewingEmail === user.email;
-                return (
-                  <React.Fragment key={user.email}>
-                    <tr className="hover:bg-ground/40 transition-colors align-top">
-                      <td className="px-5 py-4">
-                        <p className="text-xs font-bold text-ink">{user.name}</p>
-                        <p className="text-2xs text-muted">{user.email}</p>
-                      </td>
-                      <td className="px-4 py-4 text-xs text-muted">{formatDate(kyc?.submissionDate)}</td>
-                      <td className="px-4 py-4 text-xs font-bold text-ink">{kyc?.documentType || kyc?.idType || "Not submitted"}</td>
-                      <td className="px-4 py-4">
-                        <button disabled={!kyc} onClick={() => setExpandedUser(isExpanded ? null : user.email)} className="inline-flex items-center gap-1.5 px-3 py-2 bg-ground border border-line rounded-lg text-2xs font-bold text-ink disabled:opacity-50 cursor-pointer hover:border-accent">
-                          <Eye size={12} /> View ({getDocumentCount(kyc)})
-                        </button>
-                      </td>
-                      <td className="px-4 py-4">
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${statusColors[user.kycStatus]}`}>
-                          {user.kycStatus.toUpperCase()}
-                        </span>
-                      </td>
-                      <td className="px-4 py-4">
-                        <input
-                          value={adminNotes[user.email] ?? kyc?.adminNotes ?? kyc?.rejectionReason ?? ""}
-                          onChange={event => setAdminNotes(prev => ({ ...prev, [user.email]: event.target.value }))}
-                          placeholder="Approval note or rejection reason"
-                          className="w-[250px] px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent"
-                        />
-                      </td>
-                      <td className="px-5 py-4">
-                        {kyc?.status === "pending" ? (
-                          <div className="flex justify-end gap-2">
-                            <button onClick={() => approve(user)} disabled={isReviewing} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-positive text-ink font-bold text-2xs uppercase rounded-lg hover:bg-positive cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-                              <Check size={12} /> Approve
-                            </button>
-                            <button onClick={() => reject(user)} disabled={isReviewing} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-negative text-ink font-bold text-2xs uppercase rounded-lg hover:bg-negative cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-                              <X size={12} /> Reject
-                            </button>
-                          </div>
-                        ) : (
-                          <p className="text-right text-2xs font-bold uppercase text-muted">No action</p>
-                        )}
-                      </td>
-                    </tr>
-                    {isExpanded && kyc && (
-                      <tr className="bg-ground/50">
-                        <td colSpan={7} className="px-5 py-5">
-                          <DocumentPanel kyc={kyc} />
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {filtered.length === 0 && <div className="py-14 text-center text-sm text-muted">No verification records match this view.</div>}
-      </div>
-    </motion.div>
+        )}
+      </Drawer>
+    </AdminTabShell>
   );
 };
-
-const DocumentPanel: React.FC<{ kyc: KycSubmission }> = ({ kyc }) => (
-  <div className="space-y-4">
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-2xs">
-      <Info label="Document Number" value={kyc.idNumber || "Not captured"} />
-      <Info label="Date of Birth" value={kyc.dob || "Not captured"} />
-      <Info label="Country" value={kyc.country || "Not captured"} />
-      <Info label="Address" value={[kyc.address, kyc.city].filter(Boolean).join(", ") || "Not captured"} />
-    </div>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-      <DocumentLink title="Primary Document" url={kyc.frontImage} />
-      <DocumentLink title="Back Document" url={kyc.backImage} />
-      <DocumentLink title="Proof of Address" url={kyc.proofOfAddressImage} optional />
-    </div>
-  </div>
-);
-
-const Info: React.FC<{ label: string; value: string }> = ({ label, value }) => (
-  <div className="bg-surface border border-line rounded-lg p-3">
-    <p className="text-2xs uppercase tracking-wider text-muted font-bold">{label}</p>
-    <p className="mt-1 text-ink font-bold break-words">{value}</p>
-  </div>
-);
-
-const DocumentLink: React.FC<{ title: string; url?: string; optional?: boolean }> = ({ title, url, optional }) => (
-  <div className="bg-surface border border-line rounded-xl p-3 min-h-[120px]">
-    <p className="text-2xs text-muted uppercase font-bold mb-2 flex items-center gap-1"><FileText size={11} /> {title}</p>
-    {url ? (
-      <a href={url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs font-bold text-accent hover:text-ink">
-        Open uploaded document <ExternalLink size={12} />
-      </a>
-    ) : (
-      <p className="text-xs text-muted">{optional ? "Not provided" : "Missing document"}</p>
-    )}
-  </div>
-);
