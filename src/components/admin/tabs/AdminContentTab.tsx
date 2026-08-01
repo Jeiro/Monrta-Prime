@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSiteSettings, DEFAULT_SITE_CONTENT } from "../../../context/domains/SiteSettingsContext";
 import { motion } from "motion/react";
 import { PenTool, Save, Check, RotateCcw } from "lucide-react";
+import { Button, Input, Textarea } from "../../ui";
 
 export const AdminContentTab: React.FC = () => {
   const { siteContent, updateSiteContent } = useSiteSettings();
@@ -56,14 +57,8 @@ export const AdminContentTab: React.FC = () => {
           <p className="text-xs text-muted mt-1">Edit all text content displayed on the public-facing website. Changes sync in real-time to Firestore.</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={handleReset}
-            className="flex items-center gap-1.5 px-3 py-2 bg-line/50 border border-line text-muted text-xs font-bold rounded-lg hover:text-ink cursor-pointer">
-            <RotateCcw size={12} /> Reset
-          </button>
-          <button onClick={handleSave} disabled={saving}
-            className="flex items-center gap-1.5 px-5 py-2 bg-accent text-ground text-xs font-bold uppercase rounded-lg hover:opacity-90 cursor-pointer disabled:opacity-50">
-            <Save size={12} /> {saving ? "Saving..." : "Save All"}
-          </button>
+          <Button variant="secondary" icon={RotateCcw} onClick={handleReset}>Reset</Button>
+          <Button icon={Save} loading={saving} onClick={handleSave}>Save All</Button>
         </div>
       </div>
 
@@ -77,20 +72,19 @@ export const AdminContentTab: React.FC = () => {
       {/* Fields */}
       <div className="space-y-4">
         {fields.map(field => (
-          <div key={field.key} className="bg-surface border border-line rounded-xl p-4 space-y-2">
-            <label className="text-2xs font-bold text-muted uppercase tracking-wider">{field.label}</label>
+          <div key={field.key} className="bg-surface border border-line rounded-xl p-4">
             {field.rows > 1 ? (
-              <textarea
+              <Textarea
+                label={field.label}
                 rows={field.rows}
                 value={(form as any)[field.key] || ""}
                 onChange={e => setForm(prev => ({ ...prev, [field.key]: e.target.value }))}
-                className="w-full px-4 py-2.5 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none"
               />
             ) : (
-              <input
+              <Input
+                label={field.label}
                 value={(form as any)[field.key] || ""}
                 onChange={e => setForm(prev => ({ ...prev, [field.key]: e.target.value }))}
-                className="w-full px-4 py-2.5 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent"
               />
             )}
           </div>
@@ -99,10 +93,7 @@ export const AdminContentTab: React.FC = () => {
 
       {/* Bottom Save */}
       <div className="flex justify-end">
-        <button onClick={handleSave} disabled={saving}
-          className="flex items-center gap-2 px-8 py-3 bg-accent text-ground font-bold text-xs uppercase rounded-xl hover:opacity-90 cursor-pointer disabled:opacity-50">
-          <Save size={14} /> {saving ? "Saving..." : "Save All Changes"}
-        </button>
+        <Button size="lg" icon={Save} loading={saving} onClick={handleSave}>Save All Changes</Button>
       </div>
     </motion.div>
   );

@@ -12,6 +12,7 @@ import {
   Key, Database, Search, Plus, Trash2, FileText, Lock, Compass, DollarSign, Award, Gift
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, LineChart, Line } from "recharts";
+import { Button } from "../../ui";
 
 const AdminVolumeChart: React.FC<{ chartData: any[] }> = ({ chartData }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -157,18 +158,18 @@ export const AdminOverviewTab: React.FC = () => {
 
             {/* Quick Actions Panel */}
             <div className="bg-ground border border-line/50 rounded-xl p-4 flex flex-col sm:flex-row gap-3">
-              <button onClick={() => window.location.hash = "#users"} className="flex-1 py-2 bg-surface border border-line text-ink hover:border-accent text-xs font-bold rounded-lg cursor-pointer transition-colors flex items-center justify-center gap-2">
+              <Button variant="secondary" size="sm" className="flex-1" onClick={() => window.location.hash = "#users"}>
                 <Users size={14} className="text-accent" />
                 Manage Users
-              </button>
-              <button onClick={() => window.location.hash = "#deposits"} className="flex-1 py-2 bg-surface border border-line text-ink hover:border-accent text-xs font-bold rounded-lg cursor-pointer transition-colors flex items-center justify-center gap-2">
+              </Button>
+              <Button variant="secondary" size="sm" className="flex-1" onClick={() => window.location.hash = "#deposits"}>
                 <ArrowDownLeft size={14} className="text-positive" />
                 Review Invoices
-              </button>
-              <button onClick={() => window.location.hash = "#support"} className="flex-1 py-2 bg-surface border border-line text-ink hover:border-accent text-xs font-bold rounded-lg cursor-pointer transition-colors flex items-center justify-center gap-2">
+              </Button>
+              <Button variant="secondary" size="sm" className="flex-1" onClick={() => window.location.hash = "#support"}>
                 <MessageSquare size={14} className="text-accent" />
                 Support Desk
-              </button>
+              </Button>
             </div>
 
             {/* Platform Financial Analysis */}
@@ -194,9 +195,9 @@ export const AdminOverviewTab: React.FC = () => {
                   </div>
                   
                   <div className="pt-4 border-t border-line/40 mt-4">
-                    <button className="w-full py-2 bg-accent text-ground font-bold uppercase tracking-wider text-2xs rounded hover:opacity-90 cursor-pointer">
+                    <Button size="sm" block>
                       Export Hedging Log
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>

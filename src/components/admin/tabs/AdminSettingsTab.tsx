@@ -4,6 +4,7 @@ import { AlertCircle, Building2, Check, Headphones, Mail, MessageCircle, Save } 
 import { useSiteSettings } from "../../../context/domains/SiteSettingsContext";
 import { useNotifications } from "../../../context/domains/NotificationsContext";
 import type { AppSettings } from "../../../types";
+import { Button, Input, Textarea } from "../../ui";
 
 const inputClass = "w-full px-4 py-3 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent disabled:opacity-60";
 const labelClass = "text-2xs font-bold text-muted uppercase tracking-wider";
@@ -71,29 +72,26 @@ export const AdminSettingsTab: React.FC = () => {
   };
 
   const renderFields = (fields: FieldConfig[]) => fields.map(field => (
-    <div key={field.key} className={field.multiline ? "sm:col-span-2 space-y-2" : "space-y-2"}>
-      <label className={labelClass} htmlFor={field.key}>
-        {field.label}{field.optional ? " (Optional)" : ""}
-      </label>
+    <div key={field.key} className={field.multiline ? "sm:col-span-2" : undefined}>
       {field.multiline ? (
-        <textarea
+        <Textarea
           id={field.key}
+          label={`${field.label}${field.optional ? " (Optional)" : ""}`}
           rows={4}
           value={form[field.key]}
           onChange={event => handleChange(field.key, event.target.value)}
           placeholder={field.placeholder}
           disabled={saving}
-          className={`${inputClass} resize-none`}
         />
       ) : (
-        <input
+        <Input
           id={field.key}
+          label={`${field.label}${field.optional ? " (Optional)" : ""}`}
           type={field.type || "text"}
           value={form[field.key]}
           onChange={event => handleChange(field.key, event.target.value)}
           placeholder={field.placeholder}
           disabled={saving}
-          className={inputClass}
         />
       )}
     </div>
@@ -108,14 +106,7 @@ export const AdminSettingsTab: React.FC = () => {
           </h1>
           <p className="text-xs text-muted mt-1">Manage business contact, email identity, and live chat configuration.</p>
         </div>
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={saving}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-accent text-ground text-xs font-bold uppercase rounded-lg hover:opacity-90 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] w-full sm:w-auto"
-        >
-          <Save size={14} /> {saving ? "Saving..." : "Save Changes"}
-        </button>
+        <Button type="button" icon={Save} loading={saving} onClick={handleSave} className="w-full sm:w-auto">Save Changes</Button>
       </div>
 
       {feedback && (
@@ -157,14 +148,7 @@ export const AdminSettingsTab: React.FC = () => {
       </section>
 
       <div className="flex justify-end">
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={saving}
-          className="inline-flex items-center justify-center gap-2 px-7 py-3 bg-accent text-ground font-bold text-xs uppercase rounded-xl hover:opacity-90 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] w-full sm:w-auto"
-        >
-          <Save size={14} /> {saving ? "Saving..." : "Save Changes"}
-        </button>
+        <Button type="button" size="lg" icon={Save} loading={saving} onClick={handleSave} className="w-full sm:w-auto">Save Changes</Button>
       </div>
     </motion.div>
   );
