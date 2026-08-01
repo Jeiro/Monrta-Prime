@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useApp } from "../context/AppContext";
 import { getDepositWalletLabel } from "../services";
-import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { X, Check, Copy, ArrowUpRight, Loader2, Info, AlertTriangle } from "lucide-react";
+import { Alert, Button, Input, Modal } from "./ui";
 
 interface GlobalModalsProps {
   depositModalOpen: boolean;
@@ -32,9 +32,9 @@ export function GlobalModals({
   const [wdrAddr, setWdrAddr] = useState("");
 
   const [modalFeedback, setModalFeedback] = useState<string | { title: string; description: string; type?: string } | null>(null);
-  const hasActiveModal = depositModalOpen || withdrawModalOpen || insufficientBalanceOpen;
 
-  useBodyScrollLock(hasActiveModal);
+  // Scroll locking now belongs to each <Modal>; a second lock here caused
+  // the leak documented in useBodyScrollLock.
 
   const depositCoins = useMemo(
     () => Array.from(new Set(enabledDepositWallets.map(wallet => wallet.coinName).filter(Boolean))),
@@ -182,26 +182,13 @@ export function GlobalModals({
   return (
     <>
       {/* QUICK DEPOSIT MODAL OUTLAY */}
-      {depositModalOpen && (() => {
-        return (
-          <div className="fixed inset-0 bg-ground/80 backdrop-blur-sm p-4 z-50 flex items-center justify-center">
-            <div className="bg-surface border border-line rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-5 max-h-[85dvh] overflow-y-auto my-auto scrollbar-none">
-              <button 
-                onClick={() => { setDepositModalOpen(false); setModalFeedback(null); }}
-                className="absolute top-4 right-4 text-muted hover:text-ink cursor-pointer"
-              >
-                <X size={18} />
-              </button>
-
-              <div>
-                <h3 className="text-base font-bold text-ink flex items-center gap-2">
-                  <ArrowUpRight size={18} className="text-accent shrink-0 transform rotate-180" />
-                  Fast Deposit
-                </h3>
-                <p className="text-xs text-muted mt-1 leading-relaxed font-sans">
-                  Instantly fund your wallet to begin trading. Select your preferred asset and network.
-                </p>
-              </div>
+      <Modal
+        open={depositModalOpen}
+        onClose={() => { setDepositModalOpen(false); setModalFeedback(null); }}
+        title="Fast deposit"
+        description="Fund your wallet to begin trading. Select your asset and network."
+      >
+        <div className="space-y-5">
 
               {modalFeedback && (() => {
                 if (typeof modalFeedback === "object") {
@@ -367,31 +354,17 @@ export function GlobalModals({
                   </p>
                 </div>
               </form>
-            </div>
-          </div>
-        );
-      })()}
+        </div>
+      </Modal>
 
       {/* QUICK WITHDRAWAL MODAL OUTLAY */}
-      {withdrawModalOpen && (
-        <div className="fixed inset-0 bg-ground/80 backdrop-blur-sm p-4 z-50 flex items-center justify-center">
-          <div className="bg-surface border border-line rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-5 max-h-[85dvh] overflow-y-auto my-auto">
-            <button 
-              onClick={() => { setWithdrawModalOpen(false); setModalFeedback(null); }}
-              className="absolute top-4 right-4 text-muted hover:text-ink cursor-pointer"
-            >
-              <X size={18} />
-            </button>
-
-            <div>
-              <h3 className="text-base font-bold text-ink flex items-center gap-2">
-                <ArrowUpRight size={18} className="text-accent shrink-0" />
-                Withdraw
-              </h3>
-              <p className="text-xs text-muted mt-1 leading-relaxed">
-                Please ensure the withdrawal address and selected network match exactly to avoid loss of funds.
-              </p>
-            </div>
+      <Modal
+        open={withdrawModalOpen}
+        onClose={() => { setWithdrawModalOpen(false); setModalFeedback(null); }}
+        title="Withdraw"
+        description="Make sure the address and network match exactly — a mismatch can permanently lose the funds."
+      >
+        <div className="space-y-5">
 
             {modalFeedback && (() => {
               if (typeof modalFeedback === "object") {
@@ -526,20 +499,16 @@ export function GlobalModals({
                 Withdraw
               </button>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
 
       {/* Insufficient Balance Modal Overlay */}
-      {insufficientBalanceOpen && (
-        <div className="fixed inset-0 bg-ground/75 backdrop-blur-sm z-[200] flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-surface border border-line rounded-2xl w-full max-w-sm p-6 relative shadow-2xl space-y-5">
-            <button 
-              onClick={() => setInsufficientBalanceOpen(false)}
-              className="absolute top-4 right-4 text-muted hover:text-ink cursor-pointer bg-transparent border-none outline-none"
-            >
-              <X size={18} />
-            </button>
+      <Modal
+        open={insufficientBalanceOpen}
+        onClose={() => setInsufficientBalanceOpen(false)}
+        size="sm"
+      >
+        <div className="space-y-5">
             <div className="text-center space-y-3">
               <div className="mx-auto w-12 h-12 rounded-full bg-warning-soft border border-warning-line flex items-center justify-center text-accent">
                 <AlertTriangle size={24} className="animate-bounce" />
@@ -570,9 +539,8 @@ export function GlobalModals({
                 Fund Wallet
               </button>
             </div>
-          </div>
         </div>
-      )}
+      </Modal>
     </>
   );
 }

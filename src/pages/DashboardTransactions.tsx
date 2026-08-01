@@ -1,170 +1,222 @@
-import React, { useState, useMemo } from "react";
-import { History, ChevronDown, CheckCircle2, Clock, XCircle, AlertTriangle, ArrowDownLeft, ArrowUpRight, WalletCards } from "lucide-react";
+import React, { useMemo, useState } from "react";
+import {
+  AlertTriangle,
+  ArrowDownLeft,
+  ArrowUpRight,
+  CheckCircle2,
+  Clock,
+  History,
+  WalletCards,
+  XCircle,
+} from "lucide-react";
 import { useApp } from "../context/AppContext";
+import { Badge, Button, EmptyState, SectionCard, Select } from "../components/ui";
+import { formatDateTime, formatMoney } from "../lib/format";
 
 export const DashboardTransactions: React.FC = () => {
   const { user } = useApp();
 
-  const [filterType, setFilterType] = useState(""); 
-  const [filterStatus, setFilterStatus] = useState<"" | "completed" | "pending" | "failed" | "rejected" | "approved">(""); 
-  const [filterTime, setFilterTime] = useState<"" | "7" | "30" | "90">(""); 
+  const [filterType, setFilterType] = useState("");
+  const [filterStatus, setFilterStatus] = useState<
+    "" | "completed" | "pending" | "failed" | "rejected" | "approved"
+  >("");
+  const [filterTime, setFilterTime] = useState<"" | "7" | "30" | "90">("");
 
   const filtered = useMemo(() => {
     let items = [...user.transactions];
 
-    if (filterType) {
-      items = items.filter(t => t.type === filterType);
-    }
-    if (filterStatus) {
-      items = items.filter(t => t.status === filterStatus);
-    }
+    if (filterType) items = items.filter((t) => t.type === filterType);
+    if (filterStatus) items = items.filter((t) => t.status === filterStatus);
     if (filterTime) {
       const days = parseInt(filterTime);
       const cutoff = new Date();
       cutoff.setDate(cutoff.getDate() - days);
-      items = items.filter(t => new Date(t.date) >= cutoff);
+      items = items.filter((t) => new Date(t.date) >= cutoff);
     }
 
     return items;
   }, [user.transactions, filterType, filterStatus, filterTime]);
+
+  const hasFilters = Boolean(filterType || filterStatus || filterTime);
+  const clearFilters = () => {
+    setFilterType("");
+    setFilterStatus("");
+    setFilterTime("");
+  };
 
   const statusBadge = (status: string) => {
     switch (status) {
       case "completed":
       case "approved":
         return (
-          <span className="flex items-center gap-1 text-2xs font-bold text-positive">
-            <CheckCircle2 size={12} /> Completed
-          </span>
+          <Badge tone="positive">
+            <CheckCircle2 size={11} /> {status}
+          </Badge>
         );
       case "pending":
         return (
-          <span className="flex items-center gap-1 text-2xs font-bold text-warning">
-            <Clock size={12} /> Pending
-          </span>
+          <Badge tone="warning">
+            <Clock size={11} /> Pending
+          </Badge>
         );
       case "failed":
         return (
-          <span className="flex items-center gap-1 text-2xs font-bold text-negative">
-            <XCircle size={12} /> Failed
-          </span>
+          <Badge tone="negative">
+            <XCircle size={11} /> Failed
+          </Badge>
         );
       case "rejected":
         return (
-          <span className="flex items-center gap-1 text-2xs font-bold text-negative">
-            <AlertTriangle size={12} /> Rejected
-          </span>
+          <Badge tone="negative">
+            <AlertTriangle size={11} /> Rejected
+          </Badge>
         );
       default:
-        return <span className="text-2xs text-muted">{status}</span>;
+        return <Badge>{status}</Badge>;
     }
   };
 
   return (
-    <div className="space-y-4 pb-4 sm:pb-6 font-sans overflow-x-hidden">
-      <div className="flex flex-col gap-4">
-        <h2 className="text-xl font-bold font-heading text-ink flex items-center gap-2">
-          <History className="text-accent" size={24} />
-          Transaction History
-        </h2>
-        
-        {/* Filter Pills — Now functional */}
-        <div className="flex flex-row overflow-x-auto whitespace-nowrap gap-2 justify-start w-full pb-1">
-          <div className="relative">
-            <select 
-              value={filterType}
-              onChange={e => setFilterType(e.target.value as any)}
-              className="appearance-none bg-surface border border-line text-2xs py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
-            >
-              <option value="">All Types</option>
-              <option value="deposit">Deposits</option>
-              <option value="withdrawal">Withdrawals</option>
-              <option value="investment">Investments</option>
-              <option value="payout">Payouts</option>
-              <option value="adjustment">Adjustments</option>
-            </select>
-            <ChevronDown size={10} className="absolute top-1/2 right-2.5 -translate-y-1/2 text-muted pointer-events-none" />
-          </div>
-          <div className="relative">
-            <select 
-              value={filterStatus}
-              onChange={e => setFilterStatus(e.target.value as any)}
-              className="appearance-none bg-surface border border-line text-2xs py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
-            >
-              <option value="">All Status</option>
-              <option value="completed">Completed</option>
-              <option value="pending">Pending</option>
-              <option value="failed">Failed</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-            </select>
-            <ChevronDown size={10} className="absolute top-1/2 right-2.5 -translate-y-1/2 text-muted pointer-events-none" />
-          </div>
-          <div className="relative">
-            <select 
-              value={filterTime}
-              onChange={e => setFilterTime(e.target.value as any)}
-              className="appearance-none bg-surface border border-line text-2xs py-1.5 px-3 pr-7 rounded-full hover:border-accent/50 transition-colors text-ink cursor-pointer outline-none focus:border-accent"
-            >
-              <option value="">All Time</option>
-              <option value="7">Last 7 Days</option>
-              <option value="30">Last 30 Days</option>
-              <option value="90">Last 90 Days</option>
-            </select>
-            <ChevronDown size={10} className="absolute top-1/2 right-2.5 -translate-y-1/2 text-muted pointer-events-none" />
-          </div>
-
-          {(filterType || filterStatus || filterTime) && (
-            <button
-              onClick={() => { setFilterType(""); setFilterStatus(""); setFilterTime(""); }}
-              className="text-2xs text-accent hover:text-ink px-3 py-1.5 rounded-full border border-accent/30 bg-accent/5 font-bold cursor-pointer transition-colors"
-            >
-              Clear Filters
-            </button>
-          )}
+    <div className="space-y-4 pb-4 sm:pb-6">
+      <header className="border-b border-line pb-5">
+        <div className="flex items-center gap-2.5">
+          <History size={20} className="shrink-0 text-faint" aria-hidden="true" />
+          <h1 className="text-2xl font-semibold tracking-tight text-ink">Transactions</h1>
         </div>
+        <p className="mt-1 text-xs text-muted">
+          Every deposit, withdrawal, investment and payout on your account.
+        </p>
+      </header>
+
+      {/* Filters sit in one row above the list. Native selects, so on a phone
+          these are the OS picker rather than a custom dropdown. */}
+      <div className="flex flex-wrap items-end gap-3">
+        <Select
+          label="Type"
+          className="min-w-[9rem]"
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+        >
+          <option value="">All types</option>
+          <option value="deposit">Deposits</option>
+          <option value="withdrawal">Withdrawals</option>
+          <option value="investment">Investments</option>
+          <option value="payout">Payouts</option>
+          <option value="adjustment">Adjustments</option>
+        </Select>
+
+        <Select
+          label="Status"
+          className="min-w-[9rem]"
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value as typeof filterStatus)}
+        >
+          <option value="">All statuses</option>
+          <option value="completed">Completed</option>
+          <option value="pending">Pending</option>
+          <option value="failed">Failed</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </Select>
+
+        <Select
+          label="Period"
+          className="min-w-[9rem]"
+          value={filterTime}
+          onChange={(e) => setFilterTime(e.target.value as typeof filterTime)}
+        >
+          <option value="">All time</option>
+          <option value="7">Last 7 days</option>
+          <option value="30">Last 30 days</option>
+          <option value="90">Last 90 days</option>
+        </Select>
+
+        {hasFilters && (
+          <Button variant="ghost" onClick={clearFilters}>
+            Clear filters
+          </Button>
+        )}
       </div>
 
-      <div className="bg-surface border border-line rounded-xl">
+      <SectionCard
+        flush
+        title="History"
+        action={
+          <span className="text-2xs tabular-nums text-faint">
+            {filtered.length} of {user.transactions.length}
+          </span>
+        }
+      >
         {filtered.length === 0 ? (
-          <div className="text-center py-16 text-muted text-sm">
-            {user.transactions.length === 0 
-              ? "No transactions yet. Deposit funds to get started." 
-              : "No transactions match your filters."}
-          </div>
+          user.transactions.length === 0 ? (
+            <EmptyState
+              icon={History}
+              title="No transactions yet"
+              description="Deposits, withdrawals and payouts will appear here."
+            />
+          ) : (
+            <EmptyState
+              icon={History}
+              title="Nothing matches these filters"
+              description="Try widening the type, status or period."
+              action={
+                <Button size="sm" variant="secondary" onClick={clearFilters}>
+                  Clear filters
+                </Button>
+              }
+            />
+          )
         ) : (
-          <div className="flex flex-col divide-y divide-line/30">
+          <ul className="divide-y divide-line">
             {filtered.map((tx) => {
               const isCredit = tx.type === "deposit" || tx.type === "payout";
               const isDebit = tx.type === "withdrawal" || tx.type === "investment";
-              const amountPrefix = isCredit ? "+" : isDebit ? "-" : "";
-              const amountDisplay = `${amountPrefix}$${tx.amount.toLocaleString()}`;
               const Icon = isCredit ? ArrowDownLeft : isDebit ? ArrowUpRight : WalletCards;
 
               return (
-                <div key={tx.id} className="flex justify-between items-center py-4 px-4 hover:bg-panel/40 transition-colors gap-4">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isCredit ? "bg-positive/10 text-positive" : "bg-accent/10 text-accent"}`}>
+                <li
+                  key={tx.id}
+                  className="flex items-center justify-between gap-4 px-4 py-3.5 transition-colors duration-[--duration-fast] hover:bg-raised"
+                >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span
+                      className={
+                        "grid h-8 w-8 shrink-0 place-items-center rounded-full " +
+                        (isCredit ? "bg-positive-soft text-positive" : "bg-raised text-muted")
+                      }
+                      aria-hidden="true"
+                    >
                       <Icon size={14} />
-                    </div>
-                    <div className="flex flex-col gap-0.5 min-w-0">
-                      <span className="text-sm font-medium text-ink capitalize">{tx.type}</span>
-                      <span className="text-2xs text-muted font-mono truncate">{tx.timestamp || tx.date} - {tx.currency || tx.asset}</span>
-                      <span className="text-2xs text-muted font-mono truncate">ID: {tx.id}</span>
+                    </span>
+                    <div className="min-w-0">
+                      <span className="block text-sm font-medium capitalize text-ink">{tx.type}</span>
+                      {/* Was `{tx.timestamp || tx.date}` printed verbatim — a
+                          raw ISO string in the UI. */}
+                      <span className="block truncate text-2xs text-muted">
+                        {formatDateTime(tx.timestamp || tx.date)}
+                        {(tx.currency || tx.asset) && ` · ${tx.currency || tx.asset}`}
+                      </span>
+                      <span className="block truncate font-data text-2xs text-faint">{tx.id}</span>
                     </div>
                   </div>
-                  <div className="flex flex-col items-end gap-0.5 shrink-0">
-                    <span className={`text-sm font-bold font-data ${isCredit ? "text-positive" : "text-ink"}`}>
-                      {amountDisplay}
+
+                  <div className="flex shrink-0 flex-col items-end gap-1">
+                    <span
+                      className={`font-data text-sm font-semibold tabular-nums ${
+                        isCredit ? "text-positive" : "text-ink"
+                      }`}
+                    >
+                      {isCredit ? "+" : isDebit ? "−" : ""}
+                      {formatMoney(tx.amount)}
                     </span>
                     {statusBadge(tx.status)}
                   </div>
-                </div>
+                </li>
               );
             })}
-          </div>
+          </ul>
         )}
-      </div>
+      </SectionCard>
     </div>
   );
 };

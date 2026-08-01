@@ -58,3 +58,6 @@ export type { AlertProps } from "./Alert";
 
 export { Avatar } from "./Avatar";
 export type { AvatarProps } from "./Avatar";
+
+export { Textarea } from "./Textarea";
+export type { TextareaProps } from "./Textarea";

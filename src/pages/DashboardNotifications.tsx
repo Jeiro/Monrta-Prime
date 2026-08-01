@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Bell, CheckCheck, CheckCircle2, Info, Trash2, AlertTriangle, XCircle, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import { useApp } from "../context/AppContext";
+import { Button, EmptyState } from "../components/ui";
 import type { NotificationItem, NotificationType } from "../services";
 import { formatRelativeTimestamp } from "../services";
 
@@ -82,26 +83,22 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
           </div>
         </div>
 
-        <button
-          type="button"
+        <Button
+          variant="secondary"
+          icon={CheckCheck}
           onClick={markAllNotificationsRead}
           disabled={!unreadNotificationsCount}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-surface px-4 py-2 text-xs font-bold text-ink transition-all hover:border-accent/50 hover:text-accent disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <CheckCheck size={15} /> Mark all read
-        </button>
+          Mark all read
+        </Button>
       </div>
 
       {notifications.length === 0 ? (
-        <div className="flex min-h-[340px] flex-col items-center justify-center rounded-xl border border-dashed border-line bg-surface/40 px-6 text-center">
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-line bg-panel text-muted">
-            <Bell size={24} />
-          </div>
-          <h2 className="text-lg font-bold text-ink">No notifications yet</h2>
-          <p className="mt-2 max-w-md text-sm text-muted">
-            Account activity, reviews, bulletins, and trade lifecycle updates will appear here.
-          </p>
-        </div>
+        <EmptyState
+          icon={Bell}
+          title="No notifications yet"
+          description="Account activity, reviews, bulletins and trade updates will appear here."
+        />
       ) : (
         <div className="space-y-3">
           {visibleNotifications.map((notification) => {
@@ -129,33 +126,36 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
 
                   <div className="flex shrink-0 items-center gap-2 self-end sm:self-start">
                     {notification.action && (
-                      <button
-                        type="button"
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        iconRight={ArrowRight}
                         onClick={() => handleAction(notification)}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-panel px-3 py-2 text-xs font-bold text-ink transition-colors hover:border-accent/50 hover:text-accent"
                       >
                         {notification.action.label}
-                        <ArrowRight size={13} />
-                      </button>
+                      </Button>
                     )}
                     {!notification.read && (
-                      <button
-                        type="button"
+                      <Button
+                        size="sm"
+                        variant="ghost"
                         onClick={() => markNotificationRead(notification.id)}
-                        className="rounded-lg border border-line bg-panel p-2 text-muted transition-colors hover:text-positive"
                         title="Mark as read"
+                        aria-label={`Mark "${notification.title}" as read`}
                       >
                         <CheckCircle2 size={15} />
-                      </button>
+                      </Button>
                     )}
-                    <button
-                      type="button"
+                    <Button
+                      size="sm"
+                      variant="ghost"
                       onClick={() => deleteNotification(notification.id)}
-                      className="rounded-lg border border-line bg-panel p-2 text-muted transition-colors hover:text-negative"
                       title="Delete notification"
+                      aria-label={`Delete "${notification.title}"`}
+                      className="hover:text-negative"
                     >
                       <Trash2 size={15} />
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </article>
@@ -164,13 +164,9 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
 
           {visibleCount < notifications.length && (
             <div className="flex justify-center pt-2">
-              <button
-                type="button"
-                onClick={() => setVisibleCount(count => count + PAGE_SIZE)}
-                className="rounded-xl border border-line bg-surface px-5 py-2.5 text-xs font-bold text-ink transition-all hover:border-accent/50 hover:text-accent"
-              >
+              <Button variant="secondary" onClick={() => setVisibleCount(count => count + PAGE_SIZE)}>
                 Load more
-              </button>
+              </Button>
             </div>
           )}
         </div>

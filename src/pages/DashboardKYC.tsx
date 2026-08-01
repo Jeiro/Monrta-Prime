@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useApp } from "../context/AppContext";
-import { Shield, CheckCircle2, AlertTriangle, Clock, XCircle, Loader2, Info as InfoIcon } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Clock, Shield, XCircle } from "lucide-react";
 import { KYC_DOCUMENT_TYPES } from "../services";
 import type { KycSubmission } from "../types";
+import { Alert, Badge, Button, Input, SectionCard, Select } from "../components/ui";
+import { formatDateTime } from "../lib/format";
 
 const emptyKyc: KycSubmission = {
   status: "unverified",
@@ -15,34 +17,46 @@ const emptyKyc: KycSubmission = {
   city: "",
   country: "",
   frontImage: "",
-  backImage: ""
+  backImage: "",
 };
 
-const formatDate = (value?: string) => {
-  if (!value) return "Not submitted";
-  const parsed = Date.parse(value);
-  if (!Number.isFinite(parsed)) return value;
-  return new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(parsed));
-};
-
-
+/** "Not submitted" rather than an em dash — this is a state, not a gap. */
+const whenOr = (value: string | undefined, fallback: string) =>
+  value ? formatDateTime(value) : fallback;
 
 const StatusIcon: React.FC<{ status: KycSubmission["status"] }> = ({ status }) => {
-  if (status === "approved") return <CheckCircle2 size={14} />;
-  if (status === "pending") return <Clock size={14} />;
-  if (status === "rejected") return <XCircle size={14} />;
-  return <AlertTriangle size={14} />;
+  if (status === "approved") return <CheckCircle2 size={11} />;
+  if (status === "pending") return <Clock size={11} />;
+  if (status === "rejected") return <XCircle size={11} />;
+  return <AlertTriangle size={11} />;
 };
+
+const statusTone = (status: KycSubmission["status"]) =>
+  status === "approved"
+    ? "positive"
+    : status === "pending"
+      ? "warning"
+      : status === "rejected"
+        ? "negative"
+        : "neutral";
 
 export const DashboardKYC: React.FC = () => {
   const { user, submitKyc } = useApp();
   const currentKyc = user.kyc || emptyKyc;
-  const [documentType, setDocumentType] = useState(currentKyc.documentType || currentKyc.idType || "Government ID");
-  const [idNumber, setIdNumber] = useState(currentKyc.status === "rejected" ? currentKyc.idNumber || "" : "");
+  const [documentType, setDocumentType] = useState(
+    currentKyc.documentType || currentKyc.idType || "Government ID"
+  );
+  const [idNumber, setIdNumber] = useState(
+    currentKyc.status === "rejected" ? currentKyc.idNumber || "" : ""
+  );
   const [dob, setDob] = useState(currentKyc.status === "rejected" ? currentKyc.dob || "" : "");
-  const [address, setAddress] = useState(currentKyc.status === "rejected" ? currentKyc.address || "" : "");
+  const [address, setAddress] = useState(
+    currentKyc.status === "rejected" ? currentKyc.address || "" : ""
+  );
   const [city, setCity] = useState(currentKyc.status === "rejected" ? currentKyc.city || "" : "");
-  const [country, setCountry] = useState(currentKyc.status === "rejected" ? currentKyc.country || "" : "");
+  const [country, setCountry] = useState(
+    currentKyc.status === "rejected" ? currentKyc.country || "" : ""
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -65,7 +79,7 @@ export const DashboardKYC: React.FC = () => {
         frontImage: "",
         backImage: "",
         proofOfAddressImage: "",
-        status: "pending"
+        status: "pending",
       });
       toast.success("Verification submitted successfully");
     } catch (err) {
@@ -78,91 +92,142 @@ export const DashboardKYC: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 pb-4 sm:pb-6">
-      <div className="flex items-center gap-3 border-b border-line/50 pb-6">
-        <Shield size={24} className="text-accent" />
-        <h1 className="text-2xl font-bold text-ink">Identity Verification</h1>
-      </div>
-
-      <div className="bg-surface border border-line rounded-2xl p-4 sm:p-5 space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 className="text-lg font-bold text-ink">Current KYC Status</h2>
-            <p className="text-xs text-muted mt-1">Submission date: {formatDate(currentKyc.submissionDate)}</p>
-          </div>
-          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border w-fit ${
-            currentKyc.status === "approved" ? "bg-positive/10 text-positive border-positive/30" :
-            currentKyc.status === "pending" ? "bg-warning-soft text-warning border-warning-line" :
-            currentKyc.status === "rejected" ? "bg-negative/10 text-negative border-negative/30" :
-            "bg-line/40 text-muted border-line"
-          }`}>
-            <StatusIcon status={currentKyc.status} /> {currentKyc.status.toUpperCase()}
-          </div>
+    <div className="mx-auto w-full max-w-2xl space-y-4 pb-4 sm:pb-6">
+      <header className="border-b border-line pb-5">
+        <div className="flex items-center gap-2.5">
+          <Shield size={20} className="shrink-0 text-faint" aria-hidden="true" />
+          <h1 className="text-2xl font-semibold tracking-tight text-ink">Identity verification</h1>
         </div>
+        <p className="mt-1 text-xs text-muted">
+          Verification unlocks withdrawals and higher account limits.
+        </p>
+      </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-          <Info label="Document Type" value={currentKyc.documentType || currentKyc.idType || "Not submitted"} />
-          <Info label="Reviewed" value={formatDate(currentKyc.reviewedAt)} />
-          <Info label="Review Notes" value={currentKyc.adminNotes || currentKyc.rejectionReason || "No notes yet"} />
-        </div>
+      <SectionCard
+        title="Status"
+        action={
+          <Badge tone={statusTone(currentKyc.status)}>
+            <StatusIcon status={currentKyc.status} />
+            {currentKyc.status}
+          </Badge>
+        }
+      >
+        <dl className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {[
+            {
+              label: "Document type",
+              value: currentKyc.documentType || currentKyc.idType || "Not submitted",
+            },
+            { label: "Submitted", value: whenOr(currentKyc.submissionDate, "Not submitted") },
+            { label: "Reviewed", value: whenOr(currentKyc.reviewedAt, "Not yet reviewed") },
+          ].map((cell) => (
+            <div key={cell.label} className="rounded-lg border border-line bg-panel p-3">
+              <dt className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                {cell.label}
+              </dt>
+              <dd className="mt-1 break-words text-sm text-ink">{cell.value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        {(currentKyc.adminNotes || currentKyc.rejectionReason) && (
+          <div className="mt-3 rounded-lg border border-line bg-panel p-3">
+            <p className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+              Review notes
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-ink">
+              {currentKyc.adminNotes || currentKyc.rejectionReason}
+            </p>
+          </div>
+        )}
 
         {currentKyc.status === "approved" && (
-          <div className="p-4 bg-positive/10 border border-positive/20 rounded-xl text-sm text-positive">
-            Your identity profile is verified. Withdrawal access and verified-account features are enabled.
-          </div>
+          <Alert tone="success" className="mt-4">
+            Your identity is verified. Withdrawals and verified-account features are enabled.
+          </Alert>
         )}
 
         {currentKyc.status === "pending" && (
-          <div className="p-4 bg-warning-soft border border-warning-line rounded-xl text-sm text-warning">
-            Your documents are under platform review. You can monitor the status here.
-          </div>
+          <Alert tone="warning" className="mt-4">
+            Your documents are under review. We'll email you when there's an update.
+          </Alert>
         )}
+      </SectionCard>
 
-        {canSubmit && (
-          <form onSubmit={handleSubmit} className="space-y-4 border-t border-line pt-5">
+      {canSubmit && (
+        <SectionCard title={currentKyc.status === "rejected" ? "Resubmit" : "Submit your details"}>
+          <form onSubmit={handleSubmit} className="space-y-4">
             {currentKyc.status === "rejected" && (
-              <div className="p-4 bg-negative/10 border border-negative/20 text-negative text-xs rounded-lg">
-                <strong>Rejection Reason:</strong> {currentKyc.rejectionReason || currentKyc.adminNotes || "Please resubmit clearer documents."}
-              </div>
+              <Alert tone="error" title="Previous submission was rejected">
+                {currentKyc.rejectionReason ||
+                  currentKyc.adminNotes ||
+                  "Please resubmit clearer documents."}
+              </Alert>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <select value={documentType} onChange={(event) => setDocumentType(event.target.value)} className="bg-ground border border-line rounded-lg p-2.5 text-xs text-ink">
-                {KYC_DOCUMENT_TYPES.map(type => <option key={type}>{type}</option>)}
-              </select>
-              <input required type="text" placeholder="Document Number" value={idNumber} onChange={(event) => setIdNumber(event.target.value)} className="bg-ground border border-line rounded-lg p-2.5 text-xs text-ink" />
-              <input required type="date" value={dob} onChange={(event) => setDob(event.target.value)} className="bg-ground border border-line rounded-lg p-2.5 text-xs text-ink" />
-              <input required type="text" placeholder="Residential Address" value={address} onChange={(event) => setAddress(event.target.value)} className="bg-ground border border-line rounded-lg p-2.5 text-xs text-ink" />
-              <input required type="text" placeholder="City" value={city} onChange={(event) => setCity(event.target.value)} className="bg-ground border border-line rounded-lg p-2.5 text-xs text-ink" />
-              <input required type="text" placeholder="Country" value={country} onChange={(event) => setCountry(event.target.value)} className="bg-ground border border-line rounded-lg p-2.5 text-xs text-ink" />
+            {/* Every field now carries a real <label>. These were
+                placeholder-only, and a placeholder disappears the moment you
+                type — so anyone reviewing what they entered, using a screen
+                reader, or returning to a half-filled form had no field names
+                at all. */}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <Select
+                label="Document type"
+                value={documentType}
+                onChange={(event) => setDocumentType(event.target.value)}
+              >
+                {KYC_DOCUMENT_TYPES.map((type) => (
+                  <option key={type}>{type}</option>
+                ))}
+              </Select>
+              <Input
+                label="Document number"
+                required
+                value={idNumber}
+                onChange={(event) => setIdNumber(event.target.value)}
+                placeholder="As printed on the document"
+              />
+              <Input
+                label="Date of birth"
+                type="date"
+                required
+                value={dob}
+                onChange={(event) => setDob(event.target.value)}
+              />
+              <Input
+                label="Residential address"
+                required
+                value={address}
+                onChange={(event) => setAddress(event.target.value)}
+                placeholder="Street and number"
+              />
+              <Input
+                label="City"
+                required
+                value={city}
+                onChange={(event) => setCity(event.target.value)}
+              />
+              <Input
+                label="Country"
+                required
+                value={country}
+                onChange={(event) => setCountry(event.target.value)}
+              />
             </div>
 
-            <div className="bg-accent/10 border border-accent/30 rounded-xl p-4 flex gap-3 items-start">
-              <InfoIcon className="text-accent shrink-0 mt-0.5" size={18} />
-              <div className="text-sm">
-                <h4 className="font-bold text-accent mb-1">Verification Notice</h4>
-                <p className="text-ink/80 leading-relaxed text-xs">
-                  Our Verification Team will review your information after submission. If additional documentation is required, we'll contact you directly via your registered email address.
-                </p>
-              </div>
-            </div>
+            <Alert tone="info" title="What happens next">
+              Our verification team reviews your details after submission. If anything further is
+              needed we'll contact you at your registered email address.
+            </Alert>
 
-            {submitError && <div className="p-3 bg-negative/10 border border-negative/50 rounded-lg text-negative text-sm">{submitError}</div>}
+            {submitError && <Alert tone="error">{submitError}</Alert>}
 
-            <button type="submit" disabled={isSubmitting} className="w-full bg-accent text-ground font-bold p-3 rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed">
-              {isSubmitting ? "Submitting..." : currentKyc.status === "rejected" ? "Resubmit Verification" : "Submit Verification"}
-            </button>
+            <Button type="submit" block size="lg" loading={isSubmitting}>
+              {currentKyc.status === "rejected" ? "Resubmit verification" : "Submit verification"}
+            </Button>
           </form>
-        )}
-      </div>
+        </SectionCard>
+      )}
     </div>
   );
 };
-
-const Info: React.FC<{ label: string; value: string }> = ({ label, value }) => (
-  <div className="bg-ground border border-line rounded-xl p-3">
-    <p className="text-2xs uppercase tracking-wider text-muted font-bold">{label}</p>
-    <p className="mt-1 text-ink font-bold break-words">{value}</p>
-  </div>
-);
-
