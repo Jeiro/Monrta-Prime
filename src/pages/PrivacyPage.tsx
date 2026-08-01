@@ -1,14 +1,14 @@
 import React from "react";
 import { motion } from "motion/react";
 import { FileText, Database, Settings, Cookie, ShieldCheck, Share2, User, RefreshCw, Mail } from "lucide-react";
-import { useApp } from "../context/AppContext";
+import { useSiteSettings } from "../context/domains/SiteSettingsContext";
 
 interface PrivacyPageProps {
   onNavigate: (view: string) => void;
 }
 
 export const PrivacyPage: React.FC<PrivacyPageProps> = ({ onNavigate }) => {
-  const { appSettings } = useApp();
+  const { appSettings } = useSiteSettings();
 
   return (
     <motion.div 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useKyc } from "../context/domains/KycContext";
 import { AlertTriangle, CheckCircle2, Clock, Shield, XCircle } from "lucide-react";
 import { KYC_DOCUMENT_TYPES } from "../services";
 import type { KycSubmission } from "../types";
@@ -41,7 +42,8 @@ const statusTone = (status: KycSubmission["status"]) =>
         : "neutral";
 
 export const DashboardKYC: React.FC = () => {
-  const { user, submitKyc } = useApp();
+  const { user } = useSession();
+  const { submitKyc } = useKyc();
   const currentKyc = user.kyc || emptyKyc;
   const [documentType, setDocumentType] = useState(
     currentKyc.documentType || currentKyc.idType || "Government ID"

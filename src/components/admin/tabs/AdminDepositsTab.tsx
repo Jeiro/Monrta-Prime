@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { ArrowDownLeft, Check, ClipboardList, FileText, Search, X } from "lucide-react";
-import { useApp } from "../../../context/AppContext";
+import { useWallet } from "../../../context/domains/WalletContext";
 import { getDepositWalletLabel } from "../../../services";
 import type { DepositWallet, Transaction } from "../../../types";
 import { formatDateTime, formatMoney } from "../../../lib/format";
@@ -113,7 +113,7 @@ const buildDepositRows = (
 
 export const AdminDepositsTab: React.FC = () => {
   const { adminTransactions, adminWallets, depositWallets, adminApproveDeposit, adminRejectDeposit } =
-    useApp();
+    useWallet();
   const [adminNotes, setAdminNotes] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<"all" | DepositStatus>("all");

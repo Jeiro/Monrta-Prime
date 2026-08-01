@@ -20,7 +20,11 @@ import {
   Wallet,
   X
 } from "lucide-react";
-import { useApp } from "../../../context/AppContext";
+import { useAdminUsers } from "../../../context/domains/AdminUsersContext";
+import { useKyc } from "../../../context/domains/KycContext";
+import { useInvestmentPlans } from "../../../context/domains/InvestmentPlansContext";
+import { useTraders } from "../../../context/domains/TradersContext";
+import { useWallet } from "../../../context/domains/WalletContext";
 import { useBodyScrollLock } from "../../../hooks/useBodyScrollLock";
 import type { KycSubmission, Transaction } from "../../../types";
 import type { CoreUserProfile } from "../../../hooks/data/useUsersDirectory";
@@ -80,16 +84,15 @@ const recentTransactionsFor = (transactions: Transaction[], userId: string, type
 export const AdminUsersTab: React.FC = () => {
   const {
     usersDirectory,
+    isLoadingUsersDirectory,
     adminUpdateUserBalance,
     adminChangeUserStatus,
-    adminResetUserPassword,
-    adminKycReview,
-    isLoadingUsersDirectory,
-    allKycSubmissions,
-    adminActiveInvestments,
-    adminCopyTrades,
-    adminTransactions
-  } = useApp();
+    adminResetUserPassword
+  } = useAdminUsers();
+  const { allKycSubmissions, adminKycReview } = useKyc();
+  const { adminActiveInvestments } = useInvestmentPlans();
+  const { adminCopyTrades } = useTraders();
+  const { adminTransactions } = useWallet();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedEmail, setSelectedEmail] = useState<string | null>(null);

@@ -1,14 +1,14 @@
 import React from "react";
 import { motion } from "motion/react";
 import { ShieldCheck, UserCheck, UserPlus, LayoutGrid, AlertTriangle, Ban, Lock, Scale, RefreshCw, Mail } from "lucide-react";
-import { useApp } from "../context/AppContext";
+import { useSiteSettings } from "../context/domains/SiteSettingsContext";
 
 interface TermsPageProps {
   onNavigate: (view: string) => void;
 }
 
 export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
-  const { appSettings } = useApp();
+  const { appSettings } = useSiteSettings();
 
   return (
     <motion.div 

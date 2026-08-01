@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useApp } from "../context/AppContext";
+import { useSiteSettings } from "../context/domains/SiteSettingsContext";
 
 declare global {
   interface Window {
@@ -13,7 +13,7 @@ const removeTawkScript = () => {
 };
 
 export const TawkChat: React.FC = () => {
-  const { appSettings } = useApp();
+  const { appSettings } = useSiteSettings();
   const propertyId = appSettings.tawkPropertyId.trim();
   const widgetId = appSettings.tawkWidgetId.trim();
 

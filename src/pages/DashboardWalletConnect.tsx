@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useApp } from "../context/AppContext";
+import { useWallet } from "../context/domains/WalletContext";
+import { useNotifications } from "../context/domains/NotificationsContext";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { Wallet, Info } from "lucide-react";
 
@@ -108,7 +109,8 @@ const walletLogos: Record<string, React.ReactNode> = {
 };
 
 export const DashboardWalletConnect: React.FC = () => {
-  const { saveWalletConnection, addNotification } = useApp();
+  const { saveWalletConnection } = useWallet();
+  const { addNotification } = useNotifications();
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   useBodyScrollLock(showModal);

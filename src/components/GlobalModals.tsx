@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useWallet } from "../context/domains/WalletContext";
 import { getDepositWalletLabel } from "../services";
 import { X, Check, Copy, ArrowUpRight, Loader2, Info, AlertTriangle } from "lucide-react";
 import { Alert, Button, Input, Modal } from "./ui";
@@ -17,7 +18,8 @@ export function GlobalModals({
   withdrawModalOpen, setWithdrawModalOpen,
   onNavigate
 }: GlobalModalsProps) {
-  const { user, deposit, withdraw, enabledDepositWallets, insufficientBalanceOpen, setInsufficientBalanceOpen } = useApp();
+  const { user } = useSession();
+  const { deposit, withdraw, enabledDepositWallets, insufficientBalanceOpen, setInsufficientBalanceOpen } = useWallet();
 
   // Form states inside Quick Modals
   const [depAmt, setDepAmt] = useState("");

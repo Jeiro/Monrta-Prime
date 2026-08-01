@@ -1,11 +1,11 @@
 import React from "react";
-import { useApp } from "../../../context/AppContext";
+import { useAuditLog } from "../../../context/domains/AuditLogContext";
 import { motion } from "motion/react";
 import { ShieldAlert, AlertTriangle, Check, Info } from "lucide-react";
 import { formatDateTime } from "../../../lib/format";
 
 export const AdminSecurityTab: React.FC = () => {
-  const { adminAuditLogs } = useApp();
+  const { adminAuditLogs } = useAuditLog();
 
   const statusIcons: Record<string, React.ReactNode> = {
     success: <Check size={12} className="text-positive" />,

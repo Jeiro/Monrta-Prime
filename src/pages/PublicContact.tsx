@@ -1,10 +1,10 @@
 import React from "react";
 import { Mail, Clock, MapPin, Phone } from "lucide-react";
 import { motion } from "motion/react";
-import { useApp } from "../context/AppContext";
+import { useSiteSettings } from "../context/domains/SiteSettingsContext";
 
 const PublicContact = () => {
-  const { appSettings } = useApp();
+  const { appSettings } = useSiteSettings();
 
   return (
     <div className="min-h-screen bg-ground text-ink pt-32 pb-24 px-4 font-sans">

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Bell, CheckCheck, CheckCircle2, Info, Trash2, AlertTriangle, XCircle, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
-import { useApp } from "../context/AppContext";
+import { useNotifications } from "../context/domains/NotificationsContext";
 import { Button, EmptyState } from "../components/ui";
 import type { NotificationItem, NotificationType } from "../services";
 import { formatRelativeTimestamp } from "../services";
@@ -42,7 +42,7 @@ export const DashboardNotifications: React.FC<DashboardNotificationsProps> = ({ 
     markNotificationRead,
     markAllNotificationsRead,
     deleteNotification
-  } = useApp();
+  } = useNotifications();
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const visibleNotifications = useMemo(

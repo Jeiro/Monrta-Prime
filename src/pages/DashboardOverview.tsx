@@ -1,5 +1,9 @@
 import React, { useMemo, useState } from "react";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useInvestmentPlans } from "../context/domains/InvestmentPlansContext";
+import { useTraders } from "../context/domains/TradersContext";
+import { useNotifications } from "../context/domains/NotificationsContext";
+import { useWallet } from "../context/domains/WalletContext";
 import {
   Activity,
   AlertTriangle,
@@ -64,14 +68,11 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   onOpenDeposit,
   onOpenWithdraw,
 }) => {
-  const {
-    user,
-    topUpInvestment,
-    claimPlanPayout,
-    claimCopyTradePayout,
-    addNotification,
-    setInsufficientBalanceOpen,
-  } = useApp();
+  const { user } = useSession();
+  const { topUpInvestment, claimPlanPayout } = useInvestmentPlans();
+  const { claimCopyTradePayout } = useTraders();
+  const { addNotification } = useNotifications();
+  const { setInsufficientBalanceOpen } = useWallet();
 
   const [copiedUid, setCopiedUid] = useState(false);
   const [claimingCopyId, setClaimingCopyId] = useState<string | null>(null);

@@ -1,6 +1,6 @@
 import React from "react";
 import { Home, Bell, Gift, Repeat, TrendingUp } from "lucide-react";
-import { useApp } from "../context/AppContext";
+import { useNotifications } from "../context/domains/NotificationsContext";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 
 interface MobileNavProps {
@@ -9,7 +9,7 @@ interface MobileNavProps {
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({ currentView, onNavigate }) => {
-  const { unreadNotificationsCount } = useApp();
+  const { unreadNotificationsCount } = useNotifications();
   const { isLoggedIn, isAdmin } = useCurrentUser();
   if (!isLoggedIn || isAdmin) return null;
   const tabs = [

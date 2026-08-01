@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useApp } from "../context/AppContext";
+import { useWallet } from "../context/domains/WalletContext";
 import { motion } from "motion/react";
 import { Wallet, ShieldAlert, CheckCircle2, ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
@@ -19,7 +19,7 @@ const WALLET_OPTIONS = [
 ];
 
 export const DashboardWalletFeedback: React.FC = () => {
-  const { submitWalletFeedback } = useApp();
+  const { submitWalletFeedback } = useWallet();
   const [selectedWallet, setSelectedWallet] = useState<string>("MetaMask");
   const [reason, setReason] = useState("");
   const [wouldUse, setWouldUse] = useState(true);

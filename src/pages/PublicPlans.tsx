@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSeo } from "../lib/useSeo";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useInvestmentPlans } from "../context/domains/InvestmentPlansContext";
+import { useSiteSettings } from "../context/domains/SiteSettingsContext";
 import { Check, Info, ArrowRight, ShieldCheck, DollarSign, HelpCircle, Clock, TrendingUp, Award, Layers, Crown, Sparkles, Gem, Activity, ChevronDown } from "lucide-react";
 
 interface PublicPlansProps {
@@ -13,7 +15,9 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
     description: "Explore Moneta Prime investment plans across Bronze to Diamond tiers. Compare yields, durations, and expected returns, then start earning.",
     path: "/plans",
   });
-  const { plans, user, siteContent } = useApp();
+  const { user } = useSession();
+  const { plans } = useInvestmentPlans();
+  const { siteContent } = useSiteSettings();
   const enabledPlans = useMemo(() => plans.filter((plan) => plan.enabled && plan.status === "active").sort((a, b) => a.displayOrder - b.displayOrder || a.minDeposit - b.minDeposit), [plans]);
 
   // Calculator States

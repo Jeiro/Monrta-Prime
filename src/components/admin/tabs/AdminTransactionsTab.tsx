@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { CheckCircle2, Clock, Hash, ReceiptText, Search, XCircle } from "lucide-react";
-import { useApp } from "../../../context/AppContext";
+import { useWallet } from "../../../context/domains/WalletContext";
 import type { Transaction } from "../../../types";
 import { formatDateTime } from "../../../lib/format";
 import {
@@ -56,7 +56,7 @@ const buildRows = (transactions: Transaction[]): LedgerRow[] =>
   }));
 
 export const AdminTransactionsTab: React.FC = () => {
-  const { adminTransactions } = useApp();
+  const { adminTransactions } = useWallet();
   const [statusFilter, setStatusFilter] = useState<"all" | Transaction["status"]>("all");
   const [searchQuery, setSearchQuery] = useState("");
 

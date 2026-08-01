@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useNotifications } from "../context/domains/NotificationsContext";
 import { getUID } from "../lib/format";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useClerk } from "@clerk/clerk-react";
@@ -15,7 +16,8 @@ interface NavigationProps {
 }
 
 export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate }) => {
-  const { user, unreadNotificationsCount } = useApp();
+  const { user } = useSession();
+  const { unreadNotificationsCount } = useNotifications();
   const { isLoggedIn, isAdmin } = useCurrentUser();
   const { signOut } = useClerk();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

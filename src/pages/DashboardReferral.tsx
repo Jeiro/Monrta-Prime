@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Share2, Users, Trophy, DollarSign, Copy, Check } from "lucide-react";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useAirdrops } from "../context/domains/AirdropsContext";
+import { useNotifications } from "../context/domains/NotificationsContext";
 
 export const DashboardReferral: React.FC = () => {
-  const { user, withdrawEarnings, addNotification } = useApp();
+  const { user } = useSession();
+  const { withdrawEarnings } = useAirdrops();
+  const { addNotification } = useNotifications();
   const [copied, setCopied] = useState(false);
 
   // Was hardcoded to https://orbitriotrades.com — the pre-rebrand domain, so

@@ -74,7 +74,7 @@ export const TradersProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [copyTrades, liveClock, user.isLoggedIn]);
 
   // Copy-trade maturity notifications — the mirror of the investment maturity
-  // effect in InvestmentPlansContext (one effect in AppContext; safe to split
+  // effect in InvestmentPlansContext (a single effect before the split; safe
   // because the id sets are disjoint and the ref guard makes each idempotent).
   const notifiedMaturityIds = useRef<Set<string>>(new Set());
 

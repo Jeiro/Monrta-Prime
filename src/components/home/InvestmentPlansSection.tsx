@@ -1,11 +1,13 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Zap, Shield, ShieldCheck, BarChart3, Lock, Globe, Layers, Target, Users, TrendingUp, ThumbsUp, Headset, Database, Puzzle, Fingerprint, Mail, Sparkles } from 'lucide-react';
-import { useApp } from '../../context/AppContext';
+import { useSession } from "../../context/domains/SessionContext";
+import { useInvestmentPlans } from "../../context/domains/InvestmentPlansContext";
 
 // Investment Plans Section (matching reference image precisely with floating transparent cards, gold-orange theme, and scroll entrance effects)
 export const InvestmentPlansSection = ({ onNavigate }: { onNavigate: (view: string) => void }) => {
-  const { plans, user } = useApp();
+  const { user } = useSession();
+  const { plans } = useInvestmentPlans();
   const plansList = plans
     .filter((plan) => plan.enabled && plan.status === "active")
     .sort((a, b) => a.displayOrder - b.displayOrder || a.minDeposit - b.minDeposit)

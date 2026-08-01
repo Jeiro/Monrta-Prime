@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { AlertTriangle, TrendingDown, History, Wallet, Info, Globe2, BookOpen, Mail } from "lucide-react";
-import { useApp } from "../context/AppContext";
+import { useSiteSettings } from "../context/domains/SiteSettingsContext";
 import { useSeo } from "../lib/useSeo";
 
 interface RiskDisclosurePageProps {
@@ -13,7 +13,7 @@ const Brand = () => (
 );
 
 export const RiskDisclosurePage: React.FC<RiskDisclosurePageProps> = ({ onNavigate }) => {
-  const { appSettings } = useApp();
+  const { appSettings } = useSiteSettings();
 
   useSeo({
     title: "Risk Disclosure — Moneta Prime",

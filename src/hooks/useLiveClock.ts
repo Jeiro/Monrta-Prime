@@ -8,7 +8,7 @@ import { useSyncExternalStore } from "react";
  * Module-level rather than per-component state: investments and copy trades
  * live in separate domain providers now, and two independent intervals would
  * tick out of phase. One store, one interval, both derive from the same
- * instant — same as when they shared a single `useState` in AppContext. The
+ * instant — same as when they shared one `useState` before the split. The
  * interval only runs while something is subscribed.
  */
 let now = Date.now();

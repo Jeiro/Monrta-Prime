@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useSupport } from "../context/domains/SupportContext";
 import { LifeBuoy, MessageSquare, Send } from "lucide-react";
 import { Button, EmptyState, Input, SectionCard, Select, Tabs, Textarea } from "../components/ui";
 
@@ -8,7 +9,8 @@ import { Button, EmptyState, Input, SectionCard, Select, Tabs, Textarea } from "
 // (/dashboard/support) with its own nav entry. The ticket create/list/reply
 // logic is unchanged — it still uses createTicket / replyToTicket from context.
 export const DashboardSupport: React.FC = () => {
-  const { user, createTicket, replyToTicket } = useApp();
+  const { user } = useSession();
+  const { createTicket, replyToTicket } = useSupport();
 
   const [tktSubject, setTktSubject] = useState("");
   const [tktCategory, setTktCategory] = useState<"deposit" | "withdrawal" | "trading" | "general">(

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { useApp } from "../../../context/AppContext";
+import { useAirdrops } from "../../../context/domains/AirdropsContext";
 import { motion } from "motion/react";
 import { Check, CheckCircle, Clock3, Edit3, Gift, PauseCircle, PlayCircle, Plus, Save, Trash2, X, XCircle } from "lucide-react";
 import type { Airdrop } from "../../../types";
@@ -39,7 +39,7 @@ const statusClass = (status: string) => {
 };
 
 export const AdminAirdropsTab: React.FC = () => {
-  const { airdrops, adminAirdropClaims, adminCreateAirdrop, adminUpdateAirdrop, adminDeleteAirdrop, adminApproveAirdrop, adminRejectAirdrop } = useApp();
+  const { airdrops, adminAirdropClaims, adminCreateAirdrop, adminUpdateAirdrop, adminDeleteAirdrop, adminApproveAirdrop, adminRejectAirdrop } = useAirdrops();
 
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);

@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-import { useApp } from "../../../context/AppContext";
+import { useWallet } from "../../../context/domains/WalletContext";
 import { useSupabaseClient, uploadDepositWalletQrCode } from "../../../lib/supabase";
 import { getDepositWalletLabel, sortDepositWallets } from "../../../services";
 import type { DepositWallet } from "../../../types";
@@ -43,7 +43,7 @@ const walletToForm = (wallet: DepositWallet): WalletForm => ({
 });
 
 export const AdminWalletsTab: React.FC = () => {
-  const { depositWallets, adminSaveDepositWallet, adminDeleteDepositWallet } = useApp();
+  const { depositWallets, adminSaveDepositWallet, adminDeleteDepositWallet } = useWallet();
   const supabase = useSupabaseClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState<WalletForm>(() => createEmptyForm());

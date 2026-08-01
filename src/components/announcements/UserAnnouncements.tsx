@@ -1,7 +1,8 @@
 import React from "react";
 import { AlertTriangle, Check, Megaphone, Pin } from "lucide-react";
 import { motion } from "motion/react";
-import { useApp } from "../../context/AppContext";
+import { useSession } from "../../context/domains/SessionContext";
+import { useAnnouncements } from "../../context/domains/AnnouncementsContext";
 import type { AnnouncementPriority } from "../../types";
 import { formatDate } from "../../lib/format";
 
@@ -24,7 +25,8 @@ const priorityStyle: Record<AnnouncementPriority, { badge: string; border: strin
 };
 
 export const UserAnnouncements: React.FC = () => {
-  const { user, userAnnouncements, markAnnouncementRead } = useApp();
+  const { user } = useSession();
+  const { userAnnouncements, markAnnouncementRead } = useAnnouncements();
 
   if (userAnnouncements.length === 0) return null;
 

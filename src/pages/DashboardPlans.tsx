@@ -1,9 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useInvestmentPlans } from "../context/domains/InvestmentPlansContext";
+import { useWallet } from "../context/domains/WalletContext";
 import { Layers, Target, Coins, ShieldAlert, Timer, TrendingUp, Activity, Sparkles, Crown, Gem, Award } from "lucide-react";
 
 export const DashboardPlans: React.FC = () => {
-  const { plans, user, investInPlan, claimPlanPayout, setInsufficientBalanceOpen } = useApp();
+  const { user } = useSession();
+  const { plans, investInPlan, claimPlanPayout } = useInvestmentPlans();
+  const { setInsufficientBalanceOpen } = useWallet();
   const enabledPlans = useMemo(() => plans.filter((plan) => plan.enabled && plan.status === "active").sort((a, b) => a.displayOrder - b.displayOrder || a.minDeposit - b.minDeposit), [plans]);
   const [selectedPlanId, setSelectedPlanId] = useState("plan-gold");
   const [investAmountText, setInvestAmountText] = useState("");

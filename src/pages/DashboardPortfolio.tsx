@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useTraders } from "../context/domains/TradersContext";
 import { Briefcase, Layers, PieChart, Target, TrendingUp, Users, Wallet } from "lucide-react";
 import {
   AnimatedNumber,
@@ -18,7 +19,8 @@ interface DashboardPortfolioProps {
 }
 
 export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNavigate }) => {
-  const { user, claimCopyTradePayout } = useApp();
+  const { user } = useSession();
+  const { claimCopyTradePayout } = useTraders();
   const [claimingId, setClaimingId] = useState<string | null>(null);
 
   const handleClaimCopyPayout = async (copyTradeId: string) => {

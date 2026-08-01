@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { AlertCircle, Building2, Check, Headphones, Mail, MessageCircle, Save } from "lucide-react";
-import { useApp } from "../../../context/AppContext";
+import { useSiteSettings } from "../../../context/domains/SiteSettingsContext";
+import { useNotifications } from "../../../context/domains/NotificationsContext";
 import type { AppSettings } from "../../../types";
 
 const inputClass = "w-full px-4 py-3 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent disabled:opacity-60";
@@ -34,7 +35,8 @@ const chatFields: FieldConfig[] = [
 ];
 
 export const AdminSettingsTab: React.FC = () => {
-  const { appSettings, updateAppSettings, addNotification } = useApp();
+  const { appSettings, updateAppSettings } = useSiteSettings();
+  const { addNotification } = useNotifications();
   const [form, setForm] = useState<AppSettings>(appSettings);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);

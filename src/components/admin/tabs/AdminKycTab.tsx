@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { useApp } from "../../../context/AppContext";
+import { useAdminUsers } from "../../../context/domains/AdminUsersContext";
+import { useKyc } from "../../../context/domains/KycContext";
 import { Check, ExternalLink, FileText, Search, UserCheck, X } from "lucide-react";
 import type { KycSubmission, KycStatus } from "../../../types";
 import type { CoreUserProfile } from "../../../hooks/data/useUsersDirectory";
@@ -34,7 +35,8 @@ const getDocumentCount = (kyc?: KycSubmission) =>
   [kyc?.frontImage, kyc?.backImage, kyc?.proofOfAddressImage].filter(Boolean).length;
 
 export const AdminKycTab: React.FC = () => {
-  const { usersDirectory, allKycSubmissions, adminKycReview } = useApp();
+  const { usersDirectory } = useAdminUsers();
+  const { allKycSubmissions, adminKycReview } = useKyc();
   const [searchQuery, setSearchQuery] = useState("");
   const [adminNotes, setAdminNotes] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<string | null>(null);

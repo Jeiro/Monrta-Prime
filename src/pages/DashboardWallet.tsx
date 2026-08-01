@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useWallet } from "../context/domains/WalletContext";
+import { useNotifications } from "../context/domains/NotificationsContext";
 import { useSupabaseClient, uploadDepositProof } from "../lib/supabase";
 import { getDepositWalletLabel } from "../services";
 import {
@@ -37,7 +39,9 @@ interface DashboardWalletProps {
 type WalletTab = "deposit" | "withdraw" | "ledger";
 
 export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab = "deposit" }) => {
-  const { user, deposit, withdraw, enabledDepositWallets, addNotification } = useApp();
+  const { user } = useSession();
+  const { deposit, withdraw, enabledDepositWallets } = useWallet();
+  const { addNotification } = useNotifications();
   const { user: clerkUser } = useUser();
   const supabase = useSupabaseClient();
   const [activeSubTab, setActiveSubTab] = useState<WalletTab>(initialOpenTab);

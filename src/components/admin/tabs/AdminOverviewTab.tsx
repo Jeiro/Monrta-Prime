@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useApp } from "../../../context/AppContext";
+import { useSession } from "../../../context/domains/SessionContext";
+import { useAdminUsers } from "../../../context/domains/AdminUsersContext";
+import { useWallet } from "../../../context/domains/WalletContext";
+import { useSupport } from "../../../context/domains/SupportContext";
+import { useInvestmentPlans } from "../../../context/domains/InvestmentPlansContext";
 import { InvestmentPlan } from "../../../types";
 import { motion } from "motion/react";
 import { 
@@ -65,10 +69,13 @@ const AdminVolumeChart: React.FC<{ chartData: any[] }> = ({ chartData }) => {
 
 
 export const AdminOverviewTab: React.FC = () => {
-  const orbit = useApp();
+  const { user: currentUser } = useSession();
+  const { usersDirectory } = useAdminUsers();
+  const { adminTransactions } = useWallet();
+  const { supportTickets } = useSupport();
+  const { plans } = useInvestmentPlans();
 
-  const currentUser = orbit.user;
-  const usersList = orbit.usersDirectory || [];
+  const usersList = usersDirectory || [];
   const aggregateUsers = usersList.length + 10;
   const activeUserCount = usersList.filter(u => u.status === "active").length + 8;
   const bannedCount = usersList.filter(u => u.status === "banned").length;
@@ -76,9 +83,9 @@ export const AdminOverviewTab: React.FC = () => {
   // adminTransactions/supportTickets already cover every user (including the
   // signed-in admin) when the caller is an admin, so no separate merge of
   // currentUser.transactions/tickets is needed here.
-  const allDeposits = orbit.adminTransactions.filter(t => t.type === "deposit");
-  const allWithdrawals = orbit.adminTransactions.filter(t => t.type === "withdrawal");
-  const allTickets = orbit.supportTickets;
+  const allDeposits = adminTransactions.filter(t => t.type === "deposit");
+  const allWithdrawals = adminTransactions.filter(t => t.type === "withdrawal");
+  const allTickets = supportTickets;
 
   const sortedDeposits = [...allDeposits].sort((a,b) => b.id.localeCompare(a.id));
   const sortedWithdrawals = [...allWithdrawals].sort((a,b) => b.id.localeCompare(a.id));
@@ -92,7 +99,7 @@ export const AdminOverviewTab: React.FC = () => {
     .filter(t => t.status === "completed" || t.status === "approved")
     .reduce((acc, current) => acc + current.amount, 0) + 210000;
 
-  const totalInvestmentsPlaced = (orbit.plans?.length || 0) * 48000 + 482900;
+  const totalInvestmentsPlaced = (plans?.length || 0) * 48000 + 482900;
   const platformHedgedRevenue = totalDepositVolume * 0.08;
   const pendingPayoutCount = sortedWithdrawals.filter(w => w.status === "pending").length;
 

@@ -1,10 +1,10 @@
 import React from "react";
 import { motion } from "motion/react";
 import { Mail, Phone } from "lucide-react";
-import { useApp } from "../../context/AppContext";
+import { useSiteSettings } from "../../context/domains/SiteSettingsContext";
 
 export const ContactUs = () => {
-  const { appSettings } = useApp();
+  const { appSettings } = useSiteSettings();
 
   return (
     <section className="py-16 px-4 bg-ground/30" id="contact">

@@ -1,8 +1,8 @@
 import React from "react";
-import { useApp } from "../context/AppContext";
+import { useSiteSettings } from "../context/domains/SiteSettingsContext";
 
 export const MaintenancePage: React.FC = () => {
-  const { appSettings } = useApp();
+  const { appSettings } = useSiteSettings();
 
   return (
     <div className="relative min-h-screen bg-ground text-ink flex items-center justify-center px-6 py-12">

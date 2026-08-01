@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useSeo } from "../lib/useSeo";
-import { useApp } from "../context/AppContext";
+import { useMarkets } from "../context/domains/MarketsContext";
 import { ArrowRight, Bitcoin, LineChart, Search, TrendingDown, TrendingUp } from "lucide-react";
 import {
   Button,
@@ -16,7 +16,7 @@ interface PublicMarketsProps {
   onNavigate: (view: string, targetAsset?: string) => void;
 }
 
-type MarketRow = ReturnType<typeof useApp>["marketCrypto"][number];
+type MarketRow = ReturnType<typeof useMarkets>["marketCrypto"][number];
 
 export const PublicMarkets: React.FC<PublicMarketsProps> = ({ onNavigate }) => {
   useSeo({
@@ -25,7 +25,7 @@ export const PublicMarkets: React.FC<PublicMarketsProps> = ({ onNavigate }) => {
       "Track real-time cryptocurrency and stock prices, 24h changes, and volume on Moneta Prime. Live market data to inform every trade.",
     path: "/markets",
   });
-  const { marketCrypto, marketStocks, isLoadingMarkets } = useApp();
+  const { marketCrypto, marketStocks, isLoadingMarkets } = useMarkets();
   const [activeTab, setActiveTab] = useState<"crypto" | "stocks">("crypto");
   const [searchQuery, setSearchQuery] = useState("");
   const [sort, setSort] = useState<SortState>({ key: "volume", ascending: false });

@@ -15,11 +15,11 @@ export interface CurrentUserProfile {
 /**
  * Single source of truth for "who is signed in and are they an admin" —
  * backed entirely by Clerk (identity) + Supabase (role), no Firebase.
- * Use this for access-gating (routing guards). It does NOT replace
- * AppContext's `user` object for dashboard data (balance, portfolio,
- * etc.) — that migration is happening feature-by-feature in AppContext
- * itself; `profile`/`refetchProfile` here are used for the pieces that
- * have already moved (e.g. live balance checks during a deposit/withdrawal).
+ * Use this for access-gating (routing guards). It does NOT replace the
+ * `user` object in SessionContext, which carries the dashboard data
+ * (balance, portfolio, transactions, …); `profile`/`refetchProfile` here
+ * are the live read-through used where freshness matters on its own —
+ * e.g. the balance check during a deposit/withdrawal.
  *
  * The profile lives in a module-level store rather than in each caller's
  * useState. Five components call this hook, and per-instance state meant

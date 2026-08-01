@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useApp } from "../context/AppContext";
+import { useWallet } from "../context/domains/WalletContext";
+import { useSupport } from "../context/domains/SupportContext";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { 
   Users, Layers, ArrowDownLeft, ArrowUpRight, Volume2, ShieldAlert,
@@ -28,7 +29,8 @@ const AdminSettingsTab = lazy(() => import("../components/admin/tabs/AdminSettin
 const AdminWalletFeedbackTab = lazy(() => import("../components/admin/tabs/AdminWalletFeedbackTab").then(m => ({ default: m.AdminWalletFeedbackTab })));
 
 export const DashboardAdmin: React.FC = () => {
-  const { walletFeedback, adminTransactions, supportTickets } = useApp();
+  const { walletFeedback, adminTransactions } = useWallet();
+  const { supportTickets } = useSupport();
 
   // Role-based admin authentication — backed by Clerk + Supabase.
   // isReady matters: until the Supabase role has resolved, isAdmin is false

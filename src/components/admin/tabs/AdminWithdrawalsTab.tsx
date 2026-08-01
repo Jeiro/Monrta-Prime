@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { AlertCircle, ArrowUpRight, Check, ClipboardList, Search, X } from "lucide-react";
-import { useApp } from "../../../context/AppContext";
+import { useWallet } from "../../../context/domains/WalletContext";
+import { useAdminUsers } from "../../../context/domains/AdminUsersContext";
 import type { Transaction } from "../../../types";
 import { formatDateTime, formatMoney } from "../../../lib/format";
 import {
@@ -90,8 +91,8 @@ const buildWithdrawalRows = (
     });
 
 export const AdminWithdrawalsTab: React.FC = () => {
-  const { adminTransactions, adminApproveWithdrawal, adminRejectWithdrawal, usersDirectory } =
-    useApp();
+  const { adminTransactions, adminApproveWithdrawal, adminRejectWithdrawal } = useWallet();
+  const { usersDirectory } = useAdminUsers();
   const directoryById = useMemo(
     () =>
       new Map(

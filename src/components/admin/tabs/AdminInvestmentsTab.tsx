@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowDown, ArrowUp, Check, Edit3, Layers, Pause, Play, Plus, Save, Trash2, X } from "lucide-react";
-import { useApp } from "../../../context/AppContext";
+import { useInvestmentPlans } from "../../../context/domains/InvestmentPlansContext";
 import type { InvestmentPlan } from "../../../types";
 
 type PlanForm = {
@@ -46,7 +46,7 @@ const planToForm = (plan: InvestmentPlan): PlanForm => ({
 const parsePositiveNumber = (value: string) => Number(value);
 
 export const AdminInvestmentsTab: React.FC = () => {
-  const { plans, adminCreatePlan, adminUpdatePlan, adminDeletePlan, adminSetPlanStatus } = useApp();
+  const { plans, adminCreatePlan, adminUpdatePlan, adminDeletePlan, adminSetPlanStatus } = useInvestmentPlans();
   const orderedPlans = useMemo(() => [...plans].sort((a, b) => a.displayOrder - b.displayOrder || a.minDeposit - b.minDeposit), [plans]);
   const nextOrder = orderedPlans.length ? Math.max(...orderedPlans.map((plan) => plan.displayOrder)) + 10 : 10;
 

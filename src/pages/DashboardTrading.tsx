@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useMarkets } from "../context/domains/MarketsContext";
+import { useTrading } from "../context/domains/TradingContext";
+import { useWallet } from "../context/domains/WalletContext";
 import { TradingViewWidget } from "../components/TradingViewWidget";
 import {
   Activity,
@@ -29,7 +32,10 @@ interface DashboardTradingProps {
 }
 
 export const DashboardTrading: React.FC<DashboardTradingProps> = ({ initialAsset, onNavigate }) => {
-  const { marketCrypto, marketStocks, user, executeTrade, setInsufficientBalanceOpen } = useApp();
+  const { user } = useSession();
+  const { marketCrypto, marketStocks } = useMarkets();
+  const { executeTrade } = useTrading();
+  const { setInsufficientBalanceOpen } = useWallet();
   const [selectedAssetSymbol, setSelectedAssetSymbol] = useState(initialAsset || "BTC/USD");
   const [showBalance, setShowBalance] = useState(true);
   const [watchlistQuery, setWatchlistQuery] = useState("");

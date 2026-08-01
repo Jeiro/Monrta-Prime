@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { useApp } from "../../../context/AppContext";
+import { useAnnouncements } from "../../../context/domains/AnnouncementsContext";
 import { motion } from "motion/react";
 import {
   Calendar,
@@ -48,7 +48,7 @@ const priorityClass: Record<AnnouncementPriority, string> = {
 };
 
 export const AdminBulletinsTab: React.FC = () => {
-  const { adminAnnouncements, adminCreateAnnouncement, adminUpdateAnnouncement, adminDeleteAnnouncement } = useApp();
+  const { adminAnnouncements, adminCreateAnnouncement, adminUpdateAnnouncement, adminDeleteAnnouncement } = useAnnouncements();
 
   const [form, setForm] = useState<FormState>(emptyForm);
   const [query, setQuery] = useState("");

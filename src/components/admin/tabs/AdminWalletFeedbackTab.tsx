@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useApp } from "../../../context/AppContext";
+import { useWallet } from "../../../context/domains/WalletContext";
 import { motion, AnimatePresence } from "motion/react";
 import { Wallet, Search, CheckCircle, Clock, Trash2, Edit3, X, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
 
 export const AdminWalletFeedbackTab: React.FC = () => {
-  const { walletFeedback, adminUpdateWalletFeedback, adminDeleteWalletFeedback } = useApp();
+  const { walletFeedback, adminUpdateWalletFeedback, adminDeleteWalletFeedback } = useWallet();
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedFeedback, setExpandedFeedback] = useState<string | null>(null);
   const [noteText, setNoteText] = useState("");

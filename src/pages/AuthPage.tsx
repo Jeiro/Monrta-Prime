@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSignUp, useSignIn } from "@clerk/clerk-react";
-import { useApp } from "../context/AppContext";
+import { useSiteSettings } from "../context/domains/SiteSettingsContext";
+import { useNotifications } from "../context/domains/NotificationsContext";
 import { useSupabaseClient, createUserProfile, createFreshAuthedClient } from "../lib/supabase";
 import {
   Mail, Lock, User, CheckCircle2, Phone, ChevronDown,
@@ -179,7 +180,8 @@ const Divider = () => (
 );
 
 export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "register" }) => {
-  const { appSettings, sendWelcomeNotification } = useApp();
+  const { appSettings } = useSiteSettings();
+  const { sendWelcomeNotification } = useNotifications();
   const supabase = useSupabaseClient();
   const { isLoaded: signUpLoaded, signUp, setActive: setActiveFromSignUp } = useSignUp();
   const { isLoaded: signInLoaded, signIn, setActive: setActiveFromSignIn } = useSignIn();
@@ -328,7 +330,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
         }
 
         // Branded welcome email (Clerk sends its own verification code, not a
-        // welcome). Dedup-guarded in AppContext so it fires exactly once.
+        // welcome). Dedup-guarded in NotificationsContext so it fires exactly once.
         sendWelcomeNotification(email, `${firstName.trim()} ${lastName.trim()}`.trim());
 
         setIsSuccess(true);

@@ -60,7 +60,7 @@ function announcementToRow(a: Announcement): Record<string, any> {
 /**
  * Admin-authored announcements. Backed entirely by Supabase's
  * `announcements` table. No Firebase. Persistence + fetch only — the
- * caller (AppContext) wraps these with notification/audit-log side
+ * caller (AnnouncementsContext) wraps these with notification/audit-log side
  * effects, since those touch broader app state this hook doesn't own.
  */
 export function useAnnouncements(

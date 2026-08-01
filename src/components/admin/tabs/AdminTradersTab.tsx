@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { Award, Check, Edit3, ImagePlus, Plus, Save, Star, ToggleLeft, ToggleRight, Trash2, Upload, X } from "lucide-react";
-import { useApp } from "../../../context/AppContext";
+import { useTraders } from "../../../context/domains/TradersContext";
 import type { TraderProfile } from "../../../types";
 import { Avatar } from "../../ui";
 
@@ -58,7 +58,7 @@ const moneyRange = (minimum?: number, maximum?: number) => {
 };
 
 export const AdminTradersTab: React.FC = () => {
-  const { traders, adminUpdateTrader, adminCreateTrader, adminDeleteTrader } = useApp();
+  const { traders, adminUpdateTrader, adminCreateTrader, adminDeleteTrader } = useTraders();
 
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);

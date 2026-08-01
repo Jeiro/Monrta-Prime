@@ -35,14 +35,14 @@ function notificationToRow(notification: NotificationItem): Record<string, any> 
 /**
  * Notifications — backed entirely by Supabase's `notifications` table.
  * No Firebase. Unlike every other feature hook, this one owns no React
- * state of its own: `AppContext.tsx` already owns the `notifications`
+ * state of its own: `NotificationsContext` owns the `notifications`
  * array directly (with optimistic local mutations for mark-read/delete
  * layered on top), so wrapping it in a second, separately-fetched state
  * here would create two sources of truth that could clobber each other.
  * This hook is just the thin Supabase-backed replacement for what
  * `notificationsService.ts`'s Firestore functions used to do — fetch,
- * save, mark-read, delete — leaving AppContext's existing business
- * logic untouched.
+ * save, mark-read, delete — leaving that context's business logic
+ * untouched.
  *
  * No live push: unlike the old Firestore `onSnapshot` subscription, this
  * is fetch-on-mount only, same as every other migrated feature. A

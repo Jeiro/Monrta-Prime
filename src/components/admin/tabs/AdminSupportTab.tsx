@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useApp } from "../../../context/AppContext";
+import { useSupport } from "../../../context/domains/SupportContext";
 import { motion } from "motion/react";
 import { MessageSquare, Send, X as XIcon, Search, AlertTriangle } from "lucide-react";
 import { formatDateTime } from "../../../lib/format";
 
 export const AdminSupportTab: React.FC = () => {
-  const { supportTickets, adminReplyToTicket, adminCloseTicket, adminSetTicketPriority } = useApp();
+  const { supportTickets, adminReplyToTicket, adminCloseTicket, adminSetTicketPriority } = useSupport();
   const [searchQuery, setSearchQuery] = useState("");
   const [replyTexts, setReplyTexts] = useState<Record<string, string>>({});
   const [expandedTicket, setExpandedTicket] = useState<string | null>(null);

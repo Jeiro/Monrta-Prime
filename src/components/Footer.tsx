@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "motion/react";
-import { useApp } from "../context/AppContext";
+import { useSiteSettings } from "../context/domains/SiteSettingsContext";
 import { Brandmark } from "./ui/Brandmark";
 
 interface FooterProps {
@@ -19,7 +19,7 @@ const FOOTER_LINKS: { label: string; view: string }[] = [
 ];
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
-  const { appSettings } = useApp();
+  const { appSettings } = useSiteSettings();
 
   return (
     <footer className="py-16 px-4 bg-ground border-t border-line/30">

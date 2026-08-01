@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSeo } from "../lib/useSeo";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useMarkets } from "../context/domains/MarketsContext";
 import { 
   ArrowUpRight, 
   TrendingUp, 
@@ -86,7 +87,8 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
     description: "Trade crypto with precision on Moneta Prime. Real-time markets, tiered investment plans, and copy trading in one workspace built for serious traders.",
     path: "/",
   });
-  const { marketCrypto, marketStocks, user } = useApp();
+  const { user } = useSession();
+  const { marketCrypto, marketStocks } = useMarkets();
   const [activeSpotlightTab, setActiveSpotlightTab] = useState<"crypto" | "stocks">("crypto");
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const [marketSearch, setMarketSearch] = useState("");

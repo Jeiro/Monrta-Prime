@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useSeo } from "../lib/useSeo";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useTraders } from "../context/domains/TradersContext";
+import { useWallet } from "../context/domains/WalletContext";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { Avatar } from "../components/ui";
 import { UserCheck, Users, TrendingUp, ShieldAlert, Award, ArrowUpRight, CheckCircle2, Calendar, X, DollarSign, Wallet, ShieldCheck, Info, Loader2 } from "lucide-react";
@@ -15,7 +17,9 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
     description: "Automatically mirror the strategies of proven traders on Moneta Prime. Browse verified performance, allocate funds, and copy trades in real time.",
     path: "/copy-trading",
   });
-  const { traders, copyTrader, user, setInsufficientBalanceOpen } = useApp();
+  const { user } = useSession();
+  const { traders, copyTrader } = useTraders();
+  const { setInsufficientBalanceOpen } = useWallet();
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [allocatingTrader, setAllocatingTrader] = useState<any | null>(null);
   useBodyScrollLock(Boolean(allocatingTrader));

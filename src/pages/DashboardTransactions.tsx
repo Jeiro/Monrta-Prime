@@ -9,12 +9,12 @@ import {
   WalletCards,
   XCircle,
 } from "lucide-react";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
 import { Badge, Button, EmptyState, SectionCard, Select } from "../components/ui";
 import { formatDateTime, formatMoney } from "../lib/format";
 
 export const DashboardTransactions: React.FC = () => {
-  const { user } = useApp();
+  const { user } = useSession();
 
   const [filterType, setFilterType] = useState("");
   const [filterStatus, setFilterStatus] = useState<

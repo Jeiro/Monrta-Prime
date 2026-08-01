@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { CheckCircle, Clock3, Gift, XCircle } from "lucide-react";
-import { useApp } from "../context/AppContext";
+import { useSession } from "../context/domains/SessionContext";
+import { useAirdrops } from "../context/domains/AirdropsContext";
 import {
   findUserCampaignClaim,
   getCampaignClaimCount,
@@ -20,7 +21,8 @@ const ClaimIcon = ({ status }: { status: string }) => {
 };
 
 export const DashboardAirdrops: React.FC = () => {
-  const { user, airdrops, adminAirdropClaims, claimAirdrop } = useApp();
+  const { user } = useSession();
+  const { airdrops, adminAirdropClaims, claimAirdrop } = useAirdrops();
 
   const activeCampaigns = useMemo(
     () =>

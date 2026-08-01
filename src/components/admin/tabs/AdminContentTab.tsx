@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useApp } from "../../../context/AppContext";
+import { useSiteSettings, DEFAULT_SITE_CONTENT } from "../../../context/domains/SiteSettingsContext";
 import { motion } from "motion/react";
 import { PenTool, Save, Check, RotateCcw } from "lucide-react";
-import { DEFAULT_SITE_CONTENT } from "../../../context/AppContext";
 
 export const AdminContentTab: React.FC = () => {
-  const { siteContent, updateSiteContent } = useApp();
+  const { siteContent, updateSiteContent } = useSiteSettings();
   const [form, setForm] = useState({ ...siteContent });
   const [feedback, setFeedback] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
