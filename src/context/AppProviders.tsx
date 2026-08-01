@@ -8,6 +8,7 @@ import { NotificationsProvider } from "./domains/NotificationsContext";
 import { MarketsProvider } from "./domains/MarketsContext";
 import { InvestmentPlansProvider } from "./domains/InvestmentPlansContext";
 import { TradersProvider } from "./domains/TradersContext";
+import { TradingProvider } from "./domains/TradingContext";
 import { AppProvider } from "./AppContext";
 
 /**
@@ -47,9 +48,11 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
                   <AdminUsersProvider>
                     <InvestmentPlansProvider>
                       <TradersProvider>
-                        <AppProvider>
-                          {children}
-                        </AppProvider>
+                        <TradingProvider>
+                          <AppProvider>
+                            {children}
+                          </AppProvider>
+                        </TradingProvider>
                       </TradersProvider>
                     </InvestmentPlansProvider>
                   </AdminUsersProvider>
