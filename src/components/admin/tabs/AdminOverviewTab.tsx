@@ -49,16 +49,32 @@ const AdminVolumeChart: React.FC<{ chartData: any[] }> = ({ chartData }) => {
       <div ref={containerRef} className="h-[200px] mt-4 w-full">
         {hasSize ? (
           <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
+            {/* Every colour here is a CSS custom property rather than a hex.
+                Recharts writes these straight into SVG presentation attributes
+                and inline styles, which resolve against the nearest
+                [data-theme] scope — so the chart re-colours on a theme switch
+                with no re-render and no JS reading the theme at all. Same
+                approach as DashboardEquityChart. The previous hardcoded values
+                (#222 grid, #666/#ccc axes, #111 tooltip) were dark-only and
+                left the gridlines and axis text nearly invisible in light. */}
             <BarChart data={chartData} layout="vertical" margin={{ top: 0, right: 30, left: 30, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#222" horizontal={false} />
-              <XAxis type="number" stroke="#666" tick={{ fill: "#666", fontSize: 10 }} />
-              <YAxis dataKey="name" type="category" stroke="#666" tick={{ fill: "#ccc", fontSize: 10 }} />
-              <Tooltip 
-                contentStyle={{ backgroundColor: "#111", borderColor: "#333", borderRadius: "8px", fontSize: "12px" }} 
-                itemStyle={{ color: "#fff" }}
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--mp-line)" horizontal={false} />
+              <XAxis type="number" stroke="var(--mp-line-strong)" tick={{ fill: "var(--mp-faint)", fontSize: 10 }} />
+              <YAxis dataKey="name" type="category" stroke="var(--mp-line-strong)" tick={{ fill: "var(--mp-muted)", fontSize: 10 }} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "var(--mp-overlay)",
+                  borderColor: "var(--mp-line)",
+                  borderRadius: "8px",
+                  fontSize: "12px",
+                  boxShadow: "var(--mp-shadow-lg)"
+                }}
+                itemStyle={{ color: "var(--mp-ink)" }}
+                labelStyle={{ color: "var(--mp-muted)" }}
+                cursor={{ fill: "var(--mp-raised)" }}
                 formatter={(val: any) => `$${Number(val).toLocaleString()}`}
               />
-              <Bar dataKey="volume" fill="#3D7DFF" radius={[0, 4, 4, 0]} barSize={20} />
+              <Bar dataKey="volume" fill="var(--mp-accent)" radius={[0, 4, 4, 0]} barSize={20} />
             </BarChart>
           </ResponsiveContainer>
         ) : null}
