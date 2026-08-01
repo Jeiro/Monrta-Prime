@@ -6,6 +6,7 @@ import { AdminUsersDataProvider, AdminUsersProvider } from "./domains/AdminUsers
 import { WalletDataProvider, WalletProvider } from "./domains/WalletContext";
 import { NotificationsProvider } from "./domains/NotificationsContext";
 import { MarketsProvider } from "./domains/MarketsContext";
+import { InvestmentPlansProvider } from "./domains/InvestmentPlansContext";
 import { AppProvider } from "./AppContext";
 
 /**
@@ -43,9 +44,11 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
               <MarketsProvider>
                 <WalletProvider>
                   <AdminUsersProvider>
-                    <AppProvider>
-                      {children}
-                    </AppProvider>
+                    <InvestmentPlansProvider>
+                      <AppProvider>
+                        {children}
+                      </AppProvider>
+                    </InvestmentPlansProvider>
                   </AdminUsersProvider>
                 </WalletProvider>
               </MarketsProvider>
