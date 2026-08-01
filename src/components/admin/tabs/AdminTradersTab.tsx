@@ -331,17 +331,14 @@ export const AdminTradersTab: React.FC = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1120px] text-left">
+          <table className="w-full text-left">
             <thead className="bg-ground/60 border-b border-line">
               <tr className="text-2xs uppercase tracking-wider text-muted">
                 <th className="px-5 py-3 font-bold">Trader</th>
-                <th className="px-4 py-3 font-bold">Status</th>
-                <th className="px-4 py-3 font-bold">Featured</th>
-                <th className="px-4 py-3 font-bold">Country</th>
+                <th className="px-4 py-3 font-bold">Flags</th>
                 <th className="px-4 py-3 font-bold">Style / Markets</th>
                 <th className="px-4 py-3 font-bold">Performance</th>
-                <th className="px-4 py-3 font-bold">Followers</th>
-                <th className="px-4 py-3 font-bold">Copy Range</th>
+                <th className="px-4 py-3 font-bold">Followers / Range</th>
                 <th className="px-4 py-3 font-bold">Order</th>
                 <th className="px-5 py-3 font-bold text-right">Actions</th>
               </tr>
@@ -359,15 +356,15 @@ export const AdminTradersTab: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-4 py-4">
-                    <TableToggle enabled={trader.active ?? true} onClick={() => toggleTraderField(trader, "active")} onText="Active" offText="Inactive" />
+                    <div className="flex flex-col items-start gap-1.5">
+                      <TableToggle enabled={trader.active ?? true} onClick={() => toggleTraderField(trader, "active")} onText="Active" offText="Inactive" />
+                      <TableToggle enabled={trader.featured ?? false} onClick={() => toggleTraderField(trader, "featured")} onText="Featured" offText="Standard" />
+                    </div>
                   </td>
-                  <td className="px-4 py-4">
-                    <TableToggle enabled={trader.featured ?? false} onClick={() => toggleTraderField(trader, "featured")} onText="Featured" offText="Standard" />
-                  </td>
-                  <td className="px-4 py-4 text-xs text-ink">{trader.country || "Not set"}</td>
                   <td className="px-4 py-4">
                     <p className="text-xs font-bold text-ink">{trader.tradingStyle || "Not set"}</p>
                     <p className="text-2xs text-muted mt-0.5">{trader.markets || "Markets not set"}</p>
+                    <p className="text-2xs text-faint mt-0.5">{trader.country || "Country not set"}</p>
                   </td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-3 text-2xs">
@@ -377,8 +374,10 @@ export const AdminTradersTab: React.FC = () => {
                     </div>
                     <p className="text-2xs text-muted mt-1">{trader.profitDays ?? 0} profit days</p>
                   </td>
-                  <td className="px-4 py-4 text-xs text-ink font-bold">{trader.followers ?? 0}<span className="text-muted font-normal"> / {trader.maxFollowers ?? 500}</span></td>
-                  <td className="px-4 py-4 text-xs text-ink">{moneyRange(trader.minimumCopyAmount, trader.maximumCopyAmount)}</td>
+                  <td className="px-4 py-4">
+                    <p className="font-data text-xs tabular-nums text-ink">{trader.followers ?? 0}<span className="text-muted"> / {trader.maxFollowers ?? 500}</span></p>
+                    <p className="mt-0.5 font-data text-2xs tabular-nums text-muted">{moneyRange(trader.minimumCopyAmount, trader.maximumCopyAmount)}</p>
+                  </td>
                   <td className="px-4 py-4 text-xs text-accent font-bold">{trader.displayOrder ?? "-"}</td>
                   <td className="px-5 py-4">
                     <div className="flex justify-end gap-2">
