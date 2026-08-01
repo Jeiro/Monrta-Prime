@@ -2,6 +2,12 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Zap, Shield, ShieldCheck, BarChart3, Lock, Globe, Layers, Target, Users, TrendingUp, ThumbsUp, Headset, Database, Puzzle, Fingerprint, Mail } from 'lucide-react';
 
+/*
+ * NOTE: superseded by <Proof />, which merged this section with
+ * <Confidence />. Nothing imports it today — it is kept because Proof reuses
+ * its content. Colours are on the token system so it stays usable.
+ */
+
 // Section 2: Why Choose (Platform Trust Section redesigned based on User Request with gold orange theme and container-less sleekness)
 export const WhyMonetaPrime = () => {
   const stats = [
@@ -76,7 +82,7 @@ export const WhyMonetaPrime = () => {
                   <StatIcon className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 
-                <div className="font-display font-black text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-accent via-[#FF9900] to-accent-deep select-none group-hover:scale-105 transition-transform duration-300">
+                <div className="font-display font-black text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-accent to-accent-deep select-none group-hover:scale-105 transition-transform duration-300">
                   {stat.value}
                 </div>
                 <div className="text-xs sm:text-sm font-bold text-muted tracking-widest uppercase mt-3.5 font-sans">

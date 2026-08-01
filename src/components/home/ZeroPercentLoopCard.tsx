@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 
+/*
+ * NOTE: nothing imports this today (the homepage was consolidated into five
+ * bands). Kept rather than deleted because the coin illustration is reusable;
+ * see the metal-gradient exemption comment inside.
+ */
+
 export const ZeroPercentLoopCard = () => {
   const [videoError, setVideoError] = useState(false);
   const [videoPlaying, setVideoPlaying] = useState(false);
@@ -48,6 +54,16 @@ export const ZeroPercentLoopCard = () => {
             >
               <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_15px_25px_rgba(255,255,255,0.12)]">
                 <defs>
+                  {/* EXEMPT FROM THE TOKEN SYSTEM — deliberate, do not "fix".
+                      metalBevel/metalFace simulate a material, not a palette
+                      colour: they are the light-to-dark ramp that makes the
+                      stacked coin read as brushed metal with a bevelled edge.
+                      Swapping them for surface tokens would flatten it into a
+                      grey disc, which is a different object, not a re-themed
+                      one. Same category as the brand logo in Brandmark.tsx.
+                      (Known limitation: a near-white coin has little contrast
+                      on the light theme's #F7F8FA page. Worth a darker second
+                      variant if this component is ever put back into use.) */}
                   <linearGradient id="metalBevel" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#FFFFFF" />
                     <stop offset="30%" stopColor="#E2E8F0" />
@@ -61,9 +77,11 @@ export const ZeroPercentLoopCard = () => {
                     <stop offset="100%" stopColor="#CBD5E1" />
                   </linearGradient>
                   
+                  {/* Decoration, not material — so this one IS on tokens. Was a
+                      raw accent hex ramping into an off-token orange. */}
                   <linearGradient id="accentGlow" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#6AA5FF" />
-                    <stop offset="100%" stopColor="#FF6600" />
+                    <stop offset="0%" stopColor="var(--mp-accent)" />
+                    <stop offset="100%" stopColor="var(--mp-accent-deep)" />
                   </linearGradient>
 
                   <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
@@ -81,8 +99,8 @@ export const ZeroPercentLoopCard = () => {
                 <path d="M50,15 A25,30 0 1,0 50,75 A25,30 0 1,0 50,15 Z M50,28 A12,17 0 1,1 50,62 A12,17 0 1,1 50,28 Z" fill="url(#metalFace)" stroke="#FFFFFF" strokeWidth="0.5" />
                 
                 <g transform="translate(48, 48) scale(0.38)" fill="none" stroke="url(#accentGlow)" strokeWidth="6">
-                  <circle cx="20" cy="20" r="8" fill="#6AA5FF" fillOpacity="0.2" strokeWidth="4" />
-                  <circle cx="50" cy="50" r="8" fill="#6AA5FF" fillOpacity="0.2" strokeWidth="4" />
+                  <circle cx="20" cy="20" r="8" fill="var(--mp-accent)" fillOpacity="0.2" strokeWidth="4" />
+                  <circle cx="50" cy="50" r="8" fill="var(--mp-accent)" fillOpacity="0.2" strokeWidth="4" />
                   <line x1="50" y1="20" x2="20" y2="50" strokeLinecap="round" strokeWidth="5" />
                 </g>
               </svg>
