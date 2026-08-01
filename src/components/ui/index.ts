@@ -39,7 +39,7 @@ export { EmptyState } from "./EmptyState";
 export type { EmptyStateProps } from "./EmptyState";
 
 export { DataTable } from "./DataTable";
-export type { DataTableProps, Column } from "./DataTable";
+export type { DataTableProps, Column, SortState } from "./DataTable";
 
 export { AnimatedNumber } from "./AnimatedNumber";
 export type { AnimatedNumberProps } from "./AnimatedNumber";

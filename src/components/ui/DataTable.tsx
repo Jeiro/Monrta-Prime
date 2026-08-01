@@ -23,10 +23,21 @@ import { Skeleton, SkeletonRows } from "./Skeleton";
  * up down the column and don't jitter when a value ticks.
  */
 
+export interface SortState {
+  key: string;
+  ascending: boolean;
+}
+
 export interface Column<Row> {
   /** Stable key. Also used as the mobile card's label. */
   key: string;
   header: React.ReactNode;
+  /**
+   * Marks the column sortable. The header becomes a real <button> with
+   * aria-sort on the cell — sortable <th>s with bare onClick are invisible
+   * to assistive tech and unreachable by keyboard.
+   */
+  sortable?: boolean;
   /** Cell renderer. Gets the row and its index. */
   cell: (row: Row, index: number) => React.ReactNode;
   /** Right-aligns and applies tabular figures. Use for every money column. */
@@ -56,6 +67,9 @@ export interface DataTableProps<Row> {
   };
   /** Accessible name for the table. */
   caption?: string;
+  /** Current sort. Sorting itself stays with the caller. */
+  sort?: SortState;
+  onSortChange?: (next: SortState) => void;
   className?: string;
 }
 
@@ -72,6 +86,8 @@ export function DataTable<Row>({
   onRowClick,
   empty,
   caption,
+  sort,
+  onSortChange,
   className = "",
 }: DataTableProps<Row>) {
   const showEmpty = !loading && rows.length === 0;
@@ -95,18 +111,45 @@ export function DataTable<Row>({
           {caption && <caption className="sr-only">{caption}</caption>}
           <thead>
             <tr className="border-b border-line">
-              {columns.map((col) => (
-                <th
-                  key={col.key}
-                  scope="col"
-                  className={
-                    `px-4 py-3 text-2xs font-semibold uppercase tracking-[0.09em] text-faint ` +
-                    `${alignClass(col as Column<unknown>)} ${col.width ?? ""}`
-                  }
-                >
-                  {col.header}
-                </th>
-              ))}
+              {columns.map((col) => {
+                const active = sort?.key === col.key;
+                const canSort = col.sortable && onSortChange;
+                return (
+                  <th
+                    key={col.key}
+                    scope="col"
+                    aria-sort={
+                      active ? (sort!.ascending ? "ascending" : "descending") : canSort ? "none" : undefined
+                    }
+                    className={
+                      `px-4 py-3 text-2xs font-semibold uppercase tracking-[0.09em] text-faint ` +
+                      `${alignClass(col as Column<unknown>)} ${col.width ?? ""}`
+                    }
+                  >
+                    {canSort ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onSortChange({ key: col.key, ascending: active ? !sort!.ascending : false })
+                        }
+                        className={
+                          "inline-flex items-center gap-1 rounded-sm uppercase tracking-[0.09em] " +
+                          "transition-colors duration-[--duration-fast] cursor-pointer " +
+                          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent " +
+                          (active ? "text-ink" : "hover:text-ink")
+                        }
+                      >
+                        {col.header}
+                        <span aria-hidden="true" className={active ? "opacity-100" : "opacity-0"}>
+                          {active && sort!.ascending ? "▲" : "▼"}
+                        </span>
+                      </button>
+                    ) : (
+                      col.header
+                    )}
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>

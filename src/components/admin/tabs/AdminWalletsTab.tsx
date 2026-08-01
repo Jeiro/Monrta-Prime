@@ -147,21 +147,21 @@ export const AdminWalletsTab: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <input value={form.coinName} onChange={e => setForm(prev => ({ ...prev, coinName: e.target.value }))} placeholder="Coin Name e.g. USDT" className="w-full px-4 py-2.5 bg-ground border border-line rounded-lg text-xs text-ink focus:outline-none focus:border-accent" />
-          <input value={form.network} onChange={e => setForm(prev => ({ ...prev, network: e.target.value }))} placeholder="Network e.g. TRC20" className="w-full px-4 py-2.5 bg-ground border border-line rounded-lg text-xs text-ink focus:outline-none focus:border-accent" />
-          <input value={form.minimumDeposit} onChange={e => setForm(prev => ({ ...prev, minimumDeposit: e.target.value }))} type="number" min="0" placeholder="Minimum Deposit" className="w-full px-4 py-2.5 bg-ground border border-line rounded-lg text-xs text-ink focus:outline-none focus:border-accent" />
-          <input value={form.displayOrder} onChange={e => setForm(prev => ({ ...prev, displayOrder: e.target.value }))} type="number" placeholder="Display Order" className="w-full px-4 py-2.5 bg-ground border border-line rounded-lg text-xs text-ink focus:outline-none focus:border-accent" />
+          <input value={form.coinName} onChange={e => setForm(prev => ({ ...prev, coinName: e.target.value }))} placeholder="Coin Name e.g. USDT" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
+          <input value={form.network} onChange={e => setForm(prev => ({ ...prev, network: e.target.value }))} placeholder="Network e.g. TRC20" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
+          <input value={form.minimumDeposit} onChange={e => setForm(prev => ({ ...prev, minimumDeposit: e.target.value }))} type="number" min="0" placeholder="Minimum Deposit" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
+          <input value={form.displayOrder} onChange={e => setForm(prev => ({ ...prev, displayOrder: e.target.value }))} type="number" placeholder="Display Order" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
         </div>
 
-        <input value={form.walletAddress} onChange={e => setForm(prev => ({ ...prev, walletAddress: e.target.value }))} placeholder="Wallet Address" className="w-full px-4 py-2.5 bg-ground border border-line rounded-lg text-xs text-ink font-mono focus:outline-none focus:border-accent" />
-        <input value={form.qrCodeUrl} onChange={e => setForm(prev => ({ ...prev, qrCodeUrl: e.target.value }))} placeholder="QR Code URL" className="w-full px-4 py-2.5 bg-ground border border-line rounded-lg text-xs text-ink focus:outline-none focus:border-accent" />
+        <input value={form.walletAddress} onChange={e => setForm(prev => ({ ...prev, walletAddress: e.target.value }))} placeholder="Wallet Address" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 font-data" />
+        <input value={form.qrCodeUrl} onChange={e => setForm(prev => ({ ...prev, qrCodeUrl: e.target.value }))} placeholder="QR Code URL" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
 
         <input ref={fileInputRef} type="file" accept="image/*" onChange={e => setQrFile(e.target.files?.[0] || null)} className="hidden" />
         <button type="button" onClick={() => fileInputRef.current?.click()} className="w-full px-4 py-3 border border-dashed border-line rounded-xl text-xs text-muted hover:border-accent hover:text-accent transition-colors cursor-pointer flex items-center justify-center gap-2">
           <QrCode size={14} /> {qrFile ? qrFile.name : "Upload or Change QR Code"}
         </button>
 
-        <textarea value={form.depositInstructions} onChange={e => setForm(prev => ({ ...prev, depositInstructions: e.target.value }))} rows={3} placeholder="Deposit Instructions" className="w-full px-4 py-2.5 bg-ground border border-line rounded-lg text-xs text-ink focus:outline-none focus:border-accent" />
+        <textarea value={form.depositInstructions} onChange={e => setForm(prev => ({ ...prev, depositInstructions: e.target.value }))} rows={3} placeholder="Deposit Instructions" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <label className="flex items-center gap-2 text-xs text-ink cursor-pointer">
