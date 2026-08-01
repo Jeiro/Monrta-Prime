@@ -5,6 +5,8 @@ import { Check, CheckCircle, Clock3, Edit3, Gift, PauseCircle, PlayCircle, Plus,
 import type { Airdrop } from "../../../types";
 import { getCampaignClaimCount, isAirdropActive } from "../../../services";
 import { formatDateTime } from "../../../lib/format";
+import { Button, Input, Textarea, DataTable, type Column } from "../../ui";
+import type { AirdropClaim } from "../../../types";
 
 type CampaignForm = {
   title: string;
@@ -133,6 +135,58 @@ export const AdminAirdropsTab: React.FC = () => {
     }
   };
 
+  const claimColumns: Column<AirdropClaim>[] = [
+    {
+      key: "user",
+      header: "User",
+      primary: true,
+      cell: claim => (
+        <>
+          <p className="text-xs font-bold text-ink">{claim.userName || claim.userEmail.split("@")[0]}</p>
+          <p className="text-2xs text-muted">{claim.userEmail}</p>
+        </>
+      )
+    },
+    {
+      key: "campaign",
+      header: "Campaign",
+      cell: claim => claim.campaignTitle || airdrops.find(item => item.id === claim.airdropId)?.title || claim.airdropId
+    },
+    {
+      key: "reward",
+      header: "Reward",
+      cell: claim => <span className="font-bold text-accent">{claim.rewardAmount} {claim.token}</span>
+    },
+    {
+      key: "date",
+      header: "Date",
+      hideOnMobile: true,
+      cell: claim => <span className="text-muted">{formatDateTime(claim.date)}</span>
+    },
+    {
+      key: "status",
+      header: "Status",
+      cell: claim => (
+        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-2xs font-bold ${statusClass(claim.status)}`}>
+          {claim.status === "Approved" ? <CheckCircle size={11} /> : claim.status === "Rejected" ? <XCircle size={11} /> : <Clock3 size={11} />} {claim.status}
+        </span>
+      )
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      align: "right",
+      cell: claim => claim.status === "Pending" ? (
+        <div className="flex justify-end gap-2">
+          <Button variant="positive" size="sm" icon={Check} disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "approve")}>Approve</Button>
+          <Button variant="danger" size="sm" icon={X} disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "reject")}>Reject</Button>
+        </div>
+      ) : (
+        <p className="text-2xs text-muted">{claim.payoutTransactionId ? `Paid: ${claim.payoutTransactionId}` : claim.reviewedAt || "Reviewed"}</p>
+      )
+    }
+  ];
+
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
       <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -142,9 +196,7 @@ export const AdminAirdropsTab: React.FC = () => {
           </h1>
           <p className="text-xs text-muted mt-1">Manage campaign availability, claim review, and wallet-credit approvals.</p>
         </div>
-        <button onClick={() => { setIsCreating(true); setEditingId(null); setForm(blankForm()); }} className="flex items-center gap-2 px-4 py-2 bg-accent text-ground font-bold text-xs uppercase rounded-lg hover:opacity-90 cursor-pointer">
-          <Plus size={14} /> Campaign
-        </button>
+        <Button icon={Plus} onClick={() => { setIsCreating(true); setEditingId(null); setForm(blankForm()); }}>Campaign</Button>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -164,26 +216,25 @@ export const AdminAirdropsTab: React.FC = () => {
         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="bg-surface border border-accent/30 rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-ink">{isCreating ? "Create Campaign" : "Edit Campaign"}</h3>
-            <button title="Close" onClick={resetForm} className="p-1.5 rounded-lg bg-line/50 text-muted hover:text-ink cursor-pointer"><X size={14} /></button>
+            <Button variant="ghost" size="icon" title="Close" aria-label="Close campaign form" onClick={resetForm}><X size={14} /></Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <input placeholder="Campaign title" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <input placeholder="Token" value={form.token} onChange={e => setForm(f => ({ ...f, token: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <input placeholder="Reward amount" value={form.rewardAmount} onChange={e => setForm(f => ({ ...f, rewardAmount: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <input type="number" min="1" placeholder="Claim limit" value={form.claimLimit} onChange={e => setForm(f => ({ ...f, claimLimit: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <input type="date" value={form.startDate} onChange={e => setForm(f => ({ ...f, startDate: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink focus:outline-none focus:border-accent" />
-            <input type="date" value={form.endDate} onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink focus:outline-none focus:border-accent" />
+            <Input label="Campaign title" placeholder="Campaign title" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} />
+            <Input label="Token" placeholder="Token" value={form.token} onChange={e => setForm(f => ({ ...f, token: e.target.value }))} />
+            <Input label="Reward amount" placeholder="Reward amount" value={form.rewardAmount} onChange={e => setForm(f => ({ ...f, rewardAmount: e.target.value }))} />
+            <Input label="Claim limit" type="number" min="1" numeric placeholder="Unlimited" value={form.claimLimit} onChange={e => setForm(f => ({ ...f, claimLimit: e.target.value }))} />
+            <Input label="Start date" type="date" value={form.startDate} onChange={e => setForm(f => ({ ...f, startDate: e.target.value }))} />
+            <Input label="End date" type="date" value={form.endDate} onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))} />
           </div>
-          <input placeholder="Eligibility" value={form.eligibility} onChange={e => setForm(f => ({ ...f, eligibility: e.target.value }))} className="w-full px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-          <textarea placeholder="Description" value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} className="w-full min-h-20 px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
+          <Input label="Eligibility" placeholder="Eligibility" value={form.eligibility} onChange={e => setForm(f => ({ ...f, eligibility: e.target.value }))} />
+          <Textarea label="Description" rows={3} placeholder="Description" value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            {/* Raw checkbox: no Checkbox primitive yet — see AdminInvestmentsTab. */}
             <label className="flex items-center gap-2 text-xs font-bold text-ink">
               <input type="checkbox" checked={form.enabled} onChange={e => setForm(f => ({ ...f, enabled: e.target.checked }))} className="accent-accent" />
               Enabled for users
             </label>
-            <button onClick={isCreating ? handleCreate : handleUpdate} className="flex items-center justify-center gap-2 px-6 py-2 bg-accent text-ground font-bold text-xs uppercase rounded-lg hover:opacity-90 cursor-pointer">
-              <Save size={14} /> {isCreating ? "Create" : "Save"}
-            </button>
+            <Button icon={Save} onClick={isCreating ? handleCreate : handleUpdate}>{isCreating ? "Create" : "Save"}</Button>
           </div>
         </motion.div>
       )}
@@ -208,63 +259,33 @@ export const AdminAirdropsTab: React.FC = () => {
                 <div><span className="text-muted">Dates:</span> <span className="text-ink font-bold ml-1">{airdrop.startDate || "Now"} - {airdrop.endDate || "Open"}</span></div>
               </div>
               <div className="flex gap-2 pt-2 border-t border-line/50">
-                <button title={active ? "Disable" : "Enable"} onClick={() => toggleCampaign(airdrop)} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-line/40 border border-line text-ink text-2xs font-bold rounded-lg hover:border-accent/40 cursor-pointer">
+                <Button variant="secondary" size="sm" title={active ? "Disable" : "Enable"} aria-label={`${active ? "Disable" : "Enable"} ${airdrop.title}`} onClick={() => toggleCampaign(airdrop)}>
                   {active ? <PauseCircle size={12} /> : <PlayCircle size={12} />}
-                </button>
-                <button onClick={() => startEdit(airdrop)} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-accent/10 border border-accent/30 text-accent text-2xs font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
-                  <Edit3 size={10} /> Edit
-                </button>
-                <button title="Delete" onClick={() => { if (window.confirm(`Delete "${airdrop.title}"?`)) adminDeleteAirdrop(airdrop.id); }} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-negative/10 border border-negative/30 text-negative text-2xs font-bold rounded-lg hover:bg-negative/20 cursor-pointer">
-                  <Trash2 size={10} />
-                </button>
+                </Button>
+                <Button variant="secondary" size="sm" icon={Edit3} className="flex-1" onClick={() => startEdit(airdrop)}>Edit</Button>
+                <Button variant="danger" size="sm" title="Delete" aria-label={`Delete ${airdrop.title}`} onClick={() => { if (window.confirm(`Delete "${airdrop.title}"?`)) adminDeleteAirdrop(airdrop.id); }}>
+                  <Trash2 size={12} />
+                </Button>
               </div>
             </div>
           );
         })}
       </div>
 
-      <div className="bg-surface border border-line rounded-2xl overflow-hidden">
-        <div className="p-5 border-b border-line flex items-center justify-between gap-3">
+      <div>
+        <div className="mb-3 flex items-center justify-between gap-3">
           <h3 className="text-sm font-bold text-ink flex items-center gap-2"><Clock3 size={16} className="text-accent" /> Claim Review</h3>
           <span className="text-2xs text-muted">{sortedClaims.length} records</span>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left min-w-[760px]">
-            <thead className="bg-ground/60 text-2xs uppercase text-muted">
-              <tr>
-                <th className="px-5 py-3">User</th>
-                <th className="px-4 py-3">Campaign</th>
-                <th className="px-4 py-3">Reward</th>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-5 py-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-line/60">
-              {sortedClaims.map(claim => (
-                <tr key={claim.id} className="hover:bg-ground/30 transition-colors">
-                  <td className="px-5 py-4"><p className="text-xs font-bold text-ink">{claim.userName || claim.userEmail.split("@")[0]}</p><p className="text-2xs text-muted">{claim.userEmail}</p></td>
-                  <td className="px-4 py-4 text-xs text-ink">{claim.campaignTitle || airdrops.find(item => item.id === claim.airdropId)?.title || claim.airdropId}</td>
-                  <td className="px-4 py-4 text-xs font-bold text-accent">{claim.rewardAmount} {claim.token}</td>
-                  <td className="px-4 py-4 text-xs text-muted">{formatDateTime(claim.date)}</td>
-                  <td className="px-4 py-4"><span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-2xs font-bold ${statusClass(claim.status)}`}>{claim.status === "Approved" ? <CheckCircle size={11} /> : claim.status === "Rejected" ? <XCircle size={11} /> : <Clock3 size={11} />} {claim.status}</span></td>
-                  <td className="px-5 py-4">
-                    {claim.status === "Pending" ? (
-                      <div className="flex justify-end gap-2">
-                        <button disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "approve")} className="flex items-center gap-1.5 px-3 py-2 bg-positive text-ink font-bold text-2xs uppercase rounded-lg hover:bg-positive disabled:opacity-60 cursor-pointer"><Check size={12} /> Approve</button>
-                        <button disabled={busyClaim === claim.id} onClick={() => reviewClaim(claim.id, "reject")} className="flex items-center gap-1.5 px-3 py-2 bg-negative text-ink font-bold text-2xs uppercase rounded-lg hover:bg-negative disabled:opacity-60 cursor-pointer"><X size={12} /> Reject</button>
-                      </div>
-                    ) : (
-                      <p className="text-right text-2xs text-muted">{claim.payoutTransactionId ? `Paid: ${claim.payoutTransactionId}` : claim.reviewedAt || "Reviewed"}</p>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {!sortedClaims.length && <div className="py-12 text-center text-sm text-muted">No airdrop claims submitted yet.</div>}
+        <DataTable
+          columns={claimColumns}
+          rows={sortedClaims}
+          rowKey={claim => claim.id}
+          caption="Airdrop claim review"
+          empty={{ icon: Gift, title: "No airdrop claims submitted yet." }}
+        />
       </div>
+
     </motion.div>
   );
 };
