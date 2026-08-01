@@ -121,7 +121,14 @@ export const Proof = () => (
           --mp-ground gradient running from opaque at the left/bottom to clear,
           so the image sits inside the palette rather than on top of it, in
           both themes. aria-hidden — it is atmosphere, not information. */}
-      <div className="relative mt-8 overflow-hidden rounded-2xl border border-line" aria-hidden="true">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="relative mt-8 overflow-hidden rounded-2xl border border-line"
+        aria-hidden="true"
+      >
         <img
           src={proofTeam1200}
           srcSet={`${proofTeam600} 600w, ${proofTeam1200} 1200w`}
@@ -138,7 +145,7 @@ export const Proof = () => (
           Markets, balances and transaction history in one place, with the same
           data behind every view.
         </p>
-      </div>
+      </motion.div>
 
       {/* Press strip */}
       <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-line/60 pt-6">
