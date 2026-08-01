@@ -145,9 +145,10 @@ export const AdminUsersProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 };
 
 export const useAdminUsers = (): AdminUsersContextType => {
+  const data = useAdminUsersData();
   const context = useContext(AdminUsersContext);
   if (context === undefined) {
     throw new Error("useAdminUsers must be used inside an AdminUsersProvider");
   }
-  return { ...useAdminUsersData(), ...context };
+  return { ...data, ...context };
 };

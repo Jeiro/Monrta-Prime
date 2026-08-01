@@ -444,10 +444,10 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 };
 
 export const useWallet = (): WalletDataContextType & WalletActionsContextType => {
+  const { adminTransactions, refreshTransactions, depositWallets, enabledDepositWallets, adminWallets } = useWalletData();
   const context = useContext(WalletActionsContext);
   if (context === undefined) {
     throw new Error("useWallet must be used inside a WalletProvider");
   }
-  const { adminTransactions, refreshTransactions, depositWallets, enabledDepositWallets, adminWallets } = useWalletData();
   return { adminTransactions, refreshTransactions, depositWallets, enabledDepositWallets, adminWallets, ...context };
 };

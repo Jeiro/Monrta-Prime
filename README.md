@@ -61,15 +61,49 @@ npm run lint    # tsc --noEmit (typecheck)
 ## Project structure
 
 ```
-src/lib/supabase.ts          Supabase client (memoized on Clerk session) + storage helpers
-src/hooks/useCurrentUser.ts  Identity/role hook (Clerk + Supabase)
-src/hooks/data/              One hook per feature (traders, transactions, investments, …)
-src/context/OrbitContext.tsx Assembles all hooks, exposes them via useOrbit()
-src/pages/ , src/components/ UI
-api/send-email.ts            Server-side Resend handler
-server.ts                    Express server (dev + prod) + /api routes
-*.sql                        Supabase schema / RLS / RPC migrations (see MIGRATION_NOTES.md)
+src/lib/supabase.ts            Supabase client (memoized on Clerk session) + storage helpers
+src/hooks/useCurrentUser.ts    Identity/role hook (Clerk + Supabase) — routing guards use this
+src/hooks/data/                One hook per feature (traders, transactions, investments, …):
+                               the Supabase reads/writes, with no business logic
+src/context/AppProviders.tsx   Composes every domain provider, rendered once in App.tsx
+src/context/domains/           One context per domain — see below
+src/pages/ , src/components/   UI
+api/send-email.ts              Server-side Resend handler
+server.ts                      Express server (dev + prod) + /api routes
+*.sql                          Supabase schema / RLS / RPC migrations (see MIGRATION_NOTES.md)
 ```
+
+### State: the domain contexts
+
+State lives in `src/context/domains/`, one context per domain. Each mostly
+wraps the matching hook in `src/hooks/data/` and adds the business logic —
+validation, notifications, audit logging, transactional email — around it. A
+component imports only the domains it uses, so it only re-renders when those
+change.
+
+| Context | Owns | Wraps |
+|---|---|---|
+| `SessionContext` | the `user` object, `authReady`, the Supabase client, the pending-debit reservation helpers | `useCurrentUser` |
+| `AuditLogContext` | `handleLog` + the log array | — |
+| `SiteSettingsContext` | `siteContent`, `appSettings` | `useSiteSettings` |
+| `AdminUsersContext` | users directory, admin balance/status handlers | `useUsersDirectory` |
+| `WalletContext` | deposit/withdraw, deposit wallets, approval queues, wallet feedback | `useTransactions`, `useDepositWallets`, `useWalletFeedback` |
+| `NotificationsContext` | in-app notifications + transactional email dispatch | `useNotifications` |
+| `MarketsContext` | live crypto/stock prices | — (polls `/api/markets`) |
+| `InvestmentPlansContext` | plan catalog, active investments | `useInvestmentPlans`, `useActiveInvestments` |
+| `TradersContext` | trader catalog, copy trading | `useTraders`, `useCopyTrades` |
+| `TradingContext` | spot buy/sell, holdings, live marks | `usePortfolio` |
+| `AirdropsContext` | campaigns + claims | `useAirdrops`, `useAirdropClaims` |
+| `KycContext` | submission + admin review | `useKyc` |
+| `SupportContext` | tickets, user and help-desk sides | `useSupportTickets` |
+| `AnnouncementsContext` | platform bulletins | `useAnnouncements` |
+
+`AppProviders.tsx` nests these in dependency order, and that order is
+load-bearing: a provider may only read contexts mounted above it. The comment
+at the top of that file explains why each one sits where it does. Two domains
+(`AdminUsersContext`, `WalletContext`) export a low-level data provider
+separately from their handler provider, because their raw data is needed by
+domains that themselves sit below the handlers.
 
 ## Before going to production
 
