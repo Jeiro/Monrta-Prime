@@ -30,6 +30,7 @@ import type { KycSubmission, Transaction } from "../../../types";
 import type { CoreUserProfile } from "../../../hooks/data/useUsersDirectory";
 import type { AdminActiveInvestment } from "../../../hooks/data/useActiveInvestments";
 import type { AdminCopyTrade } from "../../../hooks/data/useCopyTrades";
+import { Button, Input, Textarea, DataTable, type Column } from "../../ui";
 
 type Feedback = { type: "success" | "error"; message: string };
 type KycViewStatus = "pending" | "approved" | "rejected" | "unverified";
@@ -206,6 +207,60 @@ export const AdminUsersTab: React.FC = () => {
     setBalanceDrafts(prev => ({ ...prev, [user.email]: prev[user.email] ?? user.balance.toString() }));
   };
 
+  const userColumns: Column<CoreUserProfile>[] = [
+    {
+      key: "name",
+      header: "Name",
+      primary: true,
+      cell: user => (
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 shrink-0 rounded-full bg-gradient-to-br from-accent to-accent-deep flex items-center justify-center text-ground text-xs font-black">
+            {getInitials(user.name || "")}
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-ink truncate">{user.name}</p>
+            <p className="text-2xs text-muted">{user.accountType || user.username || "Standard account"}</p>
+          </div>
+        </div>
+      )
+    },
+    { key: "email", header: "Email", cell: user => <span className="text-muted">{user.email}</span> },
+    { key: "balance", header: "Balance", numeric: true, cell: user => formatMoney(user.balance) },
+    {
+      key: "kyc",
+      header: "KYC Status",
+      cell: user => {
+        const kycStatus: KycViewStatus = allKycSubmissions[user.email]?.status || "unverified";
+        return (
+          <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${kycStyles[kycStatus]}`}>
+            {kycStatus.toUpperCase()}
+          </span>
+        );
+      }
+    },
+    {
+      key: "status",
+      header: "Account Status",
+      cell: user => (
+        <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${statusStyles[user.status as AccountStatus]}`}>
+          {user.status.toUpperCase()}
+        </span>
+      )
+    },
+    {
+      key: "registered",
+      header: "Registration Date",
+      hideOnMobile: true,
+      cell: user => <span className="text-muted">{formatDate(user.registrationDate || undefined)}</span>
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      align: "right",
+      cell: user => <Button size="sm" icon={Edit3} onClick={() => openDrawer(user)}>Manage</Button>
+    }
+  ];
+
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
       <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
@@ -238,13 +293,13 @@ export const AdminUsersTab: React.FC = () => {
             </h2>
             <p className="text-2xs text-muted mt-1">Use Manage to open a full account operations panel.</p>
           </div>
-          <div className="relative w-full lg:w-80">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
-            <input
+          <div className="w-full lg:w-80">
+            <Input
               value={searchQuery}
               onChange={event => setSearchQuery(event.target.value)}
               placeholder="Search users"
-              className="w-full pl-9 pr-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent"
+              aria-label="Search users"
+              prefix={<Search size={14} />}
             />
           </div>
         </div>
@@ -259,60 +314,13 @@ export const AdminUsersTab: React.FC = () => {
 
         {!isLoading && !userResult.error && (
           <>
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[1080px] text-left">
-                <thead className="bg-ground/60 border-b border-line">
-                  <tr className="text-2xs uppercase tracking-wider text-muted">
-                    <th className="px-5 py-3 font-bold">Avatar</th>
-                    <th className="px-4 py-3 font-bold">Name</th>
-                    <th className="px-4 py-3 font-bold">Email</th>
-                    <th className="px-4 py-3 font-bold">Balance</th>
-                    <th className="px-4 py-3 font-bold">KYC Status</th>
-                    <th className="px-4 py-3 font-bold">Account Status</th>
-                    <th className="px-4 py-3 font-bold">Registration Date</th>
-                    <th className="px-5 py-3 font-bold text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-line/70">
-                  {filteredUsers.map(user => {
-                    const kycStatus: KycViewStatus = allKycSubmissions[user.email]?.status || "unverified";
-                    return (
-                      <tr key={user.email} className="hover:bg-ground/40 transition-colors">
-                        <td className="px-5 py-4">
-                          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-accent to-accent-deep flex items-center justify-center text-ground text-xs font-black">
-                            {getInitials(user.name || "")}
-                          </div>
-                        </td>
-                        <td className="px-4 py-4">
-                          <p className="text-sm font-bold text-ink">{user.name}</p>
-                          <p className="text-2xs text-muted">{user.accountType || user.username || "Standard account"}</p>
-                        </td>
-                        <td className="px-4 py-4 text-xs text-muted">{user.email}</td>
-                        <td className="px-4 py-4 text-xs font-bold text-ink font-data">{formatMoney(user.balance)}</td>
-                        <td className="px-4 py-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${kycStyles[kycStatus]}`}>
-                            {kycStatus.toUpperCase()}
-                          </span>
-                        </td>
-                        <td className="px-4 py-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-2xs font-bold ${statusStyles[user.status as AccountStatus]}`}>
-                            {user.status.toUpperCase()}
-                          </span>
-                        </td>
-                        <td className="px-4 py-4 text-xs text-muted">{formatDate(user.registrationDate || undefined)}</td>
-                        <td className="px-5 py-4">
-                          <div className="flex justify-end">
-                            <button onClick={() => openDrawer(user)} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-accent text-ground font-bold text-2xs uppercase rounded-lg hover:bg-accent transition-colors cursor-pointer">
-                              <Edit3 size={12} /> Manage
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+            <DataTable
+              columns={userColumns}
+              rows={filteredUsers}
+              rowKey={user => user.email}
+              caption="User accounts"
+              className="px-5 pb-5"
+            />
 
             {filteredUsers.length === 0 && (
               <StateMessage title="No users found" message={searchQuery ? "No accounts match your current search." : "No user accounts have been registered yet."} />
@@ -408,9 +416,7 @@ const UserDrawer: React.FC<{
               <p className="text-2xs text-muted truncate">{user.email}</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg bg-surface border border-line text-muted hover:text-ink hover:border-accent cursor-pointer" title="Close panel">
-            <X size={16} />
-          </button>
+          <Button variant="secondary" size="icon" onClick={onClose} title="Close panel" aria-label="Close panel"><X size={16} /></Button>
         </div>
 
         <div className="p-5 space-y-5">
@@ -431,17 +437,17 @@ const UserDrawer: React.FC<{
               <Metric label="Portfolio Value" value={formatMoney(user.portfolioValue)} />
             </div>
             <div className="mt-3 grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2">
-              <input
+              <Input
                 type="number"
                 min="0"
+                numeric
+                prefix="$"
                 value={balanceDraft}
                 onChange={event => onBalanceChange(event.target.value)}
-                className="w-full px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent"
+                aria-label="Set wallet balance"
                 placeholder="Set wallet balance"
               />
-              <button onClick={onSaveBalance} disabled={balanceBusy} className="flex items-center justify-center gap-1.5 px-4 py-2 bg-accent text-ground font-bold text-2xs uppercase rounded-lg hover:bg-accent disabled:opacity-60 cursor-pointer">
-                {balanceBusy ? <Loader2 size={12} className="animate-spin" /> : <DollarSign size={12} />} Save Balance
-              </button>
+              <Button onClick={onSaveBalance} loading={balanceBusy} icon={DollarSign} className="self-start">Save Balance</Button>
             </div>
           </Section>
 
@@ -463,18 +469,16 @@ const UserDrawer: React.FC<{
               <p className="text-xs text-muted">This user has not submitted identity documents.</p>
             )}
             <div className="mt-3 flex flex-col sm:flex-row gap-2">
-              <button onClick={onApproveKyc} className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-positive text-ink font-bold text-xs uppercase rounded-lg hover:bg-positive cursor-pointer">
-                <Check size={14} /> Approve KYC
-              </button>
-              <input
-                value={kycReason}
-                onChange={event => onKycReasonChange(event.target.value)}
-                placeholder="Rejection reason"
-                className="flex-1 px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent"
-              />
-              <button onClick={onRejectKyc} className="flex items-center justify-center gap-1.5 px-4 py-2 bg-negative text-ink font-bold text-xs uppercase rounded-lg hover:bg-negative cursor-pointer">
-                <X size={14} /> Reject
-              </button>
+              <Button variant="positive" icon={Check} onClick={onApproveKyc} className="flex-1">Approve KYC</Button>
+              <div className="flex-1">
+                <Input
+                  value={kycReason}
+                  onChange={event => onKycReasonChange(event.target.value)}
+                  placeholder="Rejection reason"
+                  aria-label="KYC rejection reason"
+                />
+              </div>
+              <Button variant="danger" icon={X} onClick={onRejectKyc}>Reject</Button>
             </div>
           </Section>
 
@@ -514,26 +518,20 @@ const UserDrawer: React.FC<{
           </div>
 
           <Section title="Admin Notes" icon={<Edit3 size={15} className="text-accent" />}>
-            <textarea
+            <Textarea
               rows={4}
               value={adminNote}
               onChange={event => onAdminNoteChange(event.target.value)}
               placeholder="Private admin notes for this review session"
-              className="w-full px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none"
+              aria-label="Admin notes"
             />
           </Section>
 
           <Section title="Account Actions" icon={<AlertTriangle size={15} className="text-warning" />}>
             <div className="flex flex-wrap gap-2">
-              <button onClick={onActivate} className="flex items-center gap-1.5 px-3 py-2 bg-positive/10 border border-positive/30 text-positive text-2xs font-bold rounded-lg hover:bg-positive/20 cursor-pointer">
-                <UserCheck size={12} /> Activate
-              </button>
-              <button onClick={onSuspend} className="flex items-center gap-1.5 px-3 py-2 bg-warning-soft border border-warning-line text-warning text-2xs font-bold rounded-lg hover:bg-warning/15 cursor-pointer">
-                <Ban size={12} /> Suspend
-              </button>
-              <button onClick={onResetPassword} className="flex items-center gap-1.5 px-3 py-2 bg-accent/10 border border-accent/30 text-accent text-2xs font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
-                <Key size={12} /> Reset Password
-              </button>
+              <Button variant="positive" size="sm" icon={UserCheck} onClick={onActivate}>Activate</Button>
+              <Button variant="secondary" size="sm" icon={Ban} onClick={onSuspend}>Suspend</Button>
+              <Button variant="secondary" size="sm" icon={Key} onClick={onResetPassword}>Reset Password</Button>
             </div>
           </Section>
         </div>
