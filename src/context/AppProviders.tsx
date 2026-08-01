@@ -5,6 +5,7 @@ import { SiteSettingsProvider } from "./domains/SiteSettingsContext";
 import { AdminUsersDataProvider, AdminUsersProvider } from "./domains/AdminUsersContext";
 import { WalletDataProvider, WalletProvider } from "./domains/WalletContext";
 import { NotificationsProvider } from "./domains/NotificationsContext";
+import { MarketsProvider } from "./domains/MarketsContext";
 import { AppProvider } from "./AppContext";
 
 /**
@@ -39,13 +40,15 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
         <AdminUsersDataProvider>
           <WalletDataProvider>
             <NotificationsProvider>
-              <WalletProvider>
-                <AdminUsersProvider>
-                  <AppProvider>
-                    {children}
-                  </AppProvider>
-                </AdminUsersProvider>
-              </WalletProvider>
+              <MarketsProvider>
+                <WalletProvider>
+                  <AdminUsersProvider>
+                    <AppProvider>
+                      {children}
+                    </AppProvider>
+                  </AdminUsersProvider>
+                </WalletProvider>
+              </MarketsProvider>
             </NotificationsProvider>
           </WalletDataProvider>
         </AdminUsersDataProvider>
