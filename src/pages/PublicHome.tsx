@@ -3,7 +3,9 @@ import { useSeo } from "../lib/useSeo";
 import { useSession } from "../context/domains/SessionContext";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
-import { TradeFeatures, InvestmentPlansSection, Proof, Closing, Footer, HomeVideos } from "../components/HomeSections";
+// No <Footer> here: App.tsx renders one globally for every non-admin,
+// non-auth route, so rendering it again stacked two footers on the homepage.
+import { TradeFeatures, InvestmentPlansSection, Proof, Closing, HomeVideos } from "../components/HomeSections";
 import { Brandmark } from "../components/ui/Brandmark";
 import heroTerminal1600 from "../assets/hero-market-terminal-1600.jpg";
 import heroTerminal800 from "../assets/hero-market-terminal-800.jpg";
@@ -266,8 +268,6 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
           with placeholder or sample names. <Testimonials /> still exists and
           now takes its content as a prop; give it real data to bring it back. */}
       <Closing onNavigate={onNavigate} />
-
-      <Footer onNavigate={onNavigate} />
     </div>
   );
 };
