@@ -5,6 +5,7 @@ import { getDepositWalletLabel, sortDepositWallets } from "../../../services";
 import type { DepositWallet } from "../../../types";
 import { motion } from "motion/react";
 import { Check, Copy, CreditCard, Edit3, Plus, QrCode, Save, Trash2 } from "lucide-react";
+import { Button, Input, Textarea } from "../../ui";
 
 type WalletForm = {
   id: string;
@@ -140,37 +141,44 @@ export const AdminWalletsTab: React.FC = () => {
             {isEditing ? "Edit Deposit Wallet" : "Add Deposit Wallet"}
           </h2>
           {isEditing && (
-            <button type="button" onClick={resetForm} className="text-2xs text-muted hover:text-ink cursor-pointer">
-              New Wallet
-            </button>
+            <Button type="button" variant="ghost" size="sm" onClick={resetForm}>New Wallet</Button>
           )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <input value={form.coinName} onChange={e => setForm(prev => ({ ...prev, coinName: e.target.value }))} placeholder="Coin Name e.g. USDT" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
-          <input value={form.network} onChange={e => setForm(prev => ({ ...prev, network: e.target.value }))} placeholder="Network e.g. TRC20" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
-          <input value={form.minimumDeposit} onChange={e => setForm(prev => ({ ...prev, minimumDeposit: e.target.value }))} type="number" min="0" placeholder="Minimum Deposit" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
-          <input value={form.displayOrder} onChange={e => setForm(prev => ({ ...prev, displayOrder: e.target.value }))} type="number" placeholder="Display Order" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
+          <Input label="Coin name" value={form.coinName} onChange={e => setForm(prev => ({ ...prev, coinName: e.target.value }))} placeholder="e.g. USDT" />
+          <Input label="Network" value={form.network} onChange={e => setForm(prev => ({ ...prev, network: e.target.value }))} placeholder="e.g. TRC20" />
+          <Input label="Minimum deposit" value={form.minimumDeposit} onChange={e => setForm(prev => ({ ...prev, minimumDeposit: e.target.value }))} type="number" min="0" prefix="$" numeric placeholder="0" />
+          <Input label="Display order" value={form.displayOrder} onChange={e => setForm(prev => ({ ...prev, displayOrder: e.target.value }))} type="number" numeric placeholder="0" />
         </div>
 
-        <input value={form.walletAddress} onChange={e => setForm(prev => ({ ...prev, walletAddress: e.target.value }))} placeholder="Wallet Address" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 font-data" />
-        <input value={form.qrCodeUrl} onChange={e => setForm(prev => ({ ...prev, qrCodeUrl: e.target.value }))} placeholder="QR Code URL" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
+        <Input label="Wallet address" value={form.walletAddress} onChange={e => setForm(prev => ({ ...prev, walletAddress: e.target.value }))} placeholder="Wallet Address" className="font-data" />
+        <Input label="QR code URL" value={form.qrCodeUrl} onChange={e => setForm(prev => ({ ...prev, qrCodeUrl: e.target.value }))} placeholder="QR Code URL" />
 
+        {/* Raw file input on purpose: it is visually hidden and only ever
+            clicked programmatically by the button below. Input would wrap it
+            in a labelled field wrapper, which is exactly what must not render. */}
         <input ref={fileInputRef} type="file" accept="image/*" onChange={e => setQrFile(e.target.files?.[0] || null)} className="hidden" />
-        <button type="button" onClick={() => fileInputRef.current?.click()} className="w-full px-4 py-3 border border-dashed border-line rounded-xl text-xs text-muted hover:border-accent hover:text-accent transition-colors cursor-pointer flex items-center justify-center gap-2">
-          <QrCode size={14} /> {qrFile ? qrFile.name : "Upload or Change QR Code"}
-        </button>
+        <Button
+          type="button"
+          variant="secondary"
+          block
+          icon={QrCode}
+          onClick={() => fileInputRef.current?.click()}
+          className="h-auto border-dashed py-3 text-xs font-medium text-muted"
+        >
+          {qrFile ? qrFile.name : "Upload or Change QR Code"}
+        </Button>
 
-        <textarea value={form.depositInstructions} onChange={e => setForm(prev => ({ ...prev, depositInstructions: e.target.value }))} rows={3} placeholder="Deposit Instructions" className="w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-[--duration-fast] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20" />
+        <Textarea label="Deposit instructions" value={form.depositInstructions} onChange={e => setForm(prev => ({ ...prev, depositInstructions: e.target.value }))} rows={3} placeholder="Deposit Instructions" />
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          {/* Raw checkbox: no Checkbox primitive yet — see AdminInvestmentsTab. */}
           <label className="flex items-center gap-2 text-xs text-ink cursor-pointer">
             <input type="checkbox" checked={form.enabled} onChange={e => setForm(prev => ({ ...prev, enabled: e.target.checked }))} className="accent-accent" />
             Enabled
           </label>
-          <button type="submit" disabled={isSaving} className="flex items-center justify-center gap-2 px-8 py-3 bg-accent text-ground font-bold text-xs uppercase rounded-xl hover:opacity-90 disabled:opacity-60 cursor-pointer">
-            <Save size={14} /> {isSaving ? "Saving..." : "Save Wallet"}
-          </button>
+          <Button type="submit" loading={isSaving} icon={Save}>Save Wallet</Button>
         </div>
       </form>
 
@@ -195,18 +203,18 @@ export const AdminWalletsTab: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
-                  <button type="button" onClick={() => handleCopy(wallet)} className="p-2 rounded-lg bg-ground border border-line text-muted hover:text-accent hover:border-accent cursor-pointer" title="Copy address">
+                  <Button type="button" variant="secondary" size="icon" onClick={() => handleCopy(wallet)} title="Copy address" aria-label={`Copy ${getDepositWalletLabel(wallet)} address`}>
                     {copiedKey === wallet.id ? <Check size={14} className="text-positive" /> : <Copy size={14} />}
-                  </button>
-                  <button type="button" onClick={() => setForm(walletToForm(wallet))} className="p-2 rounded-lg bg-ground border border-line text-muted hover:text-accent hover:border-accent cursor-pointer" title="Edit wallet">
+                  </Button>
+                  <Button type="button" variant="secondary" size="icon" onClick={() => setForm(walletToForm(wallet))} title="Edit wallet" aria-label={`Edit ${getDepositWalletLabel(wallet)}`}>
                     <Edit3 size={14} />
-                  </button>
-                  <button type="button" onClick={() => handleToggle(wallet)} className="px-3 py-2 rounded-lg bg-ground border border-line text-2xs text-muted hover:text-ink cursor-pointer">
+                  </Button>
+                  <Button type="button" variant="secondary" size="sm" onClick={() => handleToggle(wallet)}>
                     {wallet.enabled ? "Disable" : "Enable"}
-                  </button>
-                  <button type="button" onClick={() => handleDelete(wallet)} className="p-2 rounded-lg bg-ground border border-line text-muted hover:text-negative hover:border-negative/50 cursor-pointer" title="Delete wallet">
+                  </Button>
+                  <Button type="button" variant="secondary" size="icon" onClick={() => handleDelete(wallet)} title="Delete wallet" aria-label={`Delete ${getDepositWalletLabel(wallet)}`} className="hover:text-negative hover:border-negative/50">
                     <Trash2 size={14} />
-                  </button>
+                  </Button>
                 </div>
               </div>
 
