@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Users, TrendingUp, ThumbsUp, Headset, Lock, Shield, Zap, Globe, Fingerprint, BarChart3, Database } from 'lucide-react';
 import { Section, Container, SectionHeading } from '../ui/Layout';
+import proofTeam1200 from '../../assets/proof-team-1200.jpg';
+import proofTeam600 from '../../assets/proof-team-600.jpg';
 
 /**
  * Consolidated trust band.
@@ -109,6 +111,33 @@ export const Proof = () => (
             <p className="mt-1.5 text-sm leading-relaxed text-muted">{desc}</p>
           </div>
         ))}
+      </div>
+
+      {/* Photograph.
+          This band makes a claim about people ("built for people who move real
+          money") and was carried entirely by icons. The photo grounds it.
+
+          Treatment matches the hero: desaturated, dimmed, and covered by a
+          --mp-ground gradient running from opaque at the left/bottom to clear,
+          so the image sits inside the palette rather than on top of it, in
+          both themes. aria-hidden — it is atmosphere, not information. */}
+      <div className="relative mt-8 overflow-hidden rounded-2xl border border-line" aria-hidden="true">
+        <img
+          src={proofTeam1200}
+          srcSet={`${proofTeam600} 600w, ${proofTeam1200} 1200w`}
+          sizes="(min-width: 1024px) 1024px, 100vw"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="h-48 w-full object-cover opacity-[0.62] saturate-[0.55] sm:h-64"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-ground via-ground/60 to-ground/15" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ground via-ground/40 to-transparent" />
+        <p className="absolute bottom-5 left-5 right-5 max-w-md text-sm leading-relaxed text-muted sm:bottom-6 sm:left-6">
+          <span className="block text-sm font-semibold text-ink">A platform people work in every day</span>
+          Markets, balances and transaction history in one place, with the same
+          data behind every view.
+        </p>
       </div>
 
       {/* Press strip */}

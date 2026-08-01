@@ -5,6 +5,8 @@ import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
 import { TradeFeatures, InvestmentPlansSection, Proof, Closing, Footer, HomeVideos } from "../components/HomeSections";
 import { Brandmark } from "../components/ui/Brandmark";
+import heroTerminal1600 from "../assets/hero-market-terminal-1600.jpg";
+import heroTerminal800 from "../assets/hero-market-terminal-800.jpg";
 
 /**
  * The hero's orbiting asset marks.
@@ -77,8 +79,38 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
       {/* 1. HERO BANNER: METRICS & EXQUISITE CELESTIAL ORBITING SYSTEM */}
       <section className="relative flex flex-col justify-center items-center bg-gradient-to-b from-ground via-panel to-panel border-b border-line/30 px-4 overflow-hidden pt-14 sm:pt-16 pb-14">
         
+        {/* Photographic base layer.
+            The hero was 100% gradients, SVG and icons before this. The photo is
+            a real market terminal, and it is deliberately the bottom layer
+            rather than a framed image beside the copy: it gives the section
+            texture without competing with the headline.
+
+            Treatment: the image is desaturated and dimmed, then covered by a
+            --mp-ground gradient that is opaque at the bottom and clears toward
+            the top. That is what keeps it reading as part of the palette
+            instead of a bright rectangle — the section's own ground colour
+            literally sits on top of it, so it inherits the theme. In light
+            mode the same gradient is near-white, which washes the photo out to
+            a pale texture rather than leaving a dark block on a light page.
+
+            aria-hidden + empty alt: it carries no information the copy does not
+            already state, so a screen reader should skip it. */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <img
+            src={heroTerminal1600}
+            srcSet={`${heroTerminal800} 800w, ${heroTerminal1600} 1600w`}
+            sizes="100vw"
+            alt=""
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            className="h-full w-full object-cover opacity-[0.3] saturate-50"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-ground/55 via-ground/80 to-ground" />
+        </div>
+
         {/* Subtle grid background effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(rgba(106,165,255,0.12)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(var(--mp-accent)_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.12] pointer-events-none" />
         <div
           className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-accent/5 rounded-full blur-[140px] pointer-events-none"
           style={{ width: "min(150vw, 37.5rem)", height: "min(150vw, 37.5rem)" }}
