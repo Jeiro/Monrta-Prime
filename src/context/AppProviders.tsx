@@ -1,6 +1,7 @@
 import React from "react";
 import { AuditLogProvider } from "./domains/AuditLogContext";
 import { SessionProvider } from "./domains/SessionContext";
+import { SiteSettingsProvider } from "./domains/SiteSettingsContext";
 import { AppProvider } from "./AppContext";
 
 /**
@@ -22,9 +23,11 @@ import { AppProvider } from "./AppContext";
 export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <AuditLogProvider>
     <SessionProvider>
-      <AppProvider>
-        {children}
-      </AppProvider>
+      <SiteSettingsProvider>
+        <AppProvider>
+          {children}
+        </AppProvider>
+      </SiteSettingsProvider>
     </SessionProvider>
   </AuditLogProvider>
 );

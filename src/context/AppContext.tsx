@@ -42,7 +42,7 @@ import { useEmailNotifications } from "../hooks/useEmailNotifications";
 import type { TransactionalEmailEvent } from "../lib/emailClient";
 import { useSession } from "./domains/SessionContext";
 import { useAuditLog, useAuditLogWriter } from "./domains/AuditLogContext";
-import { useSiteSettings } from "../hooks/data/useSiteSettings";
+import { useSiteSettings } from "./domains/SiteSettingsContext";
 import { useTraders } from "../hooks/data/useTraders";
 import { useAnnouncements } from "../hooks/data/useAnnouncements";
 import { useDepositWallets } from "../hooks/data/useDepositWallets";
@@ -204,7 +204,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const { handleLog } = useAuditLogWriter();
   const { adminAuditLogs } = useAuditLog();
   const { fetchNotifications, saveNotificationToDb, markReadInDb, markManyReadInDb, deleteNotificationInDb } = useNotifications(supabase);
-  const { siteContent, appSettings, updateSiteContent, updateAppSettings } = useSiteSettings(supabase);
+  const { siteContent, appSettings, updateSiteContent, updateAppSettings } = useSiteSettings();
   const {
     plans,
     createPlan: createInvestmentPlanInDb,
