@@ -2,7 +2,7 @@ import React from "react";
 import { useSeo } from "../lib/useSeo";
 import { useSession } from "../context/domains/SessionContext";
 import { ArrowUpRight } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 // No <Footer> here: App.tsx renders one globally for every non-admin,
 // non-auth route, so rendering it again stacked two footers on the homepage.
 import { TradeFeatures, InvestmentPlansSection, Proof, Closing, HomeVideos } from "../components/HomeSections";
@@ -74,6 +74,9 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
     path: "/",
   });
   const { user } = useSession();
+  // Matches every other motion consumer in the app (RouteTransition,
+  // Progress, AnimatedNumber, ScrollAnimatedBackground).
+  const reduceMotion = useReducedMotion();
 
   return (
     <div className="min-h-screen bg-transparent text-ink font-sans selection:bg-accent/20 overflow-x-hidden pt-0">
@@ -97,7 +100,18 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
 
             aria-hidden + empty alt: it carries no information the copy does not
             already state, so a screen reader should skip it. */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        {/* Fades in on mount rather than on scroll: it is above the fold, so a
+            whileInView trigger would fire immediately anyway. Opacity only —
+            a y-translate on a full-bleed backdrop reads as the page shifting
+            under the headline. Duration/easing match the page's other fades
+            (see Proof.tsx). */}
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="absolute inset-0 overflow-hidden pointer-events-none"
+          aria-hidden="true"
+        >
           <img
             src={heroTerminal1600}
             srcSet={`${heroTerminal800} 800w, ${heroTerminal1600} 1600w`}
@@ -109,7 +123,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
             className="h-full w-full object-cover opacity-[0.3] saturate-50"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-ground/55 via-ground/80 to-ground" />
-        </div>
+        </motion.div>
 
         {/* Subtle grid background effects */}
         <div className="absolute inset-0 bg-[radial-gradient(var(--mp-accent)_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.12] pointer-events-none" />
@@ -196,8 +210,17 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
             {ORBIT_RINGS.map(ring => (
               <motion.div
                 key={ring.id}
-                animate={{ rotate: ring.direction * 360 }}
-                transition={{ repeat: Infinity, duration: ring.duration, ease: "linear" }}
+                // Reduced motion: the rings hold still. A continuous, unending
+                // 360deg loop is the archetypal case the preference exists for,
+                // and there is no information in the spin — the composition
+                // reads the same frozen. Same for the counter-rotation below,
+                // which only exists to cancel this one out.
+                animate={reduceMotion ? { rotate: 0 } : { rotate: ring.direction * 360 }}
+                transition={
+                  reduceMotion
+                    ? { duration: 0 }
+                    : { repeat: Infinity, duration: ring.duration, ease: "linear" }
+                }
                 className={`absolute rounded-full z-10 ${ring.border}`}
                 style={{ width: ring.size, height: ring.size }}
               >
@@ -219,8 +242,12 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
                       {/* Counter-rotation keeps each glyph upright while the
                           ring turns. */}
                       <motion.div
-                        animate={{ rotate: ring.direction * -360 }}
-                        transition={{ repeat: Infinity, duration: ring.duration, ease: "linear" }}
+                        animate={reduceMotion ? { rotate: 0 } : { rotate: ring.direction * -360 }}
+                        transition={
+                          reduceMotion
+                            ? { duration: 0 }
+                            : { repeat: Infinity, duration: ring.duration, ease: "linear" }
+                        }
                         className={`${token.bg} ${token.color} rounded-full flex items-center justify-center font-bold leading-none shadow-[0_0_12px_color-mix(in_srgb,var(--mp-ground)_80%,transparent)] border border-white/10`}
                         style={{
                           width: "calc(var(--orbit) * 0.07)",
