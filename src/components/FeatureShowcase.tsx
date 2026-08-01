@@ -84,6 +84,14 @@ const TradingViewWidget: React.FC = () => {
   );
 };
 
+/*
+ * NOTE: nothing currently imports this component — the homepage was
+ * consolidated into five bands and this was left behind. Its colours are on
+ * the token system as of this pass so it is ready to use, but two content
+ * problems remain and must be fixed before it goes anywhere near a page: the
+ * body copy still names "TenVault" rather than Moneta Prime, and it claims
+ * "over 6,000 elite investors", which is not a real figure.
+ */
 interface FeatureShowcaseProps {
   onNavigate?: (view: string) => void;
 }
@@ -107,7 +115,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
         <ScrollReveal>
           <div className="relative rounded-3xl p-8 sm:p-12 lg:p-16 border border-line/30 bg-panel overflow-hidden group shadow-2xl">
             {/* Soft glowing vector grid columns background */}
-            <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#6AA5FF_1px,transparent_1px)] bg-[size:5rem_5rem]" />
+            <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,var(--mp-accent)_1px,transparent_1px)] bg-[size:5rem_5rem]" />
             <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-accent/5 blur-[120px]" />
             
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
@@ -147,13 +155,11 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                       whileInView={{ height: `${heightPct * 80}%` }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.8, delay: idx * 0.1, ease: "easeOut" }}
-                      className="w-8 rounded-t-lg relative group"
-                      style={{
-                        background: idx === 6 
-                          ? "linear-gradient(to top, rgba(106,165,255, 0.05), rgba(106,165,255, 0.45))" 
-                          : "linear-gradient(to top, rgba(43, 49, 57, 0.05), rgba(132, 142, 156, 0.2))",
-                        border: idx === 6 ? "1px solid rgba(106,165,255, 0.4)" : "1px solid rgba(43, 49, 57, 0.3)"
-                      }}
+                      className={`w-8 rounded-t-lg relative group border bg-gradient-to-t ${
+                        idx === 6
+                          ? "from-accent/5 to-accent/45 border-accent/40"
+                          : "from-line/5 to-faint/20 border-line/30"
+                      }`}
                     >
                       {idx === 6 && (
                         <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-accent/15 border border-accent/40 text-2xs text-accent font-mono font-bold px-1.5 py-0.5 rounded shadow">
@@ -224,7 +230,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                   <button
                     type="button"
                     onClick={handleStartTrading}
-                    className="bg-negative hover:brightness-110 text-ink font-extrabold text-xs uppercase tracking-wider py-3.5 px-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-lg shadow-[#f6465d]/10 focus:outline-none"
+                    className="bg-negative hover:brightness-110 text-ink font-extrabold text-xs uppercase tracking-wider py-3.5 px-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-lg shadow-negative/10 focus:outline-none"
                   >
                     ↓ SELL BTC
                   </button>
@@ -355,8 +361,9 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                   className="absolute pointer-events-none z-20"
                   style={{ bottom: "15%", right: "12%" }}
                 >
-                  {/* SOL / Custom purple coin */}
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#9945FF]/10 to-[#14F195]/85 border border-[#9945FF] flex items-center justify-center shadow-lg shadow-[#14F195]/10 backdrop-blur-sm">
+                  {/* Secondary coin — neutral surface, no brand colour: the accent
+                      stays on the lead coin above so the group reads as one system. */}
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-raised/40 to-raised border border-line-strong flex items-center justify-center shadow-lg shadow-ground/20 backdrop-blur-sm">
                     <span className="text-xs font-bold text-ink">S</span>
                   </div>
                 </motion.div>
@@ -370,8 +377,8 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                   className="absolute pointer-events-none z-20"
                   style={{ top: "18%", right: "20%" }}
                 >
-                  {/* ETH Purple Coin */}
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#627eea]/15 to-[#627eea]/80 border border-[#627eea] flex items-center justify-center shadow-lg shadow-[#627eea]/10 backdrop-blur-sm">
+                  {/* Tertiary coin — same neutral treatment. */}
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-raised/40 to-raised border border-line-strong flex items-center justify-center shadow-lg shadow-ground/20 backdrop-blur-sm">
                     <span className="text-xs font-bold text-ink">Ξ</span>
                   </div>
                 </motion.div>
