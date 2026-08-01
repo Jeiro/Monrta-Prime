@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowDown, ArrowUp, Check, Edit3, Layers, Pause, Play, Plus, Save, Trash2, X } from "lucide-react";
 import { useInvestmentPlans } from "../../../context/domains/InvestmentPlansContext";
+import { Button, Input, Textarea } from "../../ui";
 import type { InvestmentPlan } from "../../../types";
 
 type PlanForm = {
@@ -170,9 +171,7 @@ export const AdminInvestmentsTab: React.FC = () => {
           </h1>
           <p className="text-xs text-muted mt-1">Manage Firestore-backed plans, status, badges, colors, and display order.</p>
         </div>
-        <button onClick={startCreate} className="flex items-center gap-2 px-4 py-2 bg-accent text-ground font-bold text-xs uppercase rounded-lg hover:opacity-90 transition-colors cursor-pointer">
-          <Plus size={14} /> New Plan
-        </button>
+        <Button onClick={startCreate} icon={Plus}>New Plan</Button>
       </div>
 
       {feedback && (
@@ -185,28 +184,34 @@ export const AdminInvestmentsTab: React.FC = () => {
         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="bg-surface border border-accent/30 rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-ink">{editingPlan ? `Editing: ${editingPlan.name}` : "Create New Plan"}</h3>
-            <button onClick={resetForm} className="p-1.5 rounded-lg bg-line/50 text-muted hover:text-ink transition-colors cursor-pointer"><X size={14} /></button>
+            <Button variant="ghost" size="icon" onClick={resetForm} aria-label="Close plan form"><X size={14} /></Button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <input placeholder="Plan Name" value={formData.name} onChange={e => setFormData(f => ({ ...f, name: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <input type="number" placeholder="Min Investment ($)" value={formData.minDeposit} onChange={e => setFormData(f => ({ ...f, minDeposit: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <input type="number" placeholder="Max Investment ($)" value={formData.maxDeposit} onChange={e => setFormData(f => ({ ...f, maxDeposit: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <input type="number" placeholder="ROI %" value={formData.roiPercent} onChange={e => setFormData(f => ({ ...f, roiPercent: e.target.value }))} min="0.1" step="0.1" className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <input type="number" placeholder="Duration Days" value={formData.durationDays} onChange={e => setFormData(f => ({ ...f, durationDays: e.target.value }))} min="1" className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <input type="number" placeholder="Display Order" value={formData.displayOrder} onChange={e => setFormData(f => ({ ...f, displayOrder: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <input placeholder="Badge (optional)" value={formData.badge} onChange={e => setFormData(f => ({ ...f, badge: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <input placeholder="Accent Color (optional)" value={formData.accentColor} onChange={e => setFormData(f => ({ ...f, accentColor: e.target.value }))} className="px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <textarea placeholder="Description" value={formData.description} onChange={e => setFormData(f => ({ ...f, description: e.target.value }))} className="sm:col-span-2 lg:col-span-3 min-h-20 px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-            <label className="flex items-center gap-2 px-3 py-2 bg-ground border border-line rounded-lg text-xs text-ink cursor-pointer">
+            <Input label="Plan name" placeholder="Plan Name" value={formData.name} onChange={e => setFormData(f => ({ ...f, name: e.target.value }))} />
+            <Input label="Min investment" type="number" prefix="$" numeric placeholder="0" value={formData.minDeposit} onChange={e => setFormData(f => ({ ...f, minDeposit: e.target.value }))} />
+            <Input label="Max investment" type="number" prefix="$" numeric placeholder="0" value={formData.maxDeposit} onChange={e => setFormData(f => ({ ...f, maxDeposit: e.target.value }))} />
+            <Input label="ROI" type="number" suffix="%" numeric placeholder="0" value={formData.roiPercent} onChange={e => setFormData(f => ({ ...f, roiPercent: e.target.value }))} min="0.1" step="0.1" />
+            <Input label="Duration" type="number" suffix="days" numeric placeholder="0" value={formData.durationDays} onChange={e => setFormData(f => ({ ...f, durationDays: e.target.value }))} min="1" />
+            <Input label="Display order" type="number" numeric placeholder="0" value={formData.displayOrder} onChange={e => setFormData(f => ({ ...f, displayOrder: e.target.value }))} />
+            <Input label="Badge" placeholder="Optional" value={formData.badge} onChange={e => setFormData(f => ({ ...f, badge: e.target.value }))} />
+            <Input label="Accent colour" placeholder="Optional" value={formData.accentColor} onChange={e => setFormData(f => ({ ...f, accentColor: e.target.value }))} />
+            <div className="sm:col-span-2 lg:col-span-3">
+              <Textarea label="Description" rows={3} placeholder="Description" value={formData.description} onChange={e => setFormData(f => ({ ...f, description: e.target.value }))} />
+            </div>
+            {/* Raw checkbox on purpose: Input renders a full-width text field
+                with the label ABOVE it, which is the wrong control shape for a
+                boolean. There is no Checkbox primitive yet — adding one is its
+                own piece of work, not part of this conversion pass. */}
+            <label className="flex items-center gap-2 self-end px-3 py-2.5 bg-panel border border-line rounded-lg text-xs text-ink cursor-pointer">
               <input type="checkbox" checked={formData.enabled} onChange={e => setFormData(f => ({ ...f, enabled: e.target.checked }))} className="accent-accent" />
               Enabled
             </label>
           </div>
 
-          <button onClick={handleSubmit} disabled={isSaving} className="flex items-center gap-2 px-6 py-2 bg-accent text-ground font-bold text-xs uppercase rounded-lg hover:opacity-90 transition-colors cursor-pointer">
-            <Save size={14} /> {isSaving ? "Saving..." : editingPlan ? "Save Changes" : "Create Plan"}
-          </button>
+          <Button onClick={handleSubmit} loading={isSaving} icon={Save}>
+            {editingPlan ? "Save Changes" : "Create Plan"}
+          </Button>
         </motion.div>
       )}
 
@@ -233,10 +238,10 @@ export const AdminInvestmentsTab: React.FC = () => {
             </div>
             <p className="text-2xs text-muted leading-relaxed line-clamp-2">{plan.description}</p>
             <div className="flex flex-wrap gap-2 pt-2 border-t border-line/50">
-              <button onClick={() => movePlan(plan, "up")} disabled={isSaving || index === 0} className="px-2 py-1.5 bg-line/40 border border-line text-ink text-2xs font-bold rounded-lg disabled:opacity-30 cursor-pointer"><ArrowUp size={12} /></button>
-              <button onClick={() => movePlan(plan, "down")} disabled={isSaving || index === orderedPlans.length - 1} className="px-2 py-1.5 bg-line/40 border border-line text-ink text-2xs font-bold rounded-lg disabled:opacity-30 cursor-pointer"><ArrowDown size={12} /></button>
-              <button onClick={() => startEdit(plan)} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-accent/10 border border-accent/30 text-accent text-2xs font-bold rounded-lg hover:bg-accent/20 cursor-pointer"><Edit3 size={10} /> Edit</button>
-              <button onClick={async () => {
+              <Button variant="secondary" size="sm" onClick={() => movePlan(plan, "up")} disabled={isSaving || index === 0} aria-label={`Move ${plan.name} up`}><ArrowUp size={12} /></Button>
+              <Button variant="secondary" size="sm" onClick={() => movePlan(plan, "down")} disabled={isSaving || index === orderedPlans.length - 1} aria-label={`Move ${plan.name} down`}><ArrowDown size={12} /></Button>
+              <Button variant="secondary" size="sm" icon={Edit3} onClick={() => startEdit(plan)} className="flex-1">Edit</Button>
+              <Button onClick={async () => {
                   try {
                     if (isSaving) return;
                     setIsSaving(true);
@@ -247,10 +252,10 @@ export const AdminInvestmentsTab: React.FC = () => {
                   } finally {
                     setIsSaving(false);
                   }
-                }} className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-2xs font-bold rounded-lg cursor-pointer border ${plan.enabled ? "bg-warning-soft border-warning-line text-warning hover:bg-warning/15" : "bg-positive/10 border-positive/30 text-positive hover:bg-positive/20"}`}>
-                {plan.enabled ? <><Pause size={10} /> Disable</> : <><Play size={10} /> Enable</>}
-              </button>
-              <button onClick={async () => {
+                }} variant={plan.enabled ? "secondary" : "positive"} size="sm" icon={plan.enabled ? Pause : Play} className="flex-1">
+                {plan.enabled ? "Disable" : "Enable"}
+              </Button>
+              <Button onClick={async () => {
                   if (isSaving || !window.confirm(`Delete "${plan.name}"?`)) return;
                   setIsSaving(true);
                   try {
@@ -261,7 +266,7 @@ export const AdminInvestmentsTab: React.FC = () => {
                   } finally {
                     setIsSaving(false);
                   }
-                }} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-negative/10 border border-negative/30 text-negative text-2xs font-bold rounded-lg hover:bg-negative/20 cursor-pointer"><Trash2 size={10} /></button>
+                }} variant="danger" size="sm" aria-label={`Delete ${plan.name}`}><Trash2 size={12} /></Button>
             </div>
           </div>
         ))}
