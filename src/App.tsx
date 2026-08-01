@@ -335,9 +335,13 @@ function AppShell() {
         </Suspense>
       </main>
 
-      {/* Global Standard Footer - Hidden on mobile */}
+      {/* Global footer. Desktop always; on mobile only when the sticky
+          MobileNav isn't there to collide with it — i.e. for signed-out
+          visitors, who would otherwise have no route to the terms, privacy
+          and risk pages at all on a phone. (Signed-in users reach those
+          through the mobile nav.) */}
       {!isAdminUser && currentView !== "auth" && (
-        <div className="hidden sm:block">
+        <div className={showUserMobileNav ? "hidden sm:block" : ""}>
           <Footer onNavigate={handleNavigate} />
         </div>
       )}
