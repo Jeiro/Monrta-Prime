@@ -151,17 +151,46 @@ summary and watchlist filter are new).
 - **Mobile IA:** the order ticket sat below the watchlist *and* a 420px
   chart. Below `lg` the order is now chart → ticket → watchlist.
 
+**Done — remaining user-facing screens.** Portfolio, Transactions, KYC,
+Support, Notifications, Airdrops, Markets, and the three GlobalModals
+dialogs are on the primitives.
+
+More defects fixed in that pass:
+- **Scroll lock leaked.** GlobalModals locked on "any modal open" while each
+  Modal also locked on its own `open`. Both restored the previous overflow,
+  but the inner captured `hidden` (the outer had already applied it) and
+  React runs the parent cleanup first — so closing a modal restored `""` then
+  re-applied `hidden`, leaving the page unscrollable until reload.
+  `useBodyScrollLock` is now reference-counted.
+- 🚩 **Portfolio's "Allocation Weights" radial gauge was two dashed rings on
+  CSS spin animations.** Nothing was derived from the data while it read as a
+  chart. Replaced with sorted weight bars.
+- **KYC's six form fields were labelled by placeholder only** — names
+  vanished on typing and never existed for a screen reader.
+- Transactions printed `{tx.timestamp || tx.date}` verbatim (raw ISO string);
+  Airdrops did the same with campaign dates.
+- Markets' sortable `<th>`s were bare `onClick` — no button, no `aria-sort`,
+  unreachable by keyboard. Sorting is now a `DataTable` feature.
+- Markets forced `min-w-[700px]`, giving phones a horizontal scroller.
+- Emoji tab labels replaced with icons.
+- Copy: Markets' loading state named the upstream provider and asserted
+  "securely"; the footer claimed "deep global liquidity" and "ultra-low
+  latency".
+
 ### App-wide migration progress
 
 | | Baseline | Now |
 |---|---:|---:|
-| Raw `<button>` | 220 | **205** |
-| Raw `<input>` | 85 | **71** |
-| Files with `<table>` | 11 | **9** |
+| Raw `<button>` | 220 | **187** |
+| Raw `<input>` | 85 | **63** |
+| Files with `<table>` | 11 | **8** (all admin) |
+| Off-token palette utilities | 123 | **4** (brand marks) |
 
-**Not started:** the remaining 205 buttons / 71 inputs / 9 tables, the
-sidebar shell, the other 19 screens, the full motion pass, the a11y pass,
-and the bundle work.
+**Still not migrated:** the 8 admin tab tables and the bulk of the remaining
+raw buttons/inputs (admin tabs + `AuthPage` + `Navigation`), the dashboard
+sidebar shell, the full motion pass, a dedicated a11y audit, and the bundle
+work. Admin fields have been styled to match the primitives but not
+restructured.
 
 ---
 
