@@ -150,14 +150,14 @@ export const DashboardWalletConnect: React.FC = () => {
           Personal Wallet Connect
         </h1>
         <p className="text-sm text-muted">
-          Link your preferred external multi-sig custody or hot wallet. Secure end-to-end integration with orbitrio networks.
+          Link your preferred external multi-sig custody or hot wallet. Secure end-to-end integration with Moneta Prime.
         </p>
       </div>
 
-      <div className="bg-amber-500/10 border border-amber-500/20 p-4 rounded-xl flex items-start gap-3">
-        <Info className="text-amber-500 shrink-0 mt-0.5" size={18} />
-        <div className="text-xs text-amber-500/90 leading-relaxed font-sans">
-          <strong>Security Note:</strong> Always ensure you are on our secure <strong>orbitrio</strong> verified domain before connecting. Connection utilizes encrypted handshakes to register node balances.
+      <div className="bg-warning-soft border border-warning-line p-4 rounded-xl flex items-start gap-3">
+        <Info className="text-warning shrink-0 mt-0.5" size={18} />
+        <div className="text-xs text-warning leading-relaxed font-sans">
+          <strong>Security Note:</strong> Always confirm you are on the official <strong>Moneta Prime</strong> domain before connecting. Connection utilizes encrypted handshakes to register node balances.
         </div>
       </div>
       
@@ -174,7 +174,7 @@ export const DashboardWalletConnect: React.FC = () => {
               </div>
               <span className="font-bold tracking-tight text-sm text-left">{wallet}</span>
             </div>
-            <div className="bg-ground group-hover:bg-accent/15 border border-line/80 group-hover:border-accent/30 rounded-lg py-1 px-2 text-[10px] uppercase font-bold tracking-wider text-muted group-hover:text-accent transition-colors">
+            <div className="bg-ground group-hover:bg-accent/15 border border-line/80 group-hover:border-accent/30 rounded-lg py-1 px-2 text-2xs uppercase font-bold tracking-wider text-muted group-hover:text-accent transition-colors">
               Connect
             </div>
           </button>
@@ -182,7 +182,7 @@ export const DashboardWalletConnect: React.FC = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-ground/75 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-surface border border-line p-6 rounded-2xl w-full max-w-md space-y-5 animate-fade-in shadow-2xl relative">
             <button 
               onClick={() => setShowModal(false)}
@@ -195,13 +195,13 @@ export const DashboardWalletConnect: React.FC = () => {
               {selectedWallet && walletLogos[selectedWallet]}
               <div>
                 <h2 className="text-base font-bold text-ink leading-tight">Connect to {selectedWallet}</h2>
-                <p className="text-[11px] text-muted mt-0.5">Confirm this wallet preference</p>
+                <p className="text-2xs text-muted mt-0.5">Confirm this wallet preference</p>
               </div>
             </div>
 
             <div className="text-xs text-muted flex items-start gap-2 bg-ground/50 p-3.5 rounded-lg border border-line/50 font-sans leading-relaxed">
               <Info size={14} className="text-accent shrink-0 mt-0.5" />
-              <span>Orbitrio will never ask for or store seed phrases, private keys, or recovery words. This action only records your selected wallet provider for support context.</span>
+              <span>Moneta Prime will never ask for or store seed phrases, private keys, or recovery words. This action only records your selected wallet provider for support context.</span>
             </div>
 
             <div className="flex gap-3">

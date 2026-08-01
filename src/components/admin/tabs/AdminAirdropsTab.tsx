@@ -35,7 +35,7 @@ const metricClass = "bg-surface border border-line rounded-xl p-4";
 const statusClass = (status: string) => {
   if (status === "Approved") return "text-positive bg-positive/10 border-positive/30";
   if (status === "Rejected") return "text-negative bg-negative/10 border-negative/30";
-  return "text-yellow-300 bg-yellow-500/10 border-yellow-500/30";
+  return "text-warning bg-warning-soft border-warning-line";
 };
 
 export const AdminAirdropsTab: React.FC = () => {
@@ -149,7 +149,7 @@ export const AdminAirdropsTab: React.FC = () => {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Total Claims</p><p className="text-2xl font-bold text-ink mt-1">{metrics.total}</p></div>
-        <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Pending</p><p className="text-2xl font-bold text-yellow-300 mt-1">{metrics.pending}</p></div>
+        <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Pending</p><p className="text-2xl font-bold text-warning mt-1">{metrics.pending}</p></div>
         <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Approved</p><p className="text-2xl font-bold text-positive mt-1">{metrics.approved}</p></div>
         <div className={metricClass}><p className="text-2xs uppercase text-muted font-bold">Rejected</p><p className="text-2xl font-bold text-negative mt-1">{metrics.rejected}</p></div>
       </div>

@@ -98,14 +98,14 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
   };
 
   return (
-    <div className="w-full space-y-32 py-16 bg-[#000000] text-ink overflow-hidden font-sans">
+    <div className="w-full space-y-32 py-16 bg-ground text-ink overflow-hidden font-sans">
       
       {/* ======================================================= */}
       {/* SECTION 4: The Benchmark for Secure Multi-Asset Investing */}
       {/* ======================================================= */}
       <section className="max-w-7xl mx-auto px-4 relative">
         <ScrollReveal>
-          <div className="relative rounded-3xl p-8 sm:p-12 lg:p-16 border border-line/30 bg-[#07090C] overflow-hidden group shadow-2xl">
+          <div className="relative rounded-3xl p-8 sm:p-12 lg:p-16 border border-line/30 bg-panel overflow-hidden group shadow-2xl">
             {/* Soft glowing vector grid columns background */}
             <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#6AA5FF_1px,transparent_1px)] bg-[size:5rem_5rem]" />
             <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-accent/5 blur-[120px]" />
@@ -188,7 +188,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                 <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-line/60 pb-4 mb-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] animate-ping" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-positive animate-ping" />
                       <span className="text-2xs uppercase tracking-wider text-accent font-extrabold font-mono">
                         BTCUSDT CRYPTO PAIR
                       </span>
@@ -198,7 +198,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                     </h4>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-2xs text-[#0ecb81] font-bold font-mono bg-[#0ecb81]/10 border border-[#0ecb81]/25 px-2.5 py-1 rounded">
+                    <span className="text-2xs text-positive font-bold font-mono bg-positive-soft border border-positive-line px-2.5 py-1 rounded">
                       +1.87%
                     </span>
                     <span className="text-2xs font-mono text-faint bg-raised border border-line/80 px-2 py-1 rounded select-none uppercase">
@@ -208,7 +208,7 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                 </div>
 
                 {/* Interactive Candlestick Chart Widget Container */}
-                <div className="relative z-10 flex-1 bg-[#0b0e14] border border-line rounded-xl overflow-hidden flex flex-col mb-5 min-h-[340px] shadow-inner">
+                <div className="relative z-10 flex-1 bg-surface border border-line rounded-xl overflow-hidden flex flex-col mb-5 min-h-[340px] shadow-inner">
                   <TradingViewWidget />
                 </div>
 
@@ -217,14 +217,14 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> = ({ onNavigate }) 
                   <button
                     type="button"
                     onClick={handleStartTrading}
-                    className="bg-[#0ecb81] hover:bg-[#0cb372] text-ink font-extrabold text-xs uppercase tracking-wider py-3.5 px-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-lg shadow-[#0ecb81]/10 focus:outline-none"
+                    className="bg-positive hover:brightness-110 text-ink font-extrabold text-xs uppercase tracking-wider py-3.5 px-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-lg shadow-positive/10 focus:outline-none"
                   >
                     ↑ BUY BTC
                   </button>
                   <button
                     type="button"
                     onClick={handleStartTrading}
-                    className="bg-[#f6465d] hover:bg-[#e03f53] text-ink font-extrabold text-xs uppercase tracking-wider py-3.5 px-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-lg shadow-[#f6465d]/10 focus:outline-none"
+                    className="bg-negative hover:brightness-110 text-ink font-extrabold text-xs uppercase tracking-wider py-3.5 px-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-lg shadow-[#f6465d]/10 focus:outline-none"
                   >
                     ↓ SELL BTC
                   </button>

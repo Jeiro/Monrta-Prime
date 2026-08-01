@@ -5,7 +5,7 @@ import { useApp } from '../../context/AppContext';
 
 // Section 3: Confidence
 export const Confidence = () => (
-    <section className="py-10 px-4 bg-gradient-to-b from-ground/80 to-black relative overflow-hidden" id="confidence">
+    <section className="py-10 px-4 bg-gradient-to-b from-ground/80 to-panel relative overflow-hidden" id="confidence">
       {/* Absolute positioned huge dimming security icon behind */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0">
         <Shield className="w-[320px] h-[320px] sm:w-[450px] sm:h-[450px] md:w-[580px] md:h-[580px] text-accent/[0.025] animate-pulse" style={{ animationDuration: '6s' }} />
@@ -13,9 +13,9 @@ export const Confidence = () => (
 
       <div className="max-w-4xl mx-auto text-center relative z-10">
            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-accent/10 border border-accent/30 text-accent mb-4 shadow-[0_0_15px_rgba(106,165,255,0.15)]">
-             <ShieldCheck className="w-6 h-6 animate-pulse" style={{ animationDuration: '3s' }} />
+             <ShieldCheck className="w-6 h-6" />
            </div>
-           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-ink tracking-tight leading-tight mb-4 font-display">Trade With Confidence</h2>
+           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-semibold text-ink tracking-tight leading-tight mb-4 font-display">Trade With Confidence</h2>
            <p className="text-muted text-sm sm:text-base max-w-xl mx-auto mb-10">Security and transparency are at the center of everything we build.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
               {[ { title: "Account Security", desc: "Advanced authentication and encryption technologies keep your account protected.", icon: Fingerprint, colorClass: "text-accent hover:border-accent/20" },

@@ -13,9 +13,9 @@ type Tone = "neutral" | "accent" | "positive" | "negative" | "warning";
 const tones: Record<Tone, string> = {
   neutral: "bg-raised text-muted border-line",
   accent: "bg-accent-soft text-accent border-accent-line",
-  positive: "bg-positive/10 text-positive border-positive/25",
-  negative: "bg-negative/10 text-negative border-negative/25",
-  warning: "bg-amber-400/10 text-amber-300 border-amber-400/25",
+  positive: "bg-positive-soft text-positive border-positive-line",
+  negative: "bg-negative-soft text-negative border-negative-line",
+  warning: "bg-warning-soft text-warning border-warning-line",
 };
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {

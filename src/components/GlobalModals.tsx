@@ -184,7 +184,7 @@ export function GlobalModals({
       {/* QUICK DEPOSIT MODAL OUTLAY */}
       {depositModalOpen && (() => {
         return (
-          <div className="fixed inset-0 bg-[#000000]/80 backdrop-blur-sm p-4 z-50 flex items-center justify-center">
+          <div className="fixed inset-0 bg-ground/80 backdrop-blur-sm p-4 z-50 flex items-center justify-center">
             <div className="bg-surface border border-line rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-5 max-h-[85dvh] overflow-y-auto my-auto scrollbar-none">
               <button 
                 onClick={() => { setDepositModalOpen(false); setModalFeedback(null); }}
@@ -206,7 +206,7 @@ export function GlobalModals({
               {modalFeedback && (() => {
                 if (typeof modalFeedback === "object") {
                   return (
-                    <div className="p-4 rounded-xl bg-[#141b1a] border border-positive/20 flex items-start gap-3 text-positive">
+                    <div className="p-4 rounded-xl bg-surface border border-positive/20 flex items-start gap-3 text-positive">
                       <div className="shrink-0 mt-0.5">
                         <Loader2 size={16} className="animate-spin text-positive" />
                       </div>
@@ -349,7 +349,7 @@ export function GlobalModals({
 
                 <div className="pt-1 select-none">
                   <p className="text-2xs text-muted flex items-start gap-1.5 leading-relaxed text-left">
-                    <Info size={11} className="text-amber-500 shrink-0 mt-0.5" />
+                    <Info size={11} className="text-warning shrink-0 mt-0.5" />
                     <span>Minimum deposit: {(selectedDepositWallet?.minimumDeposit || 0).toLocaleString()} USD. Deposits below this amount cannot be recovered.</span>
                   </p>
                 </div>
@@ -374,7 +374,7 @@ export function GlobalModals({
 
       {/* QUICK WITHDRAWAL MODAL OUTLAY */}
       {withdrawModalOpen && (
-        <div className="fixed inset-0 bg-[#000000]/80 backdrop-blur-sm p-4 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-ground/80 backdrop-blur-sm p-4 z-50 flex items-center justify-center">
           <div className="bg-surface border border-line rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-5 max-h-[85dvh] overflow-y-auto my-auto">
             <button 
               onClick={() => { setWithdrawModalOpen(false); setModalFeedback(null); }}
@@ -396,7 +396,7 @@ export function GlobalModals({
             {modalFeedback && (() => {
               if (typeof modalFeedback === "object") {
                 return (
-                  <div className="p-4 rounded-xl bg-[#141b1a] border border-positive/20 flex items-start gap-3 text-positive">
+                  <div className="p-4 rounded-xl bg-surface border border-positive/20 flex items-start gap-3 text-positive">
                     <div className="shrink-0 mt-0.5">
                       <Loader2 size={16} className="animate-spin text-positive" />
                     </div>
@@ -532,7 +532,7 @@ export function GlobalModals({
 
       {/* Insufficient Balance Modal Overlay */}
       {insufficientBalanceOpen && (
-        <div className="fixed inset-0 bg-black/85 backdrop-blur-sm z-[200] flex items-center justify-center p-4 animate-fade-in">
+        <div className="fixed inset-0 bg-ground/75 backdrop-blur-sm z-[200] flex items-center justify-center p-4 animate-fade-in">
           <div className="bg-surface border border-line rounded-2xl w-full max-w-sm p-6 relative shadow-2xl space-y-5">
             <button 
               onClick={() => setInsufficientBalanceOpen(false)}
@@ -541,7 +541,7 @@ export function GlobalModals({
               <X size={18} />
             </button>
             <div className="text-center space-y-3">
-              <div className="mx-auto w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-accent">
+              <div className="mx-auto w-12 h-12 rounded-full bg-warning-soft border border-warning-line flex items-center justify-center text-accent">
                 <AlertTriangle size={24} className="animate-bounce" />
               </div>
               <h3 className="text-base font-bold text-ink uppercase tracking-wider font-heading">

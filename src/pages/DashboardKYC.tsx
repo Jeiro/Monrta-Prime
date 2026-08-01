@@ -92,7 +92,7 @@ export const DashboardKYC: React.FC = () => {
           </div>
           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border w-fit ${
             currentKyc.status === "approved" ? "bg-positive/10 text-positive border-positive/30" :
-            currentKyc.status === "pending" ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/30" :
+            currentKyc.status === "pending" ? "bg-warning-soft text-warning border-warning-line" :
             currentKyc.status === "rejected" ? "bg-negative/10 text-negative border-negative/30" :
             "bg-line/40 text-muted border-line"
           }`}>
@@ -113,7 +113,7 @@ export const DashboardKYC: React.FC = () => {
         )}
 
         {currentKyc.status === "pending" && (
-          <div className="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-xl text-sm text-yellow-300">
+          <div className="p-4 bg-warning-soft border border-warning-line rounded-xl text-sm text-warning">
             Your documents are under platform review. You can monitor the status here.
           </div>
         )}

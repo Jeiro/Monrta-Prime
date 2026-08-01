@@ -28,13 +28,13 @@ export const AdminSupportTab: React.FC = () => {
 
   const statusColors: Record<string, string> = {
     open: "text-negative bg-negative/10 border-negative/30",
-    pending: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
+    pending: "text-warning bg-warning-soft border-warning-line",
     resolved: "text-positive bg-positive/10 border-positive/30"
   };
 
   const priorityColors: Record<string, string> = {
     high: "text-negative bg-negative/10 border-negative/30",
-    medium: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
+    medium: "text-warning bg-warning-soft border-warning-line",
     low: "text-positive bg-positive/10 border-positive/30"
   };
 
@@ -59,7 +59,7 @@ export const AdminSupportTab: React.FC = () => {
             <p className="text-xs text-muted mt-1">Manage and respond to user support tickets.</p>
           </div>
           {openCount > 0 && (
-            <span className="flex items-center gap-2 text-2xs font-bold text-negative bg-negative/10 border border-negative/30 px-3 py-1.5 rounded-full animate-pulse">
+            <span className="flex items-center gap-2 text-2xs font-bold text-negative bg-negative/10 border border-negative/30 px-3 py-1.5 rounded-full">
               <AlertTriangle size={12} /> {openCount} Open Tickets
             </span>
           )}

@@ -7,6 +7,7 @@ import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { Menu, X, User, LogOut, LayoutDashboard, Coins, Briefcase, Wallet2, TrendingUp, LogIn, UserPlus, History, Gift, Shield, CheckCircle2, ChevronDown, MoreHorizontal, MessageSquare, Settings, Bell } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Brandmark } from "./ui/Brandmark";
+import { ThemeToggle } from "./ui/ThemeToggle";
 
 interface NavigationProps {
   currentView: string;
@@ -37,21 +38,21 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
   ];
 
   const primaryLinks = [
-    { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard className="text-accent" size={14} /> },
-    { id: "dashboard-trading", label: "Trade", icon: <TrendingUp className="text-positive" size={14} /> },
-    { id: "dashboard-wallet", label: "Wallet", icon: <Wallet2 className="text-accent" size={14} /> },
-    { id: "dashboard-plans", label: "Investments", icon: <Briefcase className="text-accent-hover" size={14} /> },
-    { id: "dashboard-transactions", label: "History", icon: <History className="text-muted" size={14} /> }
+    { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard size={14} /> },
+    { id: "dashboard-trading", label: "Trade", icon: <TrendingUp size={14} /> },
+    { id: "dashboard-wallet", label: "Wallet", icon: <Wallet2 size={14} /> },
+    { id: "dashboard-plans", label: "Investments", icon: <Briefcase size={14} /> },
+    { id: "dashboard-transactions", label: "History", icon: <History size={14} /> }
   ];
 
   const secondaryLinks = [
-    { id: "copy-trading", label: "Copy Trading", icon: <User className="text-accent" size={14} /> },
-    { id: "dashboard-airdrops", label: "Airdrops", icon: <Gift className="text-negative" size={14} /> },
-    { id: "dashboard-wallet-feedback", label: "Link Wallet", icon: <Wallet2 className="text-accent" size={14} /> },
-    { id: "dashboard-kyc", label: user.kyc?.status === "approved" ? "Verified" : "Verify Identity", icon: user.kyc?.status === "approved" ? <CheckCircle2 size={14} className="text-positive" /> : <Shield size={14} className="text-accent-hover" /> },
-    { id: "dashboard-notifications", label: "Notifications", icon: <Bell className="text-accent" size={14} />, badge: unreadNotificationsCount },
-    { id: "dashboard-support", label: "Support", icon: <MessageSquare className="text-accent" size={14} /> },
-    { id: "dashboard-settings", label: "Settings", icon: <Settings className="text-muted" size={14} /> }
+    { id: "copy-trading", label: "Copy Trading", icon: <User size={14} /> },
+    { id: "dashboard-airdrops", label: "Airdrops", icon: <Gift size={14} /> },
+    { id: "dashboard-wallet-feedback", label: "Link Wallet", icon: <Wallet2 size={14} /> },
+    { id: "dashboard-kyc", label: user.kyc?.status === "approved" ? "Verified" : "Verify Identity", icon: user.kyc?.status === "approved" ? <CheckCircle2 size={14} /> : <Shield size={14} /> },
+    { id: "dashboard-notifications", label: "Notifications", icon: <Bell size={14} />, badge: unreadNotificationsCount },
+    { id: "dashboard-support", label: "Support", icon: <MessageSquare size={14} /> },
+    { id: "dashboard-settings", label: "Settings", icon: <Settings size={14} /> }
   ];
 
 
@@ -71,21 +72,29 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
 
   return (
     <>
-      <nav role="navigation" aria-label="Main navigation" className="fixed top-0 left-0 right-0 w-full h-16 sm:h-20 bg-ground border-b border-line/80 z-50 shadow-[0_10px_40px_rgba(0,0,0,0.35)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 lg:py-4 flex items-center justify-between">
+      <nav role="navigation" aria-label="Main navigation" className="fixed top-0 left-0 right-0 w-full h-16 sm:h-20 bg-ground border-b border-line z-50 shadow-sm">
+        {/* h-full, not py-*. The bar declares a fixed height and the inner
+            row previously set its own vertical padding on top of it — the
+            two fought, and whichever won, the content overflowed the bar.
+            That overflow is the "header bleed-through" symptom; this is
+            the cause. */}
+        <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
 
-          {/* Logo Brand Title (Upper Hemisphere Orange-Gold, Bottom Metallic White) */}
           <div
             onClick={() => onNavigate(isLoggedIn ? "dashboard" : "home")}
-            className="flex items-center gap-3 cursor-pointer group"
+            className="flex items-center gap-3 cursor-pointer group min-w-0"
           >
-            <Brandmark className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] transition-transform duration-500 group-hover:rotate-6" />
+            <Brandmark className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] shrink-0 transition-transform duration-500 group-hover:rotate-6" />
 
-            <div>
+            <div className="min-w-0">
               <span className="font-display tracking-[0.01em] text-lg sm:text-xl text-ink block leading-none lowercase">
                 moneta <span className="text-accent">prime</span>
               </span>
-              <span className="text-2xs sm:text-2xs font-mono tracking-[0.25em] text-muted block mt-1">
+              {/* Below sm the tagline can't fit on one line beside the
+                  toggle and the menu button, and wrapping it is what
+                  pushed the bar open. It's brand dressing, not
+                  navigation, so it's the thing that goes. */}
+              <span className="hidden sm:block text-2xs font-mono tracking-[0.25em] text-muted whitespace-nowrap mt-1">
                 TRADE. COMPOUND. PRESERVE.
               </span>
             </div>
@@ -118,6 +127,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                 </div>
 
                 <div className="flex items-center gap-3">
+                  <ThemeToggle />
                   <button
                     onClick={() => {
                       window.scrollTo({ top: 0, behavior: 'instant' });
@@ -173,7 +183,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -6 }}
                           transition={{ duration: 0.16 }}
-                          className="absolute right-0 mt-2 w-56 rounded-2xl border border-line/70 bg-[#0d1118]/95 p-2 shadow-2xl backdrop-blur-xl"
+                          className="absolute right-0 mt-2 w-56 rounded-2xl border border-line/70 bg-overlay/95 p-2 shadow-2xl backdrop-blur-xl"
                         >
                           {secondaryLinks.map((link) => (
                             <button
@@ -205,10 +215,15 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                     </button>
                   )}
 
+                  <ThemeToggle />
+
+                  {/* Was animate-pulse: a destructive action throbbing for
+                      attention it should never ask for. */}
                   <button
                     onClick={() => { handleSignOut(); }}
-                    className="p-1.5 text-muted hover:text-negative transition-all cursor-pointer rounded hover:bg-negative/10 animate-pulse hover:animate-none"
-                    title="Sign Out"
+                    className="p-1.5 text-muted hover:text-negative transition-colors duration-[--duration-fast] cursor-pointer rounded-md hover:bg-negative-soft"
+                    title="Sign out"
+                    aria-label="Sign out"
                   >
                     <LogOut size={16} />
                   </button>
@@ -218,12 +233,17 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
           </div>
 
           {/* Mobile Activator hamburger */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-muted hover:text-ink cursor-pointer"
-          >
-            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+          <div className="flex items-center gap-1 lg:hidden">
+            <ThemeToggle />
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-muted hover:text-ink cursor-pointer rounded-lg transition-colors duration-[--duration-fast] hover:bg-raised"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
 
         </div>
       </nav>

@@ -12,9 +12,9 @@ const priorityStyle: Record<AnnouncementPriority, { badge: string; border: strin
     icon: <Megaphone size={15} className="text-accent" />
   },
   Important: {
-    badge: "bg-amber-500/10 text-amber-300 border-amber-500/30",
-    border: "border-amber-500/30",
-    icon: <AlertTriangle size={15} className="text-amber-300" />
+    badge: "bg-warning-soft text-warning border-warning-line",
+    border: "border-warning-line",
+    icon: <AlertTriangle size={15} className="text-warning" />
   },
   Critical: {
     badge: "bg-negative/10 text-negative border-negative/30",

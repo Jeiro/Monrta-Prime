@@ -18,7 +18,7 @@ type DepositRow = Transaction & {
 };
 
 const statusStyles: Record<DepositStatus, string> = {
-  pending: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
+  pending: "text-warning bg-warning-soft border-warning-line",
   approved: "text-positive bg-positive/10 border-positive/30",
   rejected: "text-negative bg-negative/10 border-negative/30"
 };
@@ -316,7 +316,7 @@ export const AdminDepositsTab: React.FC = () => {
 
 const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "yellow" | "green" | "red" }> = ({ label, value, tone = "default" }) => {
   const toneClass = tone === "yellow"
-    ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
+    ? "bg-warning-soft border-warning-line text-warning"
     : tone === "green"
       ? "bg-positive/10 border-positive/20 text-positive"
       : tone === "red"

@@ -43,7 +43,7 @@ const emptyForm: FormState = {
 
 const priorityClass: Record<AnnouncementPriority, string> = {
   Normal: "bg-surface/10 text-muted border-line/30",
-  Important: "bg-amber-500/10 text-amber-300 border-amber-500/30",
+  Important: "bg-warning-soft text-warning border-warning-line",
   Critical: "bg-negative/10 text-negative border-negative/30"
 };
 

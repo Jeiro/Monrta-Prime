@@ -110,7 +110,7 @@ export const DashboardPortfolio: React.FC<DashboardPortfolioProps> = ({ onNaviga
             <span>Asset Value</span>
             <Layers size={14} className="text-muted/70 shrink-0" />
           </div>
-          <strong className="text-2xl font-black font-data text-accent block animate-pulse">${totalHoldingValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+          <strong className="text-2xl font-black font-data text-accent block">${totalHoldingValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
         </div>
 
         <div className="bg-surface border border-line rounded-xl p-6 space-y-2">

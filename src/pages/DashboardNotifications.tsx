@@ -24,8 +24,8 @@ const typeStyles: Record<NotificationType, { icon: React.ReactNode; tone: string
   },
   warning: {
     icon: <AlertTriangle size={18} />,
-    tone: "text-amber-400 bg-amber-500/10 border-amber-500/20",
-    dot: "bg-amber-400"
+    tone: "text-warning bg-warning-soft border-warning-line",
+    dot: "bg-warning"
   },
   error: {
     icon: <XCircle size={18} />,

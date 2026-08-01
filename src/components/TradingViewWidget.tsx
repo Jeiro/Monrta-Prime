@@ -1,11 +1,42 @@
 import React, { useEffect, useRef } from "react";
+import { useTheme } from "../context/ThemeContext";
 
 interface TradingViewWidgetProps {
   symbol: string; // e.g., "BTCUSDT" or "AAPL"
 }
 
+/*
+ * TradingView renders inside its own iframe, so it is the one surface in the
+ * app that our CSS custom properties cannot reach. It has to be told the
+ * palette explicitly and rebuilt when the theme changes — hence `theme` in
+ * the effect's dependency list.
+ *
+ * These hex values are deliberately duplicated from tokens.css rather than
+ * read from the DOM: the widget needs them at construction time, before it
+ * has painted anything we could measure.
+ */
+const CHART_THEME = {
+  dark: {
+    tv: "dark",
+    toolbar: "#0E1013",
+    loading: "#0A0B0E",
+    pane: "#0E1013",
+    grid: "#24282F",
+    scaleText: "#98A0AD",
+  },
+  light: {
+    tv: "light",
+    toolbar: "#FBFCFD",
+    loading: "#F7F8FA",
+    pane: "#FFFFFF",
+    grid: "#E3E7EE",
+    scaleText: "#59626F",
+  },
+} as const;
+
 export const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ symbol }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     // Generate the correct exchange/symbol path for TradingView
@@ -16,6 +47,7 @@ export const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ symbol }) 
       formattedSymbol = `NASDAQ:${formattedSymbol}`; // Default to NASDAQ for tech stocks
     }
 
+    const palette = CHART_THEME[theme];
     const scriptId = "tradingview-widget-script";
     let script = document.getElementById(scriptId) as HTMLScriptElement;
 
@@ -33,23 +65,23 @@ export const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ symbol }) 
           symbol: formattedSymbol,
           interval: "H", // 1 Hour candles
           timezone: "Etc/UTC",
-          theme: "dark",
+          theme: palette.tv,
           style: "1", // Candlesticks
           locale: "en",
-          toolbar_bg: "#0B0E14",
+          toolbar_bg: palette.toolbar,
           enable_publishing: false,
           hide_side_toolbar: false,
           allow_symbol_change: true,
           container_id: widgetContainer.id,
           studies: ["RSI@tv-basicstudies", "MASimple@tv-basicstudies"],
-          loading_screen: { backgroundColor: "#07090E" },
-          // Custom deep Bybit-esque charcoal overlays
+          loading_screen: { backgroundColor: palette.loading },
           overrides: {
-            "paneProperties.background": "#0F131C",
-            "paneProperties.vertGridProperties.color": "#1E232F",
-            "paneProperties.horzGridProperties.color": "#1E232F",
+            "paneProperties.background": palette.pane,
+            "paneProperties.backgroundType": "solid",
+            "paneProperties.vertGridProperties.color": palette.grid,
+            "paneProperties.horzGridProperties.color": palette.grid,
             "symbolWatermarkProperties.transparency": 90,
-            "scalesProperties.textColor": "#8491A5",
+            "scalesProperties.textColor": palette.scaleText,
           }
         });
       }
@@ -76,7 +108,7 @@ export const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ symbol }) 
         containerRef.current.innerHTML = "";
       }
     };
-  }, [symbol]);
+  }, [symbol, theme]);
 
   return (
     <div className="w-full h-full border border-line rounded-xl overflow-hidden bg-surface relative">

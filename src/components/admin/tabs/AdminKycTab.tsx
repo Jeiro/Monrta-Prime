@@ -8,7 +8,7 @@ import type { CoreUserProfile } from "../../../hooks/data/useUsersDirectory";
 type KycRow = CoreUserProfile & { kyc?: KycSubmission; kycStatus: KycStatus };
 
 const statusColors: Record<KycStatus, string> = {
-  pending: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
+  pending: "text-warning bg-warning-soft border-warning-line",
   approved: "text-positive bg-positive/10 border-positive/30",
   rejected: "text-negative bg-negative/10 border-negative/30",
   unverified: "text-muted bg-surface/10 border-line/30"
@@ -101,7 +101,7 @@ export const AdminKycTab: React.FC = () => {
             </h1>
             <p className="text-xs text-muted mt-1">Review identity documents, proof of address, notes, and verification outcomes.</p>
           </div>
-          <span className="flex items-center gap-2 text-2xs font-bold text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 px-3 py-1.5 rounded-full">
+          <span className="flex items-center gap-2 text-2xs font-bold text-warning bg-warning-soft border border-warning-line px-3 py-1.5 rounded-full">
             {pendingCount} Pending Reviews
           </span>
         </div>

@@ -39,7 +39,7 @@ export const DashboardTransactions: React.FC = () => {
         );
       case "pending":
         return (
-          <span className="flex items-center gap-1 text-2xs font-bold text-yellow-400">
+          <span className="flex items-center gap-1 text-2xs font-bold text-warning">
             <Clock size={12} /> Pending
           </span>
         );

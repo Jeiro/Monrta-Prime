@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Award, Check, Edit3, ImagePlus, Plus, Save, Star, ToggleLeft, ToggleRight, Trash2, Upload, X } from "lucide-react";
 import { useApp } from "../../../context/AppContext";
 import type { TraderProfile } from "../../../types";
+import { Avatar } from "../../ui";
 
 type TraderFormState = {
   name: string;
@@ -350,7 +351,7 @@ export const AdminTradersTab: React.FC = () => {
                 <tr key={trader.id} className="hover:bg-ground/40 transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <img src={trader.avatar} alt={trader.name} className="w-10 h-10 rounded-full object-cover border-2 border-accent/30" />
+                      <Avatar src={trader.avatar} name={trader.name} size="md" />
                       <div className="min-w-0">
                         <p className="text-sm font-bold text-ink truncate">{trader.name}</p>
                         <p className="text-2xs text-muted">{trader.assetsUnderManagement || "$0"} AUM</p>

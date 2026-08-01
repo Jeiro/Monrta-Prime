@@ -94,7 +94,7 @@ export const DashboardPlans: React.FC = () => {
       <div className="border-b border-line/50 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold font-heading text-ink flex items-center gap-2.5">
-            <TrendingUp size={24} className="text-accent shrink-0 animate-pulse" />
+            <TrendingUp size={24} className="text-accent shrink-0" />
             <span>Investment Plans</span>
           </h1>
           <p className="text-xs text-muted mt-1 font-sans leading-relaxed">
@@ -135,7 +135,7 @@ export const DashboardPlans: React.FC = () => {
               <div className="space-y-4">
                 <div>
                   <div className="inline-flex items-center justify-center bg-accent-deep/10 border border-accent-deep/20 p-1 rounded-md mb-2">
-                    <Activity size={13} className="text-accent-deep animate-pulse" />
+                    <Activity size={13} className="text-accent-deep" />
                   </div>
                   <h3 className="text-base font-extrabold text-ink tracking-tight font-sans mt-0.5 flex items-center gap-2">
                     {getPlanIcon(p.id)}
@@ -307,7 +307,7 @@ export const DashboardPlans: React.FC = () => {
           <div className="bg-gradient-to-br from-panel to-surface border border-line rounded-xl p-5 space-y-4 flex-1">
             <h4 className="text-xs font-bold font-heading text-ink border-b border-line/60 pb-2 flex items-center justify-between">
               My Active Plans
-              <Timer className="text-accent animate-pulse" size={14} />
+              <Timer className="text-accent" size={14} />
             </h4>
 
             {user.activeInvestments.length === 0 ? (

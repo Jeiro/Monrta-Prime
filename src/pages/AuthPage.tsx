@@ -134,12 +134,17 @@ const passwordStrength = (pw: string): { score: number; label: string } => {
   return { score: s, label: ["", "Weak", "Fair", "Good", "Strong"][s] };
 };
 
+/* Weak → Strong is a sequential outcome ramp, so it runs
+   negative → warning → positive. The accent used to sit at "Fair",
+   which both broke the ramp (blue between red and green reads as a
+   category change, not a step up) and put the accent to work
+   encoding an outcome — the one job it never does. */
 const pwBarColor = (i: number, score: number) => {
   if (i > score) return "bg-line";
-  return ["", "bg-negative", "bg-accent", "bg-yellow-400", "bg-positive"][score];
+  return ["", "bg-negative", "bg-warning", "bg-positive/60", "bg-positive"][score];
 };
 const pwTextColor = (score: number) =>
-  ["text-muted", "text-negative", "text-accent", "text-yellow-400", "text-positive"][score];
+  ["text-muted", "text-negative", "text-warning", "text-positive", "text-positive"][score];
 
 /* Google mark — brand-tinted so it reads as a secondary path, not a rival CTA */
 const GoogleMark = () => (
@@ -168,7 +173,7 @@ const Divider = () => (
       <div className="w-full border-t border-line/40" />
     </div>
     <div className="relative flex justify-center text-2xs uppercase font-bold tracking-[0.14em]">
-      <span className="bg-[#0e1116] px-3 text-muted">Or</span>
+      <span className="bg-panel px-3 text-muted">Or</span>
     </div>
   </div>
 );
@@ -677,7 +682,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                 "radial-gradient(120% 80% at 0% 0%, rgba(106,165,255,0.12), transparent 55%), radial-gradient(60% 40% at 85% 95%, rgba(61,125,255,0.10), transparent 60%)",
             }}
           />
-          <div className="relative z-10 font-sans text-[22px] font-bold tracking-tight">
+          <div className="relative z-10 font-sans text-xl font-bold tracking-tight">
             <span className="text-ink">moneta </span><span className="text-accent">prime</span>
           </div>
 
@@ -685,7 +690,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
             <div className="text-2xs font-bold uppercase tracking-[0.22em] text-accent">
               Institutional-grade trading
             </div>
-            <h1 className="mt-3 mb-3 max-w-[13ch] font-display text-[30px] font-bold leading-[1.1] tracking-tight text-balance text-ink sm:text-[34px]">
+            <h1 className="mt-3 mb-3 max-w-[13ch] font-display text-3xl font-bold leading-[1.1] tracking-tight text-balance text-ink sm:text-4xl">
               Trade with{" "}
               <span className="bg-gradient-to-r from-accent to-accent-deep bg-clip-text text-transparent">precision</span>,
               onboard in minutes.
@@ -750,7 +755,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                   <Mail size={26} />
                 </span>
               )}
-              <h2 className="font-display text-[25px] font-bold tracking-tight text-ink">{headerTitle}</h2>
+              <h2 className="font-display text-2xl font-bold tracking-tight text-ink">{headerTitle}</h2>
               <p className="mt-1.5 max-w-[46ch] text-sm leading-relaxed text-muted">{headerSub}</p>
             </div>
           )}

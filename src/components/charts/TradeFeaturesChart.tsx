@@ -181,13 +181,13 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
         {/* The Interactive Terminal UI */}
         <div className="bg-panel border border-line rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/5">
           {/* Terminal Toolbar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 p-4 border-b border-line/80 bg-[#0F1216]">
+          <div className="flex flex-wrap items-center justify-between gap-4 p-4 border-b border-line/80 bg-panel">
             
             {/* Coin Selector */}
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-3 px-4 py-2 bg-raised hover:bg-[#252A33] border border-line rounded-lg transition-colors"
+                className="flex items-center gap-3 px-4 py-2 bg-raised hover:bg-raised border border-line rounded-lg transition-colors"
               >
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${selectedCoin.iconBg}`}>
                   {selectedCoin.icon}
@@ -204,7 +204,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
                     <button
                       key={coin.symbol}
                       onClick={() => { setSelectedCoin(coin); setDropdownOpen(false); }}
-                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#252A33] transition-colors border-b border-line/50 last:border-0"
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-raised transition-colors border-b border-line/50 last:border-0"
                     >
                       <div className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold ${coin.iconBg}`}>
                         {coin.icon}
@@ -258,7 +258,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
               
               <button 
                 onClick={() => setChartType(prev => prev === "area" ? "line" : "area")}
-                className="p-2 bg-raised hover:bg-[#252A33] border border-line rounded-lg text-muted hover:text-ink transition-colors"
+                className="p-2 bg-raised hover:bg-raised border border-line rounded-lg text-muted hover:text-ink transition-colors"
                 title="Toggle Chart Type"
               >
                 <Activity size={16} />
@@ -282,24 +282,24 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
                 <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={priceChangePercent >= 0 ? "#10B981" : "#F43F5E"} stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor={priceChangePercent >= 0 ? "#10B981" : "#F43F5E"} stopOpacity={0}/>
+                      <stop offset="5%" stopColor={priceChangePercent >= 0 ? "var(--mp-positive)" : "var(--mp-negative)"} stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor={priceChangePercent >= 0 ? "var(--mp-positive)" : "var(--mp-negative)"} stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2B3139" vertical={false} />
-                  <XAxis dataKey="time" stroke="#848E9C" fontSize={10} tickMargin={10} minTickGap={30} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--mp-line)" vertical={false} />
+                  <XAxis dataKey="time" stroke="var(--mp-faint)" fontSize={11} tickMargin={10} minTickGap={30} />
                   <YAxis 
                     domain={yDomain} 
-                    stroke="#848E9C" 
+                    stroke="var(--mp-faint)" 
                     fontSize={10} 
                     tickFormatter={(value) => `$${value.toLocaleString()}`}
                     orientation="right"
                   />
-                  <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#475569', strokeWidth: 1, strokeDasharray: '4 4' }} />
+                  <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'var(--mp-line-strong)', strokeWidth: 1, strokeDasharray: '4 4' }} />
                   <Area 
                     type="monotone" 
                     dataKey="price" 
-                    stroke={priceChangePercent >= 0 ? "#10B981" : "#F43F5E"} 
+                    stroke={priceChangePercent >= 0 ? "var(--mp-positive)" : "var(--mp-negative)"} 
                     strokeWidth={2}
                     fillOpacity={chartType === "area" ? 1 : 0} 
                     fill={chartType === "area" ? "url(#colorPrice)" : "transparent"} 
@@ -316,7 +316,7 @@ export const TradeFeaturesChart: React.FC<TradeFeaturesChartProps> = ({ onNaviga
               <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                 <ComposedChart data={chartData} margin={{ top: 0, right: 10, left: -20, bottom: 0 }}>
                   <YAxis hide />
-                  <Bar dataKey="volume" fill="#2B3139" />
+                  <Bar dataKey="volume" fill="var(--mp-line-strong)" />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>

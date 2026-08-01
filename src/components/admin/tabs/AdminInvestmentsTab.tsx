@@ -221,7 +221,7 @@ export const AdminInvestmentsTab: React.FC = () => {
                 </div>
                 <p className="text-2xs text-muted mt-1">Order {plan.displayOrder}{plan.badge ? ` | ${plan.badge}` : ""}</p>
               </div>
-              <span className={`text-2xs font-bold px-2 py-0.5 rounded-full border ${plan.enabled ? "text-positive bg-positive/10 border-positive/30" : "text-yellow-400 bg-yellow-500/10 border-yellow-500/30"}`}>
+              <span className={`text-2xs font-bold px-2 py-0.5 rounded-full border ${plan.enabled ? "text-positive bg-positive/10 border-positive/30" : "text-warning bg-warning-soft border-warning-line"}`}>
                 {plan.enabled ? "ENABLED" : "DISABLED"}
               </span>
             </div>
@@ -247,7 +247,7 @@ export const AdminInvestmentsTab: React.FC = () => {
                   } finally {
                     setIsSaving(false);
                   }
-                }} className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-2xs font-bold rounded-lg cursor-pointer border ${plan.enabled ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/20" : "bg-positive/10 border-positive/30 text-positive hover:bg-positive/20"}`}>
+                }} className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-2xs font-bold rounded-lg cursor-pointer border ${plan.enabled ? "bg-warning-soft border-warning-line text-warning hover:bg-warning/15" : "bg-positive/10 border-positive/30 text-positive hover:bg-positive/20"}`}>
                 {plan.enabled ? <><Pause size={10} /> Disable</> : <><Play size={10} /> Enable</>}
               </button>
               <button onClick={async () => {

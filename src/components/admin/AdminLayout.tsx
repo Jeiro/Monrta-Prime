@@ -48,7 +48,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
           {item.label}
         </span>
         {!!item.alert && (
-          <span className={`text-2xs font-black px-1.5 py-0.5 rounded-full ${isActive ? "bg-ground text-accent" : "bg-negative/15 text-negative border border-negative/30 animate-pulse"}`}>
+          <span className={`text-2xs font-black px-1.5 py-0.5 rounded-full ${isActive ? "bg-ground text-accent" : "bg-negative/15 text-negative border border-negative/30"}`}>
             {item.alert}
           </span>
         )}
@@ -113,7 +113,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ activeTab, navItems, o
                 </button>
               </div>
             </aside>
-            <div className="flex-1 bg-black/60 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
+            <div className="flex-1 bg-ground/75 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
           </motion.div>
         )}
       </AnimatePresence>

@@ -37,7 +37,7 @@ const shortValue = (value?: string, left = 12, right = 6) => {
 
 const statusClass = (status: Transaction["status"]) => {
   if (status === "completed" || status === "approved") return "border-positive/30 bg-positive/10 text-positive";
-  if (status === "pending") return "border-yellow-500/30 bg-yellow-500/10 text-yellow-400";
+  if (status === "pending") return "border-warning-line bg-warning-soft text-warning";
   return "border-negative/30 bg-negative/10 text-negative";
 };
 
@@ -191,7 +191,7 @@ export const AdminTransactionsTab: React.FC = () => {
 
 const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "yellow" | "green" | "red" }> = ({ label, value, tone = "default" }) => {
   const toneClass = tone === "yellow"
-    ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
+    ? "bg-warning-soft border-warning-line text-warning"
     : tone === "green"
       ? "bg-positive/10 border-positive/20 text-positive"
       : tone === "red"

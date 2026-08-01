@@ -13,7 +13,7 @@ export const AboutUs = () => (
         </div>
 
         {/* Brand styled heading: lowercase 'moneta prime' with white/accent split, using the Bybit font layout */}
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold text-ink tracking-tight leading-tight font-display mb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-semibold text-ink tracking-tight leading-tight font-display mb-4">
             About <span className="lowercase text-ink">moneta <span className="text-accent">prime</span></span>
         </h2>
         <p className="text-muted text-base md:text-lg max-w-2xl mx-auto mb-6 leading-relaxed font-sans">

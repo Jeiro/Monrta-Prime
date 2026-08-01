@@ -5,7 +5,7 @@ export const MaintenancePage: React.FC = () => {
   const { appSettings } = useApp();
 
   return (
-    <div className="relative min-h-screen bg-[#03060d] text-ink flex items-center justify-center px-6 py-12">
+    <div className="relative min-h-screen bg-ground text-ink flex items-center justify-center px-6 py-12">
       <div className="relative max-w-3xl w-full rounded-3xl border border-white/10 bg-raised/80 p-10 shadow-[0_30px_90px_rgba(15,23,42,0.35)] backdrop-blur-xl">
         <div className="inline-flex items-center justify-center rounded-full bg-accent/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.24em] text-accent">
           Under Maintenance
@@ -22,7 +22,7 @@ export const MaintenancePage: React.FC = () => {
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           <a
             href={`mailto:${appSettings.supportEmail}`}
-            className="inline-flex items-center justify-center rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-faint transition hover:bg-[#ffb86c]"
+            className="inline-flex items-center justify-center rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-faint transition hover:bg-warning"
           >
             Contact support
           </a>

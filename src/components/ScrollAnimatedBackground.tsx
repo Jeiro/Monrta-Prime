@@ -27,9 +27,8 @@ export const ScrollAnimatedBackground: React.FC = () => {
 
   if (isCompactDevice || prefersReducedMotion) {
     return (
-      <div className="absolute inset-0 w-full pointer-events-none select-none z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-[#04060b]" />
-        <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-accent/[0.07] blur-[70px]" />
+      <div className="absolute inset-0 w-full pointer-events-none select-none z-0 overflow-hidden" style={{ opacity: "var(--mp-decor-opacity)" }}>
+                <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-accent/[0.07] blur-[70px]" />
         <div className="absolute top-1/3 -right-24 h-72 w-72 rounded-full bg-accent/[0.05] blur-[65px]" />
         <div
           className="absolute inset-0 opacity-[0.025]"
@@ -50,13 +49,12 @@ export const ScrollAnimatedBackground: React.FC = () => {
   ];
 
   return (
-    <div className="absolute inset-0 w-full pointer-events-none select-none z-0 overflow-hidden" style={{ minHeight: "100%" }}>
+    <div className="absolute inset-0 w-full pointer-events-none select-none z-0 overflow-hidden" style={{ minHeight: "100%", opacity: "var(--mp-decor-opacity)" }}>
       {/* 1. DARK NAVY AND CHARCOAL BACKGROUND */}
-      <div className="absolute inset-0 bg-[#04060b]" />
-      
+            
       {/* Dynamic atmospheric radial gradient glows (blue and gold) */}
       <div className="absolute top-0 left-[-10%] w-[60%] h-[750px] rounded-full bg-gradient-to-br from-accent/[0.08] via-accent/[0.04] to-transparent blur-[130px]" />
-      <div className="absolute top-[15%] right-[-10%] w-[50%] h-[800px] rounded-full bg-gradient-to-bl from-accent/[0.05] via-yellow-600/[0.02] to-transparent blur-[120px]" />
+      <div className="absolute top-[15%] right-[-10%] w-[50%] h-[800px] rounded-full bg-gradient-to-bl from-accent/[0.05] via-warning/[0.02] to-transparent blur-[120px]" />
       <div className="absolute top-[40%] left-[15%] w-[65%] h-[900px] rounded-full bg-gradient-to-r from-accent-deep/[0.03] via-accent/[0.04] to-transparent blur-[140px]" />
       <div className="absolute bottom-0 right-[5%] w-[55%] h-[1000px] rounded-full bg-gradient-to-t from-accent/[0.09] via-accent/[0.03] to-transparent blur-[150px]" />
 

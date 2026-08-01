@@ -55,12 +55,12 @@ type AccountStatus = "active" | "suspended" | "banned";
 
 const statusStyles: Record<AccountStatus, string> = {
   active: "text-positive bg-positive/10 border-positive/30",
-  suspended: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
+  suspended: "text-warning bg-warning-soft border-warning-line",
   banned: "text-negative bg-negative/10 border-negative/30"
 };
 
 const kycStyles: Record<KycViewStatus, string> = {
-  pending: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
+  pending: "text-warning bg-warning-soft border-warning-line",
   approved: "text-positive bg-positive/10 border-positive/30",
   rejected: "text-negative bg-negative/10 border-negative/30",
   unverified: "text-muted bg-surface/10 border-line/30"
@@ -393,7 +393,7 @@ const UserDrawer: React.FC<{
   const balanceBusy = busyAction === `balance-${user.email}`;
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-end" onClick={onClose}>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 bg-ground/75 backdrop-blur-sm flex justify-end" onClick={onClose}>
       <motion.aside initial={{ x: 480 }} animate={{ x: 0 }} transition={{ type: "spring", damping: 28, stiffness: 260 }} onClick={event => event.stopPropagation()} className="h-full w-full max-w-2xl bg-ground border-l border-line shadow-2xl overflow-y-auto">
         <div className="sticky top-0 z-10 bg-ground/95 backdrop-blur border-b border-line px-5 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
@@ -520,12 +520,12 @@ const UserDrawer: React.FC<{
             />
           </Section>
 
-          <Section title="Account Actions" icon={<AlertTriangle size={15} className="text-yellow-400" />}>
+          <Section title="Account Actions" icon={<AlertTriangle size={15} className="text-warning" />}>
             <div className="flex flex-wrap gap-2">
               <button onClick={onActivate} className="flex items-center gap-1.5 px-3 py-2 bg-positive/10 border border-positive/30 text-positive text-2xs font-bold rounded-lg hover:bg-positive/20 cursor-pointer">
                 <UserCheck size={12} /> Activate
               </button>
-              <button onClick={onSuspend} className="flex items-center gap-1.5 px-3 py-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-2xs font-bold rounded-lg hover:bg-yellow-500/20 cursor-pointer">
+              <button onClick={onSuspend} className="flex items-center gap-1.5 px-3 py-2 bg-warning-soft border border-warning-line text-warning text-2xs font-bold rounded-lg hover:bg-warning/15 cursor-pointer">
                 <Ban size={12} /> Suspend
               </button>
               <button onClick={onResetPassword} className="flex items-center gap-1.5 px-3 py-2 bg-accent/10 border border-accent/30 text-accent text-2xs font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
@@ -541,7 +541,7 @@ const UserDrawer: React.FC<{
 
 const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "yellow" | "green" | "red" }> = ({ label, value, tone = "default" }) => {
   const toneClass = tone === "yellow"
-    ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
+    ? "bg-warning-soft border-warning-line text-warning"
     : tone === "green"
       ? "bg-positive/10 border-positive/20 text-positive"
       : tone === "red"

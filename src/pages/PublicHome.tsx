@@ -179,7 +179,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
     <div className="min-h-screen bg-transparent text-ink font-sans selection:bg-accent/20 overflow-x-hidden pt-0">
       
       {/* 1. HERO BANNER: METRICS & EXQUISITE CELESTIAL ORBITING SYSTEM */}
-      <section className="relative flex flex-col justify-center items-center bg-gradient-to-b from-ground via-panel to-black border-b border-line/30 px-4 overflow-hidden pt-14 sm:pt-16 pb-14">
+      <section className="relative flex flex-col justify-center items-center bg-gradient-to-b from-ground via-panel to-panel border-b border-line/30 px-4 overflow-hidden pt-14 sm:pt-16 pb-14">
         
         {/* Subtle grid background effects */}
         <div className="absolute inset-0 bg-[radial-gradient(rgba(106,165,255,0.12)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
@@ -189,7 +189,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
           
           {/* Main Display Typography */}
           <div className="space-y-4 max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-extrabold text-ink tracking-tight leading-tight max-w-4xl mx-auto font-sans">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-extrabold text-ink tracking-tight leading-tight max-w-4xl mx-auto font-sans">
               Trade Smarter With <span className="lowercase text-ink font-extrabold">moneta <span className="text-accent">prime</span></span>
             </h1>
             <p className="text-muted text-sm sm:text-base max-w-md mx-auto leading-relaxed">

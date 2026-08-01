@@ -9,13 +9,13 @@ export const AdminSecurityTab: React.FC = () => {
 
   const statusIcons: Record<string, React.ReactNode> = {
     success: <Check size={12} className="text-positive" />,
-    warning: <AlertTriangle size={12} className="text-yellow-400" />,
+    warning: <AlertTriangle size={12} className="text-warning" />,
     alert: <ShieldAlert size={12} className="text-negative" />
   };
 
   const statusColors: Record<string, string> = {
     success: "border-positive/20 bg-positive/5",
-    warning: "border-yellow-500/20 bg-yellow-500/5",
+    warning: "border-warning-line bg-warning-soft",
     alert: "border-negative/20 bg-negative/5"
   };
 
@@ -33,7 +33,7 @@ export const AdminSecurityTab: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { label: "Total Events", value: adminAuditLogs.length, color: "text-accent" },
-          { label: "Warnings", value: adminAuditLogs.filter(l => l.status === "warning").length, color: "text-yellow-400" },
+          { label: "Warnings", value: adminAuditLogs.filter(l => l.status === "warning").length, color: "text-warning" },
           { label: "Alerts", value: adminAuditLogs.filter(l => l.status === "alert").length, color: "text-negative" }
         ].map((s, i) => (
           <div key={i} className="bg-surface border border-line rounded-xl p-4 flex items-center justify-between">
