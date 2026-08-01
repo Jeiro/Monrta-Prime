@@ -9,11 +9,14 @@ import { MarketsProvider } from "./domains/MarketsContext";
 import { InvestmentPlansProvider } from "./domains/InvestmentPlansContext";
 import { TradersProvider } from "./domains/TradersContext";
 import { TradingProvider } from "./domains/TradingContext";
-import { AppProvider } from "./AppContext";
+import { AirdropsProvider } from "./domains/AirdropsContext";
+import { KycProvider } from "./domains/KycContext";
+import { SupportProvider } from "./domains/SupportContext";
+import { AnnouncementsProvider } from "./domains/AnnouncementsContext";
 
 /**
- * Composes every domain provider in dependency order and is rendered once,
- * at the top of the tree, in `App.tsx`.
+ * Composes every domain provider in dependency order and is rendered once, at
+ * the top of the tree, in `App.tsx`.
  *
  * Ordering rule: a provider may only read contexts declared ABOVE it here.
  * The nesting is therefore not cosmetic — it encodes which domain depends on
@@ -22,15 +25,24 @@ import { AppProvider } from "./AppContext";
  *   AuditLog        no dependencies (write-only logger + local array)
  *   Session         identity + the shared `user` object; everything reads it
  *   SiteSettings    supplies the email sender identity to Notifications
- *   AdminUsersData  the users directory — notifyAdmins and the transaction
- *                   recipient fallback both need it, so the raw data sits
- *                   below them and the admin handlers sit above
+ *   AdminUsersData  the users directory — notifyAdmins, the transaction
+ *                   recipient fallback, the KYC reviewer and the announcement
+ *                   fan-out all read it, so the raw data sits below them and
+ *                   the admin handlers sit above
  *   WalletData      the transaction ledger — the admin balance editor and the
  *                   airdrop approval flow both refresh it, same reasoning
  *   Notifications   in-app notifications + transactional email; every domain
  *                   below raises them
- *   Wallet          deposit/withdraw + the approval queues
+ *   Markets         self-contained price feed
+ *   Wallet          deposit/withdraw, the approval queues, and the shared
+ *                   insufficient-balance modal that investments, copy trading
+ *                   and trading all open
  *   AdminUsers      the admin balance/status handlers
+ *   InvestmentPlans plans + active investments
+ *   Traders         trader catalog + copy trading
+ *   Trading         spot buy/sell; its live-mark effect reads Markets and plans
+ *   Airdrops        campaigns + claims
+ *   Kyc, Support, Announcements — leaves, nothing depends on them
  *
  * The `children` element is created here, once, so a re-render inside any one
  * provider does not cascade into the providers nested below it — that
@@ -49,9 +61,15 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
                     <InvestmentPlansProvider>
                       <TradersProvider>
                         <TradingProvider>
-                          <AppProvider>
-                            {children}
-                          </AppProvider>
+                          <AirdropsProvider>
+                            <KycProvider>
+                              <SupportProvider>
+                                <AnnouncementsProvider>
+                                  {children}
+                                </AnnouncementsProvider>
+                              </SupportProvider>
+                            </KycProvider>
+                          </AirdropsProvider>
                         </TradingProvider>
                       </TradersProvider>
                     </InvestmentPlansProvider>
