@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import { Award, Check, Edit3, ImagePlus, Plus, Save, Star, ToggleLeft, ToggleRight, Trash2, Upload, X } from "lucide-react";
 import { useTraders } from "../../../context/domains/TradersContext";
 import type { TraderProfile } from "../../../types";
-import { Avatar } from "../../ui";
+import { Avatar, Button, Input, Textarea, DataTable, type Column } from "../../ui";
 
 type TraderFormState = {
   name: string;
@@ -232,6 +232,89 @@ export const AdminTradersTab: React.FC = () => {
     }
   };
 
+  const traderColumns: Column<TraderProfile>[] = [
+    {
+      key: "trader",
+      header: "Trader",
+      primary: true,
+      cell: trader => (
+        <div className="flex items-center gap-3">
+          <Avatar src={trader.avatar} name={trader.name} size="md" />
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-ink truncate">{trader.name}</p>
+            <p className="text-2xs text-muted">{trader.assetsUnderManagement || "$0"} AUM</p>
+          </div>
+        </div>
+      )
+    },
+    {
+      key: "flags",
+      header: "Flags",
+      cell: trader => (
+        <div className="flex flex-col items-start gap-1.5">
+          <TableToggle enabled={trader.active ?? true} onClick={() => toggleTraderField(trader, "active")} onText="Active" offText="Inactive" />
+          <TableToggle enabled={trader.featured ?? false} onClick={() => toggleTraderField(trader, "featured")} onText="Featured" offText="Standard" />
+        </div>
+      )
+    },
+    {
+      key: "style",
+      header: "Style / Markets",
+      hideOnMobile: true,
+      cell: trader => (
+        <>
+          <p className="text-xs font-bold text-ink">{trader.tradingStyle || "Not set"}</p>
+          <p className="text-2xs text-muted mt-0.5">{trader.markets || "Markets not set"}</p>
+          <p className="text-2xs text-faint mt-0.5">{trader.country || "Country not set"}</p>
+        </>
+      )
+    },
+    {
+      key: "performance",
+      header: "Performance",
+      cell: trader => (
+        <>
+          <div className="flex items-center gap-3 text-2xs">
+            <span className="font-bold text-positive">{trader.roi ?? 0}% ROI</span>
+            <span className="text-ink">{trader.winRate ?? 0}% win</span>
+            <span className="text-accent">R{trader.riskScore ?? 2}</span>
+          </div>
+          <p className="text-2xs text-muted mt-1">{trader.profitDays ?? 0} profit days</p>
+        </>
+      )
+    },
+    {
+      key: "followers",
+      header: "Followers / Range",
+      cell: trader => (
+        <>
+          <p className="font-data text-xs tabular-nums text-ink">{trader.followers ?? 0}<span className="text-muted"> / {trader.maxFollowers ?? 500}</span></p>
+          <p className="mt-0.5 font-data text-2xs tabular-nums text-muted">{moneyRange(trader.minimumCopyAmount, trader.maximumCopyAmount)}</p>
+        </>
+      )
+    },
+    {
+      key: "order",
+      header: "Order",
+      numeric: true,
+      hideOnMobile: true,
+      cell: trader => <span className="text-accent font-bold">{trader.displayOrder ?? "-"}</span>
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      align: "right",
+      cell: trader => (
+        <div className="flex justify-end gap-2">
+          <Button variant="secondary" size="sm" icon={Edit3} onClick={() => startEdit(trader)}>Edit</Button>
+          <Button variant="danger" size="sm" aria-label={`Delete ${trader.name}`} onClick={() => { if (window.confirm(`Delete "${trader.name}"?`)) void adminDeleteTrader(trader.id); }}>
+            <Trash2 size={12} />
+          </Button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="space-y-6">
       <div className="bg-surface border border-line rounded-2xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
@@ -247,9 +330,7 @@ export const AdminTradersTab: React.FC = () => {
             <StatBadge label="Active" value={tableStats.active} tone="green" />
             <StatBadge label="Featured" value={tableStats.featured} tone="accent" />
           </div>
-          <button onClick={startCreate} className="flex items-center gap-2 px-4 py-2 bg-accent text-ground font-bold text-xs uppercase rounded-lg hover:opacity-90 cursor-pointer">
-            <Plus size={14} /> Add Trader
-          </button>
+          <Button icon={Plus} onClick={startCreate}>Add Trader</Button>
         </div>
       </div>
 
@@ -266,9 +347,7 @@ export const AdminTradersTab: React.FC = () => {
               <h3 className="text-sm font-bold text-ink">{isCreating ? "Add New Trader" : "Edit Trader Profile"}</h3>
               <p className="text-2xs text-muted mt-1">Update the fields shown to admins and copied into the trader record.</p>
             </div>
-            <button onClick={resetForm} className="p-1.5 rounded-lg bg-line/50 text-muted hover:text-ink cursor-pointer" aria-label="Close trader form">
-              <X size={14} />
-            </button>
+            <Button variant="ghost" size="icon" onClick={resetForm} aria-label="Close trader form"><X size={14} /></Button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
@@ -278,6 +357,8 @@ export const AdminTradersTab: React.FC = () => {
             <TextInput placeholder="Markets (Crypto, Forex, Stocks)" value={form.markets} onChange={value => setField("markets", value)} />
 
             <div className="flex items-center gap-3 px-3 py-1.5 bg-ground border border-line rounded-lg">
+              {/* Raw file input: hidden and clicked programmatically by the
+                  button below — Input would render a visible field wrapper. */}
               <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarFileChange} className="hidden" id="trader-avatar-upload" />
               {form.avatar ? (
                 <img src={form.avatar} alt="Avatar preview" className="w-8 h-8 rounded-full object-cover border-2 border-accent/40 flex-shrink-0" />
@@ -286,10 +367,9 @@ export const AdminTradersTab: React.FC = () => {
                   <ImagePlus size={14} className="text-muted" />
                 </div>
               )}
-              <button type="button" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 text-xs text-accent font-semibold hover:text-ink transition-colors cursor-pointer truncate">
-                <Upload size={12} />
+              <Button type="button" variant="ghost" size="sm" icon={Upload} className="truncate text-accent" onClick={() => fileInputRef.current?.click()}>
                 {form.avatar ? "Change Photo" : "Upload Photo"}
-              </button>
+              </Button>
             </div>
             <NumberInput placeholder="ROI %" value={form.roi} onChange={value => setField("roi", value)} />
             <NumberInput placeholder="Win Rate %" value={form.winRate} onChange={value => setField("winRate", value)} />
@@ -309,104 +389,43 @@ export const AdminTradersTab: React.FC = () => {
             </div>
           </div>
 
-          <textarea placeholder="Biography" rows={4} value={form.biography} onChange={event => setField("biography", event.target.value)} className="w-full px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none" />
+          <Textarea label="Biography" rows={4} value={form.biography} onChange={event => setField("biography", event.target.value)} />
 
           <div className="flex flex-wrap gap-3">
-            <button onClick={isCreating ? handleCreate : handleUpdate} className="flex items-center gap-2 px-6 py-2 bg-accent text-ground font-bold text-xs uppercase rounded-lg hover:opacity-90 cursor-pointer">
-              <Save size={14} /> {isCreating ? "Create Trader" : "Save Changes"}
-            </button>
-            <button onClick={resetForm} className="flex items-center gap-2 px-5 py-2 bg-line/60 text-ink font-bold text-xs uppercase rounded-lg hover:bg-line cursor-pointer">
-              <X size={14} /> Cancel
-            </button>
+            <Button icon={Save} onClick={isCreating ? handleCreate : handleUpdate}>{isCreating ? "Create Trader" : "Save Changes"}</Button>
+            <Button variant="secondary" icon={X} onClick={resetForm}>Cancel</Button>
           </div>
         </motion.div>
       )}
 
-      <div className="bg-surface border border-line rounded-2xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-line flex items-center justify-between gap-3">
-          <div>
-            <h2 className="text-sm font-bold text-ink">Trader Directory</h2>
-            <p className="text-2xs text-muted mt-1">Inline visibility controls with editable profile details.</p>
-          </div>
+      <div>
+        <div className="mb-3">
+          <h2 className="text-sm font-bold text-ink">Trader Directory</h2>
+          <p className="text-2xs text-muted mt-1">Inline visibility controls with editable profile details.</p>
         </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-ground/60 border-b border-line">
-              <tr className="text-2xs uppercase tracking-wider text-muted">
-                <th className="px-5 py-3 font-bold">Trader</th>
-                <th className="px-4 py-3 font-bold">Flags</th>
-                <th className="px-4 py-3 font-bold">Style / Markets</th>
-                <th className="px-4 py-3 font-bold">Performance</th>
-                <th className="px-4 py-3 font-bold">Followers / Range</th>
-                <th className="px-4 py-3 font-bold">Order</th>
-                <th className="px-5 py-3 font-bold text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-line/70">
-              {sortedTraders.map(trader => (
-                <tr key={trader.id} className="hover:bg-ground/40 transition-colors">
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <Avatar src={trader.avatar} name={trader.name} size="md" />
-                      <div className="min-w-0">
-                        <p className="text-sm font-bold text-ink truncate">{trader.name}</p>
-                        <p className="text-2xs text-muted">{trader.assetsUnderManagement || "$0"} AUM</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="flex flex-col items-start gap-1.5">
-                      <TableToggle enabled={trader.active ?? true} onClick={() => toggleTraderField(trader, "active")} onText="Active" offText="Inactive" />
-                      <TableToggle enabled={trader.featured ?? false} onClick={() => toggleTraderField(trader, "featured")} onText="Featured" offText="Standard" />
-                    </div>
-                  </td>
-                  <td className="px-4 py-4">
-                    <p className="text-xs font-bold text-ink">{trader.tradingStyle || "Not set"}</p>
-                    <p className="text-2xs text-muted mt-0.5">{trader.markets || "Markets not set"}</p>
-                    <p className="text-2xs text-faint mt-0.5">{trader.country || "Country not set"}</p>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="flex items-center gap-3 text-2xs">
-                      <span className="font-bold text-positive">{trader.roi ?? 0}% ROI</span>
-                      <span className="text-ink">{trader.winRate ?? 0}% win</span>
-                      <span className="text-accent">R{trader.riskScore ?? 2}</span>
-                    </div>
-                    <p className="text-2xs text-muted mt-1">{trader.profitDays ?? 0} profit days</p>
-                  </td>
-                  <td className="px-4 py-4">
-                    <p className="font-data text-xs tabular-nums text-ink">{trader.followers ?? 0}<span className="text-muted"> / {trader.maxFollowers ?? 500}</span></p>
-                    <p className="mt-0.5 font-data text-2xs tabular-nums text-muted">{moneyRange(trader.minimumCopyAmount, trader.maximumCopyAmount)}</p>
-                  </td>
-                  <td className="px-4 py-4 text-xs text-accent font-bold">{trader.displayOrder ?? "-"}</td>
-                  <td className="px-5 py-4">
-                    <div className="flex justify-end gap-2">
-                      <button onClick={() => startEdit(trader)} className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-accent/10 border border-accent/30 text-accent text-2xs font-bold rounded-lg hover:bg-accent/20 cursor-pointer">
-                        <Edit3 size={10} /> Edit
-                      </button>
-                      <button onClick={() => { if (window.confirm(`Delete \"${trader.name}\"?`)) void adminDeleteTrader(trader.id); }} className="flex items-center justify-center px-3 py-1.5 bg-negative/10 border border-negative/30 text-negative rounded-lg hover:bg-negative/20 cursor-pointer" aria-label={`Delete ${trader.name}`}>
-                        <Trash2 size={12} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          columns={traderColumns}
+          rows={sortedTraders}
+          rowKey={trader => trader.id}
+          caption="Trader directory"
+          empty={{ icon: Award, title: "No traders configured yet." }}
+        />
       </div>
+
     </motion.div>
   );
 };
 
-const inputClass = "px-3 py-2 bg-ground border border-line rounded-lg text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent";
-
+// These two wrap the Input primitive rather than a raw <input>, which
+// converts all 15 call sites in the form above at once. The old
+// placeholder becomes a real label: a placeholder-only field loses its
+// name the moment you type into it.
 const TextInput: React.FC<{ placeholder: string; value: string; onChange: (value: string) => void }> = ({ placeholder, value, onChange }) => (
-  <input placeholder={placeholder} value={value} onChange={event => onChange(event.target.value)} className={inputClass} />
+  <Input label={placeholder} value={value} onChange={event => onChange(event.target.value)} />
 );
 
 const NumberInput: React.FC<{ placeholder: string; value: string; onChange: (value: string) => void }> = ({ placeholder, value, onChange }) => (
-  <input type="number" placeholder={placeholder} value={value} onChange={event => onChange(event.target.value)} className={inputClass} />
+  <Input label={placeholder} type="number" numeric value={value} onChange={event => onChange(event.target.value)} />
 );
 
 const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "green" | "accent" }> = ({ label, value, tone = "default" }) => {
@@ -424,17 +443,31 @@ const StatBadge: React.FC<{ label: string; value: number; tone?: "default" | "gr
   );
 };
 
+// Both toggles are aria-pressed so the on/off state is exposed, not just
+// implied by colour.
 const ToggleButton: React.FC<{ label: string; enabled: boolean; onClick: () => void }> = ({ label, enabled, onClick }) => (
-  <button type="button" onClick={onClick} className={`flex items-center justify-center gap-1.5 px-3 py-2 border rounded-lg text-2xs font-bold cursor-pointer ${enabled ? "bg-positive/10 border-positive/30 text-positive" : "bg-ground border-line text-muted"}`}>
-    {enabled ? <ToggleRight size={14} /> : <ToggleLeft size={14} />}
+  <Button
+    type="button"
+    variant={enabled ? "positive" : "secondary"}
+    size="sm"
+    aria-pressed={enabled}
+    icon={enabled ? ToggleRight : ToggleLeft}
+    onClick={onClick}
+  >
     {label}
-  </button>
+  </Button>
 );
 
 const TableToggle: React.FC<{ enabled: boolean; onClick: () => void; onText: string; offText: string }> = ({ enabled, onClick, onText, offText }) => (
-  <button type="button" onClick={onClick} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-2xs font-bold cursor-pointer ${enabled ? "bg-positive/10 border-positive/30 text-positive" : "bg-ground border-line text-muted"}`}>
-    {enabled ? <ToggleRight size={13} /> : <ToggleLeft size={13} />}
+  <Button
+    type="button"
+    variant={enabled ? "positive" : "secondary"}
+    size="sm"
+    aria-pressed={enabled}
+    icon={enabled ? ToggleRight : ToggleLeft}
+    iconRight={enabled && onText === "Featured" ? Star : undefined}
+    onClick={onClick}
+  >
     {enabled ? onText : offText}
-    {enabled && onText === "Featured" ? <Star size={11} /> : null}
-  </button>
+  </Button>
 );
