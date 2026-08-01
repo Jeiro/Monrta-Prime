@@ -6,6 +6,63 @@ import { motion } from "motion/react";
 import { TradeFeatures, InvestmentPlansSection, Proof, Closing, Footer, HomeVideos } from "../components/HomeSections";
 import { Brandmark } from "../components/ui/Brandmark";
 
+/**
+ * The hero's orbiting asset marks.
+ *
+ * `size` is a share of the orbit box, not a pixel width — the three rings were
+ * 190/300/420px against a 420px composition, which is 45%/71%/100%; they are
+ * held at 92% of that here so the token glyphs sitting on the outer
+ * circumference stay inside the box rather than relying on overflow.
+ *
+ * `scale` is the glyph's font size as a share of the orbit box, so a four-letter
+ * ticker on the outer ring stays inside its dot at every width.
+ */
+const ORBIT_RINGS = [
+  {
+    id: "crypto",
+    size: "42%",
+    duration: 16,
+    direction: 1,
+    border: "border border-line/60 border-dashed",
+    tokens: [
+      { label: "₿", bg: "bg-accent", color: "text-ground", angle: 0, scale: 0.034 },
+      { label: "Ξ", bg: "bg-[#4E62CC]", color: "text-white", angle: 120, scale: 0.034 },
+      { label: "₮", bg: "bg-[#26A17B]", color: "text-white", angle: 240, scale: 0.034 },
+    ],
+  },
+  {
+    id: "equities",
+    size: "66%",
+    duration: 25,
+    direction: -1,
+    border: "border border-line/40 border-dotted",
+    tokens: [
+      { label: "T", bg: "bg-[#E82127]", color: "text-white", angle: 0, scale: 0.03 },
+      { label: "", bg: "bg-white", color: "text-black", angle: 72, scale: 0.03 },
+      { label: "NV", bg: "bg-[#76B900]", color: "text-black", angle: 144, scale: 0.026 },
+      { label: "G", bg: "bg-[#4285F4]", color: "text-white", angle: 216, scale: 0.03 },
+      { label: "a", bg: "bg-[#FF9900]", color: "text-black", angle: 288, scale: 0.03 },
+    ],
+  },
+  {
+    id: "global",
+    size: "92%",
+    duration: 38,
+    direction: 1,
+    border: "border border-line/20",
+    tokens: [
+      { label: "AVAX", bg: "bg-[#E84142]", color: "text-white", angle: 0, scale: 0.019 },
+      { label: "Đ", bg: "bg-[#C2A633]", color: "text-black", angle: 45, scale: 0.03 },
+      { label: "LINK", bg: "bg-[#375BD2]", color: "text-white", angle: 90, scale: 0.019 },
+      { label: "DOT", bg: "bg-[#E6007A]", color: "text-white", angle: 135, scale: 0.021 },
+      { label: "TRX", bg: "bg-[#EC0623]", color: "text-white", angle: 180, scale: 0.021 },
+      { label: "LTC", bg: "bg-[#345D9D]", color: "text-white", angle: 225, scale: 0.021 },
+      { label: "🚀", bg: "bg-gradient-to-tr from-[#1D4ED8] to-[#1E3A8A]", color: "text-white", angle: 270, scale: 0.028 },
+      { label: "MS", bg: "bg-[#00A4EF]", color: "text-white", angle: 315, scale: 0.026 },
+    ],
+  },
+] as const;
+
 export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ onNavigate }) => {
   useSeo({
     title: "Moneta Prime — Crypto Trading, Copy Trading & Investment Plans",
@@ -22,7 +79,10 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
         
         {/* Subtle grid background effects */}
         <div className="absolute inset-0 bg-[radial-gradient(rgba(106,165,255,0.12)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[140px] pointer-events-none" />
+        <div
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-accent/5 rounded-full blur-[140px] pointer-events-none"
+          style={{ width: "min(150vw, 37.5rem)", height: "min(150vw, 37.5rem)" }}
+        />
         
         <div className="max-w-4xl mx-auto w-full relative z-20 text-center flex flex-col items-center mt-2">
           
@@ -52,128 +112,106 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
             </button>
           </div>
 
-          {/* CELESTIAL ORBIT ANIMATION SYSTEM (Bybit-themed mockups with upright counter-rotation) */}
-          <div className="relative w-full max-w-lg h-[240px] min-[380px]:h-[280px] min-[440px]:h-[340px] sm:h-[500px] mt-2 sm:mt-12 flex items-center justify-center select-none overflow-visible scale-[0.62] min-[380px]:scale-[0.72] min-[440px]:scale-[0.85] sm:scale-100 transition-transform origin-center">
-            
-            {/* Ambient gold starfields glow */}
-            <div className="absolute w-56 h-56 bg-accent/10 rounded-full blur-[60px]" />
-            
-            {/* Central Moneta Prime Logo Brand Core */}
-            <div className="absolute w-[180px] h-[180px] rounded-full bg-transparent border-2 border-accent/20 flex flex-col items-center justify-center z-30 shadow-[0_0_50px_rgba(106,165,255,0.15)]">
-              <Brandmark className="w-[52px] h-[52px] transition-transform duration-500 hover:rotate-6 drop-shadow-[0_4px_16px_rgba(106,165,255,0.4)]" />
-              <span className="text-base text-ink font-bold tracking-[0.05em] mt-2 font-sans lowercase">
+          {/* CELESTIAL ORBIT SYSTEM
+
+              One fluid composition, not a fixed one scaled down. `--orbit` is
+              the single dimension the whole thing derives from; every ring,
+              icon and glyph below is a percentage or a calc() of it, so the
+              art resolves itself at any width instead of being authored at
+              420px and shrunk with a scale() transform at three breakpoints.
+
+              That old approach had two sizing systems fighting: the container
+              had its own breakpoint heights (240/280/340/500px) while the
+              contents were scaled independently (0.62/0.72/0.85/1), so the
+              box and the art it contained disagreed at every width between
+              the breakpoints. Rings are now sized as a share of the box, and
+              tokens sit on the circumference via a rotated frame rather than
+              a hardcoded translateY radius. */}
+          <div
+            className="relative mt-6 sm:mt-10 flex items-center justify-center select-none"
+            style={{
+              // 15rem floor keeps the glyphs legible on a 320px phone; the
+              // 28rem ceiling matches the old sm:scale-100 size, so the
+              // composition tops out where it always did.
+              ["--orbit" as string]: "clamp(15rem, 74vw, 28rem)",
+              width: "var(--orbit)",
+              height: "var(--orbit)",
+            }}
+          >
+            {/* Ambient glow */}
+            <div className="absolute w-1/2 h-1/2 bg-accent/10 rounded-full blur-[60px]" />
+
+            {/* Central brand core */}
+            <div
+              className="absolute rounded-full bg-transparent border-2 border-accent/20 flex flex-col items-center justify-center z-30 shadow-[0_0_50px_color-mix(in_srgb,var(--mp-accent)_15%,transparent)]"
+              style={{ width: "39%", height: "39%" }}
+            >
+              {/* Sized by a wrapper: Brandmark takes only className, and it is
+                  the app's logo — not something to widen the API of from here. */}
+              <div style={{ width: "calc(var(--orbit) * 0.115)", height: "calc(var(--orbit) * 0.115)" }}>
+                <Brandmark className="w-full h-full transition-transform duration-500 hover:rotate-6 drop-shadow-[0_4px_16px_color-mix(in_srgb,var(--mp-accent)_40%,transparent)]" />
+              </div>
+              <span
+                className="text-ink font-bold tracking-[0.05em] mt-2 font-sans lowercase leading-none"
+                style={{ fontSize: "calc(var(--orbit) * 0.036)" }}
+              >
                 moneta <span className="text-accent">prime</span>
               </span>
             </div>
 
-            {/* RING 1 (Inner Crypto Orbit) - Radius 95px, rotates Clockwise */}
-            <motion.div 
-              animate={{ rotate: 360 }} 
-              transition={{ repeat: Infinity, duration: 16, ease: "linear" }} 
-              className="absolute w-[190px] h-[190px] rounded-full border border-line/60 border-dashed z-10"
-            >
-              {[
-                { label: "₿", symbol: "BTC", bg: "bg-accent", color: "text-ink", angle: 0 },
-                { label: "Ξ", symbol: "ETH", bg: "bg-[#4E62CC]", color: "text-ink", angle: 120 },
-                { label: "₮", symbol: "USDT", bg: "bg-[#26A17B]", color: "text-ink", angle: 240 }
-              ].map((token, index) => (
-                <div
-                  key={index}
-                  className="absolute"
-                  style={{
-                    left: "50%",
-                    top: "50%",
-                    transform: `translate(-50%, -50%) rotate(${token.angle}deg) translateY(-95px) rotate(${-token.angle}deg)`
-                  }}
-                >
-                  {/* Counter-rotation to keep symbol perfectly upright */}
-                  <motion.div 
-                    animate={{ rotate: -360 }} 
-                    transition={{ repeat: Infinity, duration: 16, ease: "linear" }}
-                    className={`${token.bg} ${token.color} w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-[0_0_12px_rgba(0,0,0,0.8)] border border-white/15`}
+            {ORBIT_RINGS.map(ring => (
+              <motion.div
+                key={ring.id}
+                animate={{ rotate: ring.direction * 360 }}
+                transition={{ repeat: Infinity, duration: ring.duration, ease: "linear" }}
+                className={`absolute rounded-full z-10 ${ring.border}`}
+                style={{ width: ring.size, height: ring.size }}
+              >
+                {ring.tokens.map((token, index) => (
+                  // A rotated frame filling the ring, with the token pinned to
+                  // the top edge. The radius is therefore half the ring's own
+                  // height — relative by construction, so it stays on the
+                  // circumference at any --orbit value. The old code hardcoded
+                  // it as translateY(-95px|-150px|-210px).
+                  <div
+                    key={index}
+                    className="absolute inset-0"
+                    style={{ transform: `rotate(${token.angle}deg)` }}
                   >
-                    {token.label}
-                  </motion.div>
-                </div>
-              ))}
-            </motion.div>
+                    <div
+                      className="absolute left-1/2 top-0"
+                      style={{ transform: `translate(-50%, -50%) rotate(${-token.angle}deg)` }}
+                    >
+                      {/* Counter-rotation keeps each glyph upright while the
+                          ring turns. */}
+                      <motion.div
+                        animate={{ rotate: ring.direction * -360 }}
+                        transition={{ repeat: Infinity, duration: ring.duration, ease: "linear" }}
+                        className={`${token.bg} ${token.color} rounded-full flex items-center justify-center font-bold leading-none shadow-[0_0_12px_color-mix(in_srgb,var(--mp-ground)_80%,transparent)] border border-white/10`}
+                        style={{
+                          width: "calc(var(--orbit) * 0.07)",
+                          height: "calc(var(--orbit) * 0.07)",
+                          fontSize: `calc(var(--orbit) * ${token.scale ?? 0.03})`,
+                        }}
+                      >
+                        {token.label}
+                      </motion.div>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            ))}
 
-            {/* RING 2 (Middle Blue-Chip Assets Orbit) - Radius 150px, rotates Counter-Clockwise */}
-            <motion.div 
-              animate={{ rotate: -360 }} 
-              transition={{ repeat: Infinity, duration: 25, ease: "linear" }} 
-              className="absolute w-[300px] h-[300px] rounded-full border border-line/40 border-dotted z-10"
-            >
-              {[
-                { label: "T", bg: "bg-[#E82127]", color: "text-ink", angle: 0 },
-                { label: "", bg: "bg-white", color: "text-black", angle: 72 },
-                { label: "NV", bg: "bg-[#76B900]", color: "text-ink", angle: 144 },
-                { label: "G", bg: "bg-[#4285F4]", color: "text-ink", angle: 216 },
-                { label: "a", bg: "bg-[#FF9900]", color: "text-black", angle: 288 }
-              ].map((token, index) => (
-                <div
-                  key={index}
-                  className="absolute"
-                  style={{
-                    left: "50%",
-                    top: "50%",
-                    transform: `translate(-50%, -50%) rotate(${token.angle}deg) translateY(-150px) rotate(${-token.angle}deg)`
-                  }}
-                >
-                  <motion.div 
-                    animate={{ rotate: 360 }} 
-                    transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-                    className={`${token.bg} ${token.color} w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shadow-[0_0_10px_rgba(0,0,0,0.6)] border border-white/10`}
-                  >
-                    {token.label}
-                  </motion.div>
-                </div>
-              ))}
-            </motion.div>
-
-            {/* RING 3 (Outer Global Asset Orbit) - Radius 210px, rotates Clockwise */}
-            <motion.div 
-              animate={{ rotate: 360 }} 
-              transition={{ repeat: Infinity, duration: 38, ease: "linear" }} 
-              className="absolute w-[420px] h-[420px] rounded-full border border-line/20 z-10"
-            >
-              {[
-                { label: "AVAX", bg: "bg-[#E84142]", color: "text-ink text-2xs", angle: 0 },
-                { label: "Đ", bg: "bg-[#C2A633]", color: "text-ink text-xs", angle: 45 },
-                { label: "LINK", bg: "bg-[#375BD2]", color: "text-ink text-2xs", angle: 90 },
-                { label: "DOT", bg: "bg-[#E6007A]", color: "text-ink text-2xs", angle: 135 },
-                { label: "TRX", bg: "bg-[#EC0623]", color: "text-ink text-2xs", angle: 180 },
-                { label: "LTC", bg: "bg-[#345D9D]", color: "text-ink text-2xs", angle: 225 },
-                { label: "🚀", bg: "bg-gradient-to-tr from-[#1D4ED8] to-[#1E3A8A]", color: "text-ink text-xs", angle: 270 },
-                { label: "MS", bg: "bg-[#00A4EF]", color: "text-ink text-xs", angle: 315 }
-              ].map((token, index) => (
-                <div
-                  key={index}
-                  className="absolute"
-                  style={{
-                    left: "50%",
-                    top: "50%",
-                    transform: `translate(-50%, -50%) rotate(${token.angle}deg) translateY(-210px) rotate(${-token.angle}deg)`
-                  }}
-                >
-                  <motion.div 
-                    animate={{ rotate: -360 }} 
-                    transition={{ repeat: Infinity, duration: 38, ease: "linear" }}
-                    className={`${token.bg} ${token.color} w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-[0_0_10px_rgba(0,0,0,0.5)] border border-white/5`}
-                  >
-                    {token.label}
-                  </motion.div>
-                </div>
-              ))}
-            </motion.div>
-
-            {/* Glowing Trademark Brand Motto underneath orbit - Borderless and containerless, staying horizontal */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap">
-              <span className="text-2xs font-mono tracking-[0.25em] font-semibold text-accent uppercase">
+            {/* Brand motto, held just below the outer ring. */}
+            <div className="absolute left-1/2 -translate-x-1/2 z-20 whitespace-nowrap" style={{ bottom: "-1.5rem" }}>
+              <span
+                className="font-mono tracking-[0.25em] font-semibold text-accent uppercase"
+                style={{ fontSize: "clamp(0.5rem, 2.2vw, 0.625rem)" }}
+              >
                 Trade • Compound • Preserve
               </span>
             </div>
-            
+
           </div>
 
           {/* Minimal low-profile Hero Metrics Section replaced with Markets section */}
