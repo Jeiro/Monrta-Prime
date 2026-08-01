@@ -186,11 +186,53 @@ More defects fixed in that pass:
 | Files with `<table>` | 11 | **8** (all admin) |
 | Off-token palette utilities | 123 | **4** (brand marks) |
 
-**Still not migrated:** the 8 admin tab tables and the bulk of the remaining
-raw buttons/inputs (admin tabs + `AuthPage` + `Navigation`), the dashboard
-sidebar shell, the full motion pass, a dedicated a11y audit, and the bundle
-work. Admin fields have been styled to match the primitives but not
-restructured.
+**Done — admin panel** (verified signed-in with an admin account).
+
+The three approval queues — Deposits, Withdrawals, KYC — all had the same
+structural defect: an editable notes field and two irreversible action
+buttons were *table columns*. With 11–12 columns that forced
+`min-w-[1180px]`–`[1280px]`, so in the browser the notes textarea rendered
+as a vertical sliver and **Reject sat off the right edge, unreachable
+without scrolling a table most admins wouldn't realise scrolled.**
+
+Review now happens in a `Drawer` opened from the row. Tables drop to 6–8
+columns with no horizontal scroll, and the wallet address, transaction hash
+and KYC documents get room to be read in full rather than truncated to
+180–250px — which matters, since verifying those values is the whole point.
+
+More admin defects fixed:
+- 🚩 **Approve/Reject were `bg-positive`/`bg-negative` with `text-ink`** —
+  near-white on green and red. Their hover states were `hover:bg-positive` /
+  `hover:bg-negative`, *identical to the resting colour*, so neither button
+  gave any hover feedback.
+- 🚩 **Withdrawals gated payouts behind `window.confirm()`** — blocks the JS
+  thread, can't be themed, suppressible in some browsers. Replaced with an
+  in-drawer two-step that names the amount and destination it's releasing.
+- The KYC notes input rendered on **every** row including already-reviewed
+  ones, where typing in it did nothing because the actions were hidden.
+- Financial Ledger and Traders List each forced a horizontal scroller by
+  splitting pairs across columns (User ID / User Name, Amount / Currency,
+  Status / Featured). Consolidated: 9→7 and 10→7.
+- Five more local `formatMoney`/`formatDate` helpers retired.
+
+Adds `AdminTabShell` for the header/stat-tile chrome each tab rebuilt by hand.
+
+**Verified:** all 15 admin tabs render, no console errors, and no table
+overflows its container.
+
+### App-wide migration progress
+
+| | Baseline | Now |
+|---|---:|---:|
+| Raw `<button>` | 220 | **177** |
+| Raw `<input>` | 85 | **59** |
+| Files with `<table>` | 11 | **4** (3 admin + the primitive) |
+| Off-token palette utilities | 123 | **4** (brand marks) |
+
+**Still not migrated:** three admin tables (Users, Airdrops, Traders —
+none of which overflow), the remaining raw buttons/inputs concentrated in
+`AuthPage` and `Navigation`, the dashboard sidebar shell, the full motion
+pass, a dedicated a11y audit, and the bundle work.
 
 ---
 
