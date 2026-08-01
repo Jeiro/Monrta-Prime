@@ -3,6 +3,7 @@ import { useWallet } from "../../../context/domains/WalletContext";
 import { motion, AnimatePresence } from "motion/react";
 import { Wallet, Search, CheckCircle, Clock, Trash2, Edit3, X, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
+import { Button, Input } from "../../ui";
 
 export const AdminWalletFeedbackTab: React.FC = () => {
   const { walletFeedback, adminUpdateWalletFeedback, adminDeleteWalletFeedback } = useWallet();
@@ -64,16 +65,14 @@ export const AdminWalletFeedbackTab: React.FC = () => {
       </div>
 
       {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={18} />
-        <input
-          type="text"
-          placeholder="Search by user, email, or wallet..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-surface border border-line rounded-xl pl-12 pr-4 py-3 text-sm text-ink placeholder-muted/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
-        />
-      </div>
+      <Input
+        type="text"
+        placeholder="Search by user, email, or wallet..."
+        aria-label="Search wallet feedback"
+        prefix={<Search size={16} />}
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
 
       {/* Feedback List */}
       <div className="space-y-4">
@@ -122,21 +121,15 @@ export const AdminWalletFeedbackTab: React.FC = () => {
 
                   <div className="flex items-center gap-2 w-full sm:w-auto">
                     {fb.status === "new" ? (
-                      <button
-                        onClick={() => handleUpdateStatus(fb.id, "reviewed")}
-                        className="flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg bg-positive/10 text-positive hover:bg-positive/20 border border-positive/30 transition-colors flex items-center justify-center gap-2"
-                      >
-                        <CheckCircle size={14} /> Review
-                      </button>
+                      <Button variant="positive" size="sm" icon={CheckCircle} className="flex-1 sm:flex-none" onClick={() => handleUpdateStatus(fb.id, "reviewed")}>Review</Button>
                     ) : (
-                      <button
-                        onClick={() => handleUpdateStatus(fb.id, "new")}
-                        className="flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg bg-accent/10 text-accent hover:bg-accent/20 border border-accent/30 transition-colors flex items-center justify-center gap-2"
-                      >
-                        <XCircle size={14} /> Mark New
-                      </button>
+                      <Button variant="secondary" size="sm" icon={XCircle} className="flex-1 sm:flex-none" onClick={() => handleUpdateStatus(fb.id, "new")}>Mark New</Button>
                     )}
-                    <button
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      icon={Edit3}
+                      aria-expanded={expandedFeedback === fb.id}
                       onClick={() => {
                         if (expandedFeedback === fb.id) {
                           setExpandedFeedback(null);
@@ -145,16 +138,12 @@ export const AdminWalletFeedbackTab: React.FC = () => {
                           setNoteText(fb.adminNotes || "");
                         }
                       }}
-                      className="px-3 py-1.5 text-xs font-bold rounded-lg bg-ground text-muted hover:text-ink border border-line transition-colors flex items-center gap-2"
                     >
-                      <Edit3 size={14} /> Notes
-                    </button>
-                    <button
-                      onClick={() => handleDelete(fb.id)}
-                      className="p-1.5 text-negative hover:bg-negative/10 rounded-lg transition-colors"
-                    >
+                      Notes
+                    </Button>
+                    <Button variant="ghost" size="icon" aria-label="Delete feedback" className="text-negative" onClick={() => handleDelete(fb.id)}>
                       <Trash2 size={16} />
-                    </button>
+                    </Button>
                   </div>
                 </div>
 
@@ -177,21 +166,17 @@ export const AdminWalletFeedbackTab: React.FC = () => {
                         <div>
                           <h4 className="text-xs font-bold text-muted uppercase tracking-wider mb-2">Admin Notes</h4>
                           <div className="flex gap-2">
-                            <input
-                              type="text"
-                              value={noteText}
-                              onChange={(e) => setNoteText(e.target.value)}
-                              placeholder="Add an internal note..."
-                              className="flex-1 bg-ground border border-line rounded-xl px-4 py-2 text-sm text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
-                              onKeyDown={(e) => e.key === "Enter" && handleAddNote(fb.id)}
-                            />
-                            <button
-                              onClick={() => handleAddNote(fb.id)}
-                              disabled={!noteText.trim()}
-                              className="px-4 py-2 bg-accent hover:bg-accent-hover text-surface text-sm font-bold rounded-xl transition-colors disabled:opacity-50"
-                            >
-                              Save Note
-                            </button>
+                            <div className="flex-1">
+                              <Input
+                                type="text"
+                                value={noteText}
+                                onChange={(e) => setNoteText(e.target.value)}
+                                placeholder="Add an internal note..."
+                                aria-label="Admin note"
+                                onKeyDown={(e) => e.key === "Enter" && handleAddNote(fb.id)}
+                              />
+                            </div>
+                            <Button onClick={() => handleAddNote(fb.id)} disabled={!noteText.trim()}>Save Note</Button>
                           </div>
                           {fb.adminNotes && (
                             <p className="text-xs text-accent mt-2 flex items-center gap-1">
