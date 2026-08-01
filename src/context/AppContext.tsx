@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useRef, useMemo, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef, useMemo } from "react";
 import toast from "react-hot-toast";
 import type {
   MarketAsset,
@@ -19,75 +19,35 @@ import type {
 import {
   buildActiveInvestment,
   syncInvestmentCountdowns,
-  buildAuditLog,
-  buildTransaction,
-  buildAirdrop,
   buildAirdropClaim,
   findUserCampaignClaim,
   hasReachedClaimLimit,
   isAirdropActive,
-  normalizeAirdrop,
-  buildCopyTrade,
-  buildCopyTransaction,
-  buildDepositWallet,
   buildDepositTransaction,
-  buildInvestmentTransaction,
   buildNotification,
   type BuildNotificationOptions,
   type NotificationItem,
   formatRelativeTimestamp,
   normalizeNotification,
   sortNotifications,
-  buildTopUpTransaction,
-  buildUncopyTransaction,
-  enrichTransaction,
   buildWithdrawalTransaction,
-  createMockAirdrop,
-  deleteMockAirdrop,
-  deleteMockDepositWallet,
-  deleteMockTrader,
-  getMockAirdrops,
-  getMockDepositWallets,
-  getMockTraders,
-  saveMockAirdrop,
-  saveMockDepositWallet,
-  saveMockTrader,
   USE_MOCK_DATA,
-  createLoggedOutUser,
-  createSignedOutUser,
-  decrementTraderFollowers,
-  DEFAULT_INVESTMENT_PLANS,
   formatWithdrawalAddress,
-  getEnabledDepositWallets,
-  incrementTraderFollowers,
   isAdminEmail,
-  mapDepositWalletsToAddressBook,
-  normalizeDepositWallet,
   safeParse,
-  settleMaturedInvestments,
-  settleMaturedCopyTrades,
   syncCopyTradeCountdowns,
-  filterActiveAnnouncements,
-  isAnnouncementRead,
-  normalizeAnnouncement,
-  sortAnnouncementsForAdmin,
-  loadLocalAppSettings,
-  mergeAppSettings,
-  normalizeAppSettings,
-  saveLocalAppSettings,
-  SETTINGS_DOC_PATH
+  isAnnouncementRead
 } from "../services";
 import { useEmailNotifications } from "../hooks/useEmailNotifications";
 import type { TransactionalEmailEvent } from "../lib/emailClient";
-import { useSupabaseClient, ensureUserRow } from "../lib/supabase";
-import { useCurrentUser } from "../hooks/useCurrentUser";
+import { useSession } from "./domains/SessionContext";
+import { useAuditLog, useAuditLogWriter } from "./domains/AuditLogContext";
 import { useSiteSettings } from "../hooks/data/useSiteSettings";
 import { useTraders } from "../hooks/data/useTraders";
 import { useAnnouncements } from "../hooks/data/useAnnouncements";
 import { useDepositWallets } from "../hooks/data/useDepositWallets";
 import { useAirdrops } from "../hooks/data/useAirdrops";
 import { useWalletFeedback } from "../hooks/data/useWalletFeedback";
-import { useUser as useClerkUserProfile, useAuth as useClerkAuthState } from "@clerk/clerk-react";
 import { useUsersDirectory, type CoreUserProfile } from "../hooks/data/useUsersDirectory";
 import { useTransactions } from "../hooks/data/useTransactions";
 import { useKyc } from "../hooks/data/useKyc";
@@ -227,36 +187,22 @@ const localStorageSet = (key: string, value: any) => {
   window.localStorage.setItem(key, JSON.stringify(value));
 };
 
-const localSaveUserDoc = async (email: string, doc: any) => {
-  const users = localStorageGet<Record<string, any>>( "orbitrio_local_users", {} );
-  users[email.toLowerCase()] = { ...doc };
-  localStorageSet("orbitrio_local_users", users);
-};
-
-const localLoadUserDoc = async (email: string) => {
-  const users = localStorageGet<Record<string, any>>( "orbitrio_local_users", {} );
-  return users[email.toLowerCase()] ?? null;
-};
-
-const localUpdateUserDoc = async (email: string, updates: any) => {
-  const users = localStorageGet<Record<string, any>>( "orbitrio_local_users", {} );
-  const existing = users[email.toLowerCase()];
-  if (!existing) return null;
-  users[email.toLowerCase()] = { ...existing, ...updates };
-  localStorageSet("orbitrio_local_users", users);
-  return users[email.toLowerCase()];
-};
-
-const localDeleteUserDoc = async (email: string) => {
-  const users = localStorageGet<Record<string, any>>( "orbitrio_local_users", {} );
-  delete users[email.toLowerCase()];
-  localStorageSet("orbitrio_local_users", users);
-};
-
-const DEFAULT_PLANS = DEFAULT_INVESTMENT_PLANS;
-
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const supabase = useSupabaseClient();
+  const {
+    supabase,
+    user,
+    setUser,
+    authReady,
+    currentSupabaseUserId,
+    currentUserProfile,
+    refetchCurrentUserProfile,
+    currentUserIsLoggedIn,
+    currentUserIsAdmin,
+    tryReserveBalanceDebit,
+    releaseBalanceDebit
+  } = useSession();
+  const { handleLog } = useAuditLogWriter();
+  const { adminAuditLogs } = useAuditLog();
   const { fetchNotifications, saveNotificationToDb, markReadInDb, markManyReadInDb, deleteNotificationInDb } = useNotifications(supabase);
   const { siteContent, appSettings, updateSiteContent, updateAppSettings } = useSiteSettings(supabase);
   const {
@@ -266,35 +212,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     deletePlan: deleteInvestmentPlanInDb,
     setPlanEnabled: setInvestmentPlanEnabledInDb
   } = useInvestmentPlans(supabase);
-  // Clerk identity — declared early since the profile-loader effect below
-  // needs it, and it's also used later for currentSupabaseUserId.
-  const { user: clerkUser, isLoaded: clerkLoaded } = useClerkUserProfile();
-  const { isSignedIn: clerkIsSignedIn } = useClerkAuthState();
-  const currentSupabaseUserId = clerkUser?.id ?? null;
   const { sendTransactionalEmail } = useEmailNotifications();
   const sentEmailEventIdsRef = useRef<Set<string>>(new Set(localStorageGet<string[]>("orbitrio_sent_email_events", [])));
   // Events currently being sent — prevents a concurrent double-send without
   // permanently reserving the id (which would block retries after a failure).
   const inFlightEmailEventsRef = useRef<Set<string>>(new Set());
-  const pendingBalanceDebitsRef = useRef(0);
-  const pendingActionKeysRef = useRef<Set<string>>(new Set());
 
-  const tryReserveBalanceDebit = (actionKey: string, amount: number): "reserved" | "duplicate" | "insufficient" => {
-    const debitAmount = +amount.toFixed(2);
-    if (pendingActionKeysRef.current.has(actionKey)) return "duplicate";
-    const availableBalance = +(user.balance - pendingBalanceDebitsRef.current).toFixed(2);
-    if (availableBalance < debitAmount) return "insufficient";
-    pendingActionKeysRef.current.add(actionKey);
-    pendingBalanceDebitsRef.current = +(pendingBalanceDebitsRef.current + debitAmount).toFixed(2);
-    return "reserved";
-  };
-
-  const releaseBalanceDebit = (actionKey: string, amount: number) => {
-    globalThis.setTimeout(() => {
-      pendingActionKeysRef.current.delete(actionKey);
-      pendingBalanceDebitsRef.current = Math.max(0, +(pendingBalanceDebitsRef.current - amount).toFixed(2));
-    }, 750);
-  };
   const emailSettingsMetadata = () => ({
     companyName: appSettings.companyName,
     supportEmail: appSettings.supportEmail,
@@ -356,64 +279,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
   };
 
-  // Global user session state
-  const [user, setUser] = useState<UserState>(() => {
-    const saved = localStorage.getItem("orbitrio_user");
-    if (saved) {
-      try {
-        const u = JSON.parse(saved);
-        // Default role setup
-        if (u.isLoggedIn && isAdminEmail(u.email)) {
-          u.role = "admin";
-          u.isAdmin = true;
-        } else if (u.isLoggedIn && !u.role) {
-          u.role = "user";
-        }
-        // Force migration of old active investment ids
-        if (u.activeInvestments) {
-          u.activeInvestments = u.activeInvestments.map((inv: any) => {
-            if (inv.planId === "plan-starter") {
-              return { ...inv, planId: "plan-bronze", name: "Bronze Plan" };
-            }
-            if (inv.planId === "plan-professional") {
-              return { ...inv, planId: "plan-gold", name: "Gold Plan" };
-            }
-            if (inv.planId === "plan-vip") {
-              return { ...inv, planId: "plan-diamond", name: "Diamond Plan" };
-            }
-            return inv;
-          });
-        }
-        u.copyTrades = Array.isArray(u.copyTrades) ? u.copyTrades : [];
-        u.readAnnouncementIds = Array.isArray(u.readAnnouncementIds) ? u.readAnnouncementIds : [];
-        delete u.recoveryPhrase;
-        return u;
-      } catch (e) {}
-    }
-    return createLoggedOutUser();
-  });
-  const [authReady, setAuthReady] = useState(USE_MOCK_DATA || localDev);
-
   const [insufficientBalanceOpen, setInsufficientBalanceOpen] = useState(false);
-  const enrichUserTransaction = (
-    transaction: Transaction,
-    owner: Pick<UserState, "email" | "name"> = user,
-    relatedReferenceId?: string
-  ) => enrichTransaction(transaction, {
-    userId: owner.email,
-    userEmail: owner.email,
-    userName: owner.name
-  }, {
-    relatedReferenceId
-  });
-
-  const [adminAuditLogs, setAdminAuditLogs] = useState<AuditLog[]>(() => {
-    const saved = localStorage.getItem("orbitrio_audit_logs");
-    return saved ? JSON.parse(saved) : [
-      { id: "log-1", action: "System Booted", details: "Moneta Prime financial core initialised on secured cluster nodes.", timestamp: "2026-06-19 00:01:00", email: "system", ip: "127.0.0.1", status: "success" },
-      { id: "log-2", action: "Cold Storage Verified", details: "Multi-sig 10-layer physical vaults synchronised and validated.", timestamp: "2026-06-19 00:05:22", email: "sec-op", ip: "10.0.1.5", status: "success" }
-    ];
-  });
 
   const adminApproveAirdrop = async (claimId: string) => {
     const claim = adminAirdropClaims.find(c => c.id === claimId);
@@ -586,105 +452,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [marketStocks, setMarketStocks] = useState<MarketAsset[]>([]);
   const [isLoadingMarkets, setIsLoadingMarkets] = useState<boolean>(true);
 
-  // Persist the local user cache so a refresh has something to show
-  // before the profile-loader effect below re-fetches from Supabase.
-  useEffect(() => {
-    localStorage.setItem("orbitrio_user", JSON.stringify(user));
-  }, [user]);
-
-  // Loads the signed-in user's profile. Identity/status/role/KYC/read-announcements
-  // come from Supabase (Clerk drives sign-in state). balance, transactions,
-  // activeInvestments, copyTrades, portfolio, and tickets start at zero/empty
-  // here and are filled in a moment later by each field's own sync effect
-  // (see the `setUser(prev => ...)` blocks below) once their respective
-  // Supabase-backed hook finishes fetching.
-  useEffect(() => {
-    if (!clerkLoaded) return;
-
-    if (!clerkIsSignedIn || !clerkUser) {
-      setUser(createSignedOutUser());
-      setAuthReady(true);
-      return;
-    }
-
-    let cancelled = false;
-    (async () => {
-      const email = clerkUser.primaryEmailAddress?.emailAddress || "";
-
-      await ensureUserRow(supabase, clerkUser);
-
-      const [{ data: profileRow }, { data: kycRow }, { data: readRows }] = await Promise.all([
-        supabase.from("users").select("*").eq("id", clerkUser.id).maybeSingle(),
-        supabase.from("kyc_submissions").select("*").eq("user_id", clerkUser.id).maybeSingle(),
-        supabase.from("user_read_announcements").select("announcement_id").eq("user_id", clerkUser.id)
-      ]);
-
-      if (cancelled) return;
-
-      // Functional MERGE, not a full replace. This effect owns the identity /
-      // profile fields (email, name, role, status, kyc, …). The money/data
-      // fields — balance, portfolioValue, activeInvestments, copyTrades,
-      // portfolio, transactions, tickets — are owned by their own
-      // Supabase-backed overlay effects below. Hard-resetting them to 0/[]
-      // here (as this used to) races with those overlays: if an overlay had
-      // already applied real data, this reset clobbered it, and the overlay
-      // wouldn't re-fire (its hook data reference hadn't changed), stranding
-      // the dashboard at $0. So we spread `prev` and only set profile fields,
-      // letting the overlays remain the single source of truth for the data
-      // fields. `balance` is seeded from the freshly-fetched profileRow (and
-      // kept live afterward by the balance overlay from useCurrentUser).
-      setUser(prev => ({
-        ...prev,
-        isLoggedIn: true,
-        email,
-        name: profileRow?.name || email.split("@")[0].toUpperCase(),
-        balance: typeof profileRow?.balance === "number" ? profileRow.balance : prev.balance,
-        status: profileRow?.status || "active",
-        role: profileRow?.role === "admin" ? "admin" : "user",
-        isAdmin: profileRow?.role === "admin",
-        username: profileRow?.username || email.split("@")[0],
-        firstName: profileRow?.first_name || "Trader",
-        lastName: profileRow?.last_name || "",
-        gender: profileRow?.gender || "Male",
-        phone: profileRow?.phone || "",
-        accountType: profileRow?.account_type || "Bronze",
-        country: profileRow?.country || "United States",
-        currency: profileRow?.currency || "USD",
-        connectedWalletName: profileRow?.connected_wallet_name || "",
-        referralCount: profileRow?.referral_count || 0,
-        points: profileRow?.points || 0,
-        kyc: kycRow ? {
-          idType: kycRow.id_type,
-          documentType: kycRow.document_type,
-          idNumber: kycRow.id_number,
-          dob: kycRow.dob,
-          address: kycRow.address,
-          city: kycRow.city,
-          country: kycRow.country,
-          frontImage: kycRow.front_image,
-          backImage: kycRow.back_image,
-          proofOfAddressImage: kycRow.proof_of_address_image,
-          submissionDate: kycRow.submission_date,
-          status: kycRow.status,
-          adminNotes: kycRow.admin_notes,
-          rejectionReason: kycRow.rejection_reason,
-          reviewedAt: kycRow.reviewed_at
-        } : prev.kyc,
-        readAnnouncementIds: (readRows || []).map((r: any) => r.announcement_id)
-      }));
-      setAuthReady(true);
-    })();
-
-    return () => { cancelled = true; };
-  }, [clerkLoaded, clerkIsSignedIn, clerkUser?.id]);
-
   useEffect(() => {
     localStorage.setItem("orbitrio_plans_v3", JSON.stringify(plans));
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("orbitrio_audit_logs", JSON.stringify(adminAuditLogs));
-  }, [adminAuditLogs]);
 
   useEffect(() => {
     localStorage.setItem("orbitrio_notifications", JSON.stringify(notifications));
@@ -1406,12 +1176,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  // Helper logger
-  const handleLog = (action: string, details: string, email: string, logStatus: "success" | "warning" | "alert") => {
-    const auditLog = buildAuditLog(action, details, email, logStatus);
-    setAdminAuditLogs(prev => [auditLog, ...prev]);
-  };
-
   const syncNotificationLocally = (notification: NotificationItem) => {
     setNotifications(prev => {
       if (notification.eventKey && prev.some(item => item.eventKey === notification.eventKey && item.recipientEmail === notification.recipientEmail)) {
@@ -1450,15 +1214,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Traders catalog + announcements — both Supabase-backed. These use the
-  // real Supabase-derived identity (via useCurrentUser), not the old
+  // real Supabase-derived identity (from SessionContext), not the old
   // Firebase `user.isLoggedIn`/`user.isAdmin`, which are stale now that
   // auth runs through Clerk.
-  const {
-    isLoggedIn: currentUserIsLoggedIn,
-    isAdmin: currentUserIsAdmin,
-    profile: currentUserProfile,
-    refetchProfile: refetchCurrentUserProfile
-  } = useCurrentUser();
   const { traders, adminCreateTrader, adminUpdateTrader, adminDeleteTrader } = useTraders(
     supabase,
     authReady,
@@ -1593,16 +1351,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ? { ...prev, transactions: supabaseTransactions.filter(t => t.userId === currentSupabaseUserId) }
       : prev);
   }, [supabaseTransactions, currentSupabaseUserId, user.isLoggedIn]);
-
-  // Keep the displayed balance in sync with Supabase — without this,
-  // user.balance only ever reflects whatever it was at login (a one-time
-  // Firestore snapshot), and would silently go stale after every deposit,
-  // withdrawal, or investment even though the database itself is correct.
-  useEffect(() => {
-    if (currentUserProfile) {
-      setUser(prev => prev.isLoggedIn ? { ...prev, balance: currentUserProfile.balance } : prev);
-    }
-  }, [currentUserProfile?.balance, user.isLoggedIn]);
 
   // Keep active investments in sync with their Supabase source — and derive the
   // time-varying fields (progress, accumulatedProfit, remainingDays, status)

@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState, Suspense, lazy } from "react";
 import { Routes, Route, Navigate, useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { AppProvider } from "./context/AppContext";
+import { AppProviders } from "./context/AppProviders";
 import { Navigation } from "./components/Navigation";
 import { MobileNav } from "./components/MobileNav";
 import { Footer } from "./components/Footer";
@@ -376,8 +376,8 @@ export default function App() {
   }
 
   return (
-    <AppProvider>
+    <AppProviders>
       <AppShell />
-    </AppProvider>
+    </AppProviders>
   );
 }
