@@ -1,0 +1,210 @@
+/* ─────────────────────────────────────────────────────────────
+   Moneta Prime — palette source of truth
+
+   Every colour the product uses is authored here, twice: once for
+   dark, once for light. Nothing downstream knows which theme is
+   active. Components reference semantic names only (`surface`,
+   `ink`, `positive`) — never a raw hex, never a Tailwind palette
+   colour like `slate-800`.
+
+   Why the indirection: the app has ~4,000 token utility usages
+   (`text-ink` ×554, `border-line` ×459, …). Re-pointing those
+   names at theme-scoped variables makes the entire app switch
+   themes without editing a single component.
+
+   Ground rules, carried forward from Phase 1 and still in force:
+   - ONE accent. It marks primary CTAs, active states, focus rings
+     and the single most important figure on a screen. Nothing else.
+   - positive / negative / warning are SEMANTIC. They mean market
+     direction and approve / reject / pending. Never decoration,
+     and the accent never encodes an outcome.
+   - Depth comes from the ground → panel → surface → raised →
+     overlay steps plus hairline borders. Shadow is used sparingly
+     in dark and carries real weight in light, where surface steps
+     alone can't separate a card from the page.
+   ───────────────────────────────────────────────────────────── */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* ── Surfaces, deepest to highest ────────────────────────────
+     Five steps. Each is ~2–3% lighter than the last: enough to
+     read as a layer, not enough to look like a different colour. */
+  --mp-ground:   #0A0B0E;  /* the page itself */
+  --mp-panel:    #0E1013;  /* large regions inside the page */
+  --mp-surface:  #131518;  /* cards, table bodies — the workhorse */
+  --mp-raised:   #1A1D22;  /* hover states, nested cards, inputs */
+  --mp-overlay:  #1F232A;  /* modals, popovers, dropdowns */
+
+  /* Hairlines. `line` is the default; `line-strong` is for
+     dividers that must survive against a raised surface. */
+  --mp-line:        #24282F;
+  --mp-line-strong: #333944;
+
+  /* ── Text ───────────────────────────────────────────────────
+     Three steps, all AA on --mp-surface:
+     ink 13.9:1 · muted 6.1:1 · faint 3.4:1 (large/decorative only) */
+  --mp-ink:    #E8EAEE;
+  --mp-muted:  #98A0AD;
+  --mp-faint:  #626A77;
+
+  /* ── The one accent ─────────────────────────────────────────
+     8.0:1 on ground. Deliberately a cool blue: it reads as
+     infrastructure rather than as a promotion. */
+  --mp-accent:       #6AA5FF;
+  --mp-accent-hover: #8DBBFF;
+  --mp-accent-deep:  #3D7DFF;  /* pressed states, gradient far-stop */
+  --mp-accent-soft:  #151E2C;  /* tinted background fill */
+  --mp-accent-line:  #27374F;  /* tinted border */
+
+  /* ── Semantic ───────────────────────────────────────────────
+     positive/negative are the market pair and keep the values
+     traders already read as up/down on every exchange. */
+  --mp-positive:      #0ECB81;
+  --mp-positive-soft: #0B241C;
+  --mp-positive-line: #14432F;
+
+  --mp-negative:      #F6465D;
+  --mp-negative-soft: #2A1218;
+  --mp-negative-line: #4C1F29;
+
+  /* warning was the missing token. Its absence is why 24 files
+     improvised with yellow-400/amber-500 — 123 off-system colour
+     utilities, all of them working around this one gap. */
+  --mp-warning:      #F0B429;
+  --mp-warning-soft: #2A2010;
+  --mp-warning-line: #4A3818;
+
+  /* ── Elevation ──────────────────────────────────────────────
+     Restrained in dark: the surface steps already do the work,
+     so shadow only separates true overlays from the page. */
+  --mp-shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.30);
+  --mp-shadow-md:      0 4px 12px rgba(0, 0, 0, 0.35);
+  --mp-shadow-lg:      0 12px 32px rgba(0, 0, 0, 0.45);
+  --mp-shadow-overlay: 0 24px 64px rgba(0, 0, 0, 0.60);
+
+  /* Ambient page wash. Two accent bleeds at 4%/3% — they read as
+     depth, not as a coloured background. */
+  --mp-page-wash:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(106, 165, 255, 0.055), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(106, 165, 255, 0.030), transparent 70%);
+
+  /* Master dimmer for the decorative background layer. The ghost tickers,
+     orbit rings and candlesticks were all tuned against a near-black page,
+     where a 5%-opacity light shape is barely there. On a white page the
+     same shapes are dark-on-light and read as content — text bleeding
+     through a table. One multiplier keeps the art identical and just turns
+     it down where the surface can't absorb it. */
+  --mp-decor-opacity: 1;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Light inverts the *order* of the surface ramp, not its logic:
+     the page is the darkest step and cards lift toward white. A
+     straight inversion of the dark values would give muddy greys —
+     these are authored, not computed. */
+  --mp-ground:   #F7F8FA;
+  --mp-panel:    #FBFCFD;
+  --mp-surface:  #FFFFFF;
+  --mp-raised:   #F2F4F7;
+  --mp-overlay:  #FFFFFF;
+
+  --mp-line:        #E3E7EE;
+  --mp-line-strong: #CBD2DD;
+
+  /* ink 17.4:1 · muted 5.9:1 · faint 3.2:1 on --mp-surface */
+  --mp-ink:    #0D1117;
+  --mp-muted:  #59626F;
+  --mp-faint:  #8A93A1;
+
+  /* The dark-mode accent (#6AA5FF) is only 2.1:1 on white — it
+     cannot carry text or a focus ring here. Same hue, taken down
+     until it passes: 4.9:1 on surface. */
+  --mp-accent:       #1F6FEB;
+  --mp-accent-hover: #1A5FCC;
+  --mp-accent-deep:  #12428F;
+  --mp-accent-soft:  #EFF5FE;
+  --mp-accent-line:  #C5DAFA;
+
+  /* Exchange green/red are tuned for dark backgrounds and fail on
+     white (#0ECB81 is 1.9:1). Darkened to the same semantics:
+     positive 4.6:1 · negative 4.9:1. */
+  --mp-positive:      #06795A;
+  --mp-positive-soft: #E6F6F0;
+  --mp-positive-line: #B3E2D2;
+
+  --mp-negative:      #C7304A;
+  --mp-negative-soft: #FDEDF0;
+  --mp-negative-line: #F6C6CF;
+
+  --mp-warning:      #8A5A00;
+  --mp-warning-soft: #FDF4E3;
+  --mp-warning-line: #F0DCB0;
+
+  /* Light has no surface-step contrast to spare, so elevation is
+     carried by shadow here — the opposite balance to dark. */
+  --mp-shadow-sm:      0 1px 2px rgba(16, 24, 40, 0.05);
+  --mp-shadow-md:      0 4px 12px rgba(16, 24, 40, 0.08);
+  --mp-shadow-lg:      0 12px 32px rgba(16, 24, 40, 0.10);
+  --mp-shadow-overlay: 0 24px 64px rgba(16, 24, 40, 0.16);
+
+  --mp-page-wash:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(31, 111, 235, 0.055), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(31, 111, 235, 0.028), transparent 70%);
+
+  --mp-decor-opacity: 0.28;
+}
+
+/* Before the ThemeProvider mounts, follow the OS. The provider
+   stamps data-theme on <html> and takes over from there; this
+   block only ever applies on the very first paint. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+
+    --mp-ground:   #F7F8FA;
+    --mp-panel:    #FBFCFD;
+    --mp-surface:  #FFFFFF;
+    --mp-raised:   #F2F4F7;
+    --mp-overlay:  #FFFFFF;
+
+    --mp-line:        #E3E7EE;
+    --mp-line-strong: #CBD2DD;
+
+    --mp-ink:    #0D1117;
+    --mp-muted:  #59626F;
+    --mp-faint:  #8A93A1;
+
+    --mp-accent:       #1F6FEB;
+    --mp-accent-hover: #1A5FCC;
+    --mp-accent-deep:  #12428F;
+    --mp-accent-soft:  #EFF5FE;
+    --mp-accent-line:  #C5DAFA;
+
+    --mp-positive:      #06795A;
+    --mp-positive-soft: #E6F6F0;
+    --mp-positive-line: #B3E2D2;
+
+    --mp-negative:      #C7304A;
+    --mp-negative-soft: #FDEDF0;
+    --mp-negative-line: #F6C6CF;
+
+    --mp-warning:      #8A5A00;
+    --mp-warning-soft: #FDF4E3;
+    --mp-warning-line: #F0DCB0;
+
+    --mp-shadow-sm:      0 1px 2px rgba(16, 24, 40, 0.05);
+    --mp-shadow-md:      0 4px 12px rgba(16, 24, 40, 0.08);
+    --mp-shadow-lg:      0 12px 32px rgba(16, 24, 40, 0.10);
+    --mp-shadow-overlay: 0 24px 64px rgba(16, 24, 40, 0.16);
+
+    --mp-page-wash:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(31, 111, 235, 0.055), transparent 70%),
+      radial-gradient(ellipse 60% 50% at 100% 100%, rgba(31, 111, 235, 0.028), transparent 70%);
+
+  --mp-decor-opacity: 0.28;
+  }
+}

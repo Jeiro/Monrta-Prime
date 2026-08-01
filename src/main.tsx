@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client';
 import {ClerkProvider} from '@clerk/clerk-react';
 import {BrowserRouter} from 'react-router-dom';
 import App from './App.tsx';
+import {ThemeProvider} from './context/ThemeContext';
 import './index.css';
 import {installChunkReloadHandler} from './lib/chunkReload';
 
@@ -19,9 +20,11 @@ if (!CLERK_PUBLISHABLE_KEY) {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ThemeProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
     </ClerkProvider>
   </StrictMode>,
 );

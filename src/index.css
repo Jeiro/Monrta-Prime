@@ -1,18 +1,71 @@
 @import "tailwindcss";
+@import "./styles/tokens.css";
 
 /* ─────────────────────────────────────────────────────────────
    Moneta Prime design tokens
 
-   Ground rules:
-   - One accent (--color-accent). It marks primary CTAs, active
-     states, focus rings and the single most important number on
-     a screen. Nothing else.
-   - positive/negative are SEMANTIC, not decorative: they mean
-     market direction and approve/reject. Never use them for
-     emphasis, and never use the accent for outcome.
-   - Depth comes from the ground → panel → surface → raised
-     steps plus hairline borders, not from drop shadows.
+   Colour VALUES live in styles/tokens.css, authored once per
+   theme. This file maps them onto Tailwind's utility namespace
+   and defines everything that doesn't change between themes:
+   type, radius, rhythm, motion.
+
+   `@theme inline` is load-bearing. With a plain `@theme`,
+   Tailwind emits `--color-surface: var(--mp-surface)` on :root
+   and the indirection resolves once, at :root — so a
+   `[data-theme]` scope further down the tree would be ignored.
+   `inline` substitutes the value into the utility itself
+   (`.bg-surface { background: var(--mp-surface) }`), which
+   resolves at the element and therefore honours the scope.
    ───────────────────────────────────────────────────────────── */
+@theme inline {
+  /* ── Surfaces, deepest to highest ── */
+  --color-ground:  var(--mp-ground);
+  --color-panel:   var(--mp-panel);
+  --color-surface: var(--mp-surface);
+  --color-raised:  var(--mp-raised);
+  --color-overlay: var(--mp-overlay);
+
+  --color-line:        var(--mp-line);
+  --color-line-strong: var(--mp-line-strong);
+
+  /* ── Text ── */
+  --color-ink:   var(--mp-ink);
+  --color-muted: var(--mp-muted);
+  --color-faint: var(--mp-faint);
+
+  /* ── The one accent ── */
+  --color-accent:       var(--mp-accent);
+  --color-accent-hover: var(--mp-accent-hover);
+  --color-accent-deep:  var(--mp-accent-deep);
+  --color-accent-soft:  var(--mp-accent-soft);
+  --color-accent-line:  var(--mp-accent-line);
+
+  /* ── Semantic. Outcome only — never emphasis. ── */
+  --color-positive:      var(--mp-positive);
+  --color-positive-soft: var(--mp-positive-soft);
+  --color-positive-line: var(--mp-positive-line);
+
+  --color-negative:      var(--mp-negative);
+  --color-negative-soft: var(--mp-negative-soft);
+  --color-negative-line: var(--mp-negative-line);
+
+  --color-warning:      var(--mp-warning);
+  --color-warning-soft: var(--mp-warning-soft);
+  --color-warning-line: var(--mp-warning-line);
+
+  /* ── Elevation ──
+     Overrides Tailwind's defaults so every existing shadow-*
+     usage becomes theme-aware instead of baking in a dark-mode
+     black that turns to mud on a white page. */
+  --shadow-2xs: var(--mp-shadow-sm);
+  --shadow-xs:  var(--mp-shadow-sm);
+  --shadow-sm:  var(--mp-shadow-sm);
+  --shadow-md:  var(--mp-shadow-md);
+  --shadow-lg:  var(--mp-shadow-lg);
+  --shadow-xl:  var(--mp-shadow-lg);
+  --shadow-2xl: var(--mp-shadow-overlay);
+}
+
 @theme {
   /* Display: brand moments only — wordmark, hero, section openers. */
   --font-display: "Instrument Serif", "Noto Serif", Georgia, serif;
@@ -25,29 +78,6 @@
   --font-data--font-feature-settings: "tnum";
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   --font-mono--font-feature-settings: "tnum";
-
-  /* Surfaces, darkest to lightest */
-  --color-ground: #0B0C0F;
-  --color-panel: #0F1115;
-  --color-surface: #131519;
-  --color-raised: #1B1E24;
-  --color-line: #262A32;
-
-  /* Cool-grey text scale — carries most of the UI */
-  --color-ink: #E9EBEF;
-  --color-muted: #949BA9;
-  --color-faint: #5C636F;
-
-  /* The one accent. 7.9:1 on --color-ground. */
-  --color-accent: #6AA5FF;
-  --color-accent-hover: #8ABAFF;
-  --color-accent-deep: #3D7DFF;
-  --color-accent-soft: #17202E;
-  --color-accent-line: #263752;
-
-  /* Semantic only */
-  --color-positive: #0ECB81;
-  --color-negative: #F6465D;
 
   /* ── Type scale ────────────────────────────────────────────
      The app previously used 15 font sizes per page, five of them
@@ -64,6 +94,7 @@
   --text-4xl: 2.375rem;    /* 38px */
   --text-5xl: 3rem;        /* 48px */
   --text-6xl: 3.75rem;     /* 60px */
+  --text-7xl: 4.5rem;      /* 72px — hero display only */
 
   /* ── Radius scale ──────────────────────────────────────────
      Was eight different radii; now four plus full. */
@@ -81,6 +112,24 @@
   --spacing-section-tight: 2.5rem;   /* 40px */
   --spacing-section: 4rem;           /* 64px */
   --spacing-section-loose: 5.5rem;   /* 88px */
+
+  /* ── Motion ────────────────────────────────────────────────
+     Two easings do almost all the work. `out` decelerates hard
+     — things arrive quickly and settle, which is what makes an
+     interface feel responsive rather than slow. `in-out` is for
+     movements that both start and end on screen.
+
+     Durations are short on purpose. Anything above ~300ms on a
+     hover or press reads as lag, not as polish. */
+  --ease-out: cubic-bezier(0.16, 1, 0.30, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-entrance: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --duration-instant: 90ms;   /* press feedback, checkbox */
+  --duration-fast: 140ms;     /* hover, colour change */
+  --duration-base: 200ms;     /* the default */
+  --duration-slow: 320ms;     /* drawers, modals, accordions */
+  --duration-page: 420ms;     /* route transitions */
 }
 
 @layer base {
@@ -95,17 +144,16 @@
   }
 
   body {
-    background-color: var(--color-ground);
-    /* Two barely-there accent washes. Restraint is the point: at 5%/3%
-       they read as depth, not as a coloured background. */
-    background-image:
-      radial-gradient(circle at top left, rgba(106, 165, 255, 0.05), transparent 30%),
-      radial-gradient(circle at bottom right, rgba(106, 165, 255, 0.03), transparent 26%),
-      linear-gradient(135deg, rgba(8, 9, 12, 0.95), rgba(11, 12, 15, 1));
+    background-color: var(--mp-ground);
+    background-image: var(--mp-page-wash);
     background-attachment: fixed;
-    color: var(--color-ink);
+    background-repeat: no-repeat;
+    color: var(--mp-ink);
     font-family: var(--font-sans);
     touch-action: manipulation; /* Prevents double-tap zooming */
+    /* Theme changes shouldn't strobe. The surface cross-fades;
+       text does not, because animating text colour looks smeared. */
+    transition: background-color var(--duration-slow) var(--ease-out);
   }
 
   /* Prevent browser-level zooming on inputs dynamically */
@@ -114,17 +162,28 @@
   }
 
   ::selection {
-    background-color: rgba(106, 165, 255, 0.30);
-    color: #fff;
+    background-color: color-mix(in srgb, var(--mp-accent) 28%, transparent);
+    color: var(--mp-ink);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--mp-accent);
     outline-offset: 2px;
+    border-radius: 2px;
   }
 
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Skeleton sweep. A highlight travelling left-to-right rather than the
+   usual opacity pulse: a grid of pulsing skeletons all strobe in unison,
+   which reads as a fault. A sweep reads as progress. Transform-only, so
+   it composites on the GPU and never touches layout. */
+@keyframes skeleton-sweep {
+  100% {
+    transform: translateX(100%);
   }
 }
 
@@ -134,24 +193,28 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-ground);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-line);
+  background: var(--mp-line-strong);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent);
+  background: var(--mp-faint);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--mp-line-strong) transparent;
 }
 
 /* ── Legacy composite classes ──────────────────────────────────
    Retained and restyled so existing pages pick up the new system
    immediately. New work should use the primitives in
-   src/components/ui/ instead; these get retired in Phase 3 as each
-   page is rebuilt. */
+   src/components/ui/ instead; these get retired as each page is
+   rebuilt. */
 
 .orb-panel {
-  @apply rounded-2xl border border-line/70 bg-gradient-to-br from-surface via-panel to-ground shadow-[0_20px_60px_rgba(0,0,0,0.35)];
+  @apply rounded-2xl border border-line bg-surface shadow-md;
 }
 
 .orb-button {
