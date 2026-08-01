@@ -33,7 +33,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
         <div
           className="absolute inset-0 opacity-[0.025]"
           style={{
-            backgroundImage: "linear-gradient(rgba(255,255,255,0.14) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.14) 1px, transparent 1px)",
+            backgroundImage: "linear-gradient(var(--mp-line) 1px, transparent 1px), linear-gradient(90deg, var(--mp-line) 1px, transparent 1px)",
             backgroundSize: "42px 42px"
           }}
         />
@@ -62,7 +62,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
       <div 
         className="absolute inset-0 opacity-[0.025]" 
         style={{ 
-          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(var(--mp-line) 1px, transparent 1px), linear-gradient(90deg, var(--mp-line) 1px, transparent 1px)`,
           backgroundSize: "40px 40px"
         }} 
       />
@@ -96,8 +96,8 @@ export const ScrollAnimatedBackground: React.FC = () => {
           style={{ animationDuration: "90s", animationDirection: "reverse" }}
         >
           {/* Node pointers on the orbital path */}
-          <div className="absolute -top-1.5 left-1/2 w-3 h-3 rounded-full bg-accent shadow-[0_0_12px_#3b82f6] border border-[#04060b]" />
-          <div className="absolute -bottom-1.5 left-1/2 w-3 h-3 rounded-full bg-accent shadow-[0_0_12px_#6AA5FF] border border-[#04060b]" />
+          <div className="absolute -top-1.5 left-1/2 w-3 h-3 rounded-full bg-accent shadow-[0_0_12px_var(--mp-accent-deep)] border border-ground" />
+          <div className="absolute -bottom-1.5 left-1/2 w-3 h-3 rounded-full bg-accent shadow-[0_0_12px_var(--mp-accent)] border border-ground" />
         </div>
         {/* Inner ring: double accent ring */}
         <div 
@@ -144,17 +144,17 @@ export const ScrollAnimatedBackground: React.FC = () => {
           {/* 4. BLUE AND GOLD GLOWING TRANSACTION ROUTING PATHS */}
           <g className="text-accent-hover">
             {/* New York to London */}
-            <path d="M 230,100 Q 350,60 520,70" fill="none" stroke="#FFD700" strokeWidth="1.5" strokeDasharray="500" strokeDashoffset="500" className="animate-[dash_12s_linear_infinite]" />
-            <circle cx="230" cy="100" r="3" fill="#3b82f6" className="animate-pulse" />
+            <path d="M 230,100 Q 350,60 520,70" fill="none" stroke="var(--mp-accent)" strokeWidth="1.5" strokeDasharray="500" strokeDashoffset="500" className="animate-[dash_12s_linear_infinite]" />
+            <circle cx="230" cy="100" r="3" fill="var(--mp-accent-deep)" className="animate-pulse" />
             
             {/* London to Singapore */}
-            <path d="M 520,70 Q 640,180 770,220" fill="none" stroke="#3b82f6" strokeWidth="1.5" strokeDasharray="500" strokeDashoffset="500" className="animate-[dash_15s_linear_infinite]" style={{ animationDelay: "3s" }} />
-            <circle cx="520" cy="70" r="3.5" fill="#6AA5FF" className="animate-pulse" />
-            <circle cx="770" cy="220" r="3" fill="#3b82f6" className="animate-pulse" />
+            <path d="M 520,70 Q 640,180 770,220" fill="none" stroke="var(--mp-accent-deep)" strokeWidth="1.5" strokeDasharray="500" strokeDashoffset="500" className="animate-[dash_15s_linear_infinite]" style={{ animationDelay: "3s" }} />
+            <circle cx="520" cy="70" r="3.5" fill="var(--mp-accent)" className="animate-pulse" />
+            <circle cx="770" cy="220" r="3" fill="var(--mp-accent-deep)" className="animate-pulse" />
 
             {/* Singapore to Tokyo */}
-            <path d="M 770,220 Q 820,150 860,100" fill="none" stroke="#FFD700" strokeWidth="1" strokeDasharray="500" strokeDashoffset="500" className="animate-[dash_10s_linear_infinite]" style={{ animationDelay: "6s" }} />
-            <circle cx="860" cy="100" r="3" fill="#6AA5FF" />
+            <path d="M 770,220 Q 820,150 860,100" fill="none" stroke="var(--mp-accent)" strokeWidth="1" strokeDasharray="500" strokeDashoffset="500" className="animate-[dash_10s_linear_infinite]" style={{ animationDelay: "6s" }} />
+            <circle cx="860" cy="100" r="3" fill="var(--mp-accent)" />
           </g>
         </svg>
       </motion.div>
@@ -169,12 +169,12 @@ export const ScrollAnimatedBackground: React.FC = () => {
         <div className="absolute top-[280px] left-[6%] xl:left-[10%] opacity-[0.25] flex gap-1.5 items-end transform hover:scale-105 transition-transform duration-500">
           <div className="flex flex-col items-center">
             <div className="w-0.5 h-3 bg-positive" />
-            <div className="w-3.5 h-10 bg-positive rounded-sm shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
+            <div className="w-3.5 h-10 bg-positive rounded-sm shadow-[0_0_8px_color-mix(in_srgb,var(--mp-positive)_30%,transparent)]" />
             <div className="w-0.5 h-3 bg-positive" />
           </div>
           <div className="flex flex-col items-center">
             <div className="w-0.5 h-2 bg-positive" />
-            <div className="w-3.5 h-14 bg-positive rounded-sm shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
+            <div className="w-3.5 h-14 bg-positive rounded-sm shadow-[0_0_8px_color-mix(in_srgb,var(--mp-positive)_40%,transparent)]" />
             <div className="w-0.5 h-4 bg-positive" />
           </div>
           <div className="flex flex-col items-center">
@@ -184,7 +184,7 @@ export const ScrollAnimatedBackground: React.FC = () => {
           </div>
           <div className="flex flex-col items-center">
             <div className="w-0.5 h-2 bg-positive" />
-            <div className="w-3.5 h-12 bg-positive rounded-sm shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
+            <div className="w-3.5 h-12 bg-positive rounded-sm shadow-[0_0_8px_color-mix(in_srgb,var(--mp-positive)_30%,transparent)]" />
             <div className="w-0.5 h-2 bg-positive" />
           </div>
         </div>
@@ -198,12 +198,12 @@ export const ScrollAnimatedBackground: React.FC = () => {
           </div>
           <div className="flex flex-col items-center">
             <div className="w-0.5 h-5 bg-positive" />
-            <div className="w-3 h-8 bg-positive rounded-sm shadow-[0_0_6px_rgba(16,185,129,0.2)]" />
+            <div className="w-3 h-8 bg-positive rounded-sm shadow-[0_0_6px_color-mix(in_srgb,var(--mp-positive)_20%,transparent)]" />
             <div className="w-0.5 h-3 bg-positive" />
           </div>
           <div className="flex flex-col items-center">
             <div className="w-0.5 h-3 bg-negative" />
-            <div className="w-3 h-16 bg-negative rounded-sm shadow-[0_0_10px_rgba(239,68,68,0.3)]" />
+            <div className="w-3 h-16 bg-negative rounded-sm shadow-[0_0_10px_color-mix(in_srgb,var(--mp-negative)_30%,transparent)]" />
             <div className="w-0.5 h-4 bg-negative" />
           </div>
         </div>
@@ -212,12 +212,12 @@ export const ScrollAnimatedBackground: React.FC = () => {
         <div className="absolute top-[1750px] left-[5%] opacity-[0.15] flex gap-1 text-2xs font-mono items-center">
           <div className="flex flex-col items-center">
             <div className="w-0.5 h-2 bg-accent-hover" />
-            <div className="w-2.5 h-7 bg-accent-hover/90 rounded-sm shadow-[0_0_6px_rgba(106,165,255,0.3)]" />
+            <div className="w-2.5 h-7 bg-accent-hover/90 rounded-sm shadow-[0_0_6px_color-mix(in_srgb,var(--mp-accent)_30%,transparent)]" />
             <div className="w-0.5 h-2 bg-accent-hover" />
           </div>
           <div className="flex flex-col items-center">
             <div className="w-0.5 h-1 bg-accent-hover" />
-            <div className="w-2.5 h-10 bg-accent-hover/90 rounded-sm shadow-[0_0_8px_rgba(106,165,255,0.4)]" />
+            <div className="w-2.5 h-10 bg-accent-hover/90 rounded-sm shadow-[0_0_8px_color-mix(in_srgb,var(--mp-accent)_40%,transparent)]" />
             <div className="w-0.5 h-3 bg-accent-hover" />
           </div>
           <span className="text-accent-hover/80 font-bold ml-1 animate-pulse">BREAKOUT</span>
