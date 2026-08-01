@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import type { Announcement, AnnouncementPriority } from "../../../types";
 import { formatDate } from "../../../lib/format";
+import { Button, Input, Textarea, Select } from "../../ui";
 
 const priorities: AnnouncementPriority[] = ["Normal", "Important", "Critical"];
 
@@ -183,25 +184,21 @@ export const AdminBulletinsTab: React.FC = () => {
             {editing ? "Edit Announcement" : "New Announcement"}
           </h3>
           {editing && (
-            <button onClick={resetForm} className="p-2 bg-ground border border-line text-muted rounded-lg hover:text-ink" title="Cancel edit">
-              <X size={14} />
-            </button>
+            <Button variant="secondary" size="icon" onClick={resetForm} title="Cancel edit" aria-label="Cancel edit"><X size={14} /></Button>
           )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          <input placeholder="Announcement title" value={form.title} onChange={e => setForm(prev => ({ ...prev, title: e.target.value }))}
-            className="w-full px-4 py-3 bg-ground border border-line rounded-xl text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent" />
-          <select value={form.priority} onChange={e => setForm(prev => ({ ...prev, priority: e.target.value as AnnouncementPriority }))}
-            className="w-full px-4 py-3 bg-ground border border-line rounded-xl text-sm text-ink focus:outline-none focus:border-accent">
+          <Input label="Title" placeholder="Announcement title" value={form.title} onChange={e => setForm(prev => ({ ...prev, title: e.target.value }))} />
+          <Select label="Priority" value={form.priority} onChange={e => setForm(prev => ({ ...prev, priority: e.target.value as AnnouncementPriority }))}>
             {priorities.map(priority => <option key={priority} value={priority}>{priority} Priority</option>)}
-          </select>
+          </Select>
         </div>
 
-        <textarea placeholder="Announcement content..." value={form.content} onChange={e => setForm(prev => ({ ...prev, content: e.target.value }))} rows={4}
-          className="w-full px-4 py-3 bg-ground border border-line rounded-xl text-sm text-ink placeholder:text-muted focus:outline-none focus:border-accent resize-none" />
+        <Textarea label="Content" placeholder="Announcement content..." value={form.content} onChange={e => setForm(prev => ({ ...prev, content: e.target.value }))} rows={4} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+          {/* Raw checkboxes: no Checkbox primitive yet — see AdminInvestmentsTab. */}
           <label className="flex items-center gap-2 px-3 py-2 bg-ground border border-line rounded-xl cursor-pointer">
             <input type="checkbox" checked={form.enabled} onChange={e => setForm(prev => ({ ...prev, enabled: e.target.checked }))} className="w-4 h-4 accent-accent" />
             <span className="text-xs text-muted font-bold flex items-center gap-1"><Eye size={12} /> Enabled</span>
@@ -210,46 +207,36 @@ export const AdminBulletinsTab: React.FC = () => {
             <input type="checkbox" checked={form.pinned} onChange={e => setForm(prev => ({ ...prev, pinned: e.target.checked }))} className="w-4 h-4 accent-accent" />
             <span className="text-xs text-muted font-bold flex items-center gap-1"><Pin size={12} /> Pinned</span>
           </label>
-          <label className="flex items-center gap-2 px-3 py-2 bg-ground border border-line rounded-xl">
-            <Calendar size={12} className="text-muted" />
-            <input type="date" value={form.publishDate} onChange={e => setForm(prev => ({ ...prev, publishDate: e.target.value }))}
-              className="min-w-0 flex-1 bg-transparent text-xs text-ink focus:outline-none" />
-          </label>
-          <label className="flex items-center gap-2 px-3 py-2 bg-ground border border-line rounded-xl">
-            <Calendar size={12} className="text-muted" />
-            <input type="date" value={form.expiryDate} onChange={e => setForm(prev => ({ ...prev, expiryDate: e.target.value }))}
-              className="min-w-0 flex-1 bg-transparent text-xs text-ink focus:outline-none" />
-          </label>
+          <Input label="Publish date" type="date" value={form.publishDate} onChange={e => setForm(prev => ({ ...prev, publishDate: e.target.value }))} prefix={<Calendar size={12} />} />
+          <Input label="Expiry date" type="date" value={form.expiryDate} onChange={e => setForm(prev => ({ ...prev, expiryDate: e.target.value }))} prefix={<Calendar size={12} />} />
         </div>
 
-        <button onClick={handleSubmit} disabled={saving}
-          className="flex items-center gap-2 px-6 py-2.5 bg-accent text-ground font-bold text-xs uppercase rounded-lg hover:opacity-90 transition-colors cursor-pointer disabled:opacity-50">
-          {editing ? <Edit3 size={14} /> : <Plus size={14} />} {saving ? "Saving..." : editing ? "Save Announcement" : "Publish Announcement"}
-        </button>
+        <Button onClick={handleSubmit} loading={saving} icon={editing ? Edit3 : Plus} className="self-start">
+          {editing ? "Save Announcement" : "Publish Announcement"}
+        </Button>
       </div>
 
       <div className="bg-surface border border-line rounded-2xl p-4 space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <label className="md:col-span-2 flex items-center gap-2 px-3 py-2 bg-ground border border-line rounded-xl">
-            <Search size={14} className="text-muted" />
-            <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search announcements" className="w-full bg-transparent text-sm text-ink placeholder:text-muted focus:outline-none" />
-          </label>
-          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value as typeof statusFilter)} className="px-3 py-2 bg-ground border border-line rounded-xl text-xs text-ink focus:outline-none focus:border-accent">
+          <div className="md:col-span-2">
+            <Input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search announcements" aria-label="Search announcements" prefix={<Search size={14} />} />
+          </div>
+          <Select value={statusFilter} onChange={e => setStatusFilter(e.target.value as typeof statusFilter)} aria-label="Filter by status">
             <option value="all">All statuses</option>
             <option value="enabled">Enabled</option>
             <option value="disabled">Disabled</option>
-          </select>
-          <select value={priorityFilter} onChange={e => setPriorityFilter(e.target.value as typeof priorityFilter)} className="px-3 py-2 bg-ground border border-line rounded-xl text-xs text-ink focus:outline-none focus:border-accent">
+          </Select>
+          <Select value={priorityFilter} onChange={e => setPriorityFilter(e.target.value as typeof priorityFilter)} aria-label="Filter by priority">
             <option value="all">All priorities</option>
             {priorities.map(priority => <option key={priority} value={priority}>{priority}</option>)}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
           <Filter size={13} />
           {["all", "pinned", "unpinned"].map(item => (
-            <button key={item} onClick={() => setPinFilter(item as typeof pinFilter)} className={`px-3 py-1.5 rounded-lg border font-bold capitalize ${pinFilter === item ? "bg-accent text-ground border-accent" : "bg-ground border-line hover:text-ink"}`}>
+            <Button key={item} size="sm" variant={pinFilter === item ? "primary" : "secondary"} aria-pressed={pinFilter === item} onClick={() => setPinFilter(item as typeof pinFilter)} className="capitalize">
               {item}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
@@ -276,15 +263,15 @@ export const AdminBulletinsTab: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <button onClick={() => handleToggleEnabled(announcement)} className="p-2 bg-ground border border-line text-muted rounded-lg hover:text-ink" title={disabled ? "Enable" : "Disable"}>
+                  <Button variant="secondary" size="icon" onClick={() => handleToggleEnabled(announcement)} title={disabled ? "Enable" : "Disable"} aria-label={`${disabled ? "Enable" : "Disable"} ${announcement.title}`}>
                     {disabled ? <Eye size={14} /> : <EyeOff size={14} />}
-                  </button>
-                  <button onClick={() => handleEdit(announcement)} className="p-2 bg-ground border border-line text-accent rounded-lg hover:bg-accent/10" title="Edit">
+                  </Button>
+                  <Button variant="secondary" size="icon" onClick={() => handleEdit(announcement)} title="Edit" aria-label={`Edit ${announcement.title}`} className="text-accent">
                     <Edit3 size={14} />
-                  </button>
-                  <button onClick={() => handleDelete(announcement)} className="p-2 bg-negative/10 border border-negative/30 text-negative rounded-lg hover:bg-negative/20" title="Delete">
+                  </Button>
+                  <Button variant="danger" size="icon" onClick={() => handleDelete(announcement)} title="Delete" aria-label={`Delete ${announcement.title}`}>
                     <Trash2 size={14} />
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
