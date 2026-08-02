@@ -6,6 +6,17 @@ import { Zap, Shield, ShieldCheck, BarChart3, Lock, Globe, Layers, Target, Users
  * NOTE: superseded by <Proof />, which merged this section with
  * <Confidence />. Nothing imports it today — it is kept because Proof reuses
  * its content. Colours are on the token system so it stays usable.
+ *
+ * NOT SAFE TO RENDER AS-IS. The `stats` array below still carries the
+ * fabricated figures that were removed from <Proof /> — "6,000+ active
+ * investors", "$600M+" and "99% client satisfaction" are invented and have
+ * nothing behind them. Proof replaced them with capability copy that is true
+ * by construction; this file was left alone because choosing its replacement
+ * copy is a content decision for a component nobody currently uses. If this
+ * is ever wired up, those three tiles must be dealt with first.
+ *
+ * (The "AS SEEN IN" press strip that also lived here has already been
+ * removed — see the comment at the bottom of the render.)
  */
 
 // Section 2: Why Choose (Platform Trust Section redesigned based on User Request with gold orange theme and container-less sleekness)
@@ -23,8 +34,6 @@ export const WhyMonetaPrime = () => {
     { icon: Zap, title: "Fast Withdrawals", desc: "Within 24 Hours", colorClass: "text-accent bg-accent/5 border-accent/10 fill-accent/10" },
     { icon: Globe, title: "Data Privacy", desc: "GDPR Compliant", colorClass: "text-accent bg-accent/5 border-accent/10 fill-accent/10" }
   ];
-
-  const brands = ["Bloomberg", "Forbes", "Reuters", "CoinDesk", "TechCrunch"];
 
   return (
     <section className="py-10 px-4 bg-ground/20 border-t border-line/5 overflow-hidden" id="why-moneta-prime">
@@ -119,32 +128,13 @@ export const WhyMonetaPrime = () => {
           ))}
         </div>
 
-        {/* Corporate AS SEEN IN marquee/logos strip */}
-        <div className="mt-8 border-t border-line/5 pt-6 text-center">
-          <motion.span
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 0.7 }}
-            viewport={{ once: true }}
-            className="text-2xs sm:text-xs font-mono tracking-[0.35em] text-faint uppercase font-semibold"
-          >
-            AS SEEN IN
-          </motion.span>
-          <div className="flex flex-wrap items-center justify-center gap-x-12 sm:gap-x-16 md:gap-x-20 gap-y-7 mt-5 px-4">
-            {brands.map((brand, bIdx) => (
-              <motion.span
-                key={bIdx}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 0.55 }}
-                whileHover={{ opacity: 0.95, scale: 1.05 }}
-                viewport={{ once: true }}
-                transition={{ type: "spring", stiffness: 90, damping: 15, delay: bIdx * 0.05 }}
-                className="font-serif text-xl sm:text-2xl md:text-3xl font-black text-muted tracking-tight cursor-default select-none"
-              >
-                {brand}
-              </motion.span>
-            ))}
-          </div>
-        </div>
+        {/* An "AS SEEN IN" strip naming Bloomberg, Forbes, Reuters, CoinDesk
+            and TechCrunch used to sit here. It was removed for the same reason
+            as the one in Proof.tsx: naming real publications that never
+            covered the platform is a legal exposure, not just a trust one.
+            This component is currently unrendered, which is exactly why the
+            strip was removed rather than left — it is one import away from
+            shipping the claim again. Do not reinstate it. */}
 
       </div>
     </section>

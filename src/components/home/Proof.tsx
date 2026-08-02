@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Users, TrendingUp, ThumbsUp, Headset, Lock, Shield, Zap, Globe, Fingerprint, BarChart3, Database } from 'lucide-react';
+import { Layers, Gauge, LineChart, Headset, Lock, Shield, Zap, Globe, Fingerprint, BarChart3, Database } from 'lucide-react';
 import { Section, Container, SectionHeading } from '../ui/Layout';
 import proofTeam1200 from '../../assets/proof-team-1200.jpg';
 import proofTeam600 from '../../assets/proof-team-600.jpg';
@@ -9,20 +9,29 @@ import proofTeam600 from '../../assets/proof-team-600.jpg';
  * Consolidated trust band.
  *
  * Replaces two separate full-height sections (WhyMonetaPrime + Confidence)
- * that made overlapping claims across ~1,250px. Same content — the four
- * headline figures, the four assurances, the three security pillars, the
- * press strip — in one band.
+ * that made overlapping claims across ~1,250px.
  *
  * The originals coloured every icon differently (indigo, emerald, pink,
  * sky, blue), which is six accents fighting the one accent the system
- * allows. Icons are now neutral; the accent marks the figures only.
+ * allows. Icons are neutral here.
+ *
+ * This band deliberately contains NO usage figures and NO press mentions.
+ * It previously opened with "6,000+ active investors", "$600M+ profits
+ * generated" and "99% client satisfaction", and closed with an "As featured
+ * in" strip naming Bloomberg, Forbes, Reuters, CoinDesk and TechCrunch.
+ * None of it had anything behind it. A checkable claim that turns out false
+ * costs more trust than making no claim, and naming real publications that
+ * never covered the platform carries more than a trust cost. The four tiles
+ * now describe what the product does — claims that are true by construction
+ * and that nobody has to take on faith. Do not reintroduce a metric here
+ * unless it is derived from real data.
  */
 
-const STATS = [
-  { value: '6,000+', label: 'Active investors', icon: Users },
-  { value: '$600M+', label: 'Profits generated', icon: TrendingUp },
-  { value: '99%', label: 'Client satisfaction', icon: ThumbsUp },
-  { value: '24/7', label: 'Expert support', icon: Headset },
+const CAPABILITIES = [
+  { icon: Layers, title: 'Multi-asset access', desc: 'Equities, crypto and FX in one workspace' },
+  { icon: Gauge, title: 'Institutional-grade execution', desc: 'Orders routed and filled in real time' },
+  { icon: LineChart, title: 'Live market data', desc: 'Streaming prices across every market' },
+  { icon: Headset, title: '24/7 expert support', desc: 'Real humans, always on' },
 ];
 
 const ASSURANCES = [
@@ -50,8 +59,6 @@ const PILLARS = [
   },
 ];
 
-const PRESS = ['Bloomberg', 'Forbes', 'Reuters', 'CoinDesk', 'TechCrunch'];
-
 export const Proof = () => (
   <Section divided className="bg-ground" id="why-moneta-prime">
     <Container>
@@ -61,26 +68,25 @@ export const Proof = () => (
         description="Security and transparency sit at the centre of everything on the platform."
       />
 
-      {/* Headline figures — the only accented numbers on the page. */}
-      <motion.dl
+      {/* Capabilities. Same four-tile shape the figures used, but a <ul>
+          rather than a <dl>: these are statements, not term/value pairs.
+          Nothing here takes the accent — the accent marks the single most
+          important figure on a screen, and this row no longer has one. */}
+      <motion.ul
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4"
       >
-        {STATS.map(({ value, label, icon: Icon }) => (
-          <div key={label} className="rounded-xl border border-line bg-surface p-5">
+        {CAPABILITIES.map(({ icon: Icon, title, desc }) => (
+          <li key={title} className="rounded-xl border border-line bg-surface p-5">
             <Icon size={16} className="text-faint" />
-            <dd className="mt-3 font-data tabular-nums text-2xl font-semibold tracking-tight text-accent">
-              {value}
-            </dd>
-            <dt className="mt-1 text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
-              {label}
-            </dt>
-          </div>
+            <p className="mt-3 text-sm font-semibold tracking-tight text-ink">{title}</p>
+            <p className="mt-1.5 text-2xs leading-relaxed text-faint">{desc}</p>
+          </li>
         ))}
-      </motion.dl>
+      </motion.ul>
 
       {/* Assurances — compact row, no card chrome competing with the figures. */}
       <ul className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -146,18 +152,6 @@ export const Proof = () => (
           data behind every view.
         </p>
       </motion.div>
-
-      {/* Press strip */}
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-line/60 pt-6">
-        <span className="text-2xs font-semibold uppercase tracking-[0.14em] text-faint">
-          As featured in
-        </span>
-        {PRESS.map(name => (
-          <span key={name} className="text-sm font-medium text-muted/70">
-            {name}
-          </span>
-        ))}
-      </div>
     </Container>
   </Section>
 );
