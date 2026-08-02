@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { AdminLayout } from "../components/admin/AdminLayout";
 
 import { Suspense, lazy } from "react";
+import { Button } from "../components/ui";
 
 // Lazy loaded admin tabs to reduce bundle size
 const AdminUsersTab = lazy(() => import("../components/admin/tabs/AdminUsersTab").then(m => ({ default: m.AdminUsersTab })));
@@ -66,9 +67,9 @@ export const DashboardAdmin: React.FC = () => {
           <ShieldAlert size={48} className="text-negative mx-auto" />
           <h1 className="text-2xl font-bold text-ink font-heading">Access Denied</h1>
           <p className="text-muted">You do not have administrative privileges.</p>
-          <button onClick={() => window.location.assign("/")} className="text-accent hover:underline font-bold text-sm">
+          <Button variant="ghost" size="sm" className="text-accent" onClick={() => window.location.assign("/")}>
             Return to Homepage
-          </button>
+          </Button>
         </div>
       </div>
     );

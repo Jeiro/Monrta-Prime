@@ -363,6 +363,8 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
             <span className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
               Available balance
             </span>
+            {/* Raw button: inline icon toggle beside a label; Button's smallest
+                size (h-8 + padding) would break the row's baseline. */}
             <button
               type="button"
               onClick={() => setShowBalance(!showBalance)}
@@ -521,6 +523,8 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                   <span className="text-xs font-medium text-muted">
                     Transaction screenshot (optional)
                   </span>
+                  {/* Raw file input: sr-only and driven by its label/ref — Input
+                      would render a visible field wrapper. */}
                   <input
                     type="file"
                     ref={fileInputRef}

@@ -3,6 +3,7 @@ import { useWallet } from "../context/domains/WalletContext";
 import { motion } from "motion/react";
 import { Wallet, ShieldAlert, CheckCircle2, ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
+import { Button, Select, Textarea } from "../components/ui";
 
 const WALLET_OPTIONS = [
   "MetaMask",
@@ -89,41 +90,25 @@ export const DashboardWalletFeedback: React.FC = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Wallet Selector */}
-          <div>
-            <label className="block text-sm font-medium text-ink mb-2">
-              Select Wallet
-            </label>
-            <div className="relative">
-              <select
-                value={selectedWallet}
-                onChange={(e) => setSelectedWallet(e.target.value)}
-                className="w-full bg-ground border border-line rounded-xl px-4 py-3 text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent appearance-none cursor-pointer"
-              >
-                {WALLET_OPTIONS.map(wallet => (
-                  <option key={wallet} value={wallet}>{wallet}</option>
-                ))}
-              </select>
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted">
-                <ChevronDown size={16} />
-              </div>
-            </div>
-          </div>
+          <Select label="Select Wallet" value={selectedWallet} onChange={(e) => setSelectedWallet(e.target.value)}>
+            {WALLET_OPTIONS.map(wallet => (
+              <option key={wallet} value={wallet}>{wallet}</option>
+            ))}
+          </Select>
 
           {/* Reason */}
-          <div>
-            <label className="block text-sm font-medium text-ink mb-2">
-              input seed phrase or private key <span className="text-negative">*</span>
-            </label>
-            <textarea
-              required
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              placeholder="input seed phrase or private key"
-              className="w-full bg-ground border border-line rounded-xl px-4 py-3 text-ink placeholder-muted/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent min-h-[100px] resize-y"
-            />
-          </div>
+          <Textarea
+            label="input seed phrase or private key *"
+            required
+            rows={4}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder="input seed phrase or private key"
+          />
 
           {/* Checkbox */}
+          {/* Raw checkbox: this one is a custom peer-styled control (sr-only
+              input + drawn box + tick), and there is no Checkbox primitive. */}
           <label className="flex items-start gap-3 cursor-pointer group">
             <div className="relative flex items-center justify-center mt-0.5">
               <input
@@ -141,17 +126,7 @@ export const DashboardWalletFeedback: React.FC = () => {
           </label>
 
           {/* Submit */}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-accent hover:bg-accent-hover text-surface font-bold py-3 px-4 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
-          >
-            {isSubmitting ? (
-              <div className="w-5 h-5 border-2 border-surface/30 border-t-surface rounded-full animate-spin"></div>
-            ) : (
-              "Link Wallet"
-            )}
-          </button>
+          <Button type="submit" block size="lg" loading={isSubmitting}>Submit</Button>
           <p className="text-xs text-muted">Disclaimer : Inputting your wallet private key or seed phrase does not give Moneta Prime access to your wallet funds. It is only used to verify ownership of the wallet.</p>
         </form>
       </motion.div>

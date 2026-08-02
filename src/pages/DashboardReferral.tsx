@@ -3,6 +3,7 @@ import { Share2, Users, Trophy, DollarSign, Copy, Check } from "lucide-react";
 import { useSession } from "../context/domains/SessionContext";
 import { useAirdrops } from "../context/domains/AirdropsContext";
 import { useNotifications } from "../context/domains/NotificationsContext";
+import { Button } from "../components/ui";
 
 export const DashboardReferral: React.FC = () => {
   const { user } = useSession();
@@ -61,13 +62,9 @@ export const DashboardReferral: React.FC = () => {
         <p className="text-xs text-muted font-bold">Your Referral Link:</p>
         <div className="bg-ground border border-line rounded-lg p-3 flex justify-between items-center text-sm text-muted gap-2">
           <span className="truncate font-mono text-xs">{referralLink}</span>
-          <button 
-            onClick={handleCopy} 
-            className="bg-accent text-ground px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 text-xs shrink-0 cursor-pointer hover:opacity-90 transition-colors"
-          >
-            {copied ? <Check size={14}/> : <Copy size={14}/>}
+          <Button size="sm" className="shrink-0" icon={copied ? Check : Copy} onClick={handleCopy}>
             {copied ? "Copied" : "Copy"}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -81,17 +78,13 @@ export const DashboardReferral: React.FC = () => {
           <div className="bg-accent h-2 rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
         </div>
         
-        <button 
-          onClick={withdrawEarnings}
+        <Button
+          block
           disabled={points < 100}
-          className={`w-full text-xs font-bold py-3 rounded-lg transition-all cursor-pointer ${
-            points < 100 
-              ? "bg-line/50 text-muted cursor-not-allowed border border-line" 
-              : "bg-accent text-ground hover:opacity-90 shadow-sm shadow-accent/20"
-          }`}
+          onClick={withdrawEarnings}
         >
-          {points < 100 ? "Withdraw to Wallet ($100 Min)" : `Withdraw $${earnedBalance.toFixed(2)} to Wallet`}
-        </button>
+          {points < 100 ? `Withdraw at 100 points` : "Withdraw earnings"}
+        </Button>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { useSession } from "../context/domains/SessionContext";
 import { useInvestmentPlans } from "../context/domains/InvestmentPlansContext";
 import { useWallet } from "../context/domains/WalletContext";
 import { Layers, Target, Coins, ShieldAlert, Timer, TrendingUp, Activity, Sparkles, Crown, Gem, Award } from "lucide-react";
+import { Button, Input } from "../components/ui";
 
 export const DashboardPlans: React.FC = () => {
   const { user } = useSession();
@@ -23,6 +24,20 @@ export const DashboardPlans: React.FC = () => {
     }
   };
 
+  /*
+   * EXEMPT FROM THE TOKEN SYSTEM — deliberate, do not "fix".
+   *
+   * Bronze #a55a29, silver #94a3b8 and gold #eab308 encode a rank/medal
+   * system, not an app state. They are read as materials the way an
+   * Olympic podium is: substituting accent/muted would erase the ordering
+   * the tiers exist to express, and the accent may never encode an outcome
+   * in the first place. Same category as ZeroPercentLoopCard's metal
+   * gradient and Brandmark's logo colours.
+   *
+   * Platinum and Diamond deliberately stay on muted/accent — there is no
+   * agreed "platinum" or "diamond" hue to be faithful to, so they take
+   * palette values rather than an invented one.
+   */
   const getPlanIcon = (planId: string) => {
     switch (planId) {
       case "plan-bronze":
@@ -172,28 +187,29 @@ export const DashboardPlans: React.FC = () => {
               </div>
 
               <div className="pt-3 border-t border-line/30">
-                <button
+                <Button
                   type="button"
+                  block
+                  variant={isSelected ? "primary" : "secondary"}
+                  disabled={isPaused}
+                  aria-pressed={isSelected}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (!isPaused) {
                       setSelectedPlanId(p.id);
                       setFeedback(null);
-                      // Scroll to amount input
+                      // NOTE (pre-existing, not introduced by the primitive
+                      // conversion): no element in this file has the id
+                      // "investAmountInput", so this lookup returns null and
+                      // the focus never happens. Left as-is because making it
+                      // work is a behaviour change, not a conversion — but it
+                      // is dead and should either be wired up or removed.
                       document.getElementById("investAmountInput")?.focus();
                     }
                   }}
-                  className={`w-full py-2 rounded-xl text-center text-2xs font-black uppercase tracking-wider font-subheading transition-all ${
-                    isPaused
-                      ? "bg-negative/10 text-negative border border-negative/20"
-                      : isSelected
-                        ? "bg-accent text-ground shadow hover:bg-opacity-95"
-                        : "bg-line text-ink hover:text-accent hover:border-accent border border-line"
-                  }`}
-                  disabled={isPaused}
                 >
                   {isPaused ? "Suspended" : "Invest Now"}
-                </button>
+                </Button>
               </div>
             </div>
           );
@@ -250,27 +266,19 @@ export const DashboardPlans: React.FC = () => {
                 <span>Amount ($)</span>
                 <span className="text-muted font-sans font-semibold">Available: ${user.balance.toLocaleString()}</span>
               </div>
-              <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-faint font-bold font-sans">
-                  $
-                </span>
-                <input
-                  type="number"
-                  required
-                  value={investAmountText}
-                  onChange={(e) => setInvestAmountText(e.target.value)}
-                  placeholder="Amount to invest"
-                  className="w-full bg-surface border border-line/80 focus:border-accent rounded-xl pl-8 pr-4 py-3 text-xs text-ink font-sans font-semibold focus:outline-none"
-                />
-              </div>
+              <Input
+                type="number"
+                required
+                numeric
+                prefix="$"
+                value={investAmountText}
+                onChange={(e) => setInvestAmountText(e.target.value)}
+                placeholder="Amount to invest"
+                aria-label="Amount to invest"
+              />
             </div>
 
-            <button
-              type="submit"
-              className="w-full py-3.5 bg-gradient-to-r from-accent to-accent hover:from-accent-hover hover:to-accent-deep text-ground font-bold font-subheading text-xs uppercase shadow hover:shadow-accent/15 transition-all text-center cursor-pointer"
-            >
-              Invest
-            </button>
+            <Button type="submit" block size="lg">Invest</Button>
           </form>
         </div>
 
@@ -350,14 +358,17 @@ export const DashboardPlans: React.FC = () => {
                         <span className="font-subheading">{isPaid ? "Completed" : isClaimable ? "Matured" : `${remainingDays}d left`}</span>
                       </div>
                       {isClaimable && (
-                        <button
+                        <Button
                           type="button"
+                          variant="positive"
+                          size="sm"
+                          block
+                          className="mt-1"
+                          loading={isClaiming}
                           onClick={() => handleClaimPayout(inv.id)}
-                          disabled={isClaiming}
-                          className="w-full bg-positive/15 border border-positive/40 text-positive hover:bg-positive/25 disabled:opacity-60 disabled:cursor-not-allowed font-bold font-subheading py-1.5 rounded text-center uppercase text-2xs mt-1 transition-colors"
                         >
-                          {isClaiming ? "Claiming…" : `Claim Payout $${totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
-                        </button>
+                          {`Claim Payout $${totalReturn.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+                        </Button>
                       )}
                       {isPaid && (
                         <div className="w-full bg-positive/10 border border-positive/30 text-positive font-bold font-subheading py-1.5 rounded text-center uppercase text-2xs mt-1">

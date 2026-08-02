@@ -3,6 +3,8 @@ import { useWallet } from "../context/domains/WalletContext";
 import { useNotifications } from "../context/domains/NotificationsContext";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { Wallet, Info } from "lucide-react";
+import { X } from "lucide-react";
+import { Button } from "../components/ui";
 
 const TrustWalletLogo = () => (
   <svg className="w-9 h-9 shrink-0" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -164,6 +166,11 @@ export const DashboardWalletConnect: React.FC = () => {
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Raw button: each wallet is a card-shaped choice — brand logo, name
+            and a "Connect" pill in a justify-between row — not a control.
+            Button forces inline-flex with centred content and a fixed height,
+            which collapses the card. (The wallet brand logos inside are the
+            documented palette exception, same as before.) */}
         {wallets.map(wallet => (
           <button 
             key={wallet} 
@@ -186,12 +193,15 @@ export const DashboardWalletConnect: React.FC = () => {
       {showModal && (
         <div className="fixed inset-0 bg-ground/75 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-surface border border-line p-6 rounded-2xl w-full max-w-md space-y-5 animate-fade-in shadow-2xl relative">
-            <button 
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Close dialog"
               onClick={() => setShowModal(false)}
-              className="absolute top-4 right-4 text-muted hover:text-ink cursor-pointer bg-transparent border-none outline-none text-sm font-bold"
+              className="absolute top-2 right-2"
             >
-              ✕
-            </button>
+              <X size={16} />
+            </Button>
 
             <div className="flex items-center gap-3">
               {selectedWallet && walletLogos[selectedWallet]}
@@ -207,27 +217,8 @@ export const DashboardWalletConnect: React.FC = () => {
             </div>
 
             <div className="flex gap-3">
-              <button 
-                onClick={() => setShowModal(false)} 
-                disabled={isLoading}
-                className="flex-1 bg-ground border border-line/80 hover:border-ink text-ink font-bold p-3 rounded-xl hover:opacity-90 transition-all text-xs cursor-pointer disabled:opacity-50"
-              >
-                Cancel
-              </button>
-              <button 
-                onClick={handleConnect} 
-                disabled={isLoading}
-                className="flex-1 bg-accent text-ground font-extrabold p-3 rounded-xl hover:opacity-90 transition-all text-xs cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1"
-              >
-                {isLoading ? (
-                  <>
-                    <span className="w-3.5 h-3.5 border-2 border-ground border-t-transparent rounded-full animate-spin"></span>
-                    Saving...
-                  </>
-                ) : (
-                  "Save Preference"
-                )}
-              </button>
+              <Button variant="secondary" className="flex-1" disabled={isLoading} onClick={() => setShowModal(false)}>Cancel</Button>
+              <Button className="flex-1" loading={isLoading} onClick={handleConnect}>Confirm</Button>
             </div>
           </div>
         </div>

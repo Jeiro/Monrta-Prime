@@ -283,6 +283,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             <span className="inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-2 py-1">
               <span className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">UID</span>
               <span className="select-all font-data text-2xs text-muted">{uid}</span>
+              {/* Raw button: a 0.5-unit icon affordance sitting inline inside a
+                  text chip. Button's smallest size is h-8 with horizontal
+                  padding, which would break the chip's line height. */}
               <button
                 type="button"
                 onClick={() => {
@@ -312,7 +315,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               </Badge>
             ) : (
               // Unverified is an action, not just a state — it links to the
-              // thing that resolves it.
+              // thing that resolves it. Stays raw: it is a transparent wrapper
+              // around a Badge, so Button's own background, height and padding
+              // would double up on the badge's.
               <button
                 type="button"
                 onClick={() => onNavigate("dashboard-kyc")}
