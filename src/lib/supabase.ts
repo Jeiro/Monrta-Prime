@@ -5,8 +5,28 @@ import {useMemo} from 'react';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  throw new Error('Missing Supabase env vars in .env');
+/**
+ * Validated lazily, NOT at module scope.
+ *
+ * ES module bodies run during the import graph, before `createRoot().render()`
+ * — so a throw up here happens before RootErrorBoundary is mounted and there
+ * is nothing to catch it. The result is a blank white page. Called from the
+ * hook instead, the same failure throws during render and the boundary shows
+ * a real message.
+ *
+ * A build cannot ship with these missing (see requireClientEnv in
+ * vite.config.ts); this is the guard for `vite dev` and for values that are
+ * present but wrong.
+ */
+function assertSupabaseEnv(): {url: string; anonKey: string} {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    throw new Error(
+      'Missing Supabase configuration. Set VITE_SUPABASE_URL and ' +
+        'VITE_SUPABASE_ANON_KEY in .env (local) or in the Vercel project ' +
+        'environment variables, then restart.'
+    );
+  }
+  return {url: SUPABASE_URL, anonKey: SUPABASE_ANON_KEY};
 }
 
 // Hook: gives you a Supabase client that's authenticated as the
@@ -20,21 +40,34 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 // (React's "Maximum update depth exceeded").
 export function useSupabaseClient() {
   const {session} = useSession();
+  const {url, anonKey} = assertSupabaseEnv();
 
   return useMemo(
     () =>
-      createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      createClient(url, anonKey, {
         async accessToken() {
           return (await session?.getToken()) ?? null;
         },
       }),
-    [session?.id]
+    [session?.id, url, anonKey]
   );
 }
 
-// Plain client for contexts with no signed-in user (public pages,
-// reading public data like plans/traders before login).
-export const supabasePublic = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Plain client for contexts with no signed-in user (public pages, reading
+// public data like plans/traders before login).
+//
+// A function rather than a module-scope constant: createClient throws on a
+// malformed URL, and at module scope that throw lands before React mounts,
+// which is a blank page instead of an error screen. Memoized so callers
+// still share one instance.
+let publicClient: SupabaseClient | null = null;
+export function getSupabasePublic(): SupabaseClient {
+  if (!publicClient) {
+    const {url, anonKey} = assertSupabaseEnv();
+    publicClient = createClient(url, anonKey);
+  }
+  return publicClient;
+}
 
 // For use IMMEDIATELY after setActive() (e.g. right after sign-up or a
 // password reset completes). The React-hook-based client above is tied to
@@ -43,7 +76,8 @@ export const supabasePublic = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // re-render, sending the request out unauthenticated. This reads the
 // token straight from Clerk's live singleton instead, sidestepping that.
 export function createFreshAuthedClient() {
-  return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  const {url, anonKey} = assertSupabaseEnv();
+  return createClient(url, anonKey, {
     async accessToken() {
       return (await (window as any).Clerk?.session?.getToken()) ?? null;
     },
