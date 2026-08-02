@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useUser as useClerkUser } from "@clerk/clerk-react";
 import { useSession } from "../context/domains/SessionContext";
 import { useInvestmentPlans } from "../context/domains/InvestmentPlansContext";
 import { useTraders } from "../context/domains/TradersContext";
@@ -19,6 +20,7 @@ import {
   LineChart,
   MinusCircle,
   PlusCircle,
+  ShieldCheck,
   Users,
   Wallet,
 } from "lucide-react";
@@ -36,6 +38,7 @@ import {
   Progress,
   SectionCard,
   SectionCardAction,
+  Skeleton,
   StatCard,
 } from "../components/ui";
 import { formatDate, formatDateTime, formatMoney, getUID } from "../lib/format";
@@ -68,7 +71,55 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   onOpenDeposit,
   onOpenWithdraw,
 }) => {
-  const { user } = useSession();
+  const { user, authReady } = useSession();
+  const { user: clerkUser, isLoaded: clerkLoaded } = useClerkUser();
+
+  /*
+   * Account security posture — derived, never asserted.
+   *
+   * This replaces a hardcoded "Security: High" chip that read identically
+   * for every account regardless of its actual state. Both inputs here are
+   * real and independently verifiable:
+   *
+   *   2FA  — clerkUser.twoFactorEnabled (Clerk UserResource, @clerk/shared
+   *          3.47.7; confirmed present and non-deprecated in the installed
+   *          version rather than assumed).
+   *   KYC  — user.kyc.status from the session profile loader.
+   *
+   * NOTE on the KYC source: this deliberately does NOT use useKyc().
+   * That context exposes `allKycSubmissions`, which its data hook gates on
+   * isAdmin — for any non-admin it is always {}, so reading the signed-in
+   * user's own status from it would report "unverified" for every normal
+   * user. `user.kyc` is the per-user record, and is what the identity badge
+   * a few lines below already uses.
+   *
+   * Both signals must be LOADED before a tier is shown. Rendering a tier
+   * from unloaded state would reintroduce the original bug with better
+   * timing — an assurance displayed before it is known. Hence `securityKnown`
+   * gating a skeleton, and no default tier anywhere in the derivation.
+   */
+  const securityKnown = clerkLoaded && authReady;
+  const twoFactorEnabled = clerkUser?.twoFactorEnabled === true;
+  const kycApproved = user.kyc?.status === "approved";
+  const securedCount = (twoFactorEnabled ? 1 : 0) + (kycApproved ? 1 : 0);
+
+  // Wording is deliberately about THIS account, not a platform rating, and
+  // deliberately not the old "High/Medium/Low". Two checks passing is real
+  // hardening; it is not a general claim that the account is "highly secure".
+  const securityTier =
+    securedCount === 2
+      ? { label: "Account secured", tone: "positive" as const }
+      : securedCount === 1
+        ? { label: "Partly secured", tone: "warning" as const }
+        : { label: "Security setup needed", tone: "negative" as const };
+
+  // Sends the user at the thing that actually moves the tier. 2FA lives in
+  // Clerk's own account UI, so an unverified/rejected KYC is the only step
+  // this app can route to itself.
+  const securityAction =
+    !kycApproved && (user.kyc?.status === "unverified" || user.kyc?.status === "rejected" || !user.kyc)
+      ? { view: "dashboard-kyc", hint: "Verify identity" }
+      : null;
   const { topUpInvestment, claimPlanPayout } = useInvestmentPlans();
   const { claimCopyTradePayout } = useTraders();
   const { addNotification } = useNotifications();
@@ -250,11 +301,10 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 pb-4 sm:pb-6">
       {/* ── Header ───────────────────────────────────────────────
-          The old header carried five chips, one of which read
-          "Security: High" — hardcoded, identical for every account and
-          every security posture. A fabricated assurance is worse than no
-          assurance on a screen whose whole job is trust, so it's gone
-          rather than restyled. */}
+          The header once carried a "Security: High" chip that was
+          hardcoded and identical for every account. It is now derived from
+          two real signals (Clerk 2FA + KYC status) and shows a skeleton
+          until both are known — see the securityTier derivation above. */}
       <motion.header
         variants={item}
         className="flex flex-col gap-4 border-b border-line pb-4 md:flex-row md:items-start md:justify-between"
@@ -328,6 +378,30 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                   <ArrowRight size={11} />
                 </Badge>
               </button>
+            )}
+
+            {/* Account security posture. Skeleton until both inputs are
+                loaded — never a tier by default. */}
+            {!securityKnown ? (
+              <Skeleton width="w-32" height="h-6" className="rounded-full" />
+            ) : securityAction ? (
+              // Same pattern as the identity badge above: a transparent
+              // wrapper so the badge keeps its own box.
+              <button
+                type="button"
+                onClick={() => onNavigate(securityAction.view)}
+                aria-label={`${securityTier.label}. ${securityAction.hint}`}
+                className="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent cursor-pointer"
+              >
+                <Badge tone={securityTier.tone} className="hover:brightness-110">
+                  <ShieldCheck size={11} /> {securityTier.label}
+                  <ArrowRight size={11} />
+                </Badge>
+              </button>
+            ) : (
+              <Badge tone={securityTier.tone}>
+                <ShieldCheck size={11} /> {securityTier.label}
+              </Badge>
             )}
           </div>
         </div>
