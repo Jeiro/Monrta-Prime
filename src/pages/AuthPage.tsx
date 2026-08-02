@@ -4,10 +4,11 @@ import { useSiteSettings } from "../context/domains/SiteSettingsContext";
 import { useNotifications } from "../context/domains/NotificationsContext";
 import { useSupabaseClient, createUserProfile, createFreshAuthedClient } from "../lib/supabase";
 import {
-  Mail, Lock, User, CheckCircle2, Phone, ChevronDown,
+  Mail, Lock, User, CheckCircle2, Phone,
   Eye, EyeOff, Check, X, ArrowRight, ArrowLeft,
   ShieldCheck, Zap, Clock,
 } from "lucide-react";
+import { Button, Input, Select } from "../components/ui";
 
 interface AuthPageProps {
   onNavigate: (view: string) => void;
@@ -61,6 +62,15 @@ const TextInput: React.FC<TextInputProps> = ({
             <Icon size={15} />
           </span>
         )}
+        {/* Raw input, flagged rather than converted. This field carries a
+            show/hide password toggle, and Input's `suffix` slot is decoration
+            by contract — pointer-events-none and aria-hidden — so a focusable
+            control cannot live there. Routing the toggle through it would
+            produce a button no keyboard or screen-reader user can reach.
+            The right fix is an `action`/adornment slot on Input itself, which
+            is a change to a shared primitive and its own piece of work.
+            Everything else here (label, icon, hint, ok/err state) already has
+            an Input equivalent. */}
         <input
           type={actualType}
           inputMode={inputMode}
@@ -103,24 +113,13 @@ interface SelectInputProps {
   children: React.ReactNode;
 }
 
-const SelectInput: React.FC<SelectInputProps> = ({ label, required, value, onChange, state = "idle", children }) => (
-  <div className="space-y-1.5">
-    <label className="text-2xs uppercase font-subheading tracking-wider text-muted block">
-      {label}{required && <span className="text-accent ml-0.5">*</span>}
-    </label>
-    <div className={`relative flex items-center rounded-xl bg-ground border transition-all duration-150 ${stateBorder(state)}`}>
-      <select
-        value={value}
-        onChange={onChange}
-        className="w-full bg-transparent rounded-xl px-4 py-3 text-ink cursor-pointer outline-none appearance-none font-sans [&>option]:bg-surface [&>option]:text-ink"
-      >
-        {children}
-      </select>
-      <span className="absolute right-3 text-faint pointer-events-none">
-        <ChevronDown size={14} />
-      </span>
-    </div>
-  </div>
+// Wraps the Select primitive, which already supplies the label, the
+// chevron and the on-theme option list. `state` is retained for call-site
+// compatibility but no longer paints its own border — Select owns that.
+const SelectInput: React.FC<SelectInputProps> = ({ label, required, value, onChange, children }) => (
+  <Select label={required ? `${label} *` : label} value={value} onChange={onChange}>
+    {children}
+  </Select>
 );
 
 /* ---------- Password strength (pure client-side, no deps) ---------- */
@@ -158,14 +157,10 @@ const GoogleMark = () => (
 );
 
 const GoogleButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
-  <button
-    type="button"
-    onClick={onClick}
-    className="w-full py-3.5 px-4 rounded-xl border border-line/90 hover:border-accent/50 bg-white/[0.02] hover:bg-accent/[0.04] text-ink font-semibold font-subheading text-sm transition-all flex items-center justify-center gap-2.5 cursor-pointer"
-  >
+  <Button type="button" variant="secondary" size="lg" block onClick={onClick}>
     <span className="text-accent"><GoogleMark /></span>
     Continue with Google
-  </button>
+  </Button>
 );
 
 const Divider = () => (
@@ -728,24 +723,26 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
           {/* Tab switcher — hidden mid-verify / mid-reset / mid-success */}
           {!pendingVerification && !showForgotPassword && !isSuccess && (
             <div className="mb-7 inline-flex gap-1 self-start rounded-full border border-line/70 bg-white/[0.03] p-1">
-              <button
+              <Button
                 type="button"
+                size="sm"
+                variant={activeTab === "register" ? "primary" : "ghost"}
+                aria-pressed={activeTab === "register"}
+                className="rounded-full px-5"
                 onClick={() => switchTab("register")}
-                className={`rounded-full px-5 py-2 text-xs font-bold font-subheading transition-all cursor-pointer ${
-                  activeTab === "register" ? "bg-accent text-ground" : "text-muted hover:text-ink"
-                }`}
               >
                 Create account
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                size="sm"
+                variant={activeTab === "login" ? "primary" : "ghost"}
+                aria-pressed={activeTab === "login"}
+                className="rounded-full px-5"
                 onClick={() => switchTab("login")}
-                className={`rounded-full px-5 py-2 text-xs font-bold font-subheading transition-all cursor-pointer ${
-                  activeTab === "login" ? "bg-accent text-ground" : "text-muted hover:text-ink"
-                }`}
               >
                 Sign in
-              </button>
+              </Button>
             </div>
           )}
 
@@ -783,34 +780,22 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                 We sent a 6-digit code to <span className="text-ink">{loginEmail}</span> to confirm
                 this device.
               </p>
-              <div className="space-y-1.5">
-                <label className="block text-2xs uppercase font-subheading tracking-wider text-muted">
-                  Verification code
-                </label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  value={secondFactorCode}
-                  onChange={(e) => setSecondFactorCode(e.target.value)}
-                  placeholder="Enter 6-digit code"
-                  className="w-full rounded-xl border border-line/85 bg-ground px-4 py-3.5 text-center font-sans tracking-[0.4em] text-ink outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15 tabular-nums"
-                  required
-                />
-              </div>
-              <button type="submit" disabled={isVerifying} className="orb-button w-full py-4 disabled:opacity-50 disabled:cursor-not-allowed">
-                {isVerifying ? (
-                  <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-ground/30 border-t-ground" />Verifying…</>
-                ) : (<>Confirm &amp; sign in <ArrowRight size={16} /></>)}
-              </button>
+              <Input
+                label="Verification code"
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                value={secondFactorCode}
+                onChange={(e) => setSecondFactorCode(e.target.value)}
+                placeholder="Enter 6-digit code"
+                className="text-center tracking-[0.4em] tabular-nums"
+                required
+              />
+              <Button type="submit" size="lg" block loading={isVerifying} iconRight={ArrowRight}>Confirm &amp; sign in</Button>
               <div className="pt-1 text-center">
-                <button
-                  type="button"
-                  onClick={() => { setPendingSecondFactor(false); setErrorMsg(null); }}
-                  className="cursor-pointer border-none bg-transparent text-xs font-semibold text-accent outline-none hover:underline"
-                >
+                <Button type="button" variant="ghost" size="sm" className="text-accent" onClick={() => { setPendingSecondFactor(false); setErrorMsg(null); }}>
                   ← Back
-                </button>
+                </Button>
               </div>
             </form>
           ) : pendingVerification ? (
@@ -821,33 +806,21 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                   {errorMsg}
                 </div>
               )}
-              <div className="space-y-1.5">
-                <label className="block text-2xs uppercase font-subheading tracking-wider text-muted">
-                  Verification code
-                </label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
-                  placeholder="Enter 6-digit code"
-                  className="w-full rounded-xl border border-line/85 bg-ground px-4 py-3.5 text-center font-sans tracking-[0.4em] text-ink outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15 tabular-nums"
-                  required
-                />
-              </div>
-              <button type="submit" disabled={isVerifying} className="orb-button w-full py-4 disabled:opacity-50 disabled:cursor-not-allowed">
-                {isVerifying ? (
-                  <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-ground/30 border-t-ground" />Verifying…</>
-                ) : (<>Verify &amp; activate account <ArrowRight size={16} /></>)}
-              </button>
+              <Input
+                label="Verification code"
+                type="text"
+                inputMode="numeric"
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
+                placeholder="Enter 6-digit code"
+                className="text-center tracking-[0.4em] tabular-nums"
+                required
+              />
+              <Button type="submit" size="lg" block loading={isVerifying} iconRight={ArrowRight}>Verify &amp; activate account</Button>
               <div className="pt-1 text-center">
-                <button
-                  type="button"
-                  onClick={() => { setPendingVerification(false); setErrorMsg(null); }}
-                  className="cursor-pointer border-none bg-transparent text-xs font-semibold text-accent outline-none hover:underline"
-                >
+                <Button type="button" variant="ghost" size="sm" className="text-accent" onClick={() => { setPendingVerification(false); setErrorMsg(null); }}>
                   ← Back
-                </button>
+                </Button>
               </div>
             </form>
           ) : (
@@ -927,9 +900,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                           hint={cState === "err" ? "Passwords don't match yet." : null} />
                       </div>
                       <div className="mt-1">
-                        <button type="button" onClick={attemptNext} className="orb-button w-full py-4">
-                          Continue <ArrowRight size={16} />
-                        </button>
+                        <Button type="button" size="lg" block iconRight={ArrowRight} onClick={attemptNext}>Continue</Button>
                       </div>
                     </div>
                   )}
@@ -955,12 +926,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                           onChange={(e) => setPhone(e.target.value)} placeholder="Phone number" state={phState} />
                       </div>
                       <div className="mt-1 flex gap-3">
-                        <button type="button" onClick={goBackStep} className="orb-button-secondary py-4">
-                          <ArrowLeft size={16} /> Back
-                        </button>
-                        <button type="button" onClick={attemptNext} className="orb-button flex-1 py-4">
-                          Continue <ArrowRight size={16} />
-                        </button>
+                        <Button type="button" variant="secondary" size="lg" icon={ArrowLeft} onClick={goBackStep}>Back</Button>
+                        <Button type="button" size="lg" className="flex-1" iconRight={ArrowRight} onClick={attemptNext}>Continue</Button>
                       </div>
                     </div>
                   )}
@@ -991,6 +958,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                       </div>
 
                       <label htmlFor="chk-terms" className="mt-1 flex cursor-pointer select-none items-start gap-2.5 text-xs leading-tight text-muted">
+                        {/* Raw checkbox: no Checkbox primitive yet — same as the admin tabs. */}
                         <input
                           type="checkbox"
                           id="chk-terms"
@@ -998,6 +966,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                           onChange={(e) => setCheckedTerms(e.target.checked)}
                           className="mt-0.5 h-4 w-4 accent-accent"
                         />
+                        {/* The four links below stay raw <button>s: they sit inside
+                            flowing sentences, where Button's inline-flex box and
+                            fixed height break the text baseline and line-wrapping. */}
                         <span>
                           I accept the{" "}
                           <button type="button" onClick={() => onNavigate("terms")} className="text-accent hover:underline">Terms of Service</button>
@@ -1011,14 +982,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                       <div id="clerk-captcha" />
 
                       <div className="mt-1 flex gap-3">
-                        <button type="button" onClick={goBackStep} className="orb-button-secondary py-4">
-                          <ArrowLeft size={16} /> Back
-                        </button>
-                        <button type="submit" disabled={isSubmitting} className="orb-button flex-1 py-4 disabled:opacity-50 disabled:cursor-not-allowed">
-                          {isSubmitting ? (
-                            <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-ground/30 border-t-ground" />Creating…</>
-                          ) : (<>Create account <ArrowRight size={16} /></>)}
-                        </button>
+                        <Button type="button" variant="secondary" size="lg" icon={ArrowLeft} onClick={goBackStep}>Back</Button>
+                        <Button type="submit" size="lg" className="flex-1" loading={isSubmitting} iconRight={ArrowRight}>Create account</Button>
                       </div>
                       <p className="text-center text-2xs leading-tight text-muted">
                         A 6-digit code will confirm your email next.
@@ -1047,45 +1012,29 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                     <>
                       <TextInput icon={Mail} label="Email address" type="email" inputMode="email" value={forgotEmail}
                         onChange={(e) => setForgotEmail(e.target.value)} placeholder="you@example.com" />
-                      <button type="button" disabled={forgotLoading} onClick={handleForgotPasswordRequest}
-                        className="orb-button w-full py-4 disabled:opacity-50 disabled:cursor-not-allowed">
-                        {forgotLoading ? (
-                          <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-ground/30 border-t-ground" />Processing…</>
-                        ) : (<>Send reset code <ArrowRight size={16} /></>)}
-                      </button>
+                      <Button type="button" size="lg" block loading={forgotLoading} iconRight={ArrowRight} onClick={handleForgotPasswordRequest}>Send reset code</Button>
                     </>
                   ) : (
                     <>
-                      <div className="space-y-1.5">
-                        <label className="block text-2xs uppercase font-subheading tracking-wider text-muted">Reset code</label>
-                        <input
-                          type="text"
-                          inputMode="numeric"
-                          value={resetCode}
-                          onChange={(e) => setResetCode(e.target.value)}
-                          placeholder="Enter 6-digit code"
-                          className="w-full rounded-xl border border-line/85 bg-ground px-4 py-3.5 text-center font-sans tracking-[0.4em] text-ink outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15 tabular-nums"
-                          required
-                        />
-                      </div>
+                      <Input
+                        label="Reset code"
+                        type="text"
+                        inputMode="numeric"
+                        value={resetCode}
+                        onChange={(e) => setResetCode(e.target.value)}
+                        placeholder="Enter 6-digit code"
+                        className="text-center tracking-[0.4em] tabular-nums"
+                        required
+                      />
                       <TextInput icon={Lock} label="New password" password value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)} placeholder="Enter new password" />
-                      <button type="button" disabled={forgotLoading} onClick={handleForgotPasswordReset}
-                        className="orb-button w-full py-4 disabled:opacity-50 disabled:cursor-not-allowed">
-                        {forgotLoading ? (
-                          <><span className="mr-1 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-ground/30 border-t-ground" />Resetting…</>
-                        ) : (<>Reset password &amp; sign in <ArrowRight size={16} /></>)}
-                      </button>
+                      <Button type="button" size="lg" block loading={forgotLoading} iconRight={ArrowRight} onClick={handleForgotPasswordReset}>Reset password &amp; sign in</Button>
                     </>
                   )}
                   <div className="pt-1 text-center">
-                    <button
-                      type="button"
-                      onClick={() => { setShowForgotPassword(false); setForgotStep("request"); setErrorMsg(null); setSuccessMsg(null); }}
-                      className="cursor-pointer border-none bg-transparent text-xs font-semibold text-accent outline-none hover:underline"
-                    >
+                    <Button type="button" variant="ghost" size="sm" className="text-accent" onClick={() => { setShowForgotPassword(false); setForgotStep("request"); setErrorMsg(null); setSuccessMsg(null); }}>
                       ← Return to sign in
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ) : (
@@ -1096,18 +1045,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onNavigate, initialTab = "re
                   <TextInput icon={Lock} label="Password" password value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)} placeholder="Enter your password"
                     rightLabel={
-                      <button
-                        type="button"
-                        onClick={() => { setShowForgotPassword(true); setErrorMsg(null); setSuccessMsg(null); }}
-                        className="cursor-pointer border-none bg-transparent text-2xs font-semibold text-accent outline-none hover:underline"
-                      >
+                      <Button type="button" variant="ghost" size="sm" className="h-auto px-0 text-2xs text-accent" onClick={() => { setShowForgotPassword(true); setErrorMsg(null); setSuccessMsg(null); }}>
                         Forgot password?
-                      </button>
+                      </Button>
                     }
                   />
-                  <button type="submit" className="orb-button mt-1 w-full py-4">
-                    Sign in <ArrowRight size={16} />
-                  </button>
+                  <Button type="submit" size="lg" block className="mt-1" iconRight={ArrowRight}>Sign in</Button>
 
                   <Divider />
                   <GoogleButton onClick={handleGoogleSignIn} />
