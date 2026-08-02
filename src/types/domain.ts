@@ -146,6 +146,14 @@ export interface DepositWallet {
   coinName: string;
   network: string;
   walletAddress: string;
+  /**
+   * Destination tag / memo for coins that share one custodial address across
+   * users and attribute deposits by tag (XRP, XLM, EOS, …). Empty for every
+   * coin that does not use one — the deposit UI treats empty as "no tag has
+   * been configured" and falls back to telling the user to contact support,
+   * so this must never be given a placeholder value.
+   */
+  destinationTag: string;
   qrCodeUrl: string;
   minimumDeposit: number;
   enabled: boolean;

@@ -54,6 +54,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
   const [depositTxHash, setDepositTxHash] = useState("");
   const [depositProofName, setDepositProofName] = useState("");
   const [copiedAddress, setCopiedAddress] = useState(false);
+  const [copiedTag, setCopiedTag] = useState(false);
   const [depositSuccessLog, setDepositSuccessLog] = useState<string | null>(null);
   const [submittingDeposit, setSubmittingDeposit] = useState(false);
 
@@ -68,6 +69,16 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
     ? getDepositWalletLabel(selectedDepositWallet)
     : depositCurrency;
   const selectedMinimumDeposit = selectedDepositWallet?.minimumDeposit || 0;
+  // Trimmed: whitespace is not a tag. Empty here is the signal that no tag has
+  // been configured for this coin, which drives the fail-safe below.
+  const selectedDepositTag = (selectedDepositWallet?.destinationTag || "").trim();
+  // Coins that share one custodial address and attribute deposits by tag. A
+  // deposit sent without the right tag on these is not automatically
+  // creditable, so a missing tag has to stop the user rather than be skipped.
+  const TAG_REQUIRED_COINS = ["XRP", "XLM", "EOS", "ATOM", "BNB"];
+  const selectedCoinNeedsTag = TAG_REQUIRED_COINS.includes(
+    (selectedDepositWallet?.coinName || "").trim().toUpperCase()
+  );
   const selectedQrCodeUrl =
     selectedDepositWallet?.qrCodeUrl ||
     (selectedDepositWallet?.walletAddress
@@ -146,6 +157,13 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
     navigator.clipboard.writeText(selectedDepositWallet.walletAddress);
     setCopiedAddress(true);
     setTimeout(() => setCopiedAddress(false), 2000);
+  };
+
+  const handleCopyTag = () => {
+    if (!selectedDepositTag) return;
+    navigator.clipboard.writeText(selectedDepositTag);
+    setCopiedTag(true);
+    setTimeout(() => setCopiedTag(false), 2000);
   };
 
   // Withdraw states
@@ -468,26 +486,56 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                 </div>
 
                 {/*
-                  XRP destination tag.
+                  Destination tag.
 
-                  This panel previously displayed the literal tag "108253" to
-                  every user, labelled "Your XRP Deposit Destination Tag
-                  (Required)". `DepositWallet` has no tag field, so that
-                  number was not anyone's tag — and on XRP the destination tag
-                  is what attributes an incoming payment to an account.
-                  Publishing one shared, invented tag risks unattributable or
-                  lost deposits.
+                  This panel once displayed the literal tag "108253" to every
+                  user. `DepositWallet` had no tag field, so that number was
+                  nobody's tag — and on XRP the destination tag is what
+                  attributes an incoming payment to an account, so publishing
+                  one shared invented tag risked unattributable deposits.
 
-                  Until the deposit-wallet record carries a real per-account
-                  tag, this fails safe: it says a tag is needed and routes the
-                  user to support rather than showing a number we made up.
+                  The record now carries a real, admin-set tag, so there are
+                  two states and no third:
+                    - a tag is configured  → show it, same treatment as the
+                      address (selectable, font-data, copyable)
+                    - no tag is configured → the original fail-safe, unchanged
+
+                  There is deliberately no fallback value. Empty means empty.
                 */}
-                {selectedDepositWallet?.coinName.toUpperCase() === "XRP" && (
-                  <Alert tone="warning" title="A destination tag is required for XRP">
-                    Contact support to get the destination tag for your account before sending XRP.
-                    Sending without the correct tag can make a deposit impossible to credit.
+                {selectedDepositTag ? (
+                  <div className="rounded-xl border border-line bg-panel p-3.5">
+                    <span className="block text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
+                      Your {selectedDepositLabel} destination tag
+                    </span>
+                    <div className="mt-2 flex items-start justify-between gap-3">
+                      <span className="min-w-0 select-all break-all font-data text-xs text-ink">
+                        {selectedDepositTag}
+                      </span>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={handleCopyTag}
+                        aria-label="Copy destination tag"
+                        className="shrink-0"
+                      >
+                        {copiedTag ? <Check size={14} className="text-positive" /> : <Copy size={14} />}
+                      </Button>
+                    </div>
+                    <span aria-live="polite" className="sr-only">
+                      {copiedTag ? "Destination tag copied to clipboard" : ""}
+                    </span>
+                    <p className="mt-2 text-2xs leading-relaxed text-muted">
+                      Send the tag with your transfer. A {selectedDepositLabel} deposit without it
+                      cannot be matched to your account automatically.
+                    </p>
+                  </div>
+                ) : selectedCoinNeedsTag ? (
+                  <Alert tone="warning" title={`A destination tag is required for ${selectedDepositLabel}`}>
+                    Contact support to get the destination tag for your account before sending
+                    {" "}{selectedDepositLabel}. Sending without the correct tag can make a deposit
+                    impossible to credit.
                   </Alert>
-                )}
+                ) : null}
 
                 <ul className="space-y-1 text-2xs text-muted">
                   <li>Send only {selectedDepositLabel} to this address.</li>

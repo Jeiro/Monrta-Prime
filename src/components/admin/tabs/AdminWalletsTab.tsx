@@ -12,6 +12,7 @@ type WalletForm = {
   coinName: string;
   network: string;
   walletAddress: string;
+  destinationTag: string;
   qrCodeUrl: string;
   minimumDeposit: string;
   enabled: boolean;
@@ -24,6 +25,7 @@ const createEmptyForm = (): WalletForm => ({
   coinName: "",
   network: "",
   walletAddress: "",
+  destinationTag: "",
   qrCodeUrl: "",
   minimumDeposit: "100",
   enabled: true,
@@ -36,6 +38,7 @@ const walletToForm = (wallet: DepositWallet): WalletForm => ({
   coinName: wallet.coinName,
   network: wallet.network,
   walletAddress: wallet.walletAddress,
+  destinationTag: wallet.destinationTag || "",
   qrCodeUrl: wallet.qrCodeUrl,
   minimumDeposit: String(wallet.minimumDeposit),
   enabled: wallet.enabled,
@@ -94,6 +97,10 @@ export const AdminWalletsTab: React.FC = () => {
         coinName: form.coinName,
         network: form.network,
         walletAddress: form.walletAddress,
+        // Trimmed so a stray space cannot masquerade as a configured tag —
+        // the deposit screen decides between "show the tag" and "contact
+        // support" purely on this being empty.
+        destinationTag: form.destinationTag.trim(),
         qrCodeUrl,
         minimumDeposit: parseFloat(form.minimumDeposit) || 0,
         enabled: form.enabled,
@@ -153,6 +160,14 @@ export const AdminWalletsTab: React.FC = () => {
         </div>
 
         <Input label="Wallet address" value={form.walletAddress} onChange={e => setForm(prev => ({ ...prev, walletAddress: e.target.value }))} placeholder="Wallet Address" className="font-data" />
+        <Input
+          label="Destination tag (optional — XRP and similar coins only)"
+          value={form.destinationTag}
+          onChange={e => setForm(prev => ({ ...prev, destinationTag: e.target.value }))}
+          placeholder="Leave blank unless this coin requires one"
+          className="font-data"
+          hint="Shown to users beside the deposit address. Leave blank for coins that do not use a tag — users will be told to contact support instead of being shown a made-up value."
+        />
         <Input label="QR code URL" value={form.qrCodeUrl} onChange={e => setForm(prev => ({ ...prev, qrCodeUrl: e.target.value }))} placeholder="QR Code URL" />
 
         {/* Raw file input on purpose: it is visually hidden and only ever

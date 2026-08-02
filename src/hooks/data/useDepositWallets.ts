@@ -17,6 +17,9 @@ function walletRowToItem(row: any): DepositWallet {
     coinName: row.coin_name,
     network: row.network,
     walletAddress: row.wallet_address,
+    // Coalesced, not defaulted: a null/missing column reads as "no tag
+    // configured", which is what the deposit UI keys its fail-safe off.
+    destinationTag: row.destination_tag ?? "",
     qrCodeUrl: row.qr_code_url,
     minimumDeposit: row.minimum_deposit,
     enabled: row.enabled,
@@ -31,6 +34,7 @@ function walletToRow(wallet: DepositWallet): Record<string, any> {
     coin_name: wallet.coinName,
     network: wallet.network,
     wallet_address: wallet.walletAddress,
+    destination_tag: wallet.destinationTag ?? "",
     qr_code_url: wallet.qrCodeUrl,
     minimum_deposit: wallet.minimumDeposit,
     enabled: wallet.enabled,

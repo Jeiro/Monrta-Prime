@@ -25,6 +25,8 @@ export const buildDepositWallet = (wallet: Omit<DepositWallet, "id"> & { id?: st
   coinName: wallet.coinName.trim(),
   network: wallet.network.trim(),
   walletAddress: wallet.walletAddress.trim(),
+  // Trimmed, never substituted: whitespace-only means no tag configured.
+  destinationTag: (wallet.destinationTag || "").trim(),
   qrCodeUrl: wallet.qrCodeUrl.trim(),
   minimumDeposit: Number.isFinite(wallet.minimumDeposit) ? Math.max(wallet.minimumDeposit, 0) : 0,
   enabled: wallet.enabled === true,
@@ -37,6 +39,7 @@ export const normalizeDepositWallet = (id: string, data: Partial<DepositWallet>)
   coinName: (data.coinName || "").trim(),
   network: (data.network || "").trim(),
   walletAddress: (data.walletAddress || "").trim(),
+  destinationTag: (data.destinationTag || "").trim(),
   qrCodeUrl: (data.qrCodeUrl || "").trim(),
   minimumDeposit: typeof data.minimumDeposit === "number" ? Math.max(data.minimumDeposit, 0) : 0,
   enabled: data.enabled === true,
