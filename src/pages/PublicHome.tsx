@@ -7,6 +7,7 @@ import { motion, useReducedMotion } from "motion/react";
 // non-auth route, so rendering it again stacked two footers on the homepage.
 import { TradeFeatures, InvestmentPlansSection, Proof, Closing, HomeVideos } from "../components/HomeSections";
 import { Brandmark } from "../components/ui/Brandmark";
+import { Button } from "../components/ui";
 import heroTerminal1600 from "../assets/hero-market-terminal-1600.jpg";
 import heroTerminal800 from "../assets/hero-market-terminal-800.jpg";
 
@@ -146,18 +147,22 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
 
           {/* Golden Highlight Actions */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8 w-full max-w-lg">
-            <button 
+            <Button
+              size="lg"
+              iconRight={ArrowUpRight}
+              className="w-full sm:w-auto"
               onClick={() => onNavigate(user.isLoggedIn ? "dashboard-trading" : "auth")}
-              className="orb-button w-full sm:w-auto px-8 py-3.5"
             >
-              Start Trading <ArrowUpRight size={16} />
-            </button>
-            <button 
+              Start Trading
+            </Button>
+            <Button
+              variant="secondary"
+              size="lg"
+              className="w-full sm:w-auto"
               onClick={() => onNavigate("markets")}
-              className="orb-button-secondary w-full sm:w-auto px-8 py-3.5"
             >
               Explore Markets
-            </button>
+            </Button>
           </div>
 
           {/* CELESTIAL ORBIT SYSTEM

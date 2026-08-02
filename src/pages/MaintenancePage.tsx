@@ -1,5 +1,6 @@
 import React from "react";
 import { useSiteSettings } from "../context/domains/SiteSettingsContext";
+import { Button } from "../components/ui";
 
 export const MaintenancePage: React.FC = () => {
   const { appSettings } = useSiteSettings();
@@ -26,13 +27,9 @@ export const MaintenancePage: React.FC = () => {
           >
             Contact support
           </a>
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-ink transition hover:bg-white/10"
-          >
+          <Button type="button" variant="secondary" size="lg" onClick={() => window.location.reload()}>
             Refresh page
-          </button>
+          </Button>
         </div>
 
         <div className="mt-10 text-sm leading-6 text-faint">

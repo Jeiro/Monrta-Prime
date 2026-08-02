@@ -6,6 +6,7 @@ import { useWallet } from "../context/domains/WalletContext";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { Avatar } from "../components/ui";
 import { UserCheck, Users, TrendingUp, ShieldAlert, Award, ArrowUpRight, CheckCircle2, Calendar, X, DollarSign, Wallet, ShieldCheck, Info, Loader2 } from "lucide-react";
+import { Button, Input } from "../components/ui";
 
 interface PublicCopyTradingProps {
   onNavigate: (view: string) => void;
@@ -244,17 +245,12 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                     </strong>
                   </div>
 
-                  <button
+                  <Button
                     onClick={() => handleCopyClick(trader.id, trader.name)}
                     disabled={isCopying}
-                    className={`px-6 py-2 rounded-lg font-bold font-subheading text-xs transition-all transform hover:-translate-y-0.5 cursor-pointer select-none ${
-                      isCopying 
-                        ? "bg-line/50 text-muted cursor-not-allowed hover:translate-y-0" 
-                        : "bg-accent text-ground hover:opacity-90 shadow-lg shadow-accent/5"
-                    }`}
                   >
                     {isCopying ? "Copied" : "Copy"}
-                  </button>
+                  </Button>
                 </div>
 
               </div>
@@ -276,12 +272,15 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
       {allocatingTrader && (
         <div className="fixed inset-0 bg-ground/75 backdrop-blur-sm z-[150] flex items-center justify-center p-4 animate-fade-in text-left">
           <div className="bg-surface border border-line rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-5">
-            <button 
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Close allocation dialog"
+              className="absolute top-2 right-2"
               onClick={() => { setAllocatingTrader(null); setAllocateAmt(""); }}
-              className="absolute top-4 right-4 text-muted hover:text-ink cursor-pointer bg-transparent border-none outline-none"
             >
               <X size={18} />
-            </button>
+            </Button>
 
             <div>
               <h3 className="text-base font-bold text-ink flex items-center gap-2">
@@ -302,19 +301,18 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
                     Available: ${user.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-faint text-xs font-mono font-bold">$</span>
-                  <input
-                    type="number"
-                    value={allocateAmt}
-                    onChange={(e) => setAllocateAmt(e.target.value)}
-                    placeholder="Enter investment amount"
-                    min={allocatingTrader.minimumCopyAmount ?? 10}
-                    step="any"
-                    required
-                    className="w-full bg-surface border border-line/80 focus:border-accent focus:ring-1 focus:ring-accent rounded-xl py-2.5 pl-8 pr-4 text-xs text-ink font-mono font-extrabold outline-none"
-                  />
-                </div>
+                <Input
+                  type="number"
+                  numeric
+                  prefix="$"
+                  value={allocateAmt}
+                  onChange={(e) => setAllocateAmt(e.target.value)}
+                  placeholder="Enter investment amount"
+                  aria-label="Investment amount"
+                  min={allocatingTrader.minimumCopyAmount ?? 10}
+                  step="any"
+                  required
+                />
               </div>
 
               <div className="p-3 text-2xs leading-relaxed text-muted bg-surface/50 border border-line/30 rounded-xl flex items-start gap-2.5">
@@ -325,25 +323,8 @@ export const PublicCopyTrading: React.FC<PublicCopyTradingProps> = ({ onNavigate
               </div>
 
               <div className="grid grid-cols-2 gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => { setAllocatingTrader(null); setAllocateAmt(""); }}
-                  className="py-2.5 rounded-xl border border-line/50 hover:border-ink bg-transparent text-ink font-bold font-subheading text-2xs uppercase transition-all cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={allocateLoading}
-                  className="py-2.5 rounded-xl bg-accent text-ground hover:opacity-95 font-extrabold font-subheading text-2xs uppercase transition-all shadow-md shadow-accent/15 cursor-pointer flex justify-center items-center gap-2 leading-relaxed disabled:opacity-50"
-                >
-                  {allocateLoading ? (
-                    <>
-                      <Loader2 size={12} className="animate-spin inline-block mr-1" />
-                      Allocating...
-                    </>
-                  ) : "Confirm Allocation"}
-                </button>
+                <Button type="button" variant="secondary" onClick={() => { setAllocatingTrader(null); setAllocateAmt(""); }}>Cancel</Button>
+                <Button type="submit" loading={allocateLoading}>Confirm Allocation</Button>
               </div>
             </form>
           </div>

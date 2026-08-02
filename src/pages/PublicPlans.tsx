@@ -4,6 +4,7 @@ import { useSession } from "../context/domains/SessionContext";
 import { useInvestmentPlans } from "../context/domains/InvestmentPlansContext";
 import { useSiteSettings } from "../context/domains/SiteSettingsContext";
 import { Check, Info, ArrowRight, ShieldCheck, DollarSign, HelpCircle, Clock, TrendingUp, Award, Layers, Crown, Sparkles, Gem, Activity, ChevronDown } from "lucide-react";
+import { Button, Input } from "../components/ui";
 
 interface PublicPlansProps {
   onNavigate: (view: string) => void;
@@ -170,12 +171,14 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
                 </div>
               </div>
 
-              <button
+              <Button
+                block
+                variant="secondary"
+                className="mt-6"
                 onClick={() => user.isLoggedIn ? onNavigate("dashboard-plans") : onNavigate("auth")}
-                className="w-full py-3 mt-6 rounded-xl font-bold font-subheading text-xs tracking-wider uppercase transition-all bg-panel hover:bg-accent border border-line hover:border-accent text-ink hover:text-ground cursor-pointer shadow-sm text-center"
               >
-                INVEST NOW
-              </button>
+                Invest now
+              </Button>
 
             </div>
           );
@@ -209,19 +212,18 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                 {enabledPlans.map((p) => (
-                  <button
+                  <Button
                     key={p.id}
+                    size="sm"
+                    variant={selectedCalcPlan === p.id ? "primary" : "secondary"}
+                    aria-pressed={selectedCalcPlan === p.id}
                     onClick={() => {
                       setSelectedCalcPlan(p.id);
                       setCalcAmount(p.minDeposit);
                     }}
-                    className={`p-3 rounded-lg border text-center text-xs font-semibold font-subheading cursor-pointer transition-all ${selectedCalcPlan === p.id
-                        ? "border-accent bg-accent/10 text-accent shadow"
-                        : "border-line/80 bg-ground text-muted"
-                      }`}
                   >
                     {p.name}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -235,19 +237,18 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
                 </span>
               </div>
 
-              <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted font-data text-sm">
-                  $
-                </span>
-                <input
-                  type="number"
-                  value={calcAmount}
-                  onChange={(e) => handleAmountChange(Math.max(0, parseInt(e.target.value) || 0))}
-                  className="w-full bg-ground border border-line focus:border-accent rounded-xl pl-8 pr-4 py-3 text-sm font-data text-ink font-bold"
-                />
-              </div>
+              <Input
+                type="number"
+                numeric
+                prefix="$"
+                aria-label="Investment amount"
+                value={calcAmount}
+                onChange={(e) => handleAmountChange(Math.max(0, parseInt(e.target.value) || 0))}
+              />
 
               {/* Slider track scale */}
+              {/* Raw range input: Input renders a bordered text field; a slider
+                  is a different control entirely and has no primitive yet. */}
               <input
                 type="range"
                 min={activeCalcPlanObj.minDeposit}
@@ -304,12 +305,9 @@ export const PublicPlans: React.FC<PublicPlansProps> = ({ onNavigate }) => {
               </div>
             </div>
 
-            <button
-              onClick={() => user.isLoggedIn ? onNavigate("dashboard-plans") : onNavigate("auth")}
-              className="w-full mt-4 py-3 rounded-lg bg-gradient-to-r from-accent to-accent-deep text-ground font-bold font-subheading text-xs tracking-wider uppercase shadow-md shadow-accent/15 cursor-pointer text-center"
-            >
-              Invest Now
-            </button>
+            <Button block className="mt-4" onClick={() => user.isLoggedIn ? onNavigate("dashboard-plans") : onNavigate("auth")}>
+              Invest now
+            </Button>
           </div>
 
         </div>
