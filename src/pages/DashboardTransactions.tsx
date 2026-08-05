@@ -12,10 +12,15 @@ import {
 import { useSession } from "../context/domains/SessionContext";
 import { Badge, Button, EmptyState, SectionCard, Select } from "../components/ui";
 import { formatDateTime, formatMoney } from "../lib/format";
+import { TransactionReceipt } from "../components/TransactionReceipt";
+import type { Transaction } from "../types";
 
 export const DashboardTransactions: React.FC = () => {
   const { user } = useSession();
 
+  // Receipt target — `filtered` derives from user.transactions, which is
+  // already scoped to the signed-in user, so no new fetch path is introduced.
+  const [receiptTx, setReceiptTx] = useState<Transaction | null>(null);
   const [filterType, setFilterType] = useState("");
   const [filterStatus, setFilterStatus] = useState<
     "" | "completed" | "pending" | "failed" | "rejected" | "approved"
@@ -174,9 +179,24 @@ export const DashboardTransactions: React.FC = () => {
               const Icon = isCredit ? ArrowDownLeft : isDebit ? ArrowUpRight : WalletCards;
 
               return (
+                /* This list is hand-rolled rather than a DataTable, so the
+                   row affordances DataTable gives its consumers for free —
+                   role, tabIndex, Enter/Space activation, focus ring — have
+                   to be spelled out here. Same contract as DataTable's
+                   onRowClick rows, so the two behave identically. */
                 <li
                   key={tx.id}
-                  className="flex items-center justify-between gap-4 px-4 py-3.5 transition-colors duration-[--duration-fast] hover:bg-raised"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View ${tx.type} receipt for ${formatMoney(tx.amount)}`}
+                  onClick={() => setReceiptTx(tx)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setReceiptTx(tx);
+                    }
+                  }}
+                  className="flex cursor-pointer items-center justify-between gap-4 px-4 py-3.5 transition-colors duration-[--duration-fast] hover:bg-raised focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
                 >
                   <div className="flex min-w-0 items-center gap-3">
                     <span
@@ -217,6 +237,8 @@ export const DashboardTransactions: React.FC = () => {
           </ul>
         )}
       </SectionCard>
+
+      <TransactionReceipt transaction={receiptTx} onClose={() => setReceiptTx(null)} />
     </div>
   );
 };

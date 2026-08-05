@@ -27,6 +27,7 @@ import {
 import { motion } from "motion/react";
 import { DashboardEquityChart } from "../components/charts/DashboardEquityChart";
 import { UserAnnouncements } from "../components/announcements/UserAnnouncements";
+import { TransactionReceipt } from "../components/TransactionReceipt";
 import {
   AnimatedNumber,
   Badge,
@@ -42,6 +43,7 @@ import {
   StatCard,
 } from "../components/ui";
 import { formatDate, formatDateTime, formatMoney, getUID } from "../lib/format";
+import type { Transaction } from "../types";
 
 interface DashboardOverviewProps {
   onNavigate: (view: string) => void;
@@ -72,6 +74,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   onOpenWithdraw,
 }) => {
   const { user, authReady } = useSession();
+  // Receipt target. Rows come straight from user.transactions, which is
+  // already scoped to the signed-in user — no extra query.
+  const [receiptTx, setReceiptTx] = useState<Transaction | null>(null);
   const { user: clerkUser, isLoaded: clerkLoaded } = useClerkUser();
 
   /*
@@ -800,6 +805,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               columns={transactionColumns}
               rows={user.transactions.slice(0, 4)}
               rowKey={(tx) => tx.id}
+              onRowClick={(tx) => setReceiptTx(tx)}
               className="sm:[&>div]:rounded-none sm:[&>div]:border-0"
               empty={{
                 icon: History,
@@ -811,6 +817,8 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           </div>
         </SectionCard>
       </motion.div>
+
+      <TransactionReceipt transaction={receiptTx} onClose={() => setReceiptTx(null)} />
     </motion.div>
   );
 };

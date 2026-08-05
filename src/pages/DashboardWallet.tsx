@@ -20,6 +20,8 @@ import {
   XCircle,
 } from "lucide-react";
 import { formatDateTime, formatMoney } from "../lib/format";
+import type { Transaction } from "../types";
+import { TransactionReceipt } from "../components/TransactionReceipt";
 import {
   Alert,
   Badge,
@@ -55,6 +57,8 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
   const [depositProofName, setDepositProofName] = useState("");
   const [copiedAddress, setCopiedAddress] = useState(false);
   const [copiedTag, setCopiedTag] = useState(false);
+  // Receipt target — user.transactions is already the signed-in user's own.
+  const [receiptTx, setReceiptTx] = useState<Transaction | null>(null);
   const [depositSuccessLog, setDepositSuccessLog] = useState<string | null>(null);
   const [submittingDeposit, setSubmittingDeposit] = useState(false);
 
@@ -769,6 +773,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                 caption="All deposits, withdrawals and transfers"
                 columns={ledgerColumns}
                 rows={user.transactions}
+                onRowClick={(tx) => setReceiptTx(tx)}
                 rowKey={(t) => t.id}
                 className="sm:[&>div]:rounded-none sm:[&>div]:border-0"
                 empty={{
@@ -786,6 +791,8 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
           </SectionCard>
         </div>
       )}
+
+      <TransactionReceipt transaction={receiptTx} onClose={() => setReceiptTx(null)} />
     </div>
   );
 };
