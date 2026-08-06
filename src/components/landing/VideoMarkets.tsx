@@ -1,6 +1,5 @@
-import React, { useRef, useState } from "react";
-import { motion } from "motion/react";
-import { Play } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { Section, Container, SectionHeading } from "../ui/Layout";
 import { useReveal } from "./useReveal";
 // The three clips already in the repo. Asset-class mapping is taken from
@@ -19,11 +18,23 @@ import posterStocks from "../../assets/posters/stocks.jpg";
  * Market intelligence videos.
  *
  * Three self-hosted clips, one per asset class, bundled from src/*.mp4.
+ * They are ambient: muted, looping, no controls and no play button — the
+ * motion is the point, and a visitor is never asked to start or stop one.
  *
- * `preload="none"` is deliberate and load-bearing: the section sits well
- * below the fold, and three clips buffering on page load would be the
- * single heaviest thing on the landing page for something most visitors
- * never scroll to. Nothing is fetched until the visitor presses play.
+ * Three things make that safe rather than expensive:
+ *
+ * - Autoplay only ever happens MUTED. Every browser blocks autoplay with
+ *   sound, so an unmuted clip here would simply never start.
+ * - Playback is driven by an IntersectionObserver, not the autoplay
+ *   attribute, so `preload="none"` still holds: nothing is fetched until
+ *   the section scrolls into view, and clips pause again once it leaves.
+ *   1.8 MB of video should not load for a visitor who never gets here,
+ *   and three loops should not burn CPU while off-screen.
+ * - Under `prefers-reduced-motion` nothing plays at all; the card shows
+ *   its poster frame instead. A 6–7s loop running forever beside other
+ *   content is precisely what that preference exists to suppress, and it
+ *   doubles as the pause mechanism WCAG 2.2.2 asks for, without putting
+ *   controls on a section that is meant to be decorative.
  *
  * A card whose `src` is empty falls back to a labelled placeholder rather
  * than an empty black box, so a missing clip reads as unfinished rather
@@ -66,16 +77,35 @@ const MARKETS: MarketVideo[] = [
 
 const VideoCard: React.FC<{ video: MarketVideo; delay: number }> = ({ video, delay }) => {
   const reveal = useReveal(delay);
+  const reduceMotion = useReducedMotion();
   const ref = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
+  const [failed, setFailed] = useState(false);
   const hasSource = video.src.trim().length > 0;
 
-  const start = () => {
+  useEffect(() => {
     const el = ref.current;
-    if (!el || !hasSource) return;
-    void el.play();
-    setPlaying(true);
-  };
+    if (!el || !hasSource || reduceMotion) return;
+
+    // Play only while the card is actually on screen. Without this the
+    // three clips decode continuously for the whole session, including
+    // while the visitor is reading something else entirely.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // play() rejects if the browser still refuses autoplay. Swallow
+          // it and fall back to the poster rather than logging on every
+          // scroll — the card stays a still image, which is fine.
+          void el.play().catch(() => setFailed(true));
+        } else {
+          el.pause();
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, [hasSource, reduceMotion]);
 
   return (
     <motion.article
@@ -97,15 +127,17 @@ const VideoCard: React.FC<{ video: MarketVideo; delay: number }> = ({ video, del
           <video
             ref={ref}
             className="h-full w-full object-cover"
-            preload="none"
+            // muted is not optional: autoplay with sound is blocked
+            // everywhere, so without it these would never start.
+            muted
+            loop
             playsInline
-            controls={playing}
+            preload="none"
             poster={video.poster}
-            onPlay={() => setPlaying(true)}
-            onPause={() => setPlaying(false)}
+            aria-label={`${video.title} — looping background clip`}
+            onError={() => setFailed(true)}
           >
             <source src={video.src} type="video/mp4" />
-            Your browser does not support embedded video.
           </video>
         ) : (
           /* Stand-in until a URL is supplied — deliberately labelled rather
@@ -119,29 +151,12 @@ const VideoCard: React.FC<{ video: MarketVideo; delay: number }> = ({ video, del
           </div>
         )}
 
-        {/* Play affordance. Fades in on hover or keyboard focus; hidden once
-            playback starts so it never covers the native controls. */}
-        {!playing && (
-          <button
-            type="button"
-            onClick={start}
-            aria-label={`Play the ${video.title} overview`}
-            className={
-              "absolute inset-0 grid cursor-pointer place-items-center border-0 bg-ground/45 " +
-              "opacity-0 transition-opacity duration-300 group-hover:opacity-100 focus-visible:opacity-100 " +
-              "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
-            }
-          >
-            <span
-              className={
-                "grid h-14 w-14 scale-[0.82] place-items-center rounded-full bg-accent text-ground " +
-                "shadow-[0_8px_28px_color-mix(in_srgb,var(--mp-accent)_45%,transparent)] " +
-                "transition-transform duration-300 group-hover:scale-100 motion-reduce:transition-none"
-              }
-            >
-              <Play size={20} fill="currentColor" aria-hidden="true" />
-            </span>
-          </button>
+        {/* If the clip could not decode at all, the poster is still showing
+            underneath — but say so rather than leaving a silent still. */}
+        {failed && (
+          <span className="absolute bottom-2 right-2 rounded-md bg-ground/75 px-2 py-1 font-data text-[0.6rem] text-faint">
+            preview unavailable
+          </span>
         )}
       </div>
 
