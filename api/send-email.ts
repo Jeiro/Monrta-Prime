@@ -383,7 +383,10 @@ function buildEmail(eventType: string, metadata: any = {}): { subject: string; h
   const detailRows = buildDetails(event.details || []);
   const logoMarkup = logoUrl
     ? `<img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(companyName)}" style="max-width: 180px; height: auto; display: inline-block;" />`
-    : `<div style="font-size: 26px; font-weight: 800; letter-spacing: -0.5px; color: #ffffff; text-transform: lowercase;">orbit<span style="color: #F7931A;">rio</span></div>`;
+    // Fallback when MONETA_PRIME_LOGO_URL is unset — which is the current
+    // state, so this renders on every email today. It previously spelled out
+    // the pre-rebrand name in the old orange accent.
+    : `<div style="font-size: 26px; font-weight: 800; letter-spacing: -0.5px; color: #ffffff; text-transform: lowercase;">moneta <span style="color: #6AA5FF;">prime</span></div>`;
 
   return {
     subject: event.subject,

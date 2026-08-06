@@ -19,6 +19,19 @@ import { useAdminUsersData } from "./AdminUsersContext";
 
 const DEFAULT_ADMIN_NOTIFICATION_EMAIL = "henrikaram1@gmail.com";
 
+/**
+ * Dedup ledger for transactional email, keyed by event id.
+ *
+ * SCOPE CAVEAT: localStorage is per-browser, so this only prevents a repeat
+ * send from the same device. Two admins approving the same deposit from
+ * different sessions can each send the user one copy — the underlying RPCs
+ * are idempotent for the MONEY (they return early unless status = 'pending')
+ * but they return silently, so the second caller's code path continues and
+ * dispatches its own email. Making this airtight means moving the ledger
+ * server-side; see the notes in the phase report before changing it here.
+ */
+const SENT_EMAIL_EVENTS_KEY = "moneta_prime_sent_email_events";
+
 const localStorageGet = <T,>(key: string, fallback: T): T => {
   if (typeof window === "undefined") return fallback;
   return safeParse<T>(window.localStorage.getItem(key), fallback);
@@ -70,7 +83,11 @@ export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({
     useNotificationsData(supabase);
   const { sendTransactionalEmail } = useEmailNotifications();
 
-  const sentEmailEventIdsRef = useRef<Set<string>>(new Set(localStorageGet<string[]>("orbitrio_sent_email_events", [])));
+  // Renamed from the pre-rebrand "orbitrio_sent_email_events". Deliberately
+  // no migration: this is a localStorage-only dedup ledger, so the cost of
+  // resetting it is at most one repeat email per already-delivered event on
+  // a browser that had old state, and only if that exact event fires again.
+  const sentEmailEventIdsRef = useRef<Set<string>>(new Set(localStorageGet<string[]>(SENT_EMAIL_EVENTS_KEY, [])));
   // Events currently being sent — prevents a concurrent double-send without
   // permanently reserving the id (which would block retries after a failure).
   const inFlightEmailEventsRef = useRef<Set<string>>(new Set());
@@ -84,7 +101,7 @@ export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const markEmailEventSent = (eventId: string) => {
     sentEmailEventIdsRef.current.add(eventId);
-    localStorageSet("orbitrio_sent_email_events", Array.from(sentEmailEventIdsRef.current));
+    localStorageSet(SENT_EMAIL_EVENTS_KEY, Array.from(sentEmailEventIdsRef.current));
   };
 
   const dispatchTransactionalEmail = (
