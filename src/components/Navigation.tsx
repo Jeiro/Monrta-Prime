@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "../context/domains/SessionContext";
 import { useNotifications } from "../context/domains/NotificationsContext";
 import { getUID } from "../lib/format";
@@ -21,6 +21,15 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
   const { isLoggedIn, isAdmin } = useCurrentUser();
   const { signOut } = useClerk();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // Glass only once the page has moved. A blurred bar over the very top of
+  // the hero has nothing behind it to blur, so it just looks washed out.
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   useBodyScrollLock(mobileMenuOpen);
 
@@ -74,7 +83,12 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
 
   return (
     <>
-      <nav role="navigation" aria-label="Main navigation" className="fixed top-0 left-0 right-0 w-full h-16 sm:h-20 bg-ground border-b border-line z-50 shadow-sm">
+      <nav role="navigation" aria-label="Main navigation" className={
+          "fixed top-0 left-0 right-0 w-full h-16 sm:h-20 z-50 transition-colors duration-200 " +
+          (scrolled
+            ? "bg-ground/72 backdrop-blur-xl border-b border-line shadow-sm"
+            : "bg-ground border-b border-transparent")
+        }>
         {/* h-full, not py-*. The bar declares a fixed height and the inner
             row previously set its own vertical padding on top of it — the
             two fought, and whichever won, the content overflowed the bar.
@@ -146,7 +160,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                     }}
                     className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent to-accent-deep text-ground font-bold shadow-md shadow-accent/10 hover:opacity-95 transition-all cursor-pointer"
                   >
-                    Register
+                    Get Started
                   </button>
                 </div>
               </>
@@ -341,7 +355,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
                         }}
                         className="w-full py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent-deep text-ground font-bold text-center text-xs font-subheading hover:opacity-95 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-accent/20"
                       >
-                        <UserPlus size={14} /> Register
+                        <UserPlus size={14} /> Get Started
                       </button>
                     </div>
                   </>
