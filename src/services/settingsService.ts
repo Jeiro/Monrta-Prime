@@ -6,7 +6,7 @@ export const SETTINGS_STORAGE_KEY = "orbitrio_app_settings";
 
 export const DEFAULT_APP_SETTINGS: AppSettings = {
   companyName: "Moneta Prime",
-  supportEmail: "support@PLACEHOLDER-DOMAIN.example",
+  supportEmail: "support@monetaprime.xyz",
   supportPhone: "+1 (840) 234-4828",
   companyAddress: "2780 Candlelight Drive, La Porte, TX 77571, USA",
   senderName: "Moneta Prime",

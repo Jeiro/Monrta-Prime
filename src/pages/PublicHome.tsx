@@ -4,7 +4,7 @@ import { useSession } from "../context/domains/SessionContext";
 // No <Footer> here: App.tsx renders one globally for every non-admin,
 // non-auth route, so rendering it again stacked two footers on the homepage.
 import { InvestmentPlansSection } from "../components/HomeSections";
-import { Hero, StatsBar, BentoGrid, YieldCalculator, SecurityTrust, FinalCta } from "../components/landing";
+import { Hero, StatsBar, BentoGrid, VideoMarkets, YieldCalculator, SecurityTrust, FinalCta } from "../components/landing";
 
 export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ onNavigate }) => {
   useSeo({
@@ -20,6 +20,7 @@ export const PublicHome: React.FC<{ onNavigate: (view: string) => void }> = ({ o
       <Hero onNavigate={onNavigate} isLoggedIn={user.isLoggedIn} />
       <StatsBar />
       <BentoGrid />
+      <VideoMarkets />
       <YieldCalculator />
 
       {/* Kept from the previous homepage: this one renders real plans out of

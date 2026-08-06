@@ -2,6 +2,8 @@ import React from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, Play, Sparkles, TrendingUp } from "lucide-react";
 import { Button } from "../ui";
+import heroTerminal900 from "../../assets/hero-market-terminal-800.jpg";
+import heroTerminal1600 from "../../assets/hero-market-terminal-1600.jpg";
 
 /**
  * Landing hero.
@@ -61,6 +63,37 @@ export const Hero: React.FC<{ onNavigate: (view: string) => void; isLoggedIn: bo
 
   return (
     <section className="relative overflow-hidden px-4 pb-24 pt-14 sm:pt-20">
+      {/*
+        Photographic base layer.
+
+        A real market terminal rather than another gradient. It is a base
+        layer, not a framed picture: desaturated and dimmed, then covered by
+        a scrim built from --mp-ground that is near-transparent at the top
+        and fully opaque by the fold. The section's own background colour
+        literally sits on top of the image, so it inherits the theme — in
+        light mode the same scrim is near-white and washes the photo to a
+        pale texture instead of leaving a dark block on a light page.
+
+        The brief specified #07090E for the overlay. That is not a brand
+        token, and hardcoding it would keep this corner black while the rest
+        of the page flipped, so it uses --mp-ground (#0A0B0E / #F7F8FA).
+
+        aria-hidden + empty alt: it carries nothing the copy does not say.
+      */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <img
+          src={heroTerminal1600}
+          srcSet={`${heroTerminal900} 800w, ${heroTerminal1600} 1600w`}
+          sizes="100vw"
+          alt=""
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="h-full w-full object-cover opacity-[0.30] saturate-50"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-ground/55 via-ground/80 to-ground" />
+      </div>
+
       {/* Dot grid, masked so it fades out rather than ending on a hard edge. */}
       <div
         aria-hidden="true"

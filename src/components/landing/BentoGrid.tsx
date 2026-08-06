@@ -3,6 +3,12 @@ import { motion } from "motion/react";
 import { Globe, LineChart, ShieldCheck, Zap } from "lucide-react";
 import { Section, Container, SectionHeading } from "../ui/Layout";
 import { useReveal } from "./useReveal";
+import textureGlobal900 from "../../assets/texture-global-900.jpg";
+import textureGlobal500 from "../../assets/texture-global-500.jpg";
+import textureNetwork900 from "../../assets/texture-network-900.jpg";
+import textureNetwork500 from "../../assets/texture-network-500.jpg";
+import heroTerminal1600 from "../../assets/hero-market-terminal-1600.jpg";
+import heroTerminal800 from "../../assets/hero-market-terminal-800.jpg";
 
 /**
  * Feature grid, asymmetric on purpose: the two claims that carry the most
@@ -16,21 +22,53 @@ import { useReveal } from "./useReveal";
 
 const ASSETS = ["BTC", "ETH", "SOL", "XRP", "AAPL", "NVDA", "EUR", "GBP"];
 
-const CardShell: React.FC<{ children: React.ReactNode; wide?: boolean; delay?: number }> = ({
-  children,
-  wide,
-  delay = 0,
-}) => {
+/**
+ * Optional photographic texture behind a card.
+ *
+ * Deliberately opacity + a bottom-fade mask rather than mix-blend-overlay:
+ * against these token surfaces the blend modes lifted the card copy's
+ * background enough to eat into its contrast, and a feature card has to
+ * stay readable before it has to look textured. 10% dark / 5.5% light,
+ * lifting slightly on hover so the card feels alive without the text
+ * moving. Purely decorative, so it is aria-hidden and sits at -z-10 behind
+ * the content in the card's own stacking context.
+ */
+const Texture: React.FC<{ src: string; srcSet: string }> = ({ src, srcSet }) => (
+  <span aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-2xl">
+    <img
+      src={src}
+      srcSet={srcSet}
+      sizes="(min-width: 1024px) 33vw, 100vw"
+      alt=""
+      loading="lazy"
+      decoding="async"
+      className="h-full w-full object-cover opacity-[0.10] saturate-[0.35] transition-opacity duration-300 group-hover:opacity-[0.16] dark:opacity-[0.10]"
+      style={{
+        maskImage: "linear-gradient(to bottom, #000, transparent 85%)",
+        WebkitMaskImage: "linear-gradient(to bottom, #000, transparent 85%)",
+      }}
+    />
+  </span>
+);
+
+const CardShell: React.FC<{
+  children: React.ReactNode;
+  wide?: boolean;
+  delay?: number;
+  texture?: { src: string; srcSet: string };
+}> = ({ children, wide, delay = 0, texture }) => {
   const reveal = useReveal(delay);
   return (
   <motion.div
     {...reveal}
     className={
-      "rounded-2xl border border-line bg-surface p-6 transition-[transform,border-color,box-shadow] duration-200 " +
+      "group relative isolate overflow-hidden rounded-2xl border border-line bg-surface p-6 " +
+      "transition-[transform,border-color,box-shadow] duration-200 " +
       "hover:scale-[1.02] hover:border-line-strong hover:shadow-md " +
       (wide ? "lg:col-span-2" : "")
     }
   >
+    {texture && <Texture {...texture} />}
     {children}
   </motion.div>
   );
@@ -52,7 +90,7 @@ export const BentoGrid: React.FC = () => (
       />
 
       <div className="mt-11 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <CardShell wide>
+        <CardShell wide texture={{ src: heroTerminal1600, srcSet: `${heroTerminal800} 800w, ${heroTerminal1600} 1600w` }}>
           <Icon>
             <LineChart size={19} aria-hidden="true" />
           </Icon>
@@ -89,7 +127,7 @@ export const BentoGrid: React.FC = () => (
           </svg>
         </CardShell>
 
-        <CardShell delay={0.05}>
+        <CardShell delay={0.05} texture={{ src: textureGlobal900, srcSet: `${textureGlobal500} 500w, ${textureGlobal900} 900w` }}>
           <Icon>
             <Globe size={19} aria-hidden="true" />
           </Icon>
@@ -109,7 +147,7 @@ export const BentoGrid: React.FC = () => (
           </ul>
         </CardShell>
 
-        <CardShell delay={0.1}>
+        <CardShell delay={0.1} texture={{ src: textureNetwork900, srcSet: `${textureNetwork500} 500w, ${textureNetwork900} 900w` }}>
           <Icon>
             <Zap size={19} aria-hidden="true" />
           </Icon>

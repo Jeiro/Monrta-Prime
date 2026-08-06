@@ -6,7 +6,7 @@ import { useEffect } from "react";
 // own, relevant metadata (and shared links render properly). It upserts the
 // SAME tags index.html declares, so there are never duplicates.
 
-const SITE_URL = "https://PLACEHOLDER-DOMAIN.example";
+const SITE_URL = "https://monetaprime.xyz";
 // 1200x630 social preview image. Drop the real asset at public/og-image.png.
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 const SITE_NAME = "Moneta Prime";

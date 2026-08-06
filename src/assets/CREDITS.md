@@ -18,6 +18,8 @@ name.
 |---|---|---|
 | `hero-market-terminal-1600.jpg`, `hero-market-terminal-800.jpg` | `https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f` | `src/pages/PublicHome.tsx` — hero |
 | `proof-team-1200.jpg`, `proof-team-600.jpg` | `https://images.unsplash.com/photo-1521737604893-d14cc237f11d` | `src/components/home/Proof.tsx` |
+| `texture-global-900.jpg`, `texture-global-500.jpg` | `https://images.unsplash.com/photo-1451187580459-43490279c0fa` | `src/components/landing/BentoGrid.tsx` — multi-asset card |
+| `texture-network-900.jpg`, `texture-network-500.jpg` | `https://images.unsplash.com/photo-1639762681485-074b7f938ba0` | `src/components/landing/BentoGrid.tsx` — liquidity card |
 
 ## Rules for adding images here
 
