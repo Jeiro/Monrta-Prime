@@ -3,27 +3,40 @@ import { motion } from "motion/react";
 import { Play } from "lucide-react";
 import { Section, Container, SectionHeading } from "../ui/Layout";
 import { useReveal } from "./useReveal";
+// The three clips already in the repo. Asset-class mapping is taken from
+// the previous HomeVideos component, which owned them before this section
+// existed — video-stpo is the stocks reel despite the filename.
+import videoForex from "../../video-forex.mp4";
+import videoCrypto from "../../zero-crypo.mp4";
+import videoStocks from "../../video-stpo.mp4";
+// First frame of each clip, extracted with ffmpeg. Without a poster the
+// cards sit black until played, because preload="none" fetches nothing.
+import posterForex from "../../assets/posters/forex.jpg";
+import posterCrypto from "../../assets/posters/crypto.jpg";
+import posterStocks from "../../assets/posters/stocks.jpg";
 
 /**
  * Market intelligence videos.
  *
- * Three self-hosted clips, one per asset class. `src` is intentionally
- * empty — drop the URLs into MARKETS below and the placeholder disappears
- * on its own; nothing else needs changing.
+ * Three self-hosted clips, one per asset class, bundled from src/*.mp4.
  *
- * The <video> elements carry `preload="none"` so an empty (or, later, a
- * real) source costs nothing on first paint. This section sits well below
- * the fold, and three eagerly-buffered videos would be the single heaviest
- * thing on the landing page.
+ * `preload="none"` is deliberate and load-bearing: the section sits well
+ * below the fold, and three clips buffering on page load would be the
+ * single heaviest thing on the landing page for something most visitors
+ * never scroll to. Nothing is fetched until the visitor presses play.
+ *
+ * A card whose `src` is empty falls back to a labelled placeholder rather
+ * than an empty black box, so a missing clip reads as unfinished rather
+ * than broken.
  */
 
 interface MarketVideo {
   id: string;
   title: string;
   blurb: string;
-  /** Paste the clip URL here. Empty renders the placeholder instead. */
+  /** Bundled clip. Empty renders the labelled placeholder instead. */
   src: string;
-  /** Optional still shown before playback. */
+  /** First frame, shown before playback. Without it the card sits black. */
   poster?: string;
 }
 
@@ -32,19 +45,22 @@ const MARKETS: MarketVideo[] = [
     id: "forex",
     title: "Forex",
     blurb: "Navigate fiat currency pairs with institutional liquidity.",
-    src: "",
+    src: videoForex,
+    poster: posterForex,
   },
   {
     id: "crypto",
     title: "Crypto",
     blurb: "Yield generation and high-frequency trading in Web3.",
-    src: "",
+    src: videoCrypto,
+    poster: posterCrypto,
   },
   {
     id: "stocks",
     title: "Stocks",
     blurb: "Algorithmic execution for global equities and indices.",
-    src: "",
+    src: videoStocks,
+    poster: posterStocks,
   },
 ];
 
@@ -72,7 +88,11 @@ const VideoCard: React.FC<{ video: MarketVideo; delay: number }> = ({ video, del
         "motion-reduce:hover:translate-y-0"
       }
     >
-      <div className="relative grid aspect-video place-items-center overflow-hidden border-b border-line bg-panel">
+      {/* Square, not 16:9. Every source clip is square (720x720 / 1280x1280),
+          and a 16:9 frame with object-cover crops ~44% of the height — enough
+          to cut the phone mockup out of two of them. Matching the source is
+          the only framing that shows the whole clip. */}
+      <div className="relative grid aspect-square place-items-center overflow-hidden border-b border-line bg-panel">
         {hasSource ? (
           <video
             ref={ref}
