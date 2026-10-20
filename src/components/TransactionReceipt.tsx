@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Badge, Button, Drawer } from "./ui";
+import { DepositProofViewer } from "./admin/DepositProofViewer";
 import { formatDateTime, formatMoney } from "../lib/format";
 import type { Transaction, TransactionStatus } from "../types";
 
@@ -18,7 +19,7 @@ import type { Transaction, TransactionStatus } from "../types";
  *
  * STRICTLY READ-ONLY. No approve/reject, no editing, no status changes —
  * this mirrors AdminWithdrawalsTab's Drawer layout but deliberately not its
- * actions. It also issues no query of its own: callers pass a row out of
+ * actions. Callers pass a row out of
  * `user.transactions`, which is already scoped to the signed-in user, so
  * there is no path here that could read another account's data.
  */
@@ -204,6 +205,17 @@ export const TransactionReceipt: React.FC<TransactionReceiptProps> = ({ transact
               )}
               {tx.notes && <Field label="Notes">{tx.notes}</Field>}
             </dl>
+          )}
+
+          {tx.paymentMethod === "gift_card" && (
+            <div className="rounded-xl border border-line bg-panel p-3 space-y-3">
+              <h3 className="text-sm font-semibold text-ink">Gift card details</h3>
+              <dl className="space-y-2">
+                <Field label="Brand">{tx.giftCardDetails?.brand}</Field>
+                <Field label="Face value">{tx.giftCardDetails?.faceValue} {tx.giftCardDetails?.currency}</Field>
+              </dl>
+              <DepositProofViewer transaction={tx} />
+            </div>
           )}
 
           {tx.proofFile && (

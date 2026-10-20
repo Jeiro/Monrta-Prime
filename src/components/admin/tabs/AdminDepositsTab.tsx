@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { ArrowDownLeft, Check, ClipboardList, FileText, Search, X } from "lucide-react";
+import { DepositProofViewer } from "../DepositProofViewer";
 import { useWallet } from "../../../context/domains/WalletContext";
 import { getDepositWalletLabel } from "../../../services";
 import type { DepositWallet, Transaction } from "../../../types";
@@ -61,6 +62,9 @@ const resolveDepositMeta = (
   depositWallets: DepositWallet[],
   adminWallets: Record<string, string>
 ) => {
+  if (transaction.paymentMethod === "gift_card") return {
+    coin: transaction.giftCardDetails?.brand || "Gift card", network: "Gift card", wallet: "—"
+  };
   const asset = transaction.asset || "USD";
   const assetKey = normalizeKey(asset);
   const assetUnderscoreKey = assetKey.replace(/\s+/g, "_");
@@ -112,8 +116,10 @@ const buildDepositRows = (
     });
 
 export const AdminDepositsTab: React.FC = () => {
-  const { adminTransactions, adminWallets, depositWallets, adminApproveDeposit, adminRejectDeposit } =
+  const { adminTransactions, adminWallets, depositWallets, adminApproveDeposit, adminRejectDeposit, refreshTransactions } =
     useWallet();
+  const [reviewBusy, setReviewBusy] = useState(false);
+  const [reviewError, setReviewError] = useState<string | null>(null);
   const [adminNotes, setAdminNotes] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<"all" | DepositStatus>("all");
@@ -174,16 +180,16 @@ export const AdminDepositsTab: React.FC = () => {
     setTimeout(() => setFeedback(null), 3500);
   };
 
-  const handleApprove = (deposit: DepositRow) => {
-    adminApproveDeposit(deposit.id, adminNotes[deposit.id] || undefined);
-    showFeedback(`Approved deposit ${deposit.id}`);
-    setReviewingId(null);
-  };
-
-  const handleReject = (deposit: DepositRow) => {
-    adminRejectDeposit(deposit.id, adminNotes[deposit.id] || undefined);
-    showFeedback(`Rejected deposit ${deposit.id}`);
-    setReviewingId(null);
+  const handleReview = async (deposit: DepositRow, approve: boolean) => {
+    if (reviewBusy) return;
+    setReviewBusy(true); setReviewError(null);
+    try {
+      await (approve ? adminApproveDeposit : adminRejectDeposit)(deposit.id, adminNotes[deposit.id] || undefined);
+      showFeedback(`${approve ? "Approved" : "Rejected"} deposit ${deposit.id}`);
+      setReviewingId(null);
+    } catch {
+      setReviewError("Unable to save this decision. Refresh the queue and try again.");
+    } finally { setReviewBusy(false); }
   };
 
   const reviewing = deposits.find((d) => d.id === reviewingId) || null;
@@ -242,7 +248,7 @@ export const AdminDepositsTab: React.FC = () => {
           >
             {d.txHash ? shortValue(d.txHash, 14, 7) : "No hash"}
           </span>
-          {d.proofFile && (
+          {Boolean(d.proofFile || d.giftCardImagePaths?.length) && (
             <span className="mt-1 inline-flex items-center gap-1 text-2xs text-faint">
               <FileText size={10} /> Proof
             </span>
@@ -277,7 +283,7 @@ export const AdminDepositsTab: React.FC = () => {
       <AdminTabHeader
         icon={ArrowDownLeft}
         title="Deposits"
-        description="Review incoming deposits, wallet destinations and transaction hashes."
+        description="Review cryptocurrency transfers and gift-card deposits."
         stats={[
           { label: "Total", value: stats.total },
           { label: "Pending", value: stats.pending, tone: "warning" },
@@ -286,6 +292,8 @@ export const AdminDepositsTab: React.FC = () => {
         ]}
       />
 
+      <Button variant="secondary" onClick={() => void refreshTransactions()}>Refresh deposits</Button>
+      {reviewError && <Alert tone="error">{reviewError}</Alert>}
       {feedback && <Alert tone="success">{feedback}</Alert>}
 
       <SectionCard
@@ -359,7 +367,7 @@ export const AdminDepositsTab: React.FC = () => {
       */}
       <Drawer
         open={Boolean(reviewing)}
-        onClose={() => setReviewingId(null)}
+        onClose={() => { if (!reviewBusy) setReviewingId(null); }}
         title={reviewing ? `Deposit ${shortValue(reviewing.id, 14, 6)}` : ""}
         footer={
           reviewing?.displayStatus === "pending" ? (
@@ -371,7 +379,8 @@ export const AdminDepositsTab: React.FC = () => {
                 block
                 variant="positive"
                 icon={Check}
-                onClick={() => reviewing && handleApprove(reviewing)}
+                disabled={reviewBusy}
+                onClick={() => reviewing && void handleReview(reviewing, true)}
               >
                 Approve
               </Button>
@@ -379,7 +388,8 @@ export const AdminDepositsTab: React.FC = () => {
                 block
                 variant="danger"
                 icon={X}
-                onClick={() => reviewing && handleReject(reviewing)}
+                disabled={reviewBusy}
+                onClick={() => reviewing && void handleReview(reviewing, false)}
               >
                 Reject
               </Button>
@@ -393,6 +403,7 @@ export const AdminDepositsTab: React.FC = () => {
       >
         {reviewing && (
           <div className="space-y-4">
+            {reviewError && <Alert tone="error">{reviewError}</Alert>}
             <div className="flex items-center justify-between gap-3">
               <Badge tone={statusTone[reviewing.displayStatus]}>
                 {statusLabels[reviewing.displayStatus]}
@@ -420,7 +431,12 @@ export const AdminDepositsTab: React.FC = () => {
 
             {/* Full values, not truncated: verifying a deposit means reading
                 the whole address and hash. */}
-            <div className="space-y-3">
+            {reviewing.paymentMethod === "gift_card" ? <div className="rounded-lg border border-line bg-panel p-4 space-y-3">
+              <h3 className="font-semibold text-ink">Gift card details</h3>
+              <p className="text-sm text-muted">{reviewing.giftCardDetails?.brand} · Face value: {reviewing.giftCardDetails?.faceValue} {reviewing.giftCardDetails?.currency}</p>
+              <p className="text-xs text-muted">Approval credits {formatMoney(reviewing.amount)}. Verify the card and requested USD amount before approving.</p>
+              <DepositProofViewer transaction={reviewing} />
+            </div> : <div className="space-y-3">
               <div className="rounded-lg border border-line bg-panel p-3">
                 <p className="text-2xs font-semibold uppercase tracking-[0.09em] text-faint">
                   Destination wallet
@@ -435,21 +451,15 @@ export const AdminDepositsTab: React.FC = () => {
                   {reviewing.txHash || "Not submitted"}
                 </p>
               </div>
-              {reviewing.proofFile && (
-                <a
-                  href={reviewing.proofFile}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-2 rounded-lg border border-line bg-panel p-3 text-xs text-accent transition-colors duration-[--duration-fast] hover:border-accent-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                >
-                  <FileText size={14} /> View payment proof
-                </a>
-              )}
-            </div>
+              {reviewing.proofFile && (/^https?:\/\//i.test(reviewing.proofFile)
+                ? <a href={reviewing.proofFile} target="_blank" rel="noopener noreferrer" className="block py-3 text-sm text-accent">View payment proof</a>
+                : <DepositProofViewer transaction={reviewing} />)}
+            </div>}
 
             {reviewing.displayStatus === "pending" ? (
               <Textarea
                 label="Admin notes"
+                disabled={reviewBusy}
                 rows={3}
                 placeholder="Optional — recorded against this decision"
                 value={adminNotes[reviewing.id] || ""}

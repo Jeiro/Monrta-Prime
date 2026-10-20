@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import type { DepositWallet, Transaction, WalletFeedback } from "../../types";
+import type { GiftCardDeposit, DepositWallet, Transaction, WalletFeedback } from "../../types";
 import {
   buildDepositTransaction,
   buildWithdrawalTransaction,
@@ -27,7 +27,7 @@ interface WalletDataContextType {
 interface WalletActionsContextType {
   insufficientBalanceOpen: boolean;
   setInsufficientBalanceOpen: (open: boolean) => void;
-  deposit: (amount: number, currency: string, txHash?: string, proofFile?: string) => boolean;
+  deposit: (amount: number, currency: string, txHash?: string, proofFile?: string, giftCard?: GiftCardDeposit) => Promise<boolean>;
   withdraw: (
     amount: number,
     currency: string,
@@ -39,8 +39,8 @@ interface WalletActionsContextType {
   updateAdminWallets: (wallets: Record<string, string>) => void;
   adminSaveDepositWallet: (wallet: DepositWallet | Omit<DepositWallet, "id">) => Promise<void>;
   adminDeleteDepositWallet: (walletId: string) => Promise<void>;
-  adminApproveDeposit: (txId: string, notes?: string) => void;
-  adminRejectDeposit: (txId: string, notes?: string) => void;
+  adminApproveDeposit: (txId: string, notes?: string) => Promise<void>;
+  adminRejectDeposit: (txId: string, notes?: string) => Promise<void>;
   adminApproveWithdrawal: (txId: string, notes?: string) => void;
   adminRejectWithdrawal: (txId: string, notes?: string) => void;
   saveWalletConnection: (walletName?: string) => void;
@@ -141,7 +141,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const { supabase, user, setUser, authReady, currentSupabaseUserId, currentUserProfile, refetchCurrentUserProfile, currentUserIsLoggedIn, currentUserIsAdmin } = useSession();
   const { handleLog } = useAuditLogWriter();
   const { addNotification, notifyAdmins, dispatchTransactionalEmail } = useNotifications();
-  const { usersDirectory } = useAdminUsersData();
+  const { usersDirectory, refreshUsersDirectory } = useAdminUsersData();
   const {
     adminTransactions: supabaseTransactions,
     adminWallets,
@@ -163,39 +163,29 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [insufficientBalanceOpen, setInsufficientBalanceOpen] = useState(false);
 
-  const deposit = (amount: number, currency: string, txHash?: string, proofFile?: string): boolean => {
-    if (amount <= 0) return false;
-    if (!currentSupabaseUserId) return false;
-
-    const { transaction: newTx } = buildDepositTransaction(amount, currency, user.email, adminWallets, txHash, proofFile);
-    const statusType = newTx.status;
-
-    createDepositTransaction({
-      id: newTx.id,
-      userId: currentSupabaseUserId,
-      userEmail: user.email || "",
-      userName: currentUserProfile?.name || user.name || "Unknown",
-      amount,
-      currency,
-      asset: currency,
-      status: statusType === "completed" ? "completed" : "pending",
-      txHash: newTx.txHash,
-      proofFile: newTx.proofFile
-    }).then(() => {
-      if (statusType === "completed") refetchCurrentUserProfile();
-    }).catch(error => {
+  const deposit = async (amount: number, currency: string, txHash?: string, proofFile?: string, giftCard?: GiftCardDeposit): Promise<boolean> => {
+    if (!Number.isFinite(amount) || amount <= 0 || !currentSupabaseUserId) return false;
+    const asset = giftCard ? `Gift card — ${giftCard.details.brand}` : currency;
+    const { transaction: newTx } = buildDepositTransaction(amount, asset, user.email, adminWallets, txHash, proofFile);
+    try {
+      await createDepositTransaction({
+        id: newTx.id, userId: currentSupabaseUserId,
+        userEmail: user.email || "", userName: currentUserProfile?.name || user.name || "Unknown",
+        amount, currency: giftCard ? "USD" : currency, asset, status: "pending",
+        txHash: giftCard ? undefined : newTx.txHash,
+        proofFile: giftCard ? undefined : newTx.proofFile,
+        giftCard
+      });
+    } catch (error) {
       console.error("Deposit failed:", error);
       toast.error("Failed to submit deposit. Please try again.");
-    });
-
-    handleLog("Asset Deposit Action", `Recharged requested: $${amount} ${currency}. Status: ${statusType}`, user.email || "system", "success");
-    addNotification(`Your ${currency} deposit of ${amount} has been submitted for review.`, { title: "Deposit submitted", type: statusType === "completed" ? "success" : "info", eventKey: `deposit:submitted:${newTx.id}`, action: { label: "View wallet", view: "dashboard-wallet" } });
-    dispatchTransactionalEmail(user.email, statusType === "completed" ? "DEPOSIT_APPROVED" : "DEPOSIT_SUBMITTED", `deposit:${statusType === "completed" ? "approved" : "submitted"}:${newTx.id}`, { name: user.name, amount, asset: currency, txHash: newTx.txHash, transactionId: newTx.id, status: statusType });
-    if (statusType !== "completed") {
-      notifyAdmins(`${user.email || "A user"} submitted a ${currency} deposit of ${amount} for review.`, { title: "Deposit requires review", type: "warning", eventKey: `deposit:review:${newTx.id}`, action: { label: "Review deposits", view: "dashboard-admin" } });
+      return false;
     }
-
-    toast.success(`Deposit request submitted for ${amount} ${currency}`);
+    handleLog("Asset Deposit Action", `Requested: $${amount} ${asset}. Pending review.`, user.email || "system", "success");
+    addNotification(`Your ${asset} deposit of ${amount} has been submitted for review.`, { title: "Deposit submitted", type: "info", eventKey: `deposit:submitted:${newTx.id}`, action: { label: "View wallet", view: "dashboard-wallet" } });
+    dispatchTransactionalEmail(user.email, "DEPOSIT_SUBMITTED", `deposit:submitted:${newTx.id}`, { name: user.name, amount, asset, transactionId: newTx.id, status: "pending" });
+    notifyAdmins(`${user.email || "A user"} submitted a ${asset} deposit of ${amount} for review.`, { title: "Deposit requires review", type: "warning", eventKey: `deposit:review:${newTx.id}`, action: { label: "Review deposits", view: "dashboard-admin" } });
+    toast.success("Deposit submitted for admin review");
     return true;
   };
 
@@ -274,11 +264,12 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const adminApproveDeposit = async (txId: string, noteText: string = "Deposit verified by admin.") => {
     const matchingTx = supabaseTransactions.find(t => t.id === txId);
-    if (!matchingTx) return;
+    if (!matchingTx) throw new Error("Deposit no longer available. Refresh the queue.");
 
     try {
       await approveDepositTx(txId, noteText);
-      await refetchCurrentUserProfile();
+      await refreshUsersDirectory();
+      if (matchingTx.userId === currentSupabaseUserId) await refetchCurrentUserProfile();
       handleLog("Manual Deposit Confirmed", `Approved deposit ID: ${txId} worth ${matchingTx.amount} ${matchingTx.asset}`, user.email || "admin", "success");
       addNotification(`Approved incoming deposit of ${matchingTx.amount} for ${matchingTx.userName || matchingTx.userEmail}.`, { title: "Deposit approved", type: "success", eventKey: `admin:deposit:approved:${txId}` });
       addNotification(`Your ${matchingTx.asset} deposit of ${matchingTx.amount} was approved.`, { title: "Deposit approved", type: "success", recipientEmail: matchingTx.userEmail, eventKey: `deposit:approved:${txId}`, action: { label: "View wallet", view: "dashboard-wallet" } });
@@ -292,13 +283,13 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       });
     } catch (e) {
       console.error("Error approving deposit:", e);
-      toast.error("Failed to approve deposit.");
+      throw e;
     }
   };
 
   const adminRejectDeposit = async (txId: string, noteText: string = "Payment proof verification unsuccessful.") => {
     const matchingTx = supabaseTransactions.find(t => t.id === txId);
-    if (!matchingTx) return;
+    if (!matchingTx) throw new Error("Deposit no longer available. Refresh the queue.");
 
     try {
       await rejectDepositTx(txId, noteText);
@@ -308,7 +299,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       dispatchTransactionalEmail(matchingTx.userEmail, "DEPOSIT_REJECTED", `deposit:rejected:${txId}`, { name: matchingTx.userName, amount: matchingTx.amount, asset: matchingTx.asset, transactionId: txId, reason: noteText, status: "rejected" });
     } catch (e) {
       console.error("Error rejecting deposit:", e);
-      toast.error("Failed to reject deposit.");
+      throw e;
     }
   };
 
