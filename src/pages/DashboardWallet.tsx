@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { formatDateTime, formatMoney } from "../lib/format";
 import type { Transaction } from "../types";
+import { GiftCardDepositForm } from "../components/GiftCardDepositForm";
 import { TransactionReceipt } from "../components/TransactionReceipt";
 import {
   Alert,
@@ -48,6 +49,9 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
   const supabase = useSupabaseClient();
   const [activeSubTab, setActiveSubTab] = useState<WalletTab>(initialOpenTab);
   const [showBalance, setShowBalance] = useState(true);
+
+  const [depositMethod, setDepositMethod] = useState("crypto");
+  const [giftBusy, setGiftBusy] = useState(false);
 
   // Deposit states
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -133,7 +137,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
         }
       }
 
-      const success = deposit(
+      const success = await deposit(
         amount,
         selectedDepositLabel,
         depositTxHash.trim() || "N/A",
@@ -424,7 +428,15 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
           aria-labelledby="tab-deposit"
           className="mx-auto w-full max-w-2xl"
         >
-          <form onSubmit={handleDepositSubmit} className="space-y-4">
+          <label className="mb-4 block space-y-2 text-sm font-medium text-ink">
+            <span>Payment method</span>
+            <select aria-label="Payment method" value={depositMethod} disabled={giftBusy || submittingDeposit}
+              onChange={event => setDepositMethod(event.target.value)}
+              className="w-full rounded-xl border border-line bg-surface px-4 py-3 text-base focus:outline-accent">
+              <option value="crypto">Cryptocurrency</option><option value="gift_card">Gift Card</option>
+            </select>
+          </label>
+          {depositMethod === "gift_card" ? <GiftCardDepositForm onBusyChange={setGiftBusy} /> : <form onSubmit={handleDepositSubmit} className="space-y-4">
             {depositSuccessLog && (
               <Alert tone={depositSuccessLog.startsWith("Error") ? "error" : "success"}>
                 {depositSuccessLog}
@@ -627,7 +639,7 @@ export const DashboardWallet: React.FC<DashboardWalletProps> = ({ initialOpenTab
                 </div>
               </div>
             </SectionCard>
-          </form>
+          </form>}
         </div>
       )}
 

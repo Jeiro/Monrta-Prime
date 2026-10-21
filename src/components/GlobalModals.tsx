@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSession } from "../context/domains/SessionContext";
 import { useWallet } from "../context/domains/WalletContext";
+import { GiftCardDepositForm } from "./GiftCardDepositForm";
 import { getDepositWalletLabel } from "../services";
 import { X, Check, Copy, ArrowUpRight, Loader2, Info, AlertTriangle } from "lucide-react";
 import { Alert, Button, Input, Modal } from "./ui";
@@ -20,6 +21,9 @@ export function GlobalModals({
 }: GlobalModalsProps) {
   const { user } = useSession();
   const { deposit, withdraw, enabledDepositWallets, insufficientBalanceOpen, setInsufficientBalanceOpen } = useWallet();
+
+  const [depositMethod, setDepositMethod] = useState("crypto");
+  const [depositBusy, setDepositBusy] = useState(false);
 
   // Form states inside Quick Modals
   const [depAmt, setDepAmt] = useState("");
@@ -131,13 +135,18 @@ export function GlobalModals({
       return;
     }
 
-    await deposit(amount, selectedDepositLabel, depTxHash.trim() || "N/A", depProofName || "payment_proof_receipt.jpg");
+    if (depositBusy) return;
+    setDepositBusy(true);
+    let success = false;
+    try { success = await deposit(amount, selectedDepositLabel, depTxHash.trim() || "N/A", depProofName || "payment_proof_receipt.jpg"); }
+    finally { setDepositBusy(false); }
+    if (!success) { triggerModalFeedback("Error: Unable to save your deposit. Please try again."); return; }
     setDepAmt("");
     setDepTxHash("");
     setDepProofName("");
     triggerModalFeedback({
       title: "Deposit Processing",
-      description: `Your deposit of $${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })} USD equivalent of ${selectedDepositLabel} is being processed. The funds will be credited to your account after network confirmation.`,
+      description: `Your deposit of $${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })} USD equivalent of ${selectedDepositLabel} is being processed. The funds will be credited to your account after admin verification.`,
       type: "success"
     });
     setTimeout(() => {
@@ -186,9 +195,9 @@ export function GlobalModals({
       {/* QUICK DEPOSIT MODAL OUTLAY */}
       <Modal
         open={depositModalOpen}
-        onClose={() => { setDepositModalOpen(false); setModalFeedback(null); }}
+        onClose={() => { if (!depositBusy) { setDepositModalOpen(false); setModalFeedback(null); } }}
         title="Fast deposit"
-        description="Fund your wallet to begin trading. Select your asset and network."
+        description="Choose cryptocurrency or gift card to fund your wallet."
       >
         <div className="space-y-5">
 
@@ -221,7 +230,14 @@ export function GlobalModals({
                 );
               })()}
 
-              <form onSubmit={handleQuickDeposit} className="space-y-5">
+              <label className="block space-y-2 text-sm font-medium text-ink">
+                <span>Payment method</span>
+                <select aria-label="Payment method" disabled={depositBusy} value={depositMethod} onChange={event => { setDepositMethod(event.target.value); setModalFeedback(null); }}
+                  className="w-full rounded-xl border border-line bg-surface px-4 py-3 text-base focus:outline-accent">
+                  <option value="crypto">Cryptocurrency</option><option value="gift_card">Gift Card</option>
+                </select>
+              </label>
+              {depositMethod === "gift_card" ? <GiftCardDepositForm onBusyChange={setDepositBusy} /> : <form onSubmit={handleQuickDeposit} className="space-y-5">
                 {/* Step 1: Coin Selection */}
                 <div className="space-y-1.5">
                   <label className="text-2xs text-muted font-sans uppercase font-bold tracking-wider block">Coin</label>
@@ -346,7 +362,7 @@ export function GlobalModals({
                 <div className="pt-2">
                   <button
                     type="submit"
-                    disabled={!selectedDepositWallet}
+                    disabled={!selectedDepositWallet || depositBusy}
                     className="w-full py-3.5 bg-accent hover:opacity-95 disabled:opacity-50 text-ground font-extrabold font-heading text-xs uppercase rounded-xl transition-all shadow-md shadow-accent/10 cursor-pointer tracking-wider text-center"
                   >
                     CONFIRM DEPOSIT
@@ -355,7 +371,7 @@ export function GlobalModals({
                     Please only click the Confirm Deposit button if you have already transferred the funds.
                   </p>
                 </div>
-              </form>
+              </form>}
         </div>
       </Modal>
 
